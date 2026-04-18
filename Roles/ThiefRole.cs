@@ -17,7 +17,7 @@ public sealed class ThiefRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfUsRo
     public string RoleLongDescription => "Use your Pickpocket ability to steal modifiers from nearby players. You can hold a limited number of stolen modifiers.";
     public Color RoleColor => new Color(0.5f, 0.3f, 0.1f);
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
-    public RoleAlignment RoleAlignment => RoleAlignment.CrewmateSupport;
+    public RoleAlignment RoleAlignment => RoleAlignment.CrewmatePower;
     
     public List<uint> StolenModifierIds { get; } = new();
     
