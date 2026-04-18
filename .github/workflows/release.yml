@@ -1,0 +1,53 @@
+name: Release
+
+# Creates a DRAFT GitHub release when you push a `v*` tag (e.g. `v1.0.0`).
+# Intentionally does NOT build in CI - the csproj references BepInEx /
+# TOU-Mira interop DLLs from a local installation, which are not trivially
+# reproducible on a clean runner. Instead:
+#
+#   1. Build locally with:  ./scripts/Package.ps1 -Version 1.0.0
+#   2. Push a tag:          git tag v1.0.0 && git push origin v1.0.0
+#   3. This workflow runs and creates a DRAFT release with the notes from
+#      RELEASE_NOTES.md already filled in.
+#   4. Upload the DivaniMods.dll and DivaniMods-v1.0.0.zip produced by the
+#      packaging script, then hit "Publish release".
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version tag to draft (e.g. v1.0.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  draft:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve version
+        id: ver
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            tag="${{ inputs.version }}"
+          else
+            tag="${{ github.ref_name }}"
+          fi
+          case "$tag" in v*) ;; *) tag="v$tag" ;; esac
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          tag_name: ${{ steps.ver.outputs.tag }}
+          name: Divani Mods ${{ steps.ver.outputs.tag }}
+          body_path: RELEASE_NOTES.md

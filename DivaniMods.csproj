@@ -1,0 +1,135 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    
+    <AssemblyName>DivaniMods</AssemblyName>
+    <RootNamespace>DivaniMods</RootNamespace>
+    <Version>1.0.0</Version>
+    <!--
+      TownOfUs + TouMiraRolesExtension live in-repo for reference only. Do not compile them here:
+      this project already references TownOfUsMira.dll from BepInEx. Compiling sources duplicates
+      every type (CS0436) and fails without full game/Hazel refs (CS0246).
+    -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);TownOfUs\**\*;TouMiraRolesExtension\**\*;TheOtherRolesGMIA-main\**\*;.specstory\**\*</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AmongUsPath>C:\Users\dylan\Desktop\modtest</AmongUsPath>
+    <BepInExPath>$(AmongUsPath)\BepInEx</BepInExPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx.Core">
+      <HintPath>$(BepInExPath)\core\BepInEx.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="BepInEx.Unity.IL2CPP">
+      <HintPath>$(BepInExPath)\core\BepInEx.Unity.IL2CPP.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <Reference Include="0Harmony">
+      <HintPath>$(BepInExPath)\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <Reference Include="Il2CppInterop.Runtime">
+      <HintPath>$(BepInExPath)\core\Il2CppInterop.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <Reference Include="UnityEngine">
+      <HintPath>$(BepInExPath)\interop\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(BepInExPath)\interop\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>$(BepInExPath)\interop\UnityEngine.Physics2DModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(BepInExPath)\interop\UnityEngine.AudioModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>$(BepInExPath)\interop\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+      <HintPath>$(BepInExPath)\interop\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(BepInExPath)\interop\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>$(BepInExPath)\interop\Il2Cppmscorlib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(BepInExPath)\interop\Unity.TextMeshPro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(BepInExPath)\interop\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <Reference Include="Reactor">
+      <HintPath>$(BepInExPath)\plugins\Reactor.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <Reference Include="MiraAPI">
+      <HintPath>$(BepInExPath)\plugins\MiraAPI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <Reference Include="TownOfUsMira">
+      <HintPath>$(BepInExPath)\plugins\TownOfUsMira.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ShuffleButton.png" />
+    <EmbeddedResource Include="Resources\ThiefIcon.png" />
+    <EmbeddedResource Include="Resources\BlindspotIcon.png" />
+    <EmbeddedResource Include="Resources\FragileIcon.png" />
+    <EmbeddedResource Include="Resources\DeadlockIcon.png" />
+    <EmbeddedResource Include="Resources\LockdownButton.png" />
+    <EmbeddedResource Include="Resources\PortalmakerIcon.png" />
+    <EmbeddedResource Include="Resources\PortalSprite.png" />
+    <EmbeddedResource Include="Resources\RuthlessIcon.png" />
+    <EmbeddedResource Include="Resources\PlagueDoctorIcon.png" />
+    <EmbeddedResource Include="Resources\InfectButton.png" />
+    <EmbeddedResource Include="Resources\InfectedIcon.png" />
+    <!-- Audio clips must be WAV - loaded via MiraAPI's LoadableAudioResourceAsset,
+         matching how TouMiraRolesExtension ships its sounds. -->
+    <EmbeddedResource Include="Resources\FragileBreak.wav" />
+    <EmbeddedResource Include="Resources\PlagueDoctorIntro.wav" />
+    <EmbeddedResource Include="Resources\InfectSound.wav" />
+    <EmbeddedResource Include="Resources\ThiefIntro.wav" />
+    <EmbeddedResource Include="Resources\PortalMakerIntro.wav" />
+    <EmbeddedResource Include="Resources\DeadlockIntro.wav" />
+    <EmbeddedResource Include="Resources\PlacePortalSound.wav" />
+  </ItemGroup>
+
+  <Target Name="CopyToPlugins" AfterTargets="Build">
+    <Copy SourceFiles="$(OutputPath)DivaniMods.dll" DestinationFolder="$(BepInExPath)\plugins\" />
+    <Message Text="Copied $(AssemblyName).dll to BepInEx plugins folder!" Importance="High" />
+  </Target>
+
+</Project>

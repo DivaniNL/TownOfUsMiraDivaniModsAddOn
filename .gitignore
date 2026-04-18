@@ -1,0 +1,74 @@
+# -----------------------------------------------------------------------------
+# Build output
+# -----------------------------------------------------------------------------
+bin/
+obj/
+[Bb]uild/
+[Bb]uilds/
+release/
+publish/
+*.dll
+*.pdb
+*.exe
+*.mdb
+
+# Keep committed reference DLLs if any (none right now, but be explicit).
+!Resources/*.dll
+
+# -----------------------------------------------------------------------------
+# NuGet
+# -----------------------------------------------------------------------------
+packages/
+*.nupkg
+*.snupkg
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+*.lock.json
+
+# -----------------------------------------------------------------------------
+# IDEs
+# -----------------------------------------------------------------------------
+.vs/
+.vscode/
+.idea/
+_ReSharper.Caches/
+riderModule.iml
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# -----------------------------------------------------------------------------
+# OS
+# -----------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# -----------------------------------------------------------------------------
+# Local-only source references (kept out of the public repo)
+# These folders ship game source trees used for reading, not building.
+# -----------------------------------------------------------------------------
+/TownOfUs/
+/TouMiraRolesExtension/
+/TheOtherRolesGMIA-main/
+
+# -----------------------------------------------------------------------------
+# Local tool state / scratch
+# -----------------------------------------------------------------------------
+.specstory/
+.qodo/
+.cursor/
+terminals/
+agent-tools/
+agent-transcripts/
+.fake/
+*.log
+*.tmp
+
+# Personal TODO scratchpads
+lockdown timer*.txt
+todo.txt
+TODO.txt
