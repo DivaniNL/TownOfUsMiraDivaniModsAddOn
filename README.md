@@ -45,7 +45,7 @@ over your Among Us folder.
 
 ### Thief
 
-#### **Team: Crewmates**
+#### **Crewmate Power**
 
 The Thief is a Crewmate that can steal modifiers from other players.
 Use your **Pickpocket** ability on a nearby player to either take one of their
@@ -66,7 +66,7 @@ summary.
 
 ### Portalmaker
 
-#### **Team: Crewmates**
+#### **Crewmate Support**
 
 The Portalmaker is a Crewmate that can place two portals on the map.
 Once both portals are placed, **any player** (including the Portalmaker)
@@ -86,7 +86,7 @@ can use them to teleport between the two locations.
 
 ### Deadlock
 
-#### **Team: Impostors**
+#### **Impostor Support**
 
 The Deadlock is an Impostor that can temporarily disable all crewmate tasks.
 During a **Lockdown**, crewmates cannot access or complete any tasks.
@@ -109,7 +109,7 @@ killing.
 
 ### Plague Doctor
 
-#### **Team: Neutral (Killing)**
+#### **Neutral Killing**
 
 The Plague Doctor is a Neutral role that wins by infecting every living
 player. Use the **Infect** ability to directly infect a nearby player, or
@@ -137,7 +137,7 @@ living player is infected.
 
 ## Blindspot
 
-### **Team: Crewmate Utility**
+### **Crewmate**
 
 A Crewmate with the Blindspot modifier does not cause the red camera indicator
 to light up when they view cameras. Useful for sneakier information gathering.
@@ -153,7 +153,7 @@ to light up when they view cameras. Useful for sneakier information gathering.
 
 ## Fragile
 
-### **Team: Universal**
+### **Universal**
 
 A Fragile player has a chance to break (die instantly) if any other player
 interacts with them. The *Chance to Break* option controls how often an
@@ -172,7 +172,7 @@ the death hears a glass&ndash;breaking sound effect.
 
 ## Ruthless
 
-### **Team: Impostor Utility**
+### **Impostor**
 
 A Ruthless Impostor's kills bypass Medic shields, Guardian Angel protection,
 and Survivor vests.
@@ -188,7 +188,7 @@ and Survivor vests.
 
 ## Shuffle
 
-### **Team: Universal**
+### **Universal**
 
 A Shuffle player can press a button to **teleport every living player to a
 random other player's position**. Great for chaos and escape plays. Ghosts
