@@ -37,6 +37,7 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
         Harmony.PatchAll();
         FragileTownOfUsButtonPatch.Initialize(Harmony);
         RuthlessEventHandler.Initialize(Harmony);
+        DutchMemeSoundpackPatch.Register(Harmony);
         VersionDisplay.Register();
         Log.LogInfo("Divani Mods loaded successfully!");
     }
