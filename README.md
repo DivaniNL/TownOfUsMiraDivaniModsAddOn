@@ -199,6 +199,20 @@ are excluded from the shuffle; dead bodies can optionally be shuffled too.
 
 ---
 
+## Misvote
+
+### **Universal**
+
+Someone with the Misvote modifier will always vote random, even when they skipped voting, removing the vote from the original vote target
+### Game Options
+
+| Name             | Description                                                       | Type       | Default |
+| ---------------- | ----------------------------------------------------------------- | ---------- | ------- |
+| Misvote Amount | How many Misvote modifiers are assigned each game                   | Number     | 1       |
+| Misvote Chance | Per&ndash;assignment chance (rolled per slot up to Amount)          | Percentage | 50%     |
+
+---
+
 # Credits
 
 - Built on top of [TOU-Mira](https://github.com/AU-Avengers/TOU-Mira) by the
