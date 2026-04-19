@@ -45,4 +45,14 @@ public static class DivaniAssets
 
     // Biohazard icon shown next to fully-infected players in meetings (PD-only view).
     public static LoadableAsset<Sprite> InfectedIcon { get; } = new LoadableResourceAsset($"{ShortPath}.InfectedIcon.png", 300);
+
+    // Stalker role assets. Two custom hearts (shared silhouette + black border) for the
+    // meeting guess picker - grey = not picked, pink = picked. PPU chosen so the visible
+    // icon matches the size of the Swapper meeting button icons.
+    public static LoadableAsset<Sprite> StalkerIcon { get; } = new LoadableResourceAsset($"{ShortPath}.StalkerIcon.png", 550);
+    // User-supplied 800x800 tight-canvas hearts - higher PPU shrinks the on-screen sprite
+    // so it matches Swapper's compact meeting icons (SwapActive / SwapDisabled bundle art).
+    public static LoadableAsset<Sprite> HeartNotFilled { get; } = new LoadableResourceAsset($"{ShortPath}.HeartNotFilled.png", 2400);
+    public static LoadableAsset<Sprite> HeartFilled { get; } = new LoadableResourceAsset($"{ShortPath}.HeartFilled.png", 2400);
+    public static LoadableAsset<AudioClip> StalkerIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.StalkerIntro.wav");
 }

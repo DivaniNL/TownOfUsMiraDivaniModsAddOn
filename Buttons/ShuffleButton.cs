@@ -275,5 +275,7 @@ public enum DivaniRpcCalls : uint
     ResetPortals = 207,
     PlagueDoctorSetInfected = 208,
     PlagueDoctorUpdateProgress = 209,
-    PlagueDoctorWin = 210
+    PlagueDoctorWin = 210,
+    StalkerSyncGuesses = 211,
+    StalkerTriggerWin = 212,
 }

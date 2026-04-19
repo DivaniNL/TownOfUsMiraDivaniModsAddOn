@@ -116,6 +116,11 @@
     <EmbeddedResource Include="Resources\PlagueDoctorIcon.png" />
     <EmbeddedResource Include="Resources\InfectButton.png" />
     <EmbeddedResource Include="Resources\InfectedIcon.png" />
+    <!-- Stalker role assets. HeartNotFilled.png is provided by the user and must live in
+         Resources/. The filled heart shown on selection is reused from TOU's Lover bundle asset. -->
+    <EmbeddedResource Include="Resources\StalkerIcon.png" Condition="Exists('Resources\StalkerIcon.png')" />
+    <EmbeddedResource Include="Resources\HeartNotFilled.png" Condition="Exists('Resources\HeartNotFilled.png')" />
+    <EmbeddedResource Include="Resources\HeartFilled.png" Condition="Exists('Resources\HeartFilled.png')" />
     <!-- Audio clips must be WAV - loaded via MiraAPI's LoadableAudioResourceAsset,
          matching how TouMiraRolesExtension ships its sounds. -->
     <EmbeddedResource Include="Resources\FragileBreak.wav" />
@@ -125,6 +130,7 @@
     <EmbeddedResource Include="Resources\PortalMakerIntro.wav" />
     <EmbeddedResource Include="Resources\DeadlockIntro.wav" />
     <EmbeddedResource Include="Resources\PlacePortalSound.wav" />
+    <EmbeddedResource Include="Resources\StalkerIntro.wav" Condition="Exists('Resources\StalkerIntro.wav')" />
   </ItemGroup>
 
   <Target Name="CopyToPlugins" AfterTargets="Build">
