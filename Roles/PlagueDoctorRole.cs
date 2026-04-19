@@ -10,6 +10,7 @@ using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Buttons;
 using DivaniMods.Options;
+using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
@@ -17,7 +18,7 @@ using UnityEngine;
 
 namespace DivaniMods.Roles;
 
-public sealed class PlagueDoctorRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole
+public sealed class PlagueDoctorRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable
 {
     public static readonly Color PlagueDoctorColor = new Color32(255, 192, 0, 255);
 
@@ -42,7 +43,9 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITown
     public Color RoleColor => PlagueDoctorColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralKilling;
-    
+
+    public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
+
     public bool HasImpostorVision => true;
 
     private float _lastProgressUpdate;

@@ -4,12 +4,14 @@ using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
+using TownOfUs.Utilities;
 using UnityEngine;
 
 namespace DivaniMods.Roles;
 
-public sealed class PortalmakerRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfUsRole
+public sealed class PortalmakerRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable
 {
     public string RoleName => "Portalmaker";
     public string RoleDescription => "Place two portals for everyone to use!";
@@ -17,6 +19,8 @@ public sealed class PortalmakerRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITown
     public Color RoleColor => new Color(0.047f, 0.420f, 0.961f);
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmateSupport;
+
+    public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
     public CustomRoleConfiguration Configuration => new(this)
     {

@@ -116,6 +116,7 @@
     <EmbeddedResource Include="Resources\PlagueDoctorIcon.png" />
     <EmbeddedResource Include="Resources\InfectButton.png" />
     <EmbeddedResource Include="Resources\InfectedIcon.png" />
+    <EmbeddedResource Include="Resources\MisvoteIcon.png" Condition="Exists('Resources\MisvoteIcon.png')" />
     <!-- Audio clips must be WAV - loaded via MiraAPI's LoadableAudioResourceAsset,
          matching how TouMiraRolesExtension ships its sounds. -->
     <EmbeddedResource Include="Resources\FragileBreak.wav" />

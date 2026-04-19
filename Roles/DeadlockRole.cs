@@ -1,12 +1,14 @@
 using System;
 using MiraAPI.Roles;
 using DivaniMods.Assets;
+using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
+using TownOfUs.Utilities;
 using UnityEngine;
 
 namespace DivaniMods.Roles;
 
-public sealed class DeadlockRole(IntPtr cppPtr) : ImpostorRole(cppPtr), ITownOfUsRole
+public sealed class DeadlockRole(IntPtr cppPtr) : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable
 {
     public string RoleName => "Deadlock";
     public string RoleDescription => "Lock down crewmate tasks!";
@@ -14,6 +16,8 @@ public sealed class DeadlockRole(IntPtr cppPtr) : ImpostorRole(cppPtr), ITownOfU
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorSupport;
+
+    public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
     public CustomRoleConfiguration Configuration => new(this)
     {

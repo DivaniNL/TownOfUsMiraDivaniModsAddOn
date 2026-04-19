@@ -4,15 +4,17 @@ using DivaniMods.Assets;
 using DivaniMods.Options;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers.Game;
+using TownOfUs.Modules.Wiki;
+using TownOfUs.Utilities;
 using UnityEngine;
 
 namespace DivaniMods.Modifiers;
 
-public class ShuffleModifier : TouGameModifier, IColoredModifier
+public class ShuffleModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
 {
     public override string ModifierName => "Shuffle";
     public override string LocaleKey => "Shuffle";
-    public override ModifierFaction FactionType => ModifierFaction.Universal;
+    public override ModifierFaction FactionType => ModifierFaction.UniversalUtility;
     public override Color FreeplayFileColor => new Color32(0, 255, 30, 255);
     public Color ModifierColor => new Color32(0, 255, 30, 255);
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.ShuffleIcon;
@@ -33,6 +35,8 @@ public class ShuffleModifier : TouGameModifier, IColoredModifier
     }
     
     public override string GetDescription() => $"Shuffle all players' positions! ({UsesRemaining} uses left)";
+
+    public string GetAdvancedDescription() => "Shuffle all players' positions!" + MiscUtils.AppendOptionsText(GetType());
     
     public override int GetAssignmentChance() => 
         (int)OptionGroupSingleton<ShuffleOptions>.Instance.ShuffleChance.Value;

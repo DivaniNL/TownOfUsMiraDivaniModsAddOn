@@ -4,11 +4,13 @@ using DivaniMods.Assets;
 using DivaniMods.Options;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers.Game;
+using TownOfUs.Modules.Wiki;
+using TownOfUs.Utilities;
 using UnityEngine;
 
 namespace DivaniMods.Modifiers;
 
-public class BlindspotModifier : TouGameModifier, IColoredModifier
+public class BlindspotModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
 {
     public override string ModifierName => "Blindspot";
     public override string LocaleKey => "Blindspot";
@@ -18,6 +20,8 @@ public class BlindspotModifier : TouGameModifier, IColoredModifier
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.BlindspotIcon;
     
     public override string GetDescription() => "Camera lights don't activate when you use cameras.";
+
+    public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
     
     public override int GetAssignmentChance() => 
         (int)OptionGroupSingleton<BlindspotOptions>.Instance.BlindspotChance.Value;

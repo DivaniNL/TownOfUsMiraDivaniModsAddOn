@@ -39,6 +39,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> BlindspotIcon { get; } = new LoadableResourceAsset($"{ShortPath}.BlindspotIcon.png", 550);
     public static LoadableAsset<Sprite> FragileIcon { get; } = new LoadableResourceAsset($"{ShortPath}.FragileIcon.png", 550);
     public static LoadableAsset<Sprite> ShuffleIcon { get; } = new LoadableResourceAsset($"{ShortPath}.ShuffleButton.png", 550);
+    public static LoadableAsset<Sprite> MisvoteIcon { get; } = new LoadableResourceAsset($"{ShortPath}.MisvoteIcon.png", 550);
     
     // Portal on map (200 ppu)
     public static LoadableAsset<Sprite> PortalSprite { get; } = new LoadableResourceAsset($"{ShortPath}.PortalSprite.png", 200);

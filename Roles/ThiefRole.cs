@@ -5,12 +5,14 @@ using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
+using TownOfUs.Utilities;
 using UnityEngine;
 
 namespace DivaniMods.Roles;
 
-public sealed class ThiefRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfUsRole
+public sealed class ThiefRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable
 {
     public string RoleName => "Thief";
     public string RoleDescription => "Steal modifiers from other players!";
@@ -18,6 +20,8 @@ public sealed class ThiefRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfUsRo
     public Color RoleColor => new Color(0.5f, 0.3f, 0.1f);
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmatePower;
+
+    public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
     
     public List<uint> StolenModifierIds { get; } = new();
     
