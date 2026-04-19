@@ -35,6 +35,11 @@ public static class DivaniAssets
     public static LoadableAsset<AudioClip> DeadlockIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DeadlockIntro.wav");
     public static LoadableAsset<AudioClip> PlacePortalSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.PlacePortalSound.wav");
 
+    // Dutch Meme Soundpack door SFX - used by DutchMemeSoundpackPatch to replace
+    // the vanilla door open/close audio clips when the matching lobby toggle is on.
+    public static LoadableAsset<AudioClip> DutchDoorOpen { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DoorOpen.wav");
+    public static LoadableAsset<AudioClip> DutchDoorClose { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DoorClose.wav");
+
     // Modifier icons (550 ppu for modifiers - same as role icons)
     public static LoadableAsset<Sprite> BlindspotIcon { get; } = new LoadableResourceAsset($"{ShortPath}.BlindspotIcon.png", 550);
     public static LoadableAsset<Sprite> FragileIcon { get; } = new LoadableResourceAsset($"{ShortPath}.FragileIcon.png", 550);

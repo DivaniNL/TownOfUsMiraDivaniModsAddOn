@@ -126,6 +126,8 @@
     <EmbeddedResource Include="Resources\PortalMakerIntro.wav" />
     <EmbeddedResource Include="Resources\DeadlockIntro.wav" />
     <EmbeddedResource Include="Resources\PlacePortalSound.wav" />
+    <EmbeddedResource Include="Resources\DoorOpen.wav" />
+    <EmbeddedResource Include="Resources\DoorClose.wav" />
   </ItemGroup>
 
   <Target Name="CopyToPlugins" AfterTargets="Build">
