@@ -18,6 +18,7 @@ Divani Mods is built on [BepInEx](https://github.com/BepInEx/BepInEx),
 |                       | [Portalmaker](#portalmaker) |                              | [Fragile](#fragile)     |
 |                       |                             |                              | [Ruthless](#ruthless)   |
 |                       |                             |                              | [Shuffle](#shuffle)     |
+|                        |                              |                               | [Misvote](#misvote)      |
 
 ---
 
