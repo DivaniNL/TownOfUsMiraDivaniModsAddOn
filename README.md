@@ -23,19 +23,12 @@ Divani Mods is built on [BepInEx](https://github.com/BepInEx/BepInEx),
 
 ## Installation
 
-1. Install the [Steam version of Among Us](https://store.steampowered.com/app/945360/Among_Us/).
-2. Install [BepInEx IL2CPP 6.x](https://builds.bepinex.dev/projects/bepinex_be) for Among Us.
-3. Drop the following DLLs into `Among Us/BepInEx/plugins/`:
-   - `Reactor.dll`
-   - `MiraAPI.dll`
-   - `TownOfUsMira.dll` (plus the bundled `touhats.bundle` + `touhats.catalog`)
-   - `DivaniMods.dll` &larr; *this mod*
-4. Launch Among Us. All Divani Mods options appear under a **Divani Mods** tab
-   in the lobby options.
+1. Install the mod using the same setup process as Town Of Us Mira.
+2. Once Town Of Us Mira is installed, place `DivaniMods.dll` into the `[MODFOLDER]/BepInEx/plugins/` folder.
+3. Launch Among Us. All Divani Mods options will appear under the **Divani Mods** tab in the lobby options.
 
-If you want the simplest install, grab the latest `DivaniMods-vX.Y.Z.zip`
-from [Releases](../../releases), extract it, and copy the `BepInEx` folder
-over your Among Us folder.
+For the simplest install, make sure your Town Of Us Mira installation is working first, then add `DivaniMods.dll` to the plugins folder.
+
 
 ---
 
@@ -203,36 +196,6 @@ are excluded from the shuffle; dead bodies can optionally be shuffled too.
 | Shuffle Uses        | How many times a Shuffle holder can press the button        | Number     | 1       |
 | Shuffle Cooldown    | Cooldown between Shuffle button uses                        | Time       | 30s     |
 | Shuffle Dead Bodies | Whether dead bodies also get shuffled                       | Toggle     | False   |
-
----
-
-# Building from Source
-
-Divani Mods targets `net6.0` and expects a local Among Us + BepInEx
-installation so MSBuild can resolve the interop DLLs.
-
-1. Install the [.NET 8 SDK](https://dotnet.microsoft.com/download).
-2. Install Among Us + BepInEx + TOU-Mira somewhere locally.
-3. Open `DivaniMods.csproj` and update `AmongUsPath` to point at that folder.
-4. Run:
-
-   ```powershell
-   dotnet build DivaniMods.csproj -c Release
-   ```
-
-   The output DLL is written to `bin/Release/net6.0/DivaniMods.dll` and
-   also copied into `<AmongUsPath>/BepInEx/plugins/` by the `CopyToPlugins`
-   build target.
-
-To create a release package locally (zip + bare DLL), run:
-
-```powershell
-./scripts/Package.ps1 -Version 1.0.0
-```
-
-This produces `release/DivaniMods.dll` and
-`release/DivaniMods-v1.0.0.zip` matching the structure uploaded to
-GitHub releases.
 
 ---
 
