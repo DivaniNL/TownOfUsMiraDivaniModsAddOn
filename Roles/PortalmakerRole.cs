@@ -1,9 +1,9 @@
 using System;
 using MiraAPI.GameOptions;
-using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using TownOfUs.Extensions;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
@@ -11,7 +11,8 @@ using UnityEngine;
 
 namespace DivaniMods.Roles;
 
-public sealed class PortalmakerRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable
+public sealed class PortalmakerRole(IntPtr cppPtr)
+    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
 {
     public string RoleName => "Portalmaker";
     public string RoleDescription => "Place two portals for everyone to use!";
@@ -20,22 +21,14 @@ public sealed class PortalmakerRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITown
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmateSupport;
 
+    // Doomsayer hint category: teleport/manipulation fits Trickster (same as Plumber).
+    public DoomableType DoomHintType => DoomableType.Trickster;
+
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
     public CustomRoleConfiguration Configuration => new(this)
     {
-        TasksCountForProgress = true,
         Icon = DivaniAssets.PortalmakerIcon,
         IntroSound = DivaniAssets.PortalMakerIntroSound,
     };
-
-    public override void Initialize(PlayerControl targetPlayer)
-    {
-        RoleBehaviourStubs.Initialize(this, targetPlayer);
-    }
-
-    public override void Deinitialize(PlayerControl targetPlayer)
-    {
-        RoleBehaviourStubs.Deinitialize(this, targetPlayer);
-    }
 }

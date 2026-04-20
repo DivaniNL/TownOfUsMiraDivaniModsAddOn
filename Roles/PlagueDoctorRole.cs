@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AmongUs.GameOptions;
 using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
 using MiraAPI.Patches.Stubs;
@@ -10,23 +11,37 @@ using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Buttons;
 using DivaniMods.Options;
+using TownOfUs;
+using TownOfUs.Extensions;
+using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
+using TownOfUs.Roles.Crewmate;
 using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
 using UnityEngine;
 
 namespace DivaniMods.Roles;
 
-public sealed class PlagueDoctorRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable
+public sealed class PlagueDoctorRole(IntPtr cppPtr)
+    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
+    // IDoomable: tells Doomsayer which "hint category" to surface when guessing
+    // the PD. Fearmonger matches Plaguebearer/Pestilence/Arsonist (disease / fear
+    // themed killers).
+    public DoomableType DoomHintType => DoomableType.Fearmonger;
+
+    // ICrewVariant: tells Imitator which crew role is the closest equivalent of
+    // the PD for imitation purposes. MedicRole fits the doctor theme.
+    public RoleBehaviour CrewVariant =>
+        RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<MedicRole>());
+
     public static readonly Color PlagueDoctorColor = new Color32(255, 192, 0, 255);
 
     // Static data that persists across role changes (death)
     public static Dictionary<byte, bool> InfectedPlayers { get; } = new();
     public static Dictionary<byte, float> InfectionProgress { get; } = new();
     public static Dictionary<byte, bool> DeadPlayers { get; } = new();
-    public static bool TriggerPlagueDoctorWin { get; set; }
     public static PlayerControl? PlagueDoctorPlayer { get; internal set; }
     public static TMPro.TMP_Text? StatusText { get; set; }
     
@@ -52,10 +67,20 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITown
 
     public CustomRoleConfiguration Configuration => new(this)
     {
-        TasksCountForProgress = false,
+        // Note: TasksCountForProgress, CanGetKilled and other team-dependent
+        // defaults are already correct for neutrals via
+        // CustomRoleConfiguration(ICustomRole) - no need to set them.
         CanUseVent = OptionGroupSingleton<PlagueDoctorOptions>.Instance.CanVent,
         Icon = DivaniAssets.PlagueDoctorIcon,
         IntroSound = DivaniAssets.PlagueDoctorIntroSound,
+        MaxRoleCount = 1,
+        // Required so that on death the PD's role is swapped to NeutralGhostRole
+        // (which remains in ModdedRoleTeams.Custom and whose WinConditionMet()
+        // delegates to GetRoleWhenAlive()). Without this the dead PD gets the
+        // default CrewmateGhost role, which is filtered out by
+        // NeutralRoleWinCondition.GetActiveRolesOfTeam(Custom) and the win
+        // never triggers even when CanWinWhileDead is enabled.
+        GhostRole = (RoleTypes)RoleId.Get<NeutralGhostRole>(),
     };
 
     public static bool CanWinWhileDead => OptionGroupSingleton<PlagueDoctorOptions>.Instance.CanWinDead;
@@ -94,7 +119,6 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITown
         InfectedPlayers.Clear();
         InfectionProgress.Clear();
         DeadPlayers.Clear();
-        TriggerPlagueDoctorWin = false;
         PlagueDoctorPlayer = null;
         NumInfectionsRemaining = (int)OptionGroupSingleton<PlagueDoctorOptions>.Instance.MaxInfections;
         MeetingFlag = false;
@@ -117,8 +141,9 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITown
         }
 
         ImportantTextTask orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
-        orCreateTask.Text = $"{PlagueDoctorColor.ToTextColor()}Infect everyone to win!</color>";
-        orCreateTask.name = "PlagueDoctorRoleText";
+        orCreateTask.Text =
+            $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralKillingTaskHeader")}</color>";
+        orCreateTask.name = "NeutralRoleText";
     }
 
     // Note: FixedUpdateHandler logic is now in PlagueDoctorPatch.HudManagerUpdate
@@ -284,21 +309,29 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITown
         return $"#{ColorUtility.ToHtmlStringRGB(color)}";
     }
 
-    public static bool WinConditionMet()
+    // Instance method required by ITownOfUsRole so TownOfUs's NeutralRoleWinCondition
+    // picks the PD up just like Arsonist/Plaguebearer/etc. This is what makes
+    // CustomGameOver.Trigger<NeutralGameOver>(...) fire correctly on the host, which
+    // in turn syncs the win screen to every client via Mira's RpcEndGame.
+    //
+    // When the PD is dead, NeutralGhostRole.WinConditionMet() is what's actually
+    // stored on the player, but it delegates back here through
+    // Player.GetRoleWhenAlive(). That's why we use this.Player (the role's own
+    // reference) rather than the static PlagueDoctorPlayer - it stays valid on
+    // the original role instance even after the ghost-role swap.
+    public bool WinConditionMet()
     {
-        if (PlagueDoctorPlayer == null) return false;
-        if (!CanWinWhileDead && PlagueDoctorPlayer.Data.IsDead) return false;
+        if (Player == null) return false;
+        if (!CanWinWhileDead && Player.HasDied()) return false;
 
         var livingPlayers = PlayerControl.AllPlayerControls.ToArray()
-            .Where(p => p != null && p.Data != null && !p.Data.IsDead && p != PlagueDoctorPlayer)
+            .Where(p => p != null && p.Data != null && !p.HasDied() && p != Player)
             .ToList();
 
         if (livingPlayers.Count == 0) return false;
 
         return livingPlayers.All(p => InfectedPlayers.ContainsKey(p.PlayerId));
     }
-
-    // Note: CheckWinCondition logic is now in PlagueDoctorPatch
 
     public static void HandleMeetingStart()
     {
@@ -409,31 +442,5 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITown
         InfectionProgress[targetId] = progress;
     }
 
-    [MethodRpc((uint)DivaniRpcCalls.PlagueDoctorWin)]
-    public static void RpcTriggerPlagueDoctorWin(PlayerControl sender)
-    {
-        DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctor: Win RPC received! AmHost: {AmongUsClient.Instance.AmHost}");
-        TriggerPlagueDoctorWin = true;
-        
-        // Only the host should trigger the actual game end
-        if (AmongUsClient.Instance.AmHost && PlagueDoctorPlayer != null)
-        {
-            DivaniPlugin.Instance.Log.LogInfo("PlagueDoctor: Host triggering CustomGameOver and ending game");
-            
-            var winners = new NetworkedPlayerInfo[] { PlagueDoctorPlayer.Data };
-            MiraAPI.GameEnd.CustomGameOver.Trigger<DivaniMods.GameOver.PlagueDoctorGameOver>(winners);
-        }
-    }
-
-    public override bool DidWin(GameOverReason gameOverReason)
-    {
-        // Only return true if OUR CustomGameOver is active
-        // This ensures PD doesn't appear in other team's wins
-        if (MiraAPI.GameEnd.CustomGameOver.Instance is DivaniMods.GameOver.PlagueDoctorGameOver)
-        {
-            return true;
-        }
-        
-        return false;
-    }
+    public override bool DidWin(GameOverReason gameOverReason) => WinConditionMet();
 }

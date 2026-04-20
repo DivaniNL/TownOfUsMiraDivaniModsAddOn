@@ -1,7 +1,7 @@
 using System;
 using MiraAPI.Roles;
-using MiraAPI.Patches.Stubs;
 using DivaniMods.Assets;
+using TownOfUs.Extensions;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
@@ -9,7 +9,8 @@ using UnityEngine;
 
 namespace DivaniMods.Roles;
 
-public sealed class SentinelRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable
+public sealed class SentinelRole(IntPtr cppPtr)
+    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color SentinelColor = new Color32(244, 169, 60, 255);
 
@@ -22,21 +23,13 @@ public sealed class SentinelRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfU
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmateSupport;
 
+    // Doomsayer hint category: surveillance/info fits Insight (same as Sentry/Trapper).
+    public DoomableType DoomHintType => DoomableType.Insight;
+
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
     public CustomRoleConfiguration Configuration => new(this)
     {
-        TasksCountForProgress = true,
         Icon = DivaniAssets.SentinelIcon,
     };
-
-    public override void Initialize(PlayerControl targetPlayer)
-    {
-        RoleBehaviourStubs.Initialize(this, targetPlayer);
-    }
-
-    public override void Deinitialize(PlayerControl targetPlayer)
-    {
-        RoleBehaviourStubs.Deinitialize(this, targetPlayer);
-    }
 }

@@ -5,6 +5,7 @@ using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using TownOfUs.Extensions;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
@@ -12,7 +13,8 @@ using UnityEngine;
 
 namespace DivaniMods.Roles;
 
-public sealed class ThiefRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable
+public sealed class ThiefRole(IntPtr cppPtr)
+    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
 {
     public string RoleName => "Thief";
     public string RoleDescription => "Steal modifiers from other players!";
@@ -20,6 +22,9 @@ public sealed class ThiefRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfUsRo
     public Color RoleColor => new Color(0.5f, 0.3f, 0.1f);
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmatePower;
+
+    // Doomsayer hint category: stealing/manipulation fits Trickster (same as Mayor/Swapper).
+    public DoomableType DoomHintType => DoomableType.Trickster;
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
     
@@ -31,7 +36,6 @@ public sealed class ThiefRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfUsRo
 
     public CustomRoleConfiguration Configuration => new(this)
     {
-        TasksCountForProgress = true,
         Icon = DivaniAssets.ThiefIcon,
         IntroSound = DivaniAssets.ThiefIntroSound,
     };

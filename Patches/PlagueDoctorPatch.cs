@@ -1,13 +1,10 @@
-using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
-using MiraAPI.GameEnd;
 using MiraAPI.GameOptions;
 using TownOfUs.Events;
-using DivaniMods.GameOver;
 using DivaniMods.Options;
 using DivaniMods.Roles;
 using UnityEngine;
@@ -51,32 +48,26 @@ public static class PlagueDoctorPatch
     {
         var victim = evt.Target;
         var killer = evt.Source;
-        
+
         if (victim == null || killer == null) return;
-        
+
         bool victimIsPD = victim == PlagueDoctorRole.PlagueDoctorPlayer;
-        
+
         if (!victimIsPD) return;
-        
+
         var localPlayer = PlayerControl.LocalPlayer;
-        bool isLocalPD = victim.AmOwner || 
-                         (localPlayer != null && PlagueDoctorRole.PlagueDoctorPlayer != null && 
+        bool isLocalPD = victim.AmOwner ||
+                         (localPlayer != null && PlagueDoctorRole.PlagueDoctorPlayer != null &&
                           localPlayer.PlayerId == PlagueDoctorRole.PlagueDoctorPlayer.PlayerId);
-        
+
         if (!isLocalPD || localPlayer == null) return;
-        
+
         var infectKiller = OptionGroupSingleton<PlagueDoctorOptions>.Instance.InfectKiller;
-        
+
         if (infectKiller)
         {
             DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctorPatch: Infecting killer {killer.PlayerId} on PD death");
             PlagueDoctorRole.RpcSetInfected(localPlayer, killer.PlayerId);
-
-            // Immediately check the win condition on PD's client after the killer
-            // is infected. Without this, there is a race between the PD dying and
-            // the next HudManager.Update tick that can leave the game in a weird
-            // state (e.g. impostor sees Defeat but PD win screen never triggers).
-            CheckWinCondition();
         }
     }
 
@@ -122,9 +113,8 @@ public static class PlagueDoctorPatch
             if (!pdIsDead || canWinDead)
             {
                 RunInfectionSpread();
-                CheckWinCondition();
             }
-            
+
             UpdateStatusText();
         }
         else if (localIsDead)
@@ -132,13 +122,11 @@ public static class PlagueDoctorPatch
             UpdateStatusText();
         }
 
-        // Safety net: the host also evaluates the win condition, so that if the
-        // PD client is dead/disconnected/laggy (e.g. imp just killed PD) the game
-        // still ends correctly instead of getting stuck in a weird state.
-        if (AmongUsClient.Instance != null && AmongUsClient.Instance.AmHost)
-        {
-            HostCheckWinCondition();
-        }
+        // The actual win condition is evaluated on the host by TownOfUs's
+        // NeutralRoleWinCondition (registered in WinConditionRegistry), which
+        // calls PlagueDoctorRole.WinConditionMet() and then fires
+        // CustomGameOver.Trigger<NeutralGameOver>(...) - Mira then broadcasts
+        // the end game to every client so they all see the right win screen.
     }
 
     private static void RunInfectionSpread()
@@ -195,52 +183,6 @@ public static class PlagueDoctorPatch
             {
                 PlagueDoctorRole.RpcSetInfected(localPlayer, target.PlayerId);
             }
-        }
-    }
-
-    private static void CheckWinCondition()
-    {
-        var localPlayer = PlayerControl.LocalPlayer;
-        if (localPlayer == null) return;
-        if (PlagueDoctorRole.PlagueDoctorPlayer == null) return;
-        
-        // Only the PD's client should trigger the win
-        if (localPlayer != PlagueDoctorRole.PlagueDoctorPlayer) return;
-        
-        // Don't trigger if already triggered
-        if (PlagueDoctorRole.TriggerPlagueDoctorWin) return;
-        
-        if (PlagueDoctorRole.WinConditionMet())
-        {
-            DivaniPlugin.Instance.Log.LogInfo("PlagueDoctorPatch: Win condition met, calling RpcTriggerPlagueDoctorWin");
-            
-            // Use the RPC to sync to all clients and trigger game end on host
-            PlagueDoctorRole.RpcTriggerPlagueDoctorWin(localPlayer);
-        }
-    }
-
-    /// <summary>
-    /// Host-side safety net for win triggering. Runs on the host regardless of
-    /// whether the host is the PD. This ensures the game ends correctly if the
-    /// PD's client is unable to trigger the win (e.g. just died and their client
-    /// is transitioning). If the win condition is not met, this is a no-op.
-    /// </summary>
-    private static void HostCheckWinCondition()
-    {
-        if (PlagueDoctorRole.PlagueDoctorPlayer == null) return;
-        if (PlagueDoctorRole.TriggerPlagueDoctorWin) return;
-        if (MeetingHud.Instance != null) return;
-        if (PlagueDoctorRole.MeetingFlag) return;
-
-        if (PlagueDoctorRole.WinConditionMet())
-        {
-            var localPlayer = PlayerControl.LocalPlayer;
-            if (localPlayer == null) return;
-            DivaniPlugin.Instance.Log.LogInfo("PlagueDoctorPatch: Host safety-net detected win condition, triggering win RPC");
-            // Use the RPC so all clients get TriggerPlagueDoctorWin=true and
-            // VerifyCondition passes everywhere. Sender must be the local player
-            // because Reactor's MethodRpc dispatches via the sender's NetId.
-            PlagueDoctorRole.RpcTriggerPlagueDoctorWin(localPlayer);
         }
     }
 
@@ -356,166 +298,5 @@ public static class PlagueDoctorPatch
             }
         }
         return null;
-    }
-
-    /// <summary>
-    /// Handle winners list when PD wins - ensures PD is in winners even when dead.
-    /// Also removes PD from winners when they didn't win.
-    /// </summary>
-    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
-    [HarmonyPostfix]
-    [HarmonyPriority(Priority.Last)]
-    public static void OnGameEndHandlePD(ref EndGameResult endGameResult)
-    {
-        DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctorPatch: OnGameEndHandlePD running");
-        if (CustomGameOver.Instance is PlagueDoctorGameOver)
-        {
-            EnsurePDInWinners();
-        }
-        else
-        {
-            RemovePDFromWinnersInternal();
-        }
-    }
-    
-    /// <summary>
-    /// Handle winners list at SetEverythingUp time (runs right before end game display).
-    /// </summary>
-    [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
-    [HarmonyPrefix]
-    [HarmonyPriority(Priority.Last)]
-    public static void HandlePDWinners()
-    {
-        DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctorPatch: HandlePDWinners (SetEverythingUp) running. CustomGameOver: {CustomGameOver.Instance?.GetType().Name ?? "null"}");
-        if (CustomGameOver.Instance is PlagueDoctorGameOver)
-        {
-            EnsurePDInWinners();
-        }
-        else
-        {
-            RemovePDFromWinnersInternal();
-        }
-    }
-    
-    /// <summary>
-    /// Ensures PD is in the winners list - important when PD won while dead.
-    /// Uses fresh data lookup via GameData in case PlayerControl references are stale.
-    /// </summary>
-    private static void EnsurePDInWinners()
-    {
-        if (PlagueDoctorRole.PlagueDoctorPlayer == null)
-        {
-            DivaniPlugin.Instance.Log.LogWarning("PlagueDoctorPatch: Cannot ensure PD in winners - PlagueDoctorPlayer is null");
-            return;
-        }
-        
-        var pdPlayerId = PlagueDoctorRole.PlagueDoctorPlayer.PlayerId;
-        
-        // Try to get fresh data from GameData (more reliable than cached PlayerControl reference)
-        NetworkedPlayerInfo? pdData = null;
-        if (GameData.Instance != null)
-        {
-            pdData = GameData.Instance.GetPlayerById(pdPlayerId);
-        }
-        
-        // Fallback: use the cached reference
-        if (pdData == null)
-        {
-            pdData = PlagueDoctorRole.PlagueDoctorPlayer.Data;
-        }
-        
-        if (pdData == null)
-        {
-            DivaniPlugin.Instance.Log.LogError($"PlagueDoctorPatch: Cannot find PD data for PlayerId {pdPlayerId}");
-            return;
-        }
-        
-        if (EndGameResult.CachedWinners == null)
-        {
-            DivaniPlugin.Instance.Log.LogWarning("PlagueDoctorPatch: CachedWinners is null");
-            return;
-        }
-        
-        // Check if PD is already in winners
-        bool pdInWinners = false;
-        foreach (var winner in EndGameResult.CachedWinners)
-        {
-            if (winner.PlayerName == pdData.PlayerName)
-            {
-                pdInWinners = true;
-                break;
-            }
-        }
-        
-        if (!pdInWinners)
-        {
-            // Clear any other winners (PD wins solo) and add PD
-            EndGameResult.CachedWinners.Clear();
-            var winnerData = new CachedPlayerData(pdData);
-            EndGameResult.CachedWinners.Add(winnerData);
-            DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctorPatch: Added PD ({pdData.PlayerName}) to winners. IsDead: {pdData.IsDead}");
-        }
-        else
-        {
-            DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctorPatch: PD already in winners list");
-        }
-    }
-    
-    private static void RemovePDFromWinnersInternal()
-    {
-        DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctorPatch: RemovePDFromWinnersInternal. CustomGameOver.Instance type: {CustomGameOver.Instance?.GetType().Name ?? "null"}");
-        
-        // If PD didn't win (our custom game over wasn't triggered), remove them from winners
-        if (CustomGameOver.Instance is not PlagueDoctorGameOver)
-        {
-            if (PlagueDoctorRole.PlagueDoctorPlayer == null)
-            {
-                DivaniPlugin.Instance.Log.LogInfo("PlagueDoctorPatch: PlagueDoctorPlayer is null, skipping removal");
-                return;
-            }
-            
-            var pdName = PlagueDoctorRole.PlagueDoctorPlayer.Data?.PlayerName;
-            var pdPlayerId = PlagueDoctorRole.PlagueDoctorPlayer.PlayerId;
-            if (string.IsNullOrEmpty(pdName))
-            {
-                DivaniPlugin.Instance.Log.LogInfo("PlagueDoctorPatch: PD name is null/empty, skipping removal");
-                return;
-            }
-            
-            if (EndGameResult.CachedWinners == null)
-            {
-                DivaniPlugin.Instance.Log.LogInfo("PlagueDoctorPatch: CachedWinners is null");
-                return;
-            }
-            
-            DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctorPatch: Looking for PD ({pdName}, ID:{pdPlayerId}) in {EndGameResult.CachedWinners.Count} winners");
-            
-            var winnersToRemove = new List<CachedPlayerData>();
-            
-            foreach (var winner in EndGameResult.CachedWinners)
-            {
-                DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctorPatch: Winner in list: {winner.PlayerName}");
-                if (winner.PlayerName == pdName)
-                {
-                    winnersToRemove.Add(winner);
-                    DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctorPatch: Marking PD ({pdName}) for removal from winners list");
-                }
-            }
-            
-            foreach (var winner in winnersToRemove)
-            {
-                EndGameResult.CachedWinners.Remove(winner);
-                DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctorPatch: Removed PD ({winner.PlayerName}) from winners list. New count: {EndGameResult.CachedWinners.Count}");
-            }
-            
-            if (winnersToRemove.Count == 0)
-            {
-                DivaniPlugin.Instance.Log.LogInfo("PlagueDoctorPatch: PD was not found in winners list");
-            }
-        }
-        else
-        {
-            DivaniPlugin.Instance.Log.LogInfo("PlagueDoctorPatch: PD won, not removing from winners");
-        }
     }
 }
