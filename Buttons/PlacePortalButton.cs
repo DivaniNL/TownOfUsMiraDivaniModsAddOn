@@ -31,6 +31,10 @@ public class PlacePortalButton : CustomActionButton
     {
         var player = PlayerControl.LocalPlayer;
         if (player == null || player.Data == null || player.Data.IsDead) return false;
+
+        // Disabled during comms sabotage
+        if (PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(player))
+            return false;
         
         if (_isPlacing) return false;
         

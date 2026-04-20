@@ -1,5 +1,6 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
+using MiraAPI.GameOptions.OptionTypes;
 using MiraAPI.Utilities;
 using DivaniMods.Roles;
 
@@ -15,8 +16,8 @@ public class PlagueDoctorOptions : AbstractOptionGroup<PlagueDoctorRole>
     [ModdedNumberOption("Max Direct Infections", 1, 5, 1)]
     public float MaxInfections { get; set; } = 2;
 
-    [ModdedNumberOption("Infection Distance", 0.5f, 3f, 0.25f, MiraNumberSuffixes.Multiplier)]
-    public float InfectDistance { get; set; } = 1.5f;
+    [ModdedNumberOption("Infection Distance", 0.4f, 2f, 0.2f, MiraNumberSuffixes.Multiplier)]
+    public float InfectDistance { get; set; } = 0.6f;
 
     [ModdedNumberOption("Infection Duration", 1, 30, 1, MiraNumberSuffixes.Seconds)]
     public float InfectDuration { get; set; } = 5;
@@ -24,12 +25,15 @@ public class PlagueDoctorOptions : AbstractOptionGroup<PlagueDoctorRole>
     [ModdedNumberOption("Post-Meeting Immunity", 0, 30, 2.5f, MiraNumberSuffixes.Seconds)]
     public float ImmunityTime { get; set; } = 10;
 
-    [ModdedToggleOption("Infect Killer On Death")]
-    public bool InfectKiller { get; set; } = true;
-
-    [ModdedToggleOption("Can Win While Dead")]
-    public bool CanWinDead { get; set; } = true;
-
     [ModdedToggleOption("Can Use Vents")]
     public bool CanVent { get; set; } = false;
+
+    [ModdedToggleOption("Can Win While Dead")]
+    public bool CanWinDead { get; set; } = false;
+
+    public ModdedToggleOption InfectKiller { get; } = new("Infect Killer On Death", false)
+    {
+        Visible = () => OptionGroupSingleton<PlagueDoctorOptions>.Instance.CanWinDead,
+    };
+
 }

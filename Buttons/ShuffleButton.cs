@@ -175,15 +175,20 @@ public class ShuffleButton : CustomActionButton
         
         DivaniPlugin.Instance.Log.LogInfo($"Parsed {playerCoordinates.Count} player positions and {bodyCoordinates.Count} body positions");
         
-        if (Minigame.Instance)
+        // Only close minigames/vents for living players who are being shuffled
+        var localPlayer = PlayerControl.LocalPlayer;
+        if (localPlayer != null && localPlayer.Data != null && !localPlayer.Data.IsDead && playerCoordinates.ContainsKey(localPlayer.PlayerId))
         {
-            try { Minigame.Instance.Close(); }
-            catch { }
-        }
-        
-        if (PlayerControl.LocalPlayer.inVent)
-        {
-            PlayerControl.LocalPlayer.MyPhysics.ExitAllVents();
+            if (Minigame.Instance)
+            {
+                try { Minigame.Instance.Close(); }
+                catch { }
+            }
+            
+            if (localPlayer.inVent)
+            {
+                localPlayer.MyPhysics.ExitAllVents();
+            }
         }
         
         foreach (var kvp in playerCoordinates)
@@ -275,5 +280,6 @@ public enum DivaniRpcCalls : uint
     ResetPortals = 207,
     PlagueDoctorSetInfected = 208,
     PlagueDoctorUpdateProgress = 209,
-    PlagueDoctorWin = 210
+    PlagueDoctorWin = 210,
+    PlaceBeacon = 211
 }

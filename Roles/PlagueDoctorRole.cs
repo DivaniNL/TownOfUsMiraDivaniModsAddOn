@@ -27,7 +27,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITown
     public static Dictionary<byte, float> InfectionProgress { get; } = new();
     public static Dictionary<byte, bool> DeadPlayers { get; } = new();
     public static bool TriggerPlagueDoctorWin { get; set; }
-    public static PlayerControl? PlagueDoctorPlayer { get; private set; }
+    public static PlayerControl? PlagueDoctorPlayer { get; internal set; }
     public static TMPro.TMP_Text? StatusText { get; set; }
     
     public static int NumInfectionsRemaining { get; set; }
@@ -76,6 +76,17 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITown
     {
         RoleBehaviourStubs.Deinitialize(this, targetPlayer);
         TouRoleUtils.ClearTaskHeader(Player);
+    }
+
+    public override bool CanUse(IUsable usable)
+    {
+        if (!GameManager.Instance.LogicUsables.CanUse(usable, Player))
+        {
+            return false;
+        }
+
+        var console = usable.TryCast<Console>()!;
+        return console == null || console.AllowImpostor;
     }
 
     public static void ClearAndReload()

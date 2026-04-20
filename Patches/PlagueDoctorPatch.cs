@@ -93,10 +93,14 @@ public static class PlagueDoctorPatch
     [HarmonyPostfix]
     public static void HudManagerUpdate(HudManager __instance)
     {
-        if (PlagueDoctorRole.PlagueDoctorPlayer == null) return;
-        
         var localPlayer = PlayerControl.LocalPlayer;
-        if (localPlayer == null) return;
+        if (localPlayer == null || localPlayer.Data == null) return;
+
+        bool isLocalPD = localPlayer.Data.Role is PlagueDoctorRole ||
+                         (PlagueDoctorRole.PlagueDoctorPlayer != null &&
+                          localPlayer.PlayerId == PlagueDoctorRole.PlagueDoctorPlayer.PlayerId);
+
+        if (PlagueDoctorRole.PlagueDoctorPlayer == null) return;
 
         // Tick immunity timer every frame while gameplay is active. Don't tick
         // during meetings or the ejection sequence, or the grace period would
@@ -109,9 +113,8 @@ public static class PlagueDoctorPatch
             PlagueDoctorRole.TickImmunityTimer(Time.deltaTime);
         }
         
-        bool isLocalPD = localPlayer == PlagueDoctorRole.PlagueDoctorPlayer;
         bool canWinDead = PlagueDoctorRole.CanWinWhileDead;
-        bool pdIsDead = PlagueDoctorRole.PlagueDoctorPlayer.Data?.IsDead ?? false;
+        bool pdIsDead = PlagueDoctorRole.PlagueDoctorPlayer?.Data?.IsDead ?? false;
         bool localIsDead = localPlayer.Data?.IsDead ?? false;
         
         if (isLocalPD)
@@ -306,19 +309,28 @@ public static class PlagueDoctorPatch
 
     private static void CreateStatusText()
     {
-        if (HudManager.Instance?.roomTracker == null) return;
+        if (HudManager.Instance?.roomTracker == null)
+        {
+            DivaniPlugin.Instance.Log.LogWarning("PlagueDoctor: CreateStatusText - roomTracker is null");
+            return;
+        }
 
         var gameObject = UnityEngine.Object.Instantiate(HudManager.Instance.roomTracker.gameObject);
         gameObject.transform.SetParent(HudManager.Instance.transform);
         gameObject.SetActive(true);
 
-        var roomTracker = gameObject.GetComponent<RoomTracker>();
-        if (roomTracker != null)
-        {
-            UnityEngine.Object.DestroyImmediate(roomTracker);
-        }
+        UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
 
-        PlagueDoctorRole.StatusText = gameObject.GetComponent<TMPro.TMP_Text>();
+        // TMP_Text may be on a child object in newer Among Us versions
+        PlagueDoctorRole.StatusText = gameObject.GetComponent<TMPro.TMP_Text>()
+                                      ?? gameObject.GetComponentInChildren<TMPro.TMP_Text>();
+
+        if (PlagueDoctorRole.StatusText == null)
+        {
+            DivaniPlugin.Instance.Log.LogError("PlagueDoctor: CreateStatusText - Could not find TMP_Text component!");
+            UnityEngine.Object.Destroy(gameObject);
+            return;
+        }
 
         var aliveCount = PlayerControl.AllPlayerControls.ToArray()
             .Count(x => x != null && x.Data != null && !x.Data.IsDead && x != PlagueDoctorRole.PlagueDoctorPlayer);
@@ -329,6 +341,9 @@ public static class PlagueDoctorPatch
         PlagueDoctorRole.StatusText.fontSizeMin = 1.5f;
         PlagueDoctorRole.StatusText.fontSizeMax = 1.5f;
         PlagueDoctorRole.StatusText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+        PlagueDoctorRole.StatusText.alpha = 1f;
+
+        DivaniPlugin.Instance.Log.LogInfo("PlagueDoctor: StatusText created successfully");
     }
 
     private static PlayerControl? GetPlayerById(byte id)
