@@ -16,9 +16,9 @@ Divani Mods is built on [BepInEx](https://github.com/BepInEx/BepInEx),
 | --------------------- | --------------------------- | ---------------------------- | ----------------------- |
 | [Deadlock](#deadlock) | [Thief](#thief)             | [Plague Doctor](#plague-doctor) | [Blindspot](#blindspot) |
 |                       | [Portalmaker](#portalmaker) |                              | [Fragile](#fragile)     |
-|                       |                             |                              | [Ruthless](#ruthless)   |
+|                       | [Sentinel](#sentinel)       |                              | [Ruthless](#ruthless)   |
 |                       |                             |                              | [Shuffle](#shuffle)     |
-|                        |                              |                               | [Misvote](#misvote)      |
+|                       |                             |                              | [Misvote](#misvote)     |
 
 ---
 
@@ -73,6 +73,27 @@ can use them to teleport between the two locations.
 | Portalmaker           | The percentage probability of the Portalmaker appearing | Percentage | 0% |
 | Place Portal Cooldown | The cooldown on the place-portal button                 | Time | 20s     |
 | Use Portal Cooldown   | The cooldown on the use-portal button                   | Time | 10s     |
+
+---
+
+### Sentinel
+
+#### **Crewmate Support**
+
+The Sentinel is a Crewmate that places beacons to monitor rooms. Drop a
+beacon in any room and you will see a flash whenever another player enters
+that room. During meetings, you can review which players passed through
+each of your beacon rooms, turning them into an information&ndash;gathering
+surveillance network.
+
+#### Game Options
+
+| Name                        | Description                                                          | Type       | Default |
+| --------------------------- | -------------------------------------------------------------------- | ---------- | ------- |
+| Sentinel                    | The percentage probability of the Sentinel appearing                 | Percentage | 0%      |
+| Max Beacons                 | How many beacons the Sentinel can place in a game                    | Number     | 3       |
+| Place Beacon Cooldown       | The cooldown on the place&ndash;beacon button                        | Time       | 15s     |
+| Show Room Activity In Chat  | If enabled, meeting reports about beacon rooms are also sent in chat | Toggle     | False   |
 
 ---
 
