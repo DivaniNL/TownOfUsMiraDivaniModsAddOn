@@ -11,7 +11,12 @@ namespace DivaniMods.Patches;
 /// shield (+), executioner target (X), etc., so the indicator renders below the
 /// minimap overlay instead of on top of it.
 /// </summary>
-[HarmonyPatch(typeof(PlayerRoleTextExtensions), nameof(PlayerRoleTextExtensions.UpdateTargetSymbols))]
+// Target the (string, PlayerControl, bool) overload explicitly. TownOfUs added
+// a second UpdateTargetSymbols(string, PlayerControl, DataVisibility) overload,
+// and without the parameter list Harmony throws AmbiguousMatchException out of
+// PatchAll -> Load, which kills the entire plugin (no credits, no patches).
+[HarmonyPatch(typeof(PlayerRoleTextExtensions), nameof(PlayerRoleTextExtensions.UpdateTargetSymbols),
+    new[] { typeof(string), typeof(PlayerControl), typeof(bool) })]
 public static class PlagueDoctorMeetingPatch
 {
     private const string InfectedSymbol = "µ";
