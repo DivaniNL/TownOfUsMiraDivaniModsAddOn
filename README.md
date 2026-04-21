@@ -139,7 +139,7 @@ living player is infected.
 | Plague Doctor           | The percentage probability of the Plague Doctor appearing                | Percentage | 0%      |
 | Infect Cooldown         | The cooldown on the Infect ability                                       | Time       | 25s     |
 | Max Direct Infections   | How many players the Plague Doctor can infect directly with the ability  | Number     | 2       |
-| Infection Distance      | Range for passive infection spread                                       | Multiplier | 1.5x    |
+| Infection Distance      | Range for passive infection spread                                       | Multiplier | 0.6x    |
 | Infection Duration      | Seconds of proximity needed to passively infect someone                  | Time       | 5s      |
 | Post-Meeting Immunity   | Grace period after meetings where passive spread is paused               | Time       | 10s     |
 | Infect Killer On Death  | Whether killing the Plague Doctor also infects the killer                | Toggle     | True    |
