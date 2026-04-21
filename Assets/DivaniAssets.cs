@@ -24,6 +24,9 @@ public static class DivaniAssets
     // size to the other role icons (which are 700-1024 px at 550 ppu).
     public static LoadableAsset<Sprite> PlagueDoctorIcon { get; } = new LoadableResourceAsset($"{ShortPath}.PlagueDoctorIcon.png", 80);
 
+    // Sentinel icon - used for role icon and button. Lower ppu to match small source image size.
+    public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{ShortPath}.SentinelIcon.png", 115);
+
     // Audio clips - loaded lazily by MiraAPI from embedded WAVs, same approach
     // TouMiraRolesExtension uses. Drop WAV files into Resources/ and embed them
     // in the csproj alongside the other resources.
@@ -48,6 +51,9 @@ public static class DivaniAssets
     
     // Portal on map (200 ppu)
     public static LoadableAsset<Sprite> PortalSprite { get; } = new LoadableResourceAsset($"{ShortPath}.PortalSprite.png", 200);
+
+    // Beacon on map (550 ppu – source image is ~1024px so high ppu keeps it small in-game)
+    public static LoadableAsset<Sprite> BeaconSprite { get; } = new LoadableResourceAsset($"{ShortPath}.BeaconAsset.png", 550);
 
     // Biohazard icon shown next to fully-infected players in meetings (PD-only view).
     public static LoadableAsset<Sprite> InfectedIcon { get; } = new LoadableResourceAsset($"{ShortPath}.InfectedIcon.png", 300);

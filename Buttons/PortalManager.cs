@@ -5,11 +5,14 @@ using UnityEngine;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Roles;
+using TownOfUs.Utilities;
 
 namespace DivaniMods.Buttons;
 
 public static class PortalManager
 {
+    private const float PortalAnchorYOffset = 0.3636f;
+
     public static Vector2? Portal1Position { get; private set; }
     public static Vector2? Portal2Position { get; private set; }
     
@@ -76,13 +79,9 @@ public static class PortalManager
             msg = message.ToString();
         }
         
-        var title = "<color=#6633CC>Portal Activity</color>";
-        var fullMessage = $"{title}\n{msg}";
+        var title = "<color=#0C6BF5FF>Portal Activity</color>";
         
-        if (HudManager.Instance != null && HudManager.Instance.Chat != null)
-        {
-            HudManager.Instance.Chat.AddChat(portalmaker, fullMessage, false);
-        }
+        MiscUtils.AddFakeChat(portalmaker.Data, title, msg, false, true);
         
         PortalUsers.Clear();
     }
@@ -118,41 +117,55 @@ public static class PortalManager
         else
             Portal2Object = portal;
     }
+
+    private static Vector2 GetPortalUseAnchor(Vector2 fallbackPosition, GameObject? portalObject)
+    {
+        if (portalObject != null)
+        {
+            var sr = portalObject.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                return sr.bounds.center;
+            }
+        }
+
+        return new Vector2(fallbackPosition.x, fallbackPosition.y + PortalAnchorYOffset);
+    }
     
     public static Vector2? GetDestination(Vector2 playerPosition)
     {
         if (!BothPortalsPlaced) return null;
+
+        var portal1UseAnchor = GetPortalUseAnchor(Portal1Position!.Value, Portal1Object);
+        var portal2UseAnchor = GetPortalUseAnchor(Portal2Position!.Value, Portal2Object);
         
-        float dist1 = Vector2.Distance(playerPosition, Portal1Position!.Value);
-        float dist2 = Vector2.Distance(playerPosition, Portal2Position!.Value);
+        float dist1 = Vector2.Distance(playerPosition, portal1UseAnchor);
+        float dist2 = Vector2.Distance(playerPosition, portal2UseAnchor);
+
+        var portal1Destination = new Vector2(Portal1Position.Value.x, Portal1Position.Value.y + PortalAnchorYOffset);
+        var portal2Destination = new Vector2(Portal2Position.Value.x, Portal2Position.Value.y + PortalAnchorYOffset);
         
-        const float useRange = 1.5f;
+        const float useRange = 0.5f;
         
-        if (dist1 <= useRange && HasLineOfSight(playerPosition, Portal1Position!.Value))
-            return new Vector2(Portal2Position!.Value.x, Portal2Position!.Value.y + 0.3636f);
-        if (dist2 <= useRange && HasLineOfSight(playerPosition, Portal2Position!.Value))
-            return new Vector2(Portal1Position!.Value.x, Portal1Position!.Value.y + 0.3636f);
+        if (dist1 <= useRange)
+            return portal2Destination;
+        if (dist2 <= useRange)
+            return portal1Destination;
         
         return null;
     }
     
-    public static bool IsNearPortal(Vector2 playerPosition, float range = 1.5f)
+    public static bool IsNearPortal(Vector2 playerPosition, float range = 0.5f)
     {
         if (!BothPortalsPlaced) return false;
+
+        var portal1Anchor = GetPortalUseAnchor(Portal1Position!.Value, Portal1Object);
+        var portal2Anchor = GetPortalUseAnchor(Portal2Position!.Value, Portal2Object);
         
-        float dist1 = Vector2.Distance(playerPosition, Portal1Position!.Value);
-        float dist2 = Vector2.Distance(playerPosition, Portal2Position!.Value);
+        float dist1 = Vector2.Distance(playerPosition, portal1Anchor);
+        float dist2 = Vector2.Distance(playerPosition, portal2Anchor);
         
-        bool nearPortal1 = dist1 <= range && HasLineOfSight(playerPosition, Portal1Position!.Value);
-        bool nearPortal2 = dist2 <= range && HasLineOfSight(playerPosition, Portal2Position!.Value);
-        
-        return nearPortal1 || nearPortal2;
-    }
-    
-    private static bool HasLineOfSight(Vector2 from, Vector2 to)
-    {
-        var hit = Physics2D.Linecast(from, to, Constants.ShipAndAllObjectsMask);
-        return hit.collider == null;
+        return dist1 <= range || dist2 <= range;
     }
     
     public static bool CanUsePortal(byte playerId)

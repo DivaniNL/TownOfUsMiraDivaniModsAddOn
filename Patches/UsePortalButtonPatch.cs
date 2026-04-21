@@ -19,6 +19,13 @@ internal static class UsePortalButtonVisibilityPatch
             return;
         }
         
+        // Hide during meetings
+        if (MeetingHud.Instance || ExileController.Instance)
+        {
+            ButtonInstance.Button.gameObject.SetActive(false);
+            return;
+        }
+        
         if (!PortalManager.BothPortalsPlaced)
         {
             ButtonInstance.Button.gameObject.SetActive(false);
@@ -27,6 +34,20 @@ internal static class UsePortalButtonVisibilityPatch
         
         var position = player.GetTruePosition();
         bool nearPortal = PortalManager.IsNearPortal(position);
-        ButtonInstance.Button.gameObject.SetActive(nearPortal);
+        
+        if (nearPortal)
+        {
+            ButtonInstance.Button.gameObject.SetActive(true);
+            
+            // Show disabled state during comms sabotage
+            if (PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(player))
+            {
+                ButtonInstance.Button.SetDisabled();
+            }
+        }
+        else
+        {
+            ButtonInstance.Button.gameObject.SetActive(false);
+        }
     }
 }

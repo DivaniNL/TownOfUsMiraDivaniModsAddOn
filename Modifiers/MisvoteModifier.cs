@@ -11,9 +11,10 @@ using UnityEngine;
 namespace DivaniMods.Modifiers;
 
 /// <summary>
-/// Universal modifier: the player votes normally but their vote - including
-/// Skip - is silently redirected to a random alive player every meeting.
-/// The re-roll runs in <see cref="DivaniMods.Patches.MisvoteVotePatches"/>.
+/// Universal modifier: every vote the player casts - including Skip, and every
+/// bonus vote from Mayor, Knighted, or Prosecutor's prosecution - is silently
+/// redirected to an independently chosen random alive player each meeting.
+/// The re-rolls run in <see cref="DivaniMods.Patches.MisvoteVotePatches"/>.
 /// </summary>
 public sealed class MisvoteModifier : UniversalGameModifier, IWikiDiscoverable
 {
@@ -24,8 +25,8 @@ public sealed class MisvoteModifier : UniversalGameModifier, IWikiDiscoverable
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.MisvoteIcon;
 
     public override string GetDescription() =>
-        "Your vote is random every meeting. You vote normally, but the vote - " +
-        "even a Skip - is transferred to a random alive player.";
+        "Your vote is random every meeting. You vote normally, but the vote(s) - " +
+        "even a Skip - are transferred to a random players each meeting.";
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
 

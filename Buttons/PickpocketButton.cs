@@ -14,6 +14,7 @@ using DivaniMods.Patches;
 using DivaniMods.Roles;
 using DivaniMods.Utilities;
 using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Game;
 using TownOfUs.Utilities.Appearances;
 using UnityEngine;
 
@@ -100,7 +101,7 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
         if (targetModifiers.Count > 0)
         {
             var stolen = targetModifiers[random.Next(targetModifiers.Count)];
-            var canUseModifier = CanThiefUseModifier(stolen);
+            var canUseModifier = CanThiefUseModifier(stolen, player.Data.Role);
             
             // Pre-pick the fallback random id on the sender so every client applies the
             // same result. Without this, each client ran its own System.Random() and the
@@ -190,11 +191,49 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
         return false;
     }
     
-    private static bool CanThiefUseModifier(BaseModifier modifier)
+    private static bool CanThiefUseModifier(BaseModifier modifier, RoleBehaviour? thiefRole)
     {
         var modNamespace = modifier.GetType().Namespace;
         if (modNamespace != null && ExcludedNamespaces.Any(ns => modNamespace.StartsWith(ns, StringComparison.OrdinalIgnoreCase)))
             return false;
+        
+        // Reject faction-locked modifiers that belong to a side the Thief isn't on.
+        // IsModifierValidOn is NOT usable here because TouGameModifier's base implementation
+        // also encodes the "one TouGameModifier per player" assignment rule, which would
+        // falsely reject Shuffle/etc. after the thief already holds one stolen modifier.
+        if (!IsFactionValidForThief(modifier))
+            return false;
+        
+        return true;
+    }
+    
+    /// <summary>
+    /// True when the modifier's <c>FactionType</c> fits a crew-aligned Thief. Namespaces alone
+    /// don't cover modifiers like DoubleShot that live in the generic
+    /// <c>TownOfUs.Modifiers.Game</c> namespace but are marked as AssailantUtility.
+    /// Works across all three mods: TownOfUsMira uses <see cref="TouGameModifier"/> and
+    /// <see cref="UniversalGameModifier"/>; TouMiraRolesExtension uses UniversalGameModifier
+    /// plus TimedModifier/BaseModifier (which are already filtered by HideOnUi); DivaniMods
+    /// uses TouGameModifier. Both base classes expose a <c>ModifierFaction FactionType</c>.
+    /// </summary>
+    private static bool IsFactionValidForThief(BaseModifier modifier)
+    {
+        var factionName = modifier switch
+        {
+            TouGameModifier tgm => tgm.FactionType.ToString(),
+            UniversalGameModifier ugm => ugm.FactionType.ToString(),
+            _ => null,
+        };
+        
+        if (factionName == null) return true;
+        
+        if (factionName.Contains("Impostor", StringComparison.OrdinalIgnoreCase)) return false;
+        if (factionName.Contains("Assailant", StringComparison.OrdinalIgnoreCase)) return false;
+        if (factionName.Contains("Neutral", StringComparison.OrdinalIgnoreCase)) return false;
+        if (factionName.Contains("NonCrew", StringComparison.OrdinalIgnoreCase)) return false;
+        if (factionName.Contains("Hider", StringComparison.OrdinalIgnoreCase)) return false;
+        if (factionName.Contains("Seeker", StringComparison.OrdinalIgnoreCase)) return false;
+        if (factionName.Contains("External", StringComparison.OrdinalIgnoreCase)) return false;
         
         return true;
     }
@@ -249,6 +288,13 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
                 continue;
             
             if (modifier is IVisualAppearance)
+                continue;
+            
+            // Skip faction-locked modifiers that aren't appropriate for a crew-aligned
+            // Thief. Covers addon impostor modifiers (e.g. Ruthless in DivaniMods.*) and
+            // TOU modifiers that sit in the generic TownOfUs.Modifiers.Game namespace but
+            // are flagged with an impostor/assailant/neutral FactionType (e.g. DoubleShot).
+            if (!IsFactionValidForThief(modifier))
                 continue;
             
             var modType = modifier.GetType();

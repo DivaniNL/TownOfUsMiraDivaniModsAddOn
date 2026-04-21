@@ -28,6 +28,14 @@ public class UsePortalButton : CustomActionButton
     {
         var player = PlayerControl.LocalPlayer;
         if (player == null || player.Data == null || player.Data.IsDead) return false;
+
+        // Disabled during meetings
+        if (MeetingHud.Instance || ExileController.Instance)
+            return false;
+
+        // Disabled during comms sabotage
+        if (PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(player))
+            return false;
         
         if (!PortalManager.BothPortalsPlaced) return false;
         
