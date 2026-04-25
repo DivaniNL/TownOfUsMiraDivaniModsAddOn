@@ -119,6 +119,7 @@
     <EmbeddedResource Include="Resources\SentinelIcon.png" />
     <EmbeddedResource Include="Resources\BeaconAsset.png" />
     <EmbeddedResource Include="Resources\MisvoteIcon.png" Condition="Exists('Resources\MisvoteIcon.png')" />
+    <EmbeddedResource Include="Resources\SilencerIcon.png" Condition="Exists('Resources\SilencerIcon.png')" />
     <!-- Audio clips must be WAV - loaded via MiraAPI's LoadableAudioResourceAsset,
          matching how TouMiraRolesExtension ships its sounds. -->
     <EmbeddedResource Include="Resources\FragileBreak.wav" />
