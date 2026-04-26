@@ -39,8 +39,7 @@ public sealed class SilencerRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
-        // Use an existing embedded icon until Resources/SilencerIcon.png exists.
-        // Missing role icon resources can stop Mira from registering the role.
-        Icon = DivaniAssets.DeadlockIcon,
+        Icon = DivaniAssets.SilencerIcon,
+        IntroSound = DivaniAssets.SilencerIntroSound,
     };
 }

@@ -50,6 +50,10 @@
       <HintPath>$(BepInExPath)\interop\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(BepInExPath)\interop\UnityEngine.AnimationModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="UnityEngine.Physics2DModule">
       <HintPath>$(BepInExPath)\interop\UnityEngine.Physics2DModule.dll</HintPath>
       <Private>false</Private>
@@ -118,6 +122,9 @@
     <EmbeddedResource Include="Resources\InfectedIcon.png" />
     <EmbeddedResource Include="Resources\SentinelIcon.png" />
     <EmbeddedResource Include="Resources\BeaconAsset.png" />
+    <EmbeddedResource Include="Resources\FragIcon.png" Condition="Exists('Resources\FragIcon.png')" />
+    <EmbeddedResource Include="Resources\FragGive.png" Condition="Exists('Resources\FragGive.png')" />
+    <EmbeddedResource Include="Resources\FragPass.png" Condition="Exists('Resources\FragPass.png')" />
     <EmbeddedResource Include="Resources\MisvoteIcon.png" Condition="Exists('Resources\MisvoteIcon.png')" />
     <EmbeddedResource Include="Resources\SilencerIcon.png" Condition="Exists('Resources\SilencerIcon.png')" />
     <!-- Audio clips must be WAV - loaded via MiraAPI's LoadableAudioResourceAsset,
@@ -129,6 +136,10 @@
     <EmbeddedResource Include="Resources\PortalMakerIntro.wav" />
     <EmbeddedResource Include="Resources\DeadlockIntro.wav" />
     <EmbeddedResource Include="Resources\PlacePortalSound.wav" />
+    <EmbeddedResource Include="Resources\FragHeartbeat.wav" Condition="Exists('Resources\FragHeartbeat.wav')" />
+    <EmbeddedResource Include="Resources\FragIntro.wav" Condition="Exists('Resources\FragIntro.wav')" />
+    <EmbeddedResource Include="Resources\SilencerIntro.wav" Condition="Exists('Resources\SilencerIntro.wav')" />
+    <EmbeddedResource Include="Resources\FragGive.wav" Condition="Exists('Resources\FragGive.wav')" />
     <EmbeddedResource Include="Resources\DoorOpen.wav" />
     <EmbeddedResource Include="Resources\DoorClose.wav" />
   </ItemGroup>

@@ -10,12 +10,13 @@ using MiraAPI.Modifiers;
 using MiraAPI.Networking;
 using MiraAPI.Utilities;
 using DivaniMods.Modifiers;
+using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Crewmate;
 
 namespace DivaniMods.Patches;
 
 /// <summary>
-/// Ruthless modifier: Impostor can kill through shields (Medic, GA, Survivor).
+/// Ruthless modifier: Impostor can kill through shields (Medic, GA, Survivor, first-death shield, etc.).
 /// Veterans on alert still counter-kill the impostor normally.
 /// 
 /// Strategy:
@@ -81,6 +82,10 @@ public static class RuthlessEventHandler
         
         // Fast path: Mira generic lookup matches gameplay modifiers reliably.
         if (target.HasModifier<MedicShieldModifier>())
+            return true;
+
+        // First-death shield is NOT a BaseShieldModifier (ExcludedGameModifier); still blocks kills until bypassed.
+        if (target.HasModifier<FirstDeadShield>())
             return true;
 
         foreach (var mod in target.GetModifiers<BaseModifier>())
@@ -321,6 +326,21 @@ public static class RuthlessEventHandler
                 }
             }
 
+            var skipFirstShield = typeof(RuthlessRpcPatches).GetMethod(
+                nameof(RuthlessRpcPatches.SkipIfRuthlessFirstDeathShield),
+                BindingFlags.Public | BindingFlags.Static);
+            {
+                var firstShieldType = touAssembly.GetType("TownOfUs.Events.Misc.FirstShieldEvents");
+                var firstMethod = firstShieldType?.GetMethod("CheckForFirstDeathShield",
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                if (firstMethod != null && skipFirstShield != null)
+                {
+                    harmony.Patch(firstMethod, prefix: new HarmonyMethod(skipFirstShield));
+                    patchCount++;
+                    DivaniPlugin.Instance.Log.LogInfo("Ruthless: Patched FirstShieldEvents.CheckForFirstDeathShield (void, target then source)");
+                }
+            }
+
             {
                 var invulnType = touAssembly.GetType("TownOfUs.Events.InvulnerabilityEvents");
                 var invulnMethod = invulnType?.GetMethod("CheckForInvulnerability",
@@ -409,6 +429,20 @@ public static class RuthlessRpcPatches
         if (IsRuthlessAttacker(source))
         {
             DivaniPlugin.Instance.Log.LogInfo("Ruthless: Skipping warden fortify check (void)");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Prefix for <c>FirstShieldEvents.CheckForFirstDeathShield</c>: (event, target, source).
+    /// </summary>
+    public static bool SkipIfRuthlessFirstDeathShield(PlayerControl target, PlayerControl source)
+    {
+        if (IsRuthlessAttacker(source))
+        {
+            DivaniPlugin.Instance.Log.LogInfo("Ruthless: Skipping first-death shield check (void)");
             return false;
         }
 
