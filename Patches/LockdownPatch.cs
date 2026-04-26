@@ -19,24 +19,28 @@ public static class LockdownPatch
     /// <summary>Stack priority for Lockdown - lower than Frag so it sits on top when both are active.</summary>
     private const int TimerPriority = 10;
 
-    // Only block TASK consoles during a lockdown. Task consoles have a
-    // populated `TaskTypes` array; the emergency-meeting button, portal
-    // consoles, etc. have `TaskTypes.Length == 0`. Map systems (Admin,
-    // Cameras, Vitals, Doors, Comms, Reactor) use SystemConsole, which we
-    // deliberately don't patch at all so crewmates keep full access to
-    // meetings, info panels and utilities during a lockdown.
+    // Only block TASK consoles during a lockdown. Vanilla task consoles set
+    // `AllowImpostor = false` (impostors can't run crew tasks), which is the
+    // most reliable signal: several normal tasks (Refuel/gas, Trash Chute,
+    // Upload Data, Divert Power, ...) ship with an EMPTY `TaskTypes` array,
+    // so a `TaskTypes.Length` check would let them through during lockdown.
+    //
+    // The emergency-meeting button uses `SystemConsole` (not `Console`), so
+    // it never enters this prefix at all. Map systems (Admin, Cameras,
+    // Vitals, Doors, Comms, Reactor) also use SystemConsole — crew keep
+    // full access to meetings, info panels and utilities during a lockdown.
     //
     // Sabotage-fix consoles (reactor reset, lights, O2, comms, Fungle
-    // reactor, Mushroom Mixup) are also Console instances with TaskTypes
-    // set, so we whitelist those explicitly - otherwise the impostor could
-    // lockdown the ship AND sabotage, trapping the crew with no way out.
+    // reactor, Mushroom Mixup) are `Console` instances with `AllowImpostor`
+    // false too, so we whitelist them explicitly — otherwise the impostor
+    // could lockdown the ship AND sabotage, trapping the crew with no way out.
     [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
     [HarmonyPrefix]
     public static bool ConsoleCanUsePrefix(Console __instance, NetworkedPlayerInfo pc, ref bool canUse, ref bool couldUse, ref float __result)
     {
         if (!LockdownButton.IsLockdownActive) return true;
         if (__instance == null) return true;
-        if (__instance.TaskTypes == null || __instance.TaskTypes.Length == 0) return true;
+        if (__instance.AllowImpostor) return true;
         if (IsSabotageFixConsole(__instance)) return true;
 
         var playerControl = pc?.Object;
