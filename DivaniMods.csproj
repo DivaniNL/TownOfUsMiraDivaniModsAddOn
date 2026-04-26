@@ -141,6 +141,7 @@
     <EmbeddedResource Include="Resources\FragIntro.wav" Condition="Exists('Resources\FragIntro.wav')" />
     <EmbeddedResource Include="Resources\SilencerIntro.wav" Condition="Exists('Resources\SilencerIntro.wav')" />
     <EmbeddedResource Include="Resources\FragGive.wav" Condition="Exists('Resources\FragGive.wav')" />
+    <EmbeddedResource Include="Resources\BearTrapActivate.wav" Condition="Exists('Resources\BearTrapActivate.wav')" />
     <EmbeddedResource Include="Resources\DoorOpen.wav" />
     <EmbeddedResource Include="Resources\DoorClose.wav" />
   </ItemGroup>
