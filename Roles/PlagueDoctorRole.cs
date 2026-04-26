@@ -12,6 +12,7 @@ using DivaniMods.Assets;
 using DivaniMods.Buttons;
 using DivaniMods.Options;
 using TownOfUs;
+using TownOfUs.Assets;
 using TownOfUs.Extensions;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
@@ -95,12 +96,23 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
             PlagueDoctorPlayer = targetPlayer;
             DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctor: Player {targetPlayer.PlayerId} initialized as Plague Doctor (AmOwner: {targetPlayer.AmOwner})");
         }
+
+        if (Player.AmOwner)
+        {
+            HudManager.Instance.ImpostorVentButton.graphic.sprite = DivaniAssets.PlagueDoctorVentButton.LoadAsset();
+            HudManager.Instance.ImpostorVentButton.buttonLabelText.SetOutlineColor(PlagueDoctorColor);
+        }
     }
 
     public override void Deinitialize(PlayerControl targetPlayer)
     {
         RoleBehaviourStubs.Deinitialize(this, targetPlayer);
         TouRoleUtils.ClearTaskHeader(Player);
+        if (Player.AmOwner)
+        {
+            HudManager.Instance.ImpostorVentButton.graphic.sprite = TouAssets.VentSprite.LoadAsset();
+            HudManager.Instance.ImpostorVentButton.buttonLabelText.SetOutlineColor(TownOfUsColors.Impostor);
+        }
     }
 
     public override bool CanUse(IUsable usable)

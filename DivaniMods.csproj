@@ -119,6 +119,7 @@
     <EmbeddedResource Include="Resources\RuthlessIcon.png" />
     <EmbeddedResource Include="Resources\PlagueDoctorIcon.png" />
     <EmbeddedResource Include="Resources\InfectButton.png" />
+    <EmbeddedResource Include="Resources\PDVent.png" />
     <EmbeddedResource Include="Resources\InfectedIcon.png" />
     <EmbeddedResource Include="Resources\SentinelIcon.png" />
     <EmbeddedResource Include="Resources\BeaconAsset.png" />

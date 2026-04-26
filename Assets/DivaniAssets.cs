@@ -13,6 +13,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> PlacePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalSprite.png", 115);
     public static LoadableAsset<Sprite> UsePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalSprite.png", 115);
     public static LoadableAsset<Sprite> InfectButton { get; } = new LoadableResourceAsset($"{ShortPath}.InfectButton.png", 115);
+    public static LoadableAsset<Sprite> PlagueDoctorVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.PDVent.png", 1024);
     // Frag button art is 512x512; lower ppu = larger on HUD (Lockdown uses 115).
     public static LoadableAsset<Sprite> FragGiveButton { get; } = new LoadableResourceAsset($"{ShortPath}.FragGive.png", 360);
     public static LoadableAsset<Sprite> FragPassButton { get; } = new LoadableResourceAsset($"{ShortPath}.FragPass.png", 360);
