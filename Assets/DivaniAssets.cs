@@ -29,7 +29,8 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> SilencerIcon { get; } = new LoadableResourceAsset($"{ShortPath}.SilencerIcon.png", 275);
     // Role screen icon uses a lower ppu so the 150x150 source renders at a comparable
     // size to the other role icons (which are 700-1024 px at 550 ppu).
-    public static LoadableAsset<Sprite> PlagueDoctorIcon { get; } = new LoadableResourceAsset($"{ShortPath}.PlagueDoctorIcon.png", 80);
+    public static LoadableAsset<Sprite> PlagueDoctorIcon { get; } = new LoadableResourceAsset($"{ShortPath}.PlagueDoctorIcon.png", 115);
+    public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{ShortPath}.InnocentIcon.png", 115);
 
     // Sentinel icon - used for role icon and button. Lower ppu to match small source image size.
     public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{ShortPath}.SentinelIcon.png", 115);

@@ -281,5 +281,6 @@ public enum DivaniRpcCalls : uint
     PlagueDoctorSetInfected = 208,
     PlagueDoctorUpdateProgress = 209,
     PlaceBeacon = 211,
-    FragPassBomb = 212
+    FragPassBomb = 212,
+    InnocentTaunt = 213
 }
