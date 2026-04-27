@@ -31,6 +31,7 @@ public static class DivaniAssets
     // size to the other role icons (which are 700-1024 px at 550 ppu).
     public static LoadableAsset<Sprite> PlagueDoctorIcon { get; } = new LoadableResourceAsset($"{ShortPath}.PlagueDoctorIcon.png", 115);
     public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{ShortPath}.InnocentIcon.png", 115);
+    public static LoadableAsset<Sprite> OpportunistIcon { get; } = new LoadableResourceAsset($"{ShortPath}.OpportunistIcon.png", 115);
 
     // Sentinel icon - used for role icon and button. Lower ppu to match small source image size.
     public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{ShortPath}.SentinelIcon.png", 115);
@@ -50,6 +51,7 @@ public static class DivaniAssets
     public static LoadableAsset<AudioClip> SilencerIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.SilencerIntro.wav");
     public static LoadableAsset<AudioClip> FragGiveSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.FragGive.wav");
     public static LoadableAsset<AudioClip> BearTrapActivateSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.BearTrapActivate.wav");
+    public static LoadableAsset<AudioClip> OpportunistIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.OpportunistIntro.wav");
 
     // Dutch Meme Soundpack door SFX - used by DutchMemeSoundpackPatch to replace
     // the vanilla door open/close audio clips when the matching lobby toggle is on.

@@ -129,6 +129,7 @@
     <EmbeddedResource Include="Resources\FragPass.png" Condition="Exists('Resources\FragPass.png')" />
     <EmbeddedResource Include="Resources\MisvoteIcon.png" Condition="Exists('Resources\MisvoteIcon.png')" />
     <EmbeddedResource Include="Resources\SilencerIcon.png" Condition="Exists('Resources\SilencerIcon.png')" />
+    <EmbeddedResource Include="Resources\OpportunistIcon.png" Condition="Exists('Resources\OpportunistIcon.png')" />
     <!-- Audio clips must be WAV - loaded via MiraAPI's LoadableAudioResourceAsset,
          matching how TouMiraRolesExtension ships its sounds. -->
     <EmbeddedResource Include="Resources\FragileBreak.wav" />
@@ -145,6 +146,7 @@
     <EmbeddedResource Include="Resources\BearTrapActivate.wav" Condition="Exists('Resources\BearTrapActivate.wav')" />
     <EmbeddedResource Include="Resources\DoorOpen.wav" />
     <EmbeddedResource Include="Resources\DoorClose.wav" />
+    <EmbeddedResource Include="Resources\OpportunistIntro.wav" />
   </ItemGroup>
 
   <Target Name="CopyToPlugins" AfterTargets="Build">
