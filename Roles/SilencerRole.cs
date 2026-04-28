@@ -19,9 +19,7 @@ public sealed class SilencerRole(IntPtr cppPtr)
     public string RoleDescription => "Cut meeting voting time with every kill!";
     public string RoleLongDescription =>
         "Each kill you make shaves seconds\n" +
-        "off the next meeting's voting time.\n" +
-        "The voting time can never drop below\n" +
-        "a configurable minimum.";
+        "off the voting time of every meeting for the rest of the game.";
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorKilling;
