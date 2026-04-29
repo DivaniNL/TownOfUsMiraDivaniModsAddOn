@@ -1,4 +1,6 @@
 using MiraAPI.GameOptions;
+using MiraAPI.Modifiers;
+using MiraAPI.Modifiers.Types;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -10,7 +12,7 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers;
 
-public class ShuffleModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
+public class ShuffleModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable, IButtonModifier
 {
     public override string ModifierName => "Shuffle";
     public override string LocaleKey => "Shuffle";
@@ -46,7 +48,8 @@ public class ShuffleModifier : TouGameModifier, IColoredModifier, IWikiDiscovera
     
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        return base.IsModifierValidOn(role);
+        return base.IsModifierValidOn(role) &&
+            !role.Player.GetModifierComponent().HasModifier<GameModifier>(true, x => x is IButtonModifier);
     }
     
     public override void OnActivate()

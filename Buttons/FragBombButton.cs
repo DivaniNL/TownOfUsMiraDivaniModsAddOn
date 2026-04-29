@@ -7,6 +7,7 @@ using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Patches;
 using DivaniMods.Roles;
+using TownOfUs.Buttons;
 using UnityEngine;
 
 namespace DivaniMods.Buttons;
@@ -23,6 +24,7 @@ public class FragBombButton : CustomActionButton<PlayerControl>
     public override float Distance => 1.5f;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override Color TextOutlineColor => Palette.ImpostorRed;
+    public override BaseKeybind Keybind => Keybinds.SecondaryAction;
 
     public override bool Enabled(RoleBehaviour? role)
     {

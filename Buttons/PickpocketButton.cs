@@ -13,6 +13,8 @@ using DivaniMods.Options;
 using DivaniMods.Patches;
 using DivaniMods.Roles;
 using DivaniMods.Utilities;
+using TownOfUs.Buttons;
+using TownOfUs.Interfaces;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
 using TownOfUs.Utilities.Appearances;
@@ -30,6 +32,7 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
     public override float Distance => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketRange * 1.5f;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override Color TextOutlineColor => new Color(0.5f, 0.3f, 0.1f);
+    public override BaseKeybind Keybind => Keybinds.PrimaryAction;
     
     private static readonly HashSet<string> ExcludedNamespaces = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -100,8 +103,9 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
         
         if (targetModifiers.Count > 0)
         {
-            var stolen = targetModifiers[random.Next(targetModifiers.Count)];
-            var canUseModifier = CanThiefUseModifier(stolen, player.Data.Role);
+            var thiefHasButtonModifier = HasButtonModifier(player);
+            var stolen = PickTargetModifier(targetModifiers, random, preferNonButtonModifier: thiefHasButtonModifier);
+            var canUseModifier = CanThiefUseModifier(stolen, player);
             
             // Pre-pick the fallback random id on the sender so every client applies the
             // same result. Without this, each client ran its own System.Random() and the
@@ -109,7 +113,7 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
             uint fallbackRandomId = 0;
             if (!canUseModifier)
             {
-                fallbackRandomId = PickRandomGivableId(player, random);
+                fallbackRandomId = PickRandomGivableId(player, random, allowButtonModifiers: !thiefHasButtonModifier);
             }
             
             DivaniPlugin.Instance.Log.LogInfo($"Thief: Stealing {stolen.ModifierName} from {Target.Data.PlayerName} (can use: {canUseModifier}, fallback: {fallbackRandomId})");
@@ -117,7 +121,7 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
         }
         else
         {
-            var chosenId = PickRandomGivableId(player, random);
+            var chosenId = PickRandomGivableId(player, random, allowButtonModifiers: !HasButtonModifier(player));
             DivaniPlugin.Instance.Log.LogInfo($"Thief: No modifiers on {Target.Data.PlayerName}, giving random modifier id={chosenId}");
             RpcGiveRandomModifier(player, chosenId);
         }
@@ -129,9 +133,24 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
     /// Sender-side pick so all clients apply the same modifier. Returns 0 when the thief
     /// already owns every givable modifier.
     /// </summary>
-    private static uint PickRandomGivableId(PlayerControl thief, System.Random random)
+    private static BaseModifier PickTargetModifier(
+        List<BaseModifier> targetModifiers,
+        System.Random random,
+        bool preferNonButtonModifier)
     {
-        var givableIds = GetGivableModifierIds();
+        if (!preferNonButtonModifier)
+        {
+            return targetModifiers[random.Next(targetModifiers.Count)];
+        }
+
+        var nonButtonModifiers = targetModifiers.Where(x => !IsButtonModifier(x)).ToList();
+        var candidates = nonButtonModifiers.Count > 0 ? nonButtonModifiers : targetModifiers;
+        return candidates[random.Next(candidates.Count)];
+    }
+
+    private static uint PickRandomGivableId(PlayerControl thief, System.Random random, bool allowButtonModifiers)
+    {
+        var givableIds = GetGivableModifierIds(allowButtonModifiers);
         var existingIds = thief.GetModifiers<BaseModifier>()
             .Select(m => m.TypeId)
             .ToHashSet();
@@ -191,7 +210,7 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
         return false;
     }
     
-    private static bool CanThiefUseModifier(BaseModifier modifier, RoleBehaviour? thiefRole)
+    private static bool CanThiefUseModifier(BaseModifier modifier, PlayerControl thief)
     {
         var modNamespace = modifier.GetType().Namespace;
         if (modNamespace != null && ExcludedNamespaces.Any(ns => modNamespace.StartsWith(ns, StringComparison.OrdinalIgnoreCase)))
@@ -203,8 +222,21 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
         // falsely reject Shuffle/etc. after the thief already holds one stolen modifier.
         if (!IsFactionValidForThief(modifier))
             return false;
+
+        if (IsButtonModifier(modifier) && HasButtonModifier(thief))
+            return false;
         
         return true;
+    }
+
+    private static bool HasButtonModifier(PlayerControl player)
+    {
+        return player.GetModifiers<BaseModifier>().Any(IsButtonModifier);
+    }
+
+    private static bool IsButtonModifier(BaseModifier modifier)
+    {
+        return modifier is IButtonModifier;
     }
     
     /// <summary>
@@ -260,7 +292,7 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
         return !IsUniversalVisualModifier(modifier);
     }
 
-    private static List<uint> GetGivableModifierIds()
+    private static List<uint> GetGivableModifierIds(bool allowButtonModifiers)
     {
         var result = new List<uint>();
         
@@ -288,6 +320,9 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
                 continue;
             
             if (modifier is IVisualAppearance)
+                continue;
+
+            if (!allowButtonModifiers && IsButtonModifier(modifier))
                 continue;
             
             // Skip faction-locked modifiers that aren't appropriate for a crew-aligned

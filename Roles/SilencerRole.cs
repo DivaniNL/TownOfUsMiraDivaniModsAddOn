@@ -39,5 +39,6 @@ public sealed class SilencerRole(IntPtr cppPtr)
     {
         Icon = DivaniAssets.SilencerIcon,
         IntroSound = DivaniAssets.SilencerIntroSound,
+        MaxRoleCount = 1,
     };
 }

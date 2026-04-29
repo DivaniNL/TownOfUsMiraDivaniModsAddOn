@@ -4,6 +4,7 @@ using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Patches;
+using TownOfUs.Buttons;
 using UnityEngine;
 
 namespace DivaniMods.Buttons;
@@ -17,6 +18,7 @@ public class UsePortalButton : CustomActionButton
     public override LoadableAsset<Sprite>? Sprite => DivaniAssets.UsePortalButton;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomLeft;
     public override Color TextOutlineColor => new Color(0.047f, 0.420f, 0.961f);
+    public override BaseKeybind Keybind => Keybinds.TertiaryAction;
 
     public override bool Enabled(RoleBehaviour? role)
     {

@@ -35,5 +35,6 @@ public sealed class DeadlockRole(IntPtr cppPtr)
     {
         Icon = DivaniAssets.DeadlockIcon,
         IntroSound = DivaniAssets.DeadlockIntroSound,
+        MaxRoleCount = 1,
     };
 }

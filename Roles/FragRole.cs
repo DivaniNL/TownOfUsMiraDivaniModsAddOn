@@ -37,5 +37,6 @@ public sealed class FragRole(IntPtr cppPtr)
     {
         Icon = DivaniAssets.FragIcon,
         IntroSound = DivaniAssets.FragIntroSound,
+        MaxRoleCount = 1,
     };
 }

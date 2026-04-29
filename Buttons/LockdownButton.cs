@@ -7,6 +7,7 @@ using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles;
 using System.Collections;
+using TownOfUs.Buttons;
 using UnityEngine;
 
 namespace DivaniMods.Buttons;
@@ -20,6 +21,7 @@ public class LockdownButton : CustomActionButton
     public override LoadableAsset<Sprite>? Sprite => DivaniAssets.LockdownButton;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override Color TextOutlineColor => Palette.ImpostorRed;
+    public override BaseKeybind Keybind => Keybinds.SecondaryAction;
     
     public static bool IsLockdownActive { get; private set; }
     public static float LockdownTimeRemaining { get; private set; }

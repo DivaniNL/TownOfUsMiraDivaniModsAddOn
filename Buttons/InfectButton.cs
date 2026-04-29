@@ -6,6 +6,7 @@ using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles;
+using TownOfUs.Buttons;
 using UnityEngine;
 
 namespace DivaniMods.Buttons;
@@ -20,6 +21,7 @@ public class InfectButton : CustomActionButton<PlayerControl>
     public override float Distance => 1.5f;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override Color TextOutlineColor => PlagueDoctorRole.PlagueDoctorColor;
+    public override BaseKeybind Keybind => Keybinds.PrimaryAction;
 
     public override bool Enabled(RoleBehaviour? role)
     {

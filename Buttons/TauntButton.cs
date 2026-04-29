@@ -7,6 +7,7 @@ using Reactor.Networking.Attributes;
 using DivaniMods.Options;
 using DivaniMods.Roles;
 using TownOfUs.Assets;
+using TownOfUs.Buttons;
 using TownOfUs.Events;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ public sealed class TauntButton : CustomActionButton<PlayerControl>
     public override float Distance => 1.5f;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override Color TextOutlineColor => InnocentRole.InnocentColor;
+    public override BaseKeybind Keybind => Keybinds.PrimaryAction;
 
     private static bool CanTauntThisRound =>
         OptionGroupSingleton<InnocentOptions>.Instance.CanTauntFirstRound ||

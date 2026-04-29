@@ -6,6 +6,7 @@ using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles;
 using System.Collections;
+using TownOfUs.Buttons;
 using UnityEngine;
 
 namespace DivaniMods.Buttons;
@@ -19,6 +20,7 @@ public class PlacePortalButton : CustomActionButton
     public override LoadableAsset<Sprite>? Sprite => DivaniAssets.PlacePortalButton;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override Color TextOutlineColor => new Color(0.047f, 0.420f, 0.961f);
+    public override BaseKeybind Keybind => Keybinds.PrimaryAction;
     
     private bool _isPlacing;
 

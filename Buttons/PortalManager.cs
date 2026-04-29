@@ -3,8 +3,10 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using Reactor.Networking.Attributes;
+using MiraAPI.Modifiers;
 using DivaniMods.Assets;
 using DivaniMods.Roles;
+using TownOfUs.Modifiers.Game.Universal;
 using TownOfUs.Utilities;
 
 namespace DivaniMods.Buttons;
@@ -24,6 +26,7 @@ public static class PortalManager
     
     private static readonly Dictionary<byte, float> PlayerCooldowns = new();
     private static readonly HashSet<string> PortalUsers = new();
+    private static readonly HashSet<string> ImmovablePortalUsers = new();
     
     public static void Reset()
     {
@@ -43,12 +46,14 @@ public static class PortalManager
         
         PlayerCooldowns.Clear();
         PortalUsers.Clear();
+        ImmovablePortalUsers.Clear();
         DivaniPlugin.Instance.Log.LogInfo("Portal Manager reset");
     }
     
     public static void ClearPortalUsers()
     {
         PortalUsers.Clear();
+        ImmovablePortalUsers.Clear();
     }
     
     public static void AddPortalUser(PlayerControl player)
@@ -58,24 +63,44 @@ public static class PortalManager
         var playerName = player.Data.PlayerName;
         PortalUsers.Add(playerName);
     }
+
+    private static void AddImmovablePortalUser(PlayerControl player)
+    {
+        if (player?.Data == null) return;
+
+        ImmovablePortalUsers.Add(player.Data.PlayerName);
+    }
     
     public static void ReportPortalUsage(PlayerControl portalmaker)
     {
         if (!portalmaker.AmOwner) return;
         
         string msg;
-        if (PortalUsers.Count == 0)
+        if (PortalUsers.Count == 0 && ImmovablePortalUsers.Count == 0)
         {
             msg = "No one used the portals.";
         }
         else
         {
-            var message = new StringBuilder("Players who used the portals:\n");
-            foreach (var user in PortalUsers)
+            var message = new StringBuilder();
+
+            if (PortalUsers.Count > 0)
             {
-                message.Append($"{user}, ");
+                message.Append("Players who used the portals:\n");
+                message.Append(string.Join(", ", PortalUsers));
             }
-            message.Remove(message.Length - 2, 2);
+
+            if (ImmovablePortalUsers.Count > 0)
+            {
+                if (message.Length > 0)
+                {
+                    message.Append("\n\n");
+                }
+                message.Append("Immovable player(s) who tried to use the portals:\n");
+                message.Append(string.Join(", ", ImmovablePortalUsers));
+                message.Append("\nFeels bad man..."); 
+            }
+
             msg = message.ToString();
         }
         
@@ -84,6 +109,7 @@ public static class PortalManager
         MiscUtils.AddFakeChat(portalmaker.Data, title, msg, false, true);
         
         PortalUsers.Clear();
+        ImmovablePortalUsers.Clear();
     }
     
     public static void PlacePortal(Vector2 position)
@@ -202,6 +228,12 @@ public static class PortalManager
     public static void RpcUsePortal(PlayerControl user, float destX, float destY)
     {
         DivaniPlugin.Instance.Log.LogInfo($"RpcUsePortal: {user.name} teleporting to ({destX}, {destY})");
+
+        if (user.HasModifier<ImmovableModifier>())
+        {
+            AddImmovablePortalUser(user);
+            return;
+        }
         
         AddPortalUser(user);
         

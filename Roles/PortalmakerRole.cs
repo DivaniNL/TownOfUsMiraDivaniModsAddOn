@@ -30,5 +30,6 @@ public sealed class PortalmakerRole(IntPtr cppPtr)
     {
         Icon = DivaniAssets.PortalmakerIcon,
         IntroSound = DivaniAssets.PortalMakerIntroSound,
+        MaxRoleCount = 1,
     };
 }

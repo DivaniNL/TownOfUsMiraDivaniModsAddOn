@@ -4,6 +4,7 @@ using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles;
+using TownOfUs.Buttons;
 using UnityEngine;
 
 namespace DivaniMods.Buttons;
@@ -16,6 +17,7 @@ public class PlaceBeaconButton : CustomActionButton
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite>? Sprite => DivaniAssets.SentinelIcon;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
+    public override BaseKeybind Keybind => Keybinds.PrimaryAction;
 
     private static readonly Color SentinelColor = SentinelRole.SentinelColor;
     public override Color TextOutlineColor => SentinelColor;

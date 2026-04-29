@@ -11,6 +11,8 @@ using DivaniMods.Roles;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using TownOfUs.Buttons;
+using TownOfUs.Modifiers.Game.Universal;
 using UnityEngine;
 
 namespace DivaniMods.Buttons;
@@ -25,11 +27,12 @@ public class ShuffleButton : CustomActionButton
     public override int MaxUses => (int)OptionGroupSingleton<ShuffleOptions>.Instance.ShuffleUses.Value;
     public override LoadableAsset<Sprite>? Sprite => DivaniAssets.ShuffleButton;
     public override Color TextOutlineColor => new Color32(0, 255, 30, 255);
+    public override BaseKeybind Keybind => Keybinds.ModifierAction;
 
     public override bool Enabled(RoleBehaviour? role)
     {
         var player = PlayerControl.LocalPlayer;
-        if (player == null || player.Data == null) return false;
+        if (player == null || player.Data == null || player.Data.IsDead) return false;
         return player.HasModifier<ShuffleModifier>();
     }
 
@@ -117,6 +120,11 @@ public class ShuffleButton : CustomActionButton
         var parts = new List<string>();
         for (int i = 0; i < targets.Count; i++)
         {
+            if (targets[i].HasModifier<ImmovableModifier>())
+            {
+                continue;
+            }
+            
             var id = targets[i].PlayerId;
             var pos = shuffledPositions[i];
             parts.Add($"P{id},{pos.x.ToString(CultureInfo.InvariantCulture)},{pos.y.ToString(CultureInfo.InvariantCulture)}");
@@ -198,6 +206,7 @@ public class ShuffleButton : CustomActionButton
             // Defensive: if a player died between the sender's snapshot and the RPC
             // delivery, don't teleport their ghost.
             if (player.Data == null || player.Data.IsDead || player.Data.Disconnected) continue;
+            if (player.HasModifier<ImmovableModifier>()) continue;
             
             var position = kvp.Value;
             
