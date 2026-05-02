@@ -12,13 +12,15 @@ Divani Mods is built on [BepInEx](https://github.com/BepInEx/BepInEx),
 
 ## Contents
 
-| **Impostor Roles**    | **Crewmate Roles**          | **Neutral Roles**            | **Modifiers**           |
-| --------------------- | --------------------------- | ---------------------------- | ----------------------- |
-| [Deadlock](#deadlock) | [Thief](#thief)             | [Plague Doctor](#plague-doctor) | [Blindspot](#blindspot) |
-|                       | [Portalmaker](#portalmaker) |                              | [Fragile](#fragile)     |
-|                       |                             |                              | [Ruthless](#ruthless)   |
-|                       |                             |                              | [Shuffle](#shuffle)     |
-|                        |                              |                               | [Misvote](#misvote)      |
+| **Impostor Roles**    | **Crewmate Roles**          | **Neutral Roles**               | **Modifiers**              |
+| --------------------- | --------------------------- | ------------------------------- | -------------------------- |
+| [Deadlock](#deadlock) | [Thief](#thief)             | [Plague Doctor](#plague-doctor) | [Blindspot](#blindspot)    |
+| [Frag](#frag)         | [Portalmaker](#portalmaker) | [Innocent](#innocent)           | [Fragile](#fragile)        |
+| [Silencer](#silencer) |                             | [Opportunist](#opportunist)     | [Ruthless](#ruthless)      |
+|                       |                             |                                 | [Shuffle](#shuffle)        |
+|                       |                             |                                 | [Misvote](#misvote)        |
+|                       |                             |                                 | [Bear Trap](#bear-trap)    |
+|                       |                             |                                 | [Sniper](#sniper)          |
 
 ---
 
@@ -99,6 +101,43 @@ killing.
 
 ---
 
+### Frag
+
+#### **Impostor Killing**
+
+The Frag is an Impostor that can start a hot-potato time bomb.
+Use **Give Bomb** on another player to give them the bomb. After a short delay,
+the holder can pass it to another player, but not back to the previous holder
+until it moves again.
+
+#### Game Options
+
+| Name               | Description                                      | Type       | Default |
+| ------------------ | ------------------------------------------------ | ---------- | ------- |
+| Frag               | The percentage probability of the Frag appearing | Percentage | 0%      |
+| Bomb Timer         | How long the bomb timer lasts once it starts     | Time       | 20s     |
+| Give Bomb Cooldown | The cooldown on the Give Bomb ability            | Time       | 25s     |
+
+---
+
+### Silencer
+
+#### **Impostor Killing**
+
+The Silencer is an Impostor whose kills shorten meeting voting time for the
+rest of the game. Each kill cuts more seconds from every future meeting, down
+to the configured minimum voting time.
+
+#### Game Options
+
+| Name                 | Description                                             | Type       | Default |
+| -------------------- | ------------------------------------------------------- | ---------- | ------- |
+| Silencer             | The percentage probability of the Silencer appearing    | Percentage | 0%      |
+| Seconds Cut Per Kill | How many seconds each kill removes from voting time     | Time       | 15s     |
+| Minimum Voting Time  | The lowest voting time Silencer kills can reduce to     | Time       | 10s     |
+
+---
+
 ## Neutral Roles
 
 ### Plague Doctor
@@ -124,6 +163,41 @@ living player is infected.
 | Infect Killer On Death  | Whether killing the Plague Doctor also infects the killer                | Toggle     | True    |
 | Can Win While Dead      | Whether the Plague Doctor still wins if they die before all are infected | Toggle     | True    |
 | Can Use Vents           | Whether the Plague Doctor can use vents                                  | Toggle     | False   |
+
+---
+
+### Innocent
+
+#### **Neutral Evil**
+
+The Innocent is a Neutral role that wins by taunting another player into
+killing them. If the taunted killer is voted out in the next meeting, the
+Innocent wins.
+
+#### Game Options
+
+| Name                     | Description                                           | Type       | Default |
+| ------------------------ | ----------------------------------------------------- | ---------- | ------- |
+| Innocent                 | The percentage probability of the Innocent appearing  | Percentage | 0%      |
+| Taunt Cooldown           | The cooldown on the Taunt ability                     | Time       | 25s     |
+| Can Taunt in First Round | Whether the Innocent can use Taunt before any meeting | Toggle     | False   |
+
+---
+
+### Opportunist
+
+#### **Neutral Outlier**
+
+The Opportunist is a Neutral role that wins by collecting votes on the same
+targets they vote for. After the Opportunist votes a player, every other vote
+on that target during the meeting counts toward their win goal.
+
+#### Game Options
+
+| Name                     | Description                                               | Type       | Default |
+| ------------------------ | --------------------------------------------------------- | ---------- | ------- |
+| Opportunist              | The percentage probability of the Opportunist appearing   | Percentage | 0%      |
+| Required Number of Votes | How many collected votes the Opportunist needs to win     | Number     | 10      |
 
 ---
 
@@ -214,10 +288,47 @@ Someone with the Misvote modifier will always vote random, even when they skippe
 
 ---
 
+## Bear Trap
+
+### **Crewmate Postmortem**
+
+A Crewmate with Bear Trap freezes their killer when they die. While trapped,
+the killer cannot move or report the body, giving the crew a chance to catch
+them near the kill.
+
+### Game Options
+
+| Name                      | Description                                                | Type       | Default |
+| ------------------------- | ---------------------------------------------------------- | ---------- | ------- |
+| Bear Trap Amount          | How many Bear Trap modifiers are assigned each game        | Number     | 0       |
+| Bear Trap Chance          | Per&ndash;assignment chance (rolled per slot up to Amount) | Percentage | 50%     |
+| Bear Trap Freeze Duration | How long the killer is frozen after triggering Bear Trap   | Time       | 4s      |
+
+---
+
+## Sniper
+
+### **Neutral Killing**
+
+A Neutral Killing player with Sniper kills from farther away without
+teleporting to the target. Their kill range is multiplied up to long kill
+distance.
+
+### Game Options
+
+| Name                     | Description                                             | Type       | Default |
+| ------------------------ | ------------------------------------------------------- | ---------- | ------- |
+| Sniper Amount            | How many Sniper modifiers are assigned each game        | Number     | 0       |
+| Sniper Chance            | Per&ndash;assignment chance (rolled per slot up to Amount) | Percentage | 50%     |
+| Kill Distance Multiplier | Multiplier applied to the Sniper holder's kill distance | Multiplier | 1.5x    |
+
+---
+
 # Credits
 
 - Built on top of [TOU-Mira](https://github.com/AU-Avengers/TOU-Mira) by the
   AU-Avengers team.
 - Uses [MiraAPI](https://github.com/All-Of-Us-Mods/MiraAPI) and
   [Reactor](https://github.com/NuclearPowered/Reactor).
+- Role and modifier icons by Atony (Mira Dev).
 - Glass&ndash;break SFX from [Freesound](https://freesound.org/) (community).

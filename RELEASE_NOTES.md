@@ -1,65 +1,42 @@
-# Divani Mods &mdash; v1.0.0
+# Divani Mods &mdash; v1.1.0
 
-Initial public release of Divani Mods, a content pack for
+Divani Mods 1.1.0 adds new roles, new modifiers, keybind support, and several
+gameplay fixes and polish updates for
 [Town Of Us &ndash; Mira](https://github.com/AU-Avengers/TOU-Mira).
 
-## New Roles
+## Added
 
-### Impostor
-- **Deadlock** &mdash; Disables all crewmate tasks for a short window with a
-  *Lockdown* ability. Gains additional lockdown charges per kill. Timer
-  pauses during meetings and ejections, and is hidden from the HUD while a
-  meeting is open.
+### Roles
+- **Frag** (Impostor Killing) &mdash; Starts a hot-potato time bomb that can
+  be passed between players before it explodes.
+- **Silencer** (Impostor Killing) &mdash; Cuts meeting voting time with each
+  kill, down to a configurable minimum voting time.
+- **Innocent** (Neutral Evil) &mdash; Taunts another player into killing them,
+  then wins if that killer is voted out in the next meeting.
+- **Opportunist** (Neutral Outlier) &mdash; Collects votes from targets they
+  vote for and wins after reaching the configured vote threshold.
 
-### Crewmate
-- **Thief** &mdash; Pickpockets nearby players to steal their modifiers (or
-  gives them a random modifier if they have none). Stolen modifiers are
-  fully synchronised and show up correctly in the end&ndash;game summary.
-- **Portalmaker** &mdash; Places two portals on the map. Once both are
-  placed, any living player can teleport between them.
+### Modifiers
+- **Bear Trap** (Crewmate Postmortem) &mdash; Freezes the killer after the
+  Bear Trap holder dies and prevents them from reporting the body while frozen.
+- **Sniper** (Neutral Killing modifier) &mdash; Lets Neutral Killing roles kill
+  from farther away without teleporting to the target.
 
-### Neutral Killing
-- **Plague Doctor** &mdash; Wins by infecting every living player. Has a
-  direct *Infect* ability and passive infection spread between infected
-  players and their neighbours. Plays a custom intro voice line and an
-  infect SFX on ability use.
+### Controls
+- Added keybind support for Divani Mods buttons.
 
-## New Modifiers
+## Changes
 
-- **Blindspot** (Crewmate Utility) &mdash; Camera lights do not activate
-  when this player uses cameras.
-- **Fragile** (Universal) &mdash; Chance to break and die instantly when
-  any other player interacts with you. The killer hears a glass&ndash;break
-  sound effect. The break chance is shown inline in the in&ndash;game
-  modifier description.
-- **Ruthless** (Impostor Utility) &mdash; Kills by this Impostor bypass
-  Medic shields, Guardian Angel protection, and Survivor vests.
-- **Shuffle** (Universal) &mdash; Teleports every living player to a random
-  other player's position. Dead players (ghosts) are never shuffled; dead
-  bodies optionally are.
-
-## Audio
-
-- Added role intro sounds for **Thief**, **Portalmaker**, **Deadlock**, and
-  **Plague Doctor**.
-- Added an **Infect** SFX for the Plague Doctor ability.
-- Added a glass&ndash;break SFX played on the killer's client when a
-  Fragile player breaks.
-
-## Fixes & Polish
-
-- Fix Thief end&ndash;game summary showing the wrong set of modifiers
-  compared to what the Thief actually has in&ndash;game. Random modifier
-  selection is now deterministic across clients.
-- Fix Lockdown timer counting down during meetings / ejections; it now
-  pauses and is hidden from the HUD while a meeting or exile is active.
-- Fix Shuffle teleporting dead / disconnected players. Ghosts are now
-  excluded in both the sender and receiver code paths.
-- Line&ndash;broke the long descriptions for the **Deadlock** and
-  **Plague Doctor** roles so they render cleanly on the role screen.
-- Tuned the **Plague Doctor** role icon size on the role screen (icon
-  sprite ppu lowered so the 150&times;150 source matches the other
-  role icons).
+- **Ruthless** now kills through First Death Shield.
+- Fixed some task behaviours when **Lockdown** is called.
+- **Misvote** now also counts a random vote if the player does not vote.
+- **Immovable** now works with portals and **Shuffle**.
+- **Shuffle** button is now hidden when dead.
+- **Thief** no longer receives more than one button modifier.
+- **Shuffle** is now correctly listed as a button modifier.
+- Improved modifier options so they are more grouped, matching source
+  TOU Mira more closely.
+- Added icons from Atony (Mira Dev).
 
 ## Compatibility
 
