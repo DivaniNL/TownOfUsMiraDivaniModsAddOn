@@ -23,11 +23,11 @@ public class RuthlessModifier : TouGameModifier, IColoredModifier, IWikiDiscover
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
     
-    public override int GetAssignmentChance() => 
-        (int)OptionGroupSingleton<RuthlessOptions>.Instance.RuthlessChance.Value;
+    public override int GetAssignmentChance() =>
+        (int)OptionGroupSingleton<ImpostorModifierOptions>.Instance.RuthlessChance.Value;
     
-    public override int GetAmountPerGame() => 
-        (int)OptionGroupSingleton<RuthlessOptions>.Instance.RuthlessAmount;
+    public override int GetAmountPerGame() =>
+        (int)OptionGroupSingleton<ImpostorModifierOptions>.Instance.RuthlessAmount;
     
     public override bool IsModifierValidOn(RoleBehaviour role)
     {

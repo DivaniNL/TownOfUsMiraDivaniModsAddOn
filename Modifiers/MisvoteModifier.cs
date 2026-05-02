@@ -3,6 +3,7 @@ using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using TownOfUs.Interfaces;
 using TownOfUs.Modifiers.Game;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Utilities;
@@ -16,12 +17,15 @@ namespace DivaniMods.Modifiers;
 /// redirected to an independently chosen random alive player each meeting.
 /// The re-rolls run in <see cref="DivaniMods.Patches.MisvoteVotePatches"/>.
 /// </summary>
-public sealed class MisvoteModifier : UniversalGameModifier, IWikiDiscoverable
+public sealed class MisvoteModifier : UniversalGameModifier, IColoredModifier, IWikiDiscoverable
 {
+    public static readonly Color MisvoteColor = new Color32(180, 180, 180, 255);
+
     public override string ModifierName => "Misvote";
     public override string LocaleKey => "Misvote";
     public override ModifierFaction FactionType => ModifierFaction.UniversalPassive;
-    public override Color FreeplayFileColor => new Color32(180, 180, 180, 255);
+    public override Color FreeplayFileColor => MisvoteColor;
+    public Color ModifierColor => MisvoteColor;
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.MisvoteIcon;
 
     public override string GetDescription() =>
@@ -31,8 +35,8 @@ public sealed class MisvoteModifier : UniversalGameModifier, IWikiDiscoverable
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
 
     public override int GetAssignmentChance() =>
-        (int)OptionGroupSingleton<MisvoteOptions>.Instance.MisvoteChance.Value;
+        (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.MisvoteChance.Value;
 
     public override int GetAmountPerGame() =>
-        (int)OptionGroupSingleton<MisvoteOptions>.Instance.MisvoteAmount;
+        (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.MisvoteAmount;
 }

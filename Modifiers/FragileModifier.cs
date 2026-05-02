@@ -12,11 +12,13 @@ namespace DivaniMods.Modifiers;
 
 public class FragileModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
 {
+    public static readonly Color FragileColor = new Color32(251, 252, 225, 255);
+
     public override string ModifierName => "Fragile";
     public override string LocaleKey => "Fragile";
     public override ModifierFaction FactionType => ModifierFaction.UniversalPassive;
-    public override Color FreeplayFileColor => new Color32(251, 252, 225, 255);
-    public Color ModifierColor => new Color32(251, 252, 225, 255);
+    public override Color FreeplayFileColor => FragileColor;
+    public Color ModifierColor => FragileColor;
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.FragileIcon;
     
     public override string GetDescription()
@@ -27,11 +29,11 @@ public class FragileModifier : TouGameModifier, IColoredModifier, IWikiDiscovera
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
     
-    public override int GetAssignmentChance() => 
-        (int)OptionGroupSingleton<FragileOptions>.Instance.FragileChance.Value;
+    public override int GetAssignmentChance() =>
+        (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.FragileChance.Value;
     
-    public override int GetAmountPerGame() => 
-        (int)OptionGroupSingleton<FragileOptions>.Instance.FragileAmount;
+    public override int GetAmountPerGame() =>
+        (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.FragileAmount;
     
     public override bool IsModifierValidOn(RoleBehaviour role)
     {

@@ -12,7 +12,7 @@ namespace DivaniMods.Modifiers;
 
 public sealed class BearTrapModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
 {
-    private static readonly Color BearTrapColor = new Color32(165, 99, 45, 255);
+    public static readonly Color BearTrapColor = new Color32(210, 125, 45, 255);
 
     public override string ModifierName => "Bear Trap";
     public override string LocaleKey => "BearTrap";
@@ -30,10 +30,10 @@ public sealed class BearTrapModifier : TouGameModifier, IColoredModifier, IWikiD
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
 
     public override int GetAssignmentChance() =>
-        (int)OptionGroupSingleton<BearTrapOptions>.Instance.BearTrapChance.Value;
+        (int)OptionGroupSingleton<CrewmateModifierOptions>.Instance.BearTrapChance.Value;
 
     public override int GetAmountPerGame() =>
-        (int)OptionGroupSingleton<BearTrapOptions>.Instance.BearTrapAmount;
+        (int)OptionGroupSingleton<CrewmateModifierOptions>.Instance.BearTrapAmount;
 
     public override bool IsModifierValidOn(RoleBehaviour role)
     {

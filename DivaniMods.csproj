@@ -128,6 +128,7 @@
     <EmbeddedResource Include="Resources\FragGive.png" Condition="Exists('Resources\FragGive.png')" />
     <EmbeddedResource Include="Resources\FragPass.png" Condition="Exists('Resources\FragPass.png')" />
     <EmbeddedResource Include="Resources\MisvoteIcon.png" Condition="Exists('Resources\MisvoteIcon.png')" />
+    <EmbeddedResource Include="Resources\SniperIcon.png" Condition="Exists('Resources\SniperIcon.png')" />
     <EmbeddedResource Include="Resources\SilencerIcon.png" Condition="Exists('Resources\SilencerIcon.png')" />
     <EmbeddedResource Include="Resources\OpportunistIcon.png" Condition="Exists('Resources\OpportunistIcon.png')" />
     <!-- Audio clips must be WAV - loaded via MiraAPI's LoadableAudioResourceAsset,

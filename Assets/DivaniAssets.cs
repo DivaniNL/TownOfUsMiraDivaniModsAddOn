@@ -33,8 +33,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{ShortPath}.InnocentIcon.png", 115);
     public static LoadableAsset<Sprite> OpportunistIcon { get; } = new LoadableResourceAsset($"{ShortPath}.OpportunistIcon.png", 115);
 
-    // Sentinel icon - used for role icon and button. Lower ppu to match small source image size.
-    public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{ShortPath}.SentinelIcon.png", 115);
+    public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{ShortPath}.SentinelIcon.png", 275);
 
     // Audio clips - loaded lazily by MiraAPI from embedded WAVs, same approach
     // TouMiraRolesExtension uses. Drop WAV files into Resources/ and embed them
@@ -63,6 +62,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> FragileIcon { get; } = new LoadableResourceAsset($"{ShortPath}.FragileIcon.png", 550);
     public static LoadableAsset<Sprite> ShuffleIcon { get; } = new LoadableResourceAsset($"{ShortPath}.ShuffleButton.png", 550);
     public static LoadableAsset<Sprite> MisvoteIcon { get; } = new LoadableResourceAsset($"{ShortPath}.MisvoteIcon.png", 550);
+    public static LoadableAsset<Sprite> SniperIcon { get; } = new LoadableResourceAsset($"{ShortPath}.SniperIcon.png", 550);
     
     // Portal on map (200 ppu)
     public static LoadableAsset<Sprite> PortalSprite { get; } = new LoadableResourceAsset($"{ShortPath}.PortalSprite.png", 200);
