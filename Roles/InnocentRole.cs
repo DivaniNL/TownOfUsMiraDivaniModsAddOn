@@ -99,10 +99,63 @@ public sealed class InnocentRole(IntPtr cppPtr)
 
     public bool WinConditionMet()
     {
-        return TargetVoted || AboutToWin;
+        if (!TargetVoted && !AboutToWin)
+        {
+            return false;
+        }
+
+        // If impostors would win, don't trigger neutral win - we'll win with them instead
+        if (WouldImpostorsWin())
+        {
+            return false;
+        }
+
+        return true;
     }
 
-    public override bool DidWin(GameOverReason gameOverReason) => TargetVoted;
+    public override bool DidWin(GameOverReason gameOverReason)
+    {
+        if (!TargetVoted)
+        {
+            return false;
+        }
+
+        // Win with impostors if their victory was triggered by target ejection
+        // Also win for neutral game over (when impostors wouldn't have won)
+        return true;
+    }
+
+    // Mirrors LogicGameFlowPatches.CheckEndCriteriaPatch: the game continues (no impostor win)
+    // when neutral killers, crew killers (e.g. Sheriff) alongside impostors, or game halters
+    // are alive. Otherwise vanilla impostor majority (impostors >= non-impostors) triggers the win.
+    private static bool WouldImpostorsWin()
+    {
+        if (MiscUtils.NKillersAliveCount > 0)
+        {
+            return false;
+        }
+
+        if (MiscUtils.ImpAliveCount > 0 && MiscUtils.CrewKillersAliveCount > 0)
+        {
+            return false;
+        }
+
+        var aliveCount = PlayerControl.AllPlayerControls.ToArray()
+            .Count(p => p != null && p.Data != null && !p.Data.IsDead && !p.Data.Disconnected);
+
+        if (MiscUtils.GameHaltersAliveCount > 0 && aliveCount > 1)
+        {
+            return false;
+        }
+
+        if (MiscUtils.ImpAliveCount <= 0)
+        {
+            return false;
+        }
+
+        var aliveNonImpostors = aliveCount - MiscUtils.ImpAliveCount;
+        return MiscUtils.ImpAliveCount >= aliveNonImpostors;
+    }
 
     public static void ClearAndReload()
     {
