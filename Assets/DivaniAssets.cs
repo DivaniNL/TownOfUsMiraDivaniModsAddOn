@@ -13,6 +13,8 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> PlacePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalSprite.png", 115);
     public static LoadableAsset<Sprite> UsePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalSprite.png", 115);
     public static LoadableAsset<Sprite> InfectButton { get; } = new LoadableResourceAsset($"{ShortPath}.InfectButton.png", 115);
+    // Illustrated HUD art (padding / white stroke); 115 like vanilla makes it read huge—match Frag scale.
+    public static LoadableAsset<Sprite> PickpocketButton { get; } = new LoadableResourceAsset($"{ShortPath}.PickPocketButton.png");
     public static LoadableAsset<Sprite> PlagueDoctorVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.PDVent.png", 1024);
     // Frag button art is 512x512; lower ppu = larger on HUD (Lockdown uses 115).
     public static LoadableAsset<Sprite> FragGiveButton { get; } = new LoadableResourceAsset($"{ShortPath}.FragGive.png", 360);
@@ -20,7 +22,6 @@ public static class DivaniAssets
 
     // Role icons (550 ppu)
     public static LoadableAsset<Sprite> ThiefIcon { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefIcon.png", 550);
-    public static LoadableAsset<Sprite> ThiefButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefIcon.png", 550);
     public static LoadableAsset<Sprite> DeadlockIcon { get; } = new LoadableResourceAsset($"{ShortPath}.DeadlockIcon.png", 550);
     public static LoadableAsset<Sprite> PortalmakerIcon { get; } = new LoadableResourceAsset($"{ShortPath}.PortalmakerIcon.png", 550);
     public static LoadableAsset<Sprite> RuthlessIcon { get; } = new LoadableResourceAsset($"{ShortPath}.RuthlessIcon.png", 550);
@@ -69,7 +70,3 @@ public static class DivaniAssets
 
     // Beacon on map (550 ppu – source image is ~1024px so high ppu keeps it small in-game)
     public static LoadableAsset<Sprite> BeaconSprite { get; } = new LoadableResourceAsset($"{ShortPath}.BeaconAsset.png", 550);
-
-    // Biohazard icon shown next to fully-infected players in meetings (PD-only view).
-    public static LoadableAsset<Sprite> InfectedIcon { get; } = new LoadableResourceAsset($"{ShortPath}.InfectedIcon.png", 300);
-}
