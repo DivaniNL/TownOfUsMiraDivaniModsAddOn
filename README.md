@@ -36,7 +36,7 @@ new roles and modifiers on top of [Town Of Us &ndash; Mira](https://github.com/A
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#-ruthless"><img width="10%" src="./Resources/RuthlessIcon.png" alt="Ruthless"/></a>
   <img src="./Resources/Headers/UniMods.png" alt="Universal modifiers"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#-fragile"><img width="10%" src="./Resources/FragileIcon.png" alt="Fragile"/></a>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#-shuffle"><img width="10%" src="./Resources/ShuffleIcon.png" alt="Shuffle"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#-shuffle"><img width="10%" src="./Resources/ShuffleIcon.png" alt="Shuffle"/><img width="10%" src="./Resources/ShuffleButton.png" alt="Shuffle"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#-misvote"><img width="10%" src="./Resources/MisvoteIcon.png" alt="Misvote"/></a>
 </p>
 
