@@ -33,7 +33,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> PlagueDoctorIcon { get; } = new LoadableResourceAsset($"{ShortPath}.PlagueDoctorIcon.png", 115);
     public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{ShortPath}.InnocentIcon.png", 115);
     public static LoadableAsset<Sprite> OpportunistIcon { get; } = new LoadableResourceAsset($"{ShortPath}.OpportunistIcon.png", 115);
-
+    public static LoadableAsset<Sprite> RecruiterIcon { get; } = new LoadableResourceAsset($"{ShortPath}.RecruiterIcon.png");
     public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{ShortPath}.SentinelIcon.png", 275);
 
     // Audio clips - loaded lazily by MiraAPI from embedded WAVs, same approach
@@ -70,3 +70,13 @@ public static class DivaniAssets
 
     // Beacon on map (550 ppu – source image is ~1024px so high ppu keeps it small in-game)
     public static LoadableAsset<Sprite> BeaconSprite { get; } = new LoadableResourceAsset($"{ShortPath}.BeaconAsset.png", 550);
+
+    // Meeting nameplate toggles: world size is ~pixelSize/PPU (MeetingMenu sizes the collider from
+    // sprite.bounds). Swapper uses TouAssets SwapActive/SwapInactive from the tou-asset *bundle*,
+    // which have their own baked import scale — same local Position does not mean same on-screen size.
+    // Single-arg LoadableResourceAsset used to fall back to a low default PPU, so 198px art read huge.
+    public static LoadableAsset<Sprite> RecruitMeetingCrewmate { get; } =
+        new LoadableResourceAsset($"{ShortPath}.RecruitMeetingCrewmate.png", 440f);
+    public static LoadableAsset<Sprite> RecruitMeetingImpostor { get; } =
+        new LoadableResourceAsset($"{ShortPath}.RecruitMeetingImpostor.png", 440f);
+}

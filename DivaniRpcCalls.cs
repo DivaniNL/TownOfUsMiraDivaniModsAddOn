@@ -16,4 +16,5 @@ public enum DivaniRpcCalls : uint
     FragPassBomb = 212,
     InnocentTaunt = 213,
     OpportunistWin = 214,
+    RecruiterSetPendingTarget = 215,
 }

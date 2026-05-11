@@ -148,6 +148,9 @@
     <EmbeddedResource Include="Resources\DoorOpen.wav" />
     <EmbeddedResource Include="Resources\DoorClose.wav" />
     <EmbeddedResource Include="Resources\OpportunistIntro.wav" />
+    <EmbeddedResource Include="Resources\RecruiterIcon.png" />
+    <EmbeddedResource Include="Resources\RecruitMeetingCrewmate.png" />
+    <EmbeddedResource Include="Resources\RecruitMeetingImpostor.png" />
   </ItemGroup>
 
   <Target Name="CopyToPlugins" AfterTargets="Build">
