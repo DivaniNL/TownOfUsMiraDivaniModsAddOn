@@ -38,6 +38,10 @@ gameplay fixes and polish updates for
   TOU Mira more closely.
 - Added icons from Atony (Mira Dev).
 
+## Known bug(s)
+
+Uses left on sentinel is not always correct (Visual bug)
+
 ## Compatibility
 
 - Requires Among Us (Steam).
