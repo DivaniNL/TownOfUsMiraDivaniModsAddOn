@@ -108,29 +108,29 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\ShuffleButton.png" />
-    <EmbeddedResource Include="Resources\ThiefIcon.png" />
     <EmbeddedResource Include="Resources\PickPocketButton.png" />
-    <EmbeddedResource Include="Resources\BlindspotIcon.png" />
-    <EmbeddedResource Include="Resources\FragileIcon.png" />
-    <EmbeddedResource Include="Resources\DeadlockIcon.png" />
-    <EmbeddedResource Include="Resources\LockdownButton.png" />
-    <EmbeddedResource Include="Resources\PortalmakerIcon.png" />
     <EmbeddedResource Include="Resources\PortalSprite.png" />
-    <EmbeddedResource Include="Resources\RuthlessIcon.png" />
-    <EmbeddedResource Include="Resources\PlagueDoctorIcon.png" />
-    <EmbeddedResource Include="Resources\InnocentIcon.png" />
-    <EmbeddedResource Include="Resources\InfectButton.png" />
     <EmbeddedResource Include="Resources\PDVent.png" />
-    <EmbeddedResource Include="Resources\SentinelIcon.png" />
     <EmbeddedResource Include="Resources\BeaconAsset.png" />
-    <EmbeddedResource Include="Resources\FragIcon.png" Condition="Exists('Resources\FragIcon.png')" />
     <EmbeddedResource Include="Resources\FragGive.png" Condition="Exists('Resources\FragGive.png')" />
     <EmbeddedResource Include="Resources\FragPass.png" Condition="Exists('Resources\FragPass.png')" />
-    <EmbeddedResource Include="Resources\MisvoteIcon.png" Condition="Exists('Resources\MisvoteIcon.png')" />
-    <EmbeddedResource Include="Resources\SniperIcon.png" Condition="Exists('Resources\SniperIcon.png')" />
-    <EmbeddedResource Include="Resources\SilencerIcon.png" Condition="Exists('Resources\SilencerIcon.png')" />
-    <EmbeddedResource Include="Resources\OpportunistIcon.png" Condition="Exists('Resources\OpportunistIcon.png')" />
+    <!-- Role / modifier icons (logical name DivaniMods.Resources.Icons.* — see DivaniAssets.IconPath) -->
+    <EmbeddedResource Include="Resources\Icons\Thief.png" />
+    <EmbeddedResource Include="Resources\Icons\Blindspot.png" />
+    <EmbeddedResource Include="Resources\Icons\Fragile.png" />
+    <EmbeddedResource Include="Resources\Icons\Deadlock.png" />
+    <EmbeddedResource Include="Resources\Icons\PortalMaker.png" />
+    <EmbeddedResource Include="Resources\Icons\Ruthless.png" />
+    <EmbeddedResource Include="Resources\Icons\PlagueDoctor.png" />
+    <EmbeddedResource Include="Resources\Icons\Innocent.png" />
+    <EmbeddedResource Include="Resources\Icons\Sentinel.png" />
+    <EmbeddedResource Include="Resources\Icons\Frag.png" />
+    <EmbeddedResource Include="Resources\Icons\Misvote.png" />
+    <EmbeddedResource Include="Resources\Icons\Sniper.png" />
+    <EmbeddedResource Include="Resources\Icons\Silencer.png" />
+    <EmbeddedResource Include="Resources\Icons\Opportunist.png" />
+    <EmbeddedResource Include="Resources\Icons\Shuffle.png" />
+    <EmbeddedResource Include="Resources\Icons\Beartrap.png" />
     <!-- Audio clips must be WAV - loaded via MiraAPI's LoadableAudioResourceAsset,
          matching how TouMiraRolesExtension ships its sounds. -->
     <EmbeddedResource Include="Resources\FragileBreak.wav" />

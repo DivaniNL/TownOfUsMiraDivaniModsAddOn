@@ -13,31 +13,31 @@ new roles and modifiers on top of [Town Of Us &ndash; Mira](https://github.com/A
 
 <p align="center">
   <img src="./Resources/Headers/CrewPower.png" alt="Crewmate Power"/>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#thief"><img width="10%" src="./Resources/ThiefIcon.png" alt="Thief"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#thief"><img width="10%" src="./Resources/Icons/Thief.png" alt="Thief"/></a>
   <img src="./Resources/Headers/CrewSupport.png" alt="Crewmate Support"/>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#portalmaker"><img width="10%" src="./Resources/PortalmakerIcon.png" alt="Portalmaker"/></a>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#sentinel"><img width="10%" src="./Resources/SentinelIcon.png" alt="Sentinel"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#portalmaker"><img width="10%" src="./Resources/Icons/PortalMaker.png" alt="Portalmaker"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#sentinel"><img width="10%" src="./Resources/Icons/Sentinel.png" alt="Sentinel"/></a>
   <img src="./Resources/Headers/ImpSupport.png" alt="Impostor Support"/>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#deadlock"><img width="10%" src="./Resources/DeadlockIcon.png" alt="Deadlock"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#deadlock"><img width="10%" src="./Resources/Icons/Deadlock.png" alt="Deadlock"/></a>
   <img src="./Resources/Headers/ImpKilling.png" alt="Impostor Killing"/>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#frag"><img width="10%" src="./Resources/FragIcon.png" alt="Frag"/></a>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#silencer"><img width="10%" src="./Resources/SilencerIcon.png" alt="Silencer"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#frag"><img width="10%" src="./Resources/Icons/Frag.png" alt="Frag"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#silencer"><img width="10%" src="./Resources/Icons/Silencer.png" alt="Silencer"/></a>
   <img src="./Resources/Headers/NeutKilling.png" alt="Neutral Killing"/>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#plague-doctor"><img width="10%" src="./Resources/PlagueDoctorIcon.png" alt="Plague Doctor"/></a>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#sniper"><img width="10%" src="./Resources/SniperIcon.png" alt="Sniper"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#plague-doctor"><img width="10%" src="./Resources/Icons/PlagueDoctor.png" alt="Plague Doctor"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#sniper"><img width="10%" src="./Resources/Icons/Sniper.png" alt="Sniper"/></a>
   <img src="./Resources/Headers/NeutEvil.png" alt="Neutral Evil"/>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#innocent"><img width="10%" src="./Resources/InnocentIcon.png" alt="Innocent"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#innocent"><img width="10%" src="./Resources/Icons/Innocent.png" alt="Innocent"/></a>
   <img src="./Resources/Headers/NeutOutlier.png" alt="Neutral Outlier"/>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#opportunist"><img width="10%" src="./Resources/OpportunistIcon.png" alt="Opportunist"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#opportunist"><img width="10%" src="./Resources/Icons/Opportunist.png" alt="Opportunist"/></a>
   <img src="./Resources/Headers/CrewMods.png" alt="Crewmate modifiers"/>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#blindspot"><img width="10%" src="./Resources/BlindspotIcon.png" alt="Blindspot"/></a>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#bear-trap"><img width="10%" src="./Resources/BearTrapIcon.png" alt="Bear Trap"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#blindspot"><img width="10%" src="./Resources/Icons/Blindspot.png" alt="Blindspot"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#bear-trap"><img width="10%" src="./Resources/Icons/Beartrap.png" alt="Bear Trap"/></a>
   <img src="./Resources/Headers/ImpMods.png" alt="Impostor modifiers"/>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#ruthless"><img width="10%" src="./Resources/RuthlessIcon.png" alt="Ruthless"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#ruthless"><img width="10%" src="./Resources/Icons/Ruthless.png" alt="Ruthless"/></a>
   <img src="./Resources/Headers/UniMods.png" alt="Universal modifiers"/>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#fragile"><img width="10%" src="./Resources/FragileIcon.png" alt="Fragile"/></a>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#shuffle"><img width="10%" src="./Resources/ShuffleIcon.png" alt="Shuffle"/></a>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#misvote"><img width="10%" src="./Resources/MisvoteIcon.png" alt="Misvote"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#fragile"><img width="10%" src="./Resources/Icons/Fragile.png" alt="Fragile"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#shuffle"><img width="10%" src="./Resources/Icons/Shuffle.png" alt="Shuffle"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#misvote"><img width="10%" src="./Resources/Icons/Misvote.png" alt="Misvote"/></a>
 </p>
 
 ---

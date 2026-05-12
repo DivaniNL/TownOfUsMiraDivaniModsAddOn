@@ -1,7 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Utilities.Assets;
+using DivaniMods.Assets;
 using DivaniMods.Options;
-using TownOfUs.Assets;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers.Game;
 using TownOfUs.Modules.Wiki;
@@ -19,7 +19,7 @@ public sealed class BearTrapModifier : TouGameModifier, IColoredModifier, IWikiD
     public override ModifierFaction FactionType => ModifierFaction.CrewmatePostmortem;
     public override Color FreeplayFileColor => BearTrapColor;
     public Color ModifierColor => BearTrapColor;
-    public override LoadableAsset<Sprite>? ModifierIcon => TouCrewAssets.TrapSprite;
+    public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.BearTrapIcon;
 
     public override string GetDescription()
     {
