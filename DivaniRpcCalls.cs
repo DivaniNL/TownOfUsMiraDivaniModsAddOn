@@ -17,4 +17,5 @@ public enum DivaniRpcCalls : uint
     InnocentTaunt = 213,
     OpportunistWin = 214,
     RecruiterSetPendingTarget = 215,
+    RecruitImpostorFollowUp = 216,
 }

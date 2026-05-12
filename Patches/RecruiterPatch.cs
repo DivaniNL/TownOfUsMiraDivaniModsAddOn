@@ -1,25 +1,39 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using HarmonyLib;
 using AmongUs.GameOptions;
 using MiraAPI.Events;
+using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
+using MiraAPI.GameOptions;
+using MiraAPI.Modifiers;
+using MiraAPI.Modifiers.Types;
+using MiraAPI.Roles;
+using Reactor.Networking.Attributes;
+using DivaniMods.Options;
 using DivaniMods.Roles;
 
 namespace DivaniMods.Patches;
 
 /// <summary>
-/// First-meeting recruitment: host applies vanilla Impostor at the end of the first meeting.
+/// First-meeting recruitment: host sets vanilla Impostor, then (same pattern as TOU Amnesiac → Imp)
+/// either adds <see cref="TownOfUs.Modifiers.Game.Impostor.ImpostorAssassinModifier"/> or leaves a plain imp.
 /// </summary>
 [HarmonyPatch]
 public static class RecruiterPatch
 {
-    /// <summary>Number of meetings that have fully ended this game (incremented in <see cref="OnEndMeeting"/>).</summary>
     internal static int MeetingsEnded { get; private set; }
+
+    /// <summary>Recruits that still need follow-up after <see cref="RoundStartEvent"/> (TOU may assign assassin late).</summary>
+    private static readonly HashSet<byte> PendingRecruitFollowUpIds = new();
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGame))]
     [HarmonyPostfix]
     public static void ResetOnGameStart()
     {
         MeetingsEnded = 0;
+        PendingRecruitFollowUpIds.Clear();
     }
 
     [RegisterEvent]
@@ -58,6 +72,121 @@ public static class RecruiterPatch
             }
 
             target!.RpcSetRole(RoleTypes.Impostor, true);
+            PendingRecruitFollowUpIds.Add(target.PlayerId);
+            if (PlayerControl.LocalPlayer != null)
+            {
+                RpcRecruitImpostorFollowUp(PlayerControl.LocalPlayer, target.PlayerId);
+            }
+        }
+    }
+
+    [RegisterEvent]
+    public static void OnRoundStartRecruitFollowUp(RoundStartEvent _)
+    {
+        if (AmongUsClient.Instance == null || !AmongUsClient.Instance.AmHost)
+        {
+            return;
+        }
+
+        if (PendingRecruitFollowUpIds.Count == 0)
+        {
+            return;
+        }
+
+        var local = PlayerControl.LocalPlayer;
+        if (local == null)
+        {
+            return;
+        }
+
+        foreach (var playerId in PendingRecruitFollowUpIds.ToArray())
+        {
+            RpcRecruitImpostorFollowUp(local, playerId);
+        }
+
+        PendingRecruitFollowUpIds.Clear();
+    }
+
+    private static bool RecruitedShouldBecomeAssassin() =>
+        OptionGroupSingleton<RecruiterOptions>.Instance.RecruitedBecomesAssassin;
+
+    /// <summary>
+    /// Sync recruited imp state on every client: vanilla imp only, or imp + Impostor Assassin modifier (Amnesiac-style <c>AddModifier(typeId)</c>).
+    /// </summary>
+    [MethodRpc((uint)DivaniRpcCalls.RecruitImpostorFollowUp)]
+    public static void RpcRecruitImpostorFollowUp(PlayerControl _, byte targetPlayerId)
+    {
+        var target = GameData.Instance?.GetPlayerById(targetPlayerId)?.Object;
+        if (target == null || target.Data == null || target.Data.IsDead)
+        {
+            return;
+        }
+
+        if (target.Data.Role is not ImpostorRole)
+        {
+            return;
+        }
+
+        if (RecruitedShouldBecomeAssassin())
+        {
+            TryAddImpostorAssassinModifier(target);
+        }
+        else
+        {
+            StripImpostorAssassinModifiers(target);
+        }
+    }
+
+    private static void TryAddImpostorAssassinModifier(PlayerControl target)
+    {
+        var typeId = LookupImpostorAssassinModifierTypeId();
+        if (typeId == 0)
+        {
+            return;
+        }
+
+        if (target.GetModifiers<BaseModifier>().Any(m => m.TypeId == typeId))
+        {
+            return;
+        }
+
+        target.AddModifier(typeId);
+    }
+
+    private static void StripImpostorAssassinModifiers(PlayerControl target)
+    {
+        var toRemove = new List<uint>();
+        foreach (var m in target.GetModifiers<BaseModifier>())
+        {
+            for (var t = m.GetType(); t != null && t != typeof(object); t = t.BaseType)
+            {
+                if (t.Name != "ImpostorAssassinModifier")
+                {
+                    continue;
+                }
+
+                toRemove.Add(m.TypeId);
+                break;
+            }
+        }
+
+        foreach (var typeId in toRemove.Distinct())
+        {
+            target.RemoveModifier(typeId, null);
+        }
+    }
+
+    private static uint LookupImpostorAssassinModifierTypeId()
+    {
+        try
+        {
+            var asm = Assembly.Load("TownOfUsMira");
+            var t = asm.GetType("TownOfUs.Modifiers.Game.Impostor.ImpostorAssassinModifier");
+            return t == null ? 0u : ModifierManager.GetModifierTypeId(t) ?? 0u;
+        }
+        catch
+        {
+            return 0u;
         }
     }
 }
