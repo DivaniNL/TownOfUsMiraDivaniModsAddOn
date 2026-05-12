@@ -6,6 +6,7 @@ namespace DivaniMods.Assets;
 public static class DivaniAssets
 {
     private const string ShortPath = "DivaniMods.Resources";
+    private const string IconPath = "DivaniMods.Resources.Icons";
     
     // Button sprites (115 ppu)
     public static LoadableAsset<Sprite> ShuffleButton { get; } = new LoadableResourceAsset($"{ShortPath}.ShuffleButton.png", 115);
@@ -20,21 +21,16 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> FragGiveButton { get; } = new LoadableResourceAsset($"{ShortPath}.FragGive.png", 360);
     public static LoadableAsset<Sprite> FragPassButton { get; } = new LoadableResourceAsset($"{ShortPath}.FragPass.png", 360);
 
-    // Role icons (550 ppu)
-    public static LoadableAsset<Sprite> ThiefIcon { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefIcon.png", 550);
-    public static LoadableAsset<Sprite> DeadlockIcon { get; } = new LoadableResourceAsset($"{ShortPath}.DeadlockIcon.png", 550);
-    public static LoadableAsset<Sprite> PortalmakerIcon { get; } = new LoadableResourceAsset($"{ShortPath}.PortalmakerIcon.png", 550);
-    public static LoadableAsset<Sprite> RuthlessIcon { get; } = new LoadableResourceAsset($"{ShortPath}.RuthlessIcon.png", 550);
-    // These source images are 512x512; lower ppu makes them match larger role icons in settings.
-    public static LoadableAsset<Sprite> FragIcon { get; } = new LoadableResourceAsset($"{ShortPath}.FragIcon.png", 275);
-    public static LoadableAsset<Sprite> SilencerIcon { get; } = new LoadableResourceAsset($"{ShortPath}.SilencerIcon.png", 275);
-    // Role screen icon uses a lower ppu so the 150x150 source renders at a comparable
-    // size to the other role icons (which are 700-1024 px at 550 ppu).
-    public static LoadableAsset<Sprite> PlagueDoctorIcon { get; } = new LoadableResourceAsset($"{ShortPath}.PlagueDoctorIcon.png", 115);
-    public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{ShortPath}.InnocentIcon.png", 115);
-    public static LoadableAsset<Sprite> OpportunistIcon { get; } = new LoadableResourceAsset($"{ShortPath}.OpportunistIcon.png", 115);
-
-    public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{ShortPath}.SentinelIcon.png", 275);
+    public static LoadableAsset<Sprite> ThiefIcon { get; } = new LoadableResourceAsset($"{IconPath}.Thief.png", 200);
+    public static LoadableAsset<Sprite> DeadlockIcon { get; } = new LoadableResourceAsset($"{IconPath}.Deadlock.png", 200);
+    public static LoadableAsset<Sprite> PortalmakerIcon { get; } = new LoadableResourceAsset($"{IconPath}.Portalmaker.png", 200);
+    public static LoadableAsset<Sprite> RuthlessIcon { get; } = new LoadableResourceAsset($"{IconPath}.Ruthless.png", 200);
+    public static LoadableAsset<Sprite> FragIcon { get; } = new LoadableResourceAsset($"{IconPath}.Frag.png", 200);
+    public static LoadableAsset<Sprite> SilencerIcon { get; } = new LoadableResourceAsset($"{IconPath}.Silencer.png", 200);
+    public static LoadableAsset<Sprite> PlagueDoctorIcon { get; } = new LoadableResourceAsset($"{IconPath}.PlagueDoctor.png", 200);
+    public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{IconPath}.Innocent.png", 200);
+    public static LoadableAsset<Sprite> OpportunistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Opportunist.png", 200);
+    public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{IconPath}.Sentinel.png", 200);
 
     // Audio clips - loaded lazily by MiraAPI from embedded WAVs, same approach
     // TouMiraRolesExtension uses. Drop WAV files into Resources/ and embed them
@@ -59,11 +55,11 @@ public static class DivaniAssets
     public static LoadableAsset<AudioClip> DutchDoorClose { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DoorClose.wav");
 
     // Modifier icons (550 ppu for modifiers - same as role icons)
-    public static LoadableAsset<Sprite> BlindspotIcon { get; } = new LoadableResourceAsset($"{ShortPath}.BlindspotIcon.png", 550);
-    public static LoadableAsset<Sprite> FragileIcon { get; } = new LoadableResourceAsset($"{ShortPath}.FragileIcon.png", 550);
-    public static LoadableAsset<Sprite> ShuffleIcon { get; } = new LoadableResourceAsset($"{ShortPath}.ShuffleButton.png", 550);
-    public static LoadableAsset<Sprite> MisvoteIcon { get; } = new LoadableResourceAsset($"{ShortPath}.MisvoteIcon.png", 550);
-    public static LoadableAsset<Sprite> SniperIcon { get; } = new LoadableResourceAsset($"{ShortPath}.SniperIcon.png", 550);
+    public static LoadableAsset<Sprite> BlindspotIcon { get; } = new LoadableResourceAsset($"{IconPath}.Blindspot.png", 200);
+    public static LoadableAsset<Sprite> FragileIcon { get; } = new LoadableResourceAsset($"{IconPath}.Fragile.png", 200);
+    public static LoadableAsset<Sprite> ShuffleIcon { get; } = new LoadableResourceAsset($"{IconPath}.Shuffle.png", 200);
+    public static LoadableAsset<Sprite> MisvoteIcon { get; } = new LoadableResourceAsset($"{IconPath}.Misvote.png", 200);
+    public static LoadableAsset<Sprite> SniperIcon { get; } = new LoadableResourceAsset($"{IconPath}.Sniper.png", 200);
     
     // Portal on map (200 ppu)
     public static LoadableAsset<Sprite> PortalSprite { get; } = new LoadableResourceAsset($"{ShortPath}.PortalSprite.png", 200);
