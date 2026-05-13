@@ -66,6 +66,7 @@ desktop.ini
 .specstory/
 .qodo/
 .cursor/
+.cursorindexingignore
 terminals/
 agent-tools/
 agent-transcripts/
