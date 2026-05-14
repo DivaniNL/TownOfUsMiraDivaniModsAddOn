@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers;
 
-public class ShuffleModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable, IButtonModifier
+public class ShuffleModifier : UniversalGameModifier, IColoredModifier, IWikiDiscoverable, IButtonModifier
 {
     public static readonly Color ShuffleColor = new Color32(0, 255, 30, 255);
 

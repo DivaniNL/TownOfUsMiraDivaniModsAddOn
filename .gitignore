@@ -11,7 +11,6 @@ publish/
 *.pdb
 *.exe
 *.mdb
-
 # Keep committed reference DLLs if any (none right now, but be explicit).
 !Resources/*.dll
 
@@ -54,6 +53,12 @@ desktop.ini
 /TownOfUs/
 /TouMiraRolesExtension/
 /TheOtherRolesGMIA-main/
+/wiki/
+# -----------------------------------------------------------------------------
+# Local secrets (never commit tokens)
+# -----------------------------------------------------------------------------
+.env
+.env.*
 
 # -----------------------------------------------------------------------------
 # Local tool state / scratch
@@ -61,6 +66,7 @@ desktop.ini
 .specstory/
 .qodo/
 .cursor/
+.cursorindexingignore
 terminals/
 agent-tools/
 agent-transcripts/
@@ -72,3 +78,4 @@ agent-transcripts/
 lockdown timer*.txt
 todo.txt
 TODO.txt
+/scripts/GitHub-RepoActivity.ps1

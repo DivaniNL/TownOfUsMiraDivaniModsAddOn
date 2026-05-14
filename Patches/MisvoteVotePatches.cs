@@ -261,7 +261,9 @@ public static class MisvoteVotePatches
             .Concat(KnightedEvents.ExtraKnightVotes.Select(vote => vote.Voter))
             .ToHashSet();
 
-        foreach (var voter in PlayerControl.AllPlayerControls.ToArray())
+        // Do not use AllPlayerControls.ToArray() + LINQ here: on Il2Cpp that enumeration
+        // can truncate, so Misvote would only ever see the first few players (e.g. slots 0–1).
+        foreach (var voter in PlayerControl.AllPlayerControls)
         {
             if (voter == null || voter.Data == null || voter.Data.IsDead || voter.Data.Disconnected)
             {
@@ -296,17 +298,31 @@ public static class MisvoteVotePatches
 
     private static PlayerControl? GetPlayer(byte playerId)
     {
-        return PlayerControl.AllPlayerControls.ToArray()
-            .FirstOrDefault(p => p != null && p.PlayerId == playerId);
+        foreach (var p in PlayerControl.AllPlayerControls)
+        {
+            if (p != null && p.PlayerId == playerId)
+            {
+                return p;
+            }
+        }
+
+        return null;
     }
 
     private static byte PickRandomAliveTargetId()
     {
-        var candidates = PlayerControl.AllPlayerControls.ToArray()
-            .Where(p => p != null && p.Data != null
-                        && !p.Data.IsDead && !p.Data.Disconnected)
-            .Select(p => p.PlayerId)
-            .ToList();
+        // Build candidates with plain foreach — AllPlayerControls.ToArray() + LINQ can fail to
+        // include every Il2Cpp player, which made random votes hit only the first 1–2 players.
+        var candidates = new List<byte>();
+        foreach (var p in PlayerControl.AllPlayerControls)
+        {
+            if (p == null || p.Data == null || p.Data.IsDead || p.Data.Disconnected)
+            {
+                continue;
+            }
+
+            candidates.Add(p.PlayerId);
+        }
 
         if (candidates.Count == 0)
         {

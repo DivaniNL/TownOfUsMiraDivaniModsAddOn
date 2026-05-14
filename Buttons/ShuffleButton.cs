@@ -25,7 +25,7 @@ public class ShuffleButton : CustomActionButton
     public override float Cooldown => OptionGroupSingleton<ShuffleOptions>.Instance.ShuffleCooldown.Value;
     public override float EffectDuration => 0f;
     public override int MaxUses => (int)OptionGroupSingleton<ShuffleOptions>.Instance.ShuffleUses.Value;
-    public override LoadableAsset<Sprite>? Sprite => DivaniAssets.ShuffleButton;
+    public override LoadableAsset<Sprite>? Sprite => DivaniAssets.ShuffleAbilityButton;
     public override Color TextOutlineColor => new Color32(0, 255, 30, 255);
     public override BaseKeybind Keybind => Keybinds.ModifierAction;
 
@@ -263,7 +263,7 @@ public class ShuffleButton : CustomActionButton
             $"<b><color=#808080>Everyone has been shuffled!</color></b>", 
             Color.white,
             new Vector3(0f, 1f, -20f), 
-            spr: DivaniAssets.ShuffleButton.LoadAsset());
+            spr: DivaniAssets.ShuffleAbilityButton.LoadAsset());
         
         DivaniPlugin.Instance.Log.LogInfo($"Shuffled {playerCoordinates.Count} players and {bodyCoordinates.Count} bodies!");
     }

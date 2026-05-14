@@ -37,7 +37,38 @@ public static class PlagueDoctorPatch
     [RegisterEvent]
     public static void OnRoundStart(RoundStartEvent evt)
     {
+        TryClearStalePlagueDoctorStateIfNeeded();
         PlagueDoctorRole.OnRoundStart();
+    }
+
+    /// <summary>
+    /// If the stored PD is still alive but no longer has <see cref="PlagueDoctorRole"/> (e.g. recruited Impostor),
+    /// tear down infection state and HUD. Dead PD may keep ghost win logic — do not clear when <see cref="PlayerControl.Data.IsDead"/>.
+    /// </summary>
+    internal static void TryClearStalePlagueDoctorStateIfNeeded()
+    {
+        if (PlagueDoctorRole.PlagueDoctorPlayer == null)
+        {
+            return;
+        }
+
+        var pd = PlagueDoctorRole.PlagueDoctorPlayer;
+        if (pd.Data == null || pd.Data.IsDead)
+        {
+            return;
+        }
+
+        if (pd.Data.Role is PlagueDoctorRole)
+        {
+            return;
+        }
+
+        PlagueDoctorRole.ClearAndReload();
+    }
+
+    internal static void ResetInfectionSpreadThrottle()
+    {
+        _lastProgressUpdate = 0f;
     }
 
     /// <summary>

@@ -17,7 +17,7 @@ public class InfectButton : CustomActionButton<PlayerControl>
     public override float Cooldown => OptionGroupSingleton<PlagueDoctorOptions>.Instance.InfectCooldown;
     public override float EffectDuration => 0f;
     public override int MaxUses => (int)OptionGroupSingleton<PlagueDoctorOptions>.Instance.MaxInfections;
-    public override LoadableAsset<Sprite>? Sprite => DivaniAssets.InfectButton;
+    public override LoadableAsset<Sprite>? Sprite => DivaniAssets.PlagueDoctorInfectButton;
     public override float Distance => 1.5f;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override Color TextOutlineColor => PlagueDoctorRole.PlagueDoctorColor;

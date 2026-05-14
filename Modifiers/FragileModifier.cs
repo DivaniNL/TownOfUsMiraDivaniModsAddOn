@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers;
 
-public class FragileModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
+public class FragileModifier : UniversalGameModifier, IColoredModifier, IWikiDiscoverable
 {
     public static readonly Color FragileColor = new Color32(251, 252, 225, 255);
 
@@ -34,12 +34,7 @@ public class FragileModifier : TouGameModifier, IColoredModifier, IWikiDiscovera
     
     public override int GetAmountPerGame() =>
         (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.FragileAmount;
-    
-    public override bool IsModifierValidOn(RoleBehaviour role)
-    {
-        return base.IsModifierValidOn(role);
-    }
-    
+
     public override void OnActivate()
     {
         DivaniPlugin.Instance.Log.LogInfo("Fragile modifier activated!");

@@ -246,7 +246,8 @@ public class PickpocketButton : CustomActionButton<PlayerControl>
     /// Works across all three mods: TownOfUsMira uses <see cref="TouGameModifier"/> and
     /// <see cref="UniversalGameModifier"/>; TouMiraRolesExtension uses UniversalGameModifier
     /// plus TimedModifier/BaseModifier (which are already filtered by HideOnUi); DivaniMods
-    /// uses TouGameModifier. Both base classes expose a <c>ModifierFaction FactionType</c>.
+    /// uses TouGameModifier for alignment-specific modifiers and UniversalGameModifier for anyone.
+    /// Both base classes expose a <c>ModifierFaction FactionType</c>.
     /// </summary>
     private static bool IsFactionValidForThief(BaseModifier modifier)
     {

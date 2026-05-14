@@ -25,8 +25,15 @@ gameplay fixes and polish updates for
 ### Controls
 - Added keybind support for Divani Mods buttons.
 
-## Changes
+### Misc
+- Added Mod News
 
+## Bug Fixes
+
+- New **Plague Doctor** inherits infection state from the previous Plague Doctor
+  (e.g. when **Amnesiac** remembers a dead PD).
+- **Misvote** now correctly picks a random target from all alive players.
+- Added better checks for button modifiers.
 - **Ruthless** now kills through First Death Shield.
 - Fixed some task behaviours when **Lockdown** is called.
 - **Misvote** now also counts a random vote if the player does not vote.
@@ -34,9 +41,17 @@ gameplay fixes and polish updates for
 - **Shuffle** button is now hidden when dead.
 - **Thief** no longer receives more than one button modifier.
 - **Shuffle** is now correctly listed as a button modifier.
-- Improved modifier options so they are more grouped, matching source
-  TOU Mira more closely.
+- Improved modifier options so they are more grouped, matching source TOU Mira more closely.
+
+## Credits
+
 - Added icons from Atony (Mira Dev).
+
+## Known bug(s)
+
+- Uses left on Sentinel is not always correct (visual bug).
+- Previous Plague Doctor is not removed from the winners screen when **Amnesiac**
+  inherits PD (Town Of Us end-game display).
 
 ## Compatibility
 
