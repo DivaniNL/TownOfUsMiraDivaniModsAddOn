@@ -4,12 +4,11 @@ using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Patches;
-using TownOfUs.Buttons;
 using UnityEngine;
 
 namespace DivaniMods.Buttons.Crewmate.CrewmateSupport;
 
-public class UsePortalButton : TownOfUsButton
+public class UsePortalButton : CustomActionButton
 {
     public override string Name => "Use Portal";
     public override float Cooldown => OptionGroupSingleton<PortalmakerOptions>.Instance.UsePortalCooldown;
