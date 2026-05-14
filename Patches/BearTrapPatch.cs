@@ -8,7 +8,7 @@ using MiraAPI.Modifiers;
 using MiraAPI.Utilities;
 using Reactor.Utilities;
 using DivaniMods.Assets;
-using DivaniMods.Modifiers;
+using DivaniMods.Modifiers.Game.Crewmate;
 using DivaniMods.Options;
 using TownOfUs.Assets;
 using UnityEngine;

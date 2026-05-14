@@ -9,7 +9,7 @@ using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.Modifiers;
 using MiraAPI.Networking;
 using MiraAPI.Utilities;
-using DivaniMods.Modifiers;
+using DivaniMods.Modifiers.Game.Impostor.ImpostorPassive;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Crewmate;
 

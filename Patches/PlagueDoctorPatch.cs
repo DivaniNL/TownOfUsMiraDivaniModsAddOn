@@ -6,7 +6,7 @@ using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.GameOptions;
 using TownOfUs.Events;
 using DivaniMods.Options;
-using DivaniMods.Roles;
+using DivaniMods.Roles.Neutral.NeutralKilling;
 using UnityEngine;
 
 namespace DivaniMods.Patches;

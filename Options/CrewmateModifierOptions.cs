@@ -32,4 +32,13 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
         {
             Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.BearTrapAmount > 0
         };
+
+    [ModdedNumberOption("Bloody Amount", 0, 5, 1)]
+    public float BloodyAmount { get; set; } = 0;
+
+    public ModdedNumberOption BloodyChance { get; } =
+        new("Bloody Chance", 50f, 0, 100f, 10f, MiraNumberSuffixes.Percent)
+        {
+            Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.BloodyAmount > 0
+        };
 }

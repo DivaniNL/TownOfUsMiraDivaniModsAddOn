@@ -6,7 +6,7 @@ using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Networking;
 using DivaniMods.Assets;
-using DivaniMods.Modifiers;
+using DivaniMods.Modifiers.Game.Universal;
 using DivaniMods.Options;
 using UnityEngine;
 

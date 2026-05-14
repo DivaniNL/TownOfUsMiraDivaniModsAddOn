@@ -3,7 +3,7 @@ using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.Events.Vanilla.Player;
 using HarmonyLib;
-using DivaniMods.Roles;
+using DivaniMods.Roles.Neutral.NeutralEvil;
 
 namespace DivaniMods.Patches;
 

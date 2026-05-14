@@ -12,7 +12,7 @@ using MiraAPI.Modifiers.Types;
 using MiraAPI.Roles;
 using Reactor.Networking.Attributes;
 using DivaniMods.Options;
-using DivaniMods.Roles;
+using DivaniMods.Roles.Impostor.ImpostorSupport;
 
 namespace DivaniMods.Patches;
 

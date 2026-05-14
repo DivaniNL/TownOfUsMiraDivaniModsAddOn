@@ -1,5 +1,5 @@
 using HarmonyLib;
-using DivaniMods.Roles;
+using DivaniMods.Roles.Neutral.NeutralEvil;
 using TownOfUs.Utilities;
 using UnityEngine;
 
