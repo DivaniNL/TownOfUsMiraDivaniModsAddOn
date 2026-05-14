@@ -3,9 +3,9 @@ using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.GameOptions;
-using DivaniMods.Buttons;
+using DivaniMods.Buttons.Impostor.ImpostorSupport;
 using DivaniMods.Options;
-using DivaniMods.Roles;
+using DivaniMods.Roles.Impostor.ImpostorSupport;
 using DivaniMods.Utilities;
 using UnityEngine;
 

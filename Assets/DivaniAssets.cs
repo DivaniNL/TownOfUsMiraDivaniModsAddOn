@@ -31,6 +31,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> PlagueDoctorInfectButton { get; } = new LoadableResourceAsset($"{IconPath}.PlagueDoctor.png", 250f);
     public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{IconPath}.Innocent.png", 200);
     public static LoadableAsset<Sprite> OpportunistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Opportunist.png", 200);
+    public static LoadableAsset<Sprite> RecruiterIcon { get; } = new LoadableResourceAsset($"{ShortPath}.RecruiterIcon.png");
     public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{IconPath}.Sentinel.png", 200);
     public static LoadableAsset<Sprite> SentinelPlaceBeaconButton { get; } = new LoadableResourceAsset($"{IconPath}.Sentinel.png", 250f);
 
@@ -65,12 +66,22 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> MisvoteIcon { get; } = new LoadableResourceAsset($"{IconPath}.Misvote.png", 200);
     public static LoadableAsset<Sprite> SniperIcon { get; } = new LoadableResourceAsset($"{IconPath}.Sniper.png", 200);
     public static LoadableAsset<Sprite> BearTrapIcon { get; } = new LoadableResourceAsset($"{IconPath}.Beartrap.png", 200);
+    public static LoadableAsset<Sprite> BloodyIcon { get; } = new LoadableResourceAsset($"{IconPath}.Bloody.png", 200);
 
     // Portal on map (200 ppu)
     public static LoadableAsset<Sprite> PortalSprite { get; } = new LoadableResourceAsset($"{ShortPath}.PortalSprite.png", 200);
 
     // Beacon on map (550 ppu – source image is ~1024px so high ppu keeps it small in-game)
     public static LoadableAsset<Sprite> BeaconSprite { get; } = new LoadableResourceAsset($"{ShortPath}.BeaconAsset.png", 550);
+
+    // Meeting nameplate toggles: world size is ~pixelSize/PPU (MeetingMenu sizes the collider from
+    // sprite.bounds). Swapper uses TouAssets SwapActive/SwapInactive from the tou-asset *bundle*,
+    // which have their own baked import scale — same local Position does not mean same on-screen size.
+    // Single-arg LoadableResourceAsset used to fall back to a low default PPU, so 198px art read huge.
+    public static LoadableAsset<Sprite> RecruitMeetingCrewmate { get; } =
+        new LoadableResourceAsset($"{ShortPath}.RecruitMeetingCrewmate.png", 440f);
+    public static LoadableAsset<Sprite> RecruitMeetingImpostor { get; } =
+        new LoadableResourceAsset($"{ShortPath}.RecruitMeetingImpostor.png", 440f);
 
     // Announcement badge: PPU between Mira default (~100, reads huge) and very high PPU (tiny).
     // TOU uses AuAvengersSprite at 290; we sit a bit under that plus slightly lower patch scale.

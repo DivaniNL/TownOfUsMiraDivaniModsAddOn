@@ -1,7 +1,7 @@
 using System.Reflection;
 using HarmonyLib;
 using MiraAPI.Networking;
-using DivaniMods.Modifiers;
+using DivaniMods.Modifiers.Game.Neutral.NeutralPassive;
 using TownOfUs.Buttons.Neutral;
 
 namespace DivaniMods.Patches;

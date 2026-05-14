@@ -1,6 +1,6 @@
 using HarmonyLib;
 using MiraAPI.Modifiers;
-using DivaniMods.Modifiers;
+using DivaniMods.Modifiers.Game.Crewmate;
 
 namespace DivaniMods.Patches;
 

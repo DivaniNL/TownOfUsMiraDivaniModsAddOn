@@ -1,4 +1,4 @@
-using DivaniMods.Roles;
+using DivaniMods.Roles.Neutral.NeutralOutlier;
 using HarmonyLib;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
@@ -9,7 +9,6 @@ using MiraAPI.Roles;
 using MiraAPI.Utilities;
 using MiraAPI.Voting;
 using Reactor.Networking.Attributes;
-using DivaniMods.Buttons;
 using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Events.Misc;

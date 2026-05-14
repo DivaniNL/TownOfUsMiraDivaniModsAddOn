@@ -1,9 +1,13 @@
+using System.Collections.Generic;
+using System.Linq;
+using HarmonyLib;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.Events.Vanilla.Player;
-using HarmonyLib;
-using DivaniMods.Roles;
+using MiraAPI.Modifiers;
+using DivaniMods.Modifiers.Neutral.NeutralEvil;
+using DivaniMods.Roles.Neutral.NeutralEvil;
 
 namespace DivaniMods.Patches;
 
@@ -14,6 +18,7 @@ public static class InnocentPatch
     [HarmonyPostfix]
     public static void ResetOnGameStart()
     {
+        StripAllInnocentTargetMarkers();
         InnocentRole.ClearAndReload();
     }
 
@@ -48,11 +53,12 @@ public static class InnocentPatch
 
         innocent.PendingTauntKillerId = null;
         innocent.TauntedKillerId = evt.Source.PlayerId;
-        innocent.ShowTauntedTargetSymbol = true;
         innocent.TargetVoted = false;
         innocent.AboutToWin = false;
         innocent.AwaitingNextMeetingExile = true;
         innocent.WinWindowExpired = false;
+
+        GiveKillerTauntMarker(evt.Source, evt.Target.PlayerId);
     }
 
     [RegisterEvent]
@@ -66,12 +72,22 @@ public static class InnocentPatch
 
         foreach (var innocent in GetInnocents())
         {
-            if (innocent.AwaitingNextMeetingExile && innocent.TauntedKillerId == exiled.PlayerId)
+            if (!innocent.AwaitingNextMeetingExile || innocent.TauntedKillerId != exiled.PlayerId)
             {
-                innocent.AboutToWin = true;
-                innocent.AwaitingNextMeetingExile = false;
-                innocent.TargetVoted = true;
+                continue;
             }
+
+            // Require the runtime marker so ejection matches the same state as meeting UI.
+            if (!InnocentTauntMeetingDisplay.KillerHasTauntMarkerForInnocent(exiled, innocent.Player.PlayerId))
+            {
+                continue;
+            }
+
+            innocent.AboutToWin = true;
+            innocent.AwaitingNextMeetingExile = false;
+            innocent.TargetVoted = true;
+            // First meeting after taunt resolved with correct exile — strip marker immediately (RoundStart still clears as backup).
+            RemoveInnocentTauntMarker(exiled.PlayerId, innocent.Player.PlayerId);
         }
     }
 
@@ -92,6 +108,10 @@ public static class InnocentPatch
         }
     }
 
+    /// <summary>
+    /// After the first meeting following a taunt kill, drop the meeting marker: either the win branch
+    /// (target voted out) or the taunt window expired without voting out the killer.
+    /// </summary>
     [RegisterEvent]
     public static void OnRoundStart(RoundStartEvent evt)
     {
@@ -105,13 +125,17 @@ public static class InnocentPatch
             if (innocent.AboutToWin && innocent.TauntedKillerId.HasValue)
             {
                 innocent.TargetVoted = true;
-                innocent.ShowTauntedTargetSymbol = false;
+                RemoveInnocentTauntMarker(innocent.TauntedKillerId.Value, innocent.Player.PlayerId);
             }
             else if (innocent.AwaitingNextMeetingExile)
             {
+                if (innocent.TauntedKillerId.HasValue)
+                {
+                    RemoveInnocentTauntMarker(innocent.TauntedKillerId.Value, innocent.Player.PlayerId);
+                }
+
                 innocent.AwaitingNextMeetingExile = false;
                 innocent.WinWindowExpired = true;
-                innocent.ShowTauntedTargetSymbol = false;
                 innocent.TauntedKillerId = null;
             }
         }
@@ -120,5 +144,66 @@ public static class InnocentPatch
     private static IEnumerable<InnocentRole> GetInnocents()
     {
         return InnocentRole.ActiveInnocents.Values;
+    }
+
+    private static void StripAllInnocentTargetMarkers()
+    {
+        foreach (var pc in PlayerControl.AllPlayerControls.ToArray())
+        {
+            if (pc == null)
+            {
+                continue;
+            }
+
+            var comp = pc.GetModifierComponent();
+            if (comp == null)
+            {
+                continue;
+            }
+
+            foreach (var m in pc.GetModifiers<InnocentTargetModifier>().ToArray())
+            {
+                comp.RemoveModifier(m);
+            }
+        }
+    }
+
+    private static void GiveKillerTauntMarker(PlayerControl killer, byte innocentPlayerId)
+    {
+        var comp = killer.GetModifierComponent();
+        if (comp == null)
+        {
+            return;
+        }
+
+        foreach (var existing in killer.GetModifiers<InnocentTargetModifier>().ToArray())
+        {
+            comp.RemoveModifier(existing);
+        }
+
+        killer.AddModifier<InnocentTargetModifier>(innocentPlayerId);
+    }
+
+    private static void RemoveInnocentTauntMarker(byte killerPlayerId, byte innocentPlayerId)
+    {
+        var killer = GameData.Instance?.GetPlayerById(killerPlayerId)?.Object;
+        if (killer == null)
+        {
+            return;
+        }
+
+        var comp = killer.GetModifierComponent();
+        if (comp == null)
+        {
+            return;
+        }
+
+        foreach (var m in killer.GetModifiers<InnocentTargetModifier>().ToArray())
+        {
+            if (m.InnocentPlayerId == innocentPlayerId)
+            {
+                comp.RemoveModifier(m);
+            }
+        }
     }
 }

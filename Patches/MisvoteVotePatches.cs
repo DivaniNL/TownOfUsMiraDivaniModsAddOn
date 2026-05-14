@@ -8,7 +8,7 @@ using MiraAPI.Modifiers;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
 using MiraAPI.Voting;
-using DivaniMods.Modifiers;
+using DivaniMods.Modifiers.Game.Universal;
 using TownOfUs.Events.Misc;
 using TownOfUs.Modifiers;
 using TownOfUs.Options.Roles.Crewmate;

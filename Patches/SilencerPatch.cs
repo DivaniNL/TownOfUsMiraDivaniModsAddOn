@@ -3,7 +3,7 @@ using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.GameOptions;
 using DivaniMods.Options;
-using DivaniMods.Roles;
+using DivaniMods.Roles.Impostor.ImpostorKilling;
 using UnityEngine;
 
 namespace DivaniMods.Patches;

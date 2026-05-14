@@ -1,8 +1,8 @@
 using HarmonyLib;
 using MiraAPI.GameOptions;
-using DivaniMods.Buttons;
+using DivaniMods.Buttons.Crewmate.CrewmateSupport;
 using DivaniMods.Options;
-using DivaniMods.Roles;
+using DivaniMods.Roles.Crewmate.CrewmateSupport;
 
 namespace DivaniMods.Patches;
 
