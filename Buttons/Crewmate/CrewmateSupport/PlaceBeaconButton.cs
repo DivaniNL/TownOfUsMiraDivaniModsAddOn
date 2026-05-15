@@ -1,9 +1,11 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
+using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles.Crewmate.CrewmateSupport;
+using System.Collections;
 using TownOfUs.Buttons;
 using UnityEngine;
 
@@ -13,7 +15,7 @@ public class PlaceBeaconButton : TownOfUsButton
 {
     public override string Name => "Place Beacon";
     public override float Cooldown => OptionGroupSingleton<SentinelOptions>.Instance.PlaceBeaconCooldown;
-    public override float EffectDuration => 0f;
+    public override float EffectDuration => 3f;
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.SentinelPlaceBeaconButton;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
@@ -24,6 +26,8 @@ public class PlaceBeaconButton : TownOfUsButton
 
     /// <summary>Button instance for visibility patch.</summary>
     public static PlaceBeaconButton? Instance { get; private set; }
+    
+    private bool _isPlacing;
 
     public override bool Enabled(RoleBehaviour? role)
     {
@@ -43,6 +47,8 @@ public class PlaceBeaconButton : TownOfUsButton
         // Disabled during comms sabotage
         if (PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(player))
             return false;
+        
+        if (_isPlacing) return false;
 
         int maxBeacons = (int)OptionGroupSingleton<SentinelOptions>.Instance.MaxBeacons;
         if (BeaconManager.BeaconsPlaced >= maxBeacons) return false;
@@ -66,15 +72,37 @@ public class PlaceBeaconButton : TownOfUsButton
 
         var position = player.GetTruePosition();
         if (!BeaconManager.IsInRoom(position)) return;
+        
+        if (_isPlacing) return;
 
-        var roomName = BeaconManager.GetRoomName(position) ?? "Unknown";
-
-        // Place immediately - no coroutine, no shake
-        BeaconManager.RpcPlaceBeacon(player, position.x, position.y);
+        Coroutines.Start(PlaceBeaconCoroutine(player, position));
+    }
+    
+    private IEnumerator PlaceBeaconCoroutine(PlayerControl player, Vector2 capturedPosition)
+    {
+        _isPlacing = true;
+        
+        var colorHex = ColorUtility.ToHtmlStringRGB(SentinelColor);
+        MiraAPI.Utilities.Helpers.CreateAndShowNotification(
+            $"<b><color=#{colorHex}>Placing beacon...</color></b>",
+            Color.white,
+            new Vector3(0f, 1f, -20f),
+            spr: DivaniAssets.SentinelPlaceBeaconButton.LoadAsset());
+        
+        yield return new WaitForSeconds(3f);
+        
+        if (player == null || player.Data == null || player.Data.IsDead)
+        {
+            _isPlacing = false;
+            yield break;
+        }
+        
+        var roomName = BeaconManager.GetRoomName(capturedPosition) ?? "Unknown";
+        
+        BeaconManager.RpcPlaceBeacon(player, capturedPosition.x, capturedPosition.y);
 
         int beaconNum = BeaconManager.BeaconsPlaced;
         char label = (char)('A' + beaconNum - 1);
-        var colorHex = ColorUtility.ToHtmlStringRGB(SentinelColor);
         var message = $"<b><color=#{colorHex}>Beacon {label} placed in {roomName}!</color></b>";
 
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
@@ -84,5 +112,7 @@ public class PlaceBeaconButton : TownOfUsButton
             spr: DivaniAssets.SentinelPlaceBeaconButton.LoadAsset());
 
         DivaniPlugin.Instance.Log.LogInfo($"Sentinel: Placed beacon {label} in {roomName}");
+        
+        _isPlacing = false;
     }
 }

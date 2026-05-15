@@ -4,6 +4,7 @@ using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Patches;
+using TownOfUs.Buttons;
 using UnityEngine;
 
 namespace DivaniMods.Buttons.Crewmate.CrewmateSupport;

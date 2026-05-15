@@ -59,10 +59,11 @@ public class PlacePortalButton : TownOfUsButton
         
         if (_isPlacing) return;
         
-        Coroutines.Start(PlacePortalCoroutine(player));
+        var capturedPosition = player.GetTruePosition();
+        Coroutines.Start(PlacePortalCoroutine(player, capturedPosition));
     }
     
-    private IEnumerator PlacePortalCoroutine(PlayerControl player)
+    private IEnumerator PlacePortalCoroutine(PlayerControl player, Vector2 capturedPosition)
     {
         _isPlacing = true;
         
@@ -82,9 +83,8 @@ public class PlacePortalButton : TownOfUsButton
             yield break;
         }
         
-        var position = player.GetTruePosition();
-        DivaniPlugin.Instance.Log.LogInfo($"Placing portal at {position}");
-        PortalManager.RpcPlacePortal(player, position.x, position.y);
+        DivaniPlugin.Instance.Log.LogInfo($"Placing portal at {capturedPosition}");
+        PortalManager.RpcPlacePortal(player, capturedPosition.x, capturedPosition.y);
 
         // Local-only SFX: RpcPlacePortal is the network broadcast, PlaySound
         // runs only on this client so only the Portalmaker hears the drop.
