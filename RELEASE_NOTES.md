@@ -20,12 +20,10 @@ Divani Mods 1.1.2 lets the **Thief** steal **Alliance** modifiers (including **L
 
 - **Portalmaker:** **Place Portal** uses a **3s** channel; portals are placed where you stood when you clicked, not where you move during the delay.
 - **Sentinel:** **Place Beacon** uses the same **3s** channel and **click-position** placement.
-- **Portalmaker:** **Use Portal** button visibility and behaviour fixes.
 
 ## Bug fixes
 
-- **Thief / Lover:** Stealing **Lover** no longer chains heartbreak deaths to the Thief or partner when only the old lover should die.
-- **Thief / Lover:** Heartbreak cause of death and bodies now sync correctly for all players (not only the victim’s client).
+- **Portalmaker:** **Use Portal** button visibility and behaviour fixes.
 
 ## Known bug(s)
 
