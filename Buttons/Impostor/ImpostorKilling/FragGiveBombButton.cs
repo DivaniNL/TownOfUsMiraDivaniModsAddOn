@@ -5,7 +5,7 @@ using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Patches;
-using DivaniMods.Roles.Impostor.ImpostorKilling;
+using DivaniMods.Roles.Neutral.NeutralKilling;
 using TownOfUs.Buttons;
 using UnityEngine;
 
@@ -31,7 +31,7 @@ public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.FragGiveButton;
     public override float Distance => 1.5f;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
-    public override Color TextOutlineColor => Palette.ImpostorRed;
+    public override Color TextOutlineColor => FragRole.FragColor;
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
 
     public override bool Enabled(RoleBehaviour? role)

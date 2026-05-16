@@ -10,8 +10,9 @@ using MiraAPI.Utilities;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Impostor.ImpostorKilling;
-using DivaniMods.Roles.Impostor.ImpostorKilling;
+using DivaniMods.Roles.Neutral.NeutralKilling;
 using DivaniMods.Utilities;
+using TownOfUs.Modules;
 using TownOfUs.Networking;
 using UnityEngine;
 
@@ -149,8 +150,74 @@ public static class FragBombState
 
     public static void ClearForMeeting()
     {
-        // Calling a meeting fully defuses the bomb. No one dies.
+        // Calling a meeting (or reporting a body) detonates the bomb on the current
+        // holder. We capture the IDs, clear bomb state immediately so the countdown/HUD
+        // stops, and schedule a coroutine that fires the murder via RpcCustomMurder
+        // shortly after the meeting intro animation completes. The RPC syncs to every
+        // client and TouMira's HandleMeetingMurder plays the kill animation in-cabin.
+        var holderIdCapture = HolderId;
+        var fragIdCapture = FragId;
+        var shouldKill = IsActive;
+
         Clear(startGiveCooldown: false);
+
+        if (shouldKill)
+        {
+            Coroutines.Start(CoExplodeInMeeting(holderIdCapture, fragIdCapture));
+        }
+    }
+
+    private static IEnumerator CoExplodeInMeeting(byte holderIdCapture, byte fragIdCapture)
+    {
+        // Wait until the meeting cabin's intro animation finishes so the kill
+        // plays as a proper in-meeting murder (Assassin-style cabin animation
+        // is wired up by TouMira's HandleMeetingMurder via AfterMurderEvent).
+        while (MeetingHud.Instance != null &&
+               MeetingHud.Instance.state == MeetingHud.VoteStates.Animating)
+        {
+            yield return null;
+        }
+
+        if (MeetingHud.Instance == null) yield break;
+
+        yield return new WaitForSeconds(0.25f);
+
+        // Only the host kicks off the RPC so the kill resolves exactly once.
+        if (!AmongUsClient.Instance.AmHost) yield break;
+
+        var holder = PlayerById(holderIdCapture);
+        if (holder == null || holder.Data == null || holder.Data.IsDead) yield break;
+
+        var frag = PlayerById(fragIdCapture);
+        var source = (frag != null && frag.Data != null && !frag.Data.IsDead) ? frag : holder;
+
+        // TouMira's HandleMeetingMurder hides the guess-crosshair button for the
+        // dead player on every screen *except* the murderer's, because assassins
+        // normally call HideSingle themselves inside their guess click handler.
+        // Frag's bomb doesn't go through that flow, so do it explicitly on the
+        // source's client so they can't still target the player they just bombed.
+        if (source.AmOwner)
+        {
+            MeetingMenu.Instances.Do(x => x.HideSingle(holder.PlayerId));
+        }
+
+        // MeetingCheck.ForMeeting matches Assassin's guess kill — required so the
+        // RPC isn't cancelled by MiraAPI's CustomMurder meeting filter. The cabin
+        // death animation is driven by TouMira's HandleMeetingMurder, so we skip
+        // showKillAnim/teleport here and just make sure the body is created for
+        // post-meeting reports.
+        source.RpcSpecialMurder(
+            holder,
+            MeetingCheck.ForMeeting,
+            isIndirect: true,
+            ignoreShield: false,
+            didSucceed: true,
+            resetKillTimer: false,
+            createDeadBody: true,
+            teleportMurderer: false,
+            showKillAnim: false,
+            playKillSound: true,
+            causeOfDeath: "BomberBomb");
     }
 
     public static void DestroyHud() => DivaniTimers.Remove(TimerId);
@@ -413,7 +480,7 @@ public static class FragBombState
 
         DivaniTimers.Set(
             TimerId,
-            "<b><color=#CC2222>PASS THE FRAG!</color></b>",
+            "<b><color=#e8a87c>PASS THE FRAG!</color></b>",
             GetFragRoleIcon(),
             Mathf.Max(0f, TimeRemaining),
             useLocalTimeDelta: false,

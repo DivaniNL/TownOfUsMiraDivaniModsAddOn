@@ -12,6 +12,7 @@ using MiraAPI.Utilities.Assets;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
+using DivaniMods.Buttons.Impostor.ImpostorKilling;
 using DivaniMods.Options;
 using DivaniMods.Patches;
 using DivaniMods.Roles.Crewmate.CrewmatePower;
@@ -87,7 +88,13 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         var usesLeft = thief.MaxStolenModifiers - thief.StolenModifierIds.Count;
         SetUses(usesLeft);
         
-        if (!thief.CanStealMore) return false;
+        // Bomb snatch is always allowed even at max stolen modifiers because
+        // it doesn't consume a slot — keep the button live when a holder is nearby.
+        if (!thief.CanStealMore)
+        {
+            var nearby = GetTarget();
+            if (nearby == null || !FragBombState.IsHolder(nearby.PlayerId)) return false;
+        }
         
         return base.CanUse();
     }
@@ -98,6 +105,18 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         if (player == null || Target == null) return;
         
         if (player.Data.Role is not ThiefRole thief) return;
+        
+        // Frag bomb pickpocket: if the target is the current bomb holder, snatch
+        // the bomb instead of stealing a modifier. Doesn't consume a stolen slot.
+        if (FragBombState.IsHolder(Target.PlayerId))
+        {
+            DivaniPlugin.Instance.Log.LogInfo($"Thief: Pickpocketing FRAG BOMB from {Target.Data.PlayerName}");
+            FragBombState.PlayGivePassSoundLocal();
+            FragBombButton.RpcPassBomb(player, player.PlayerId, Target.PlayerId, 0f, 0f);
+            ResetTarget();
+            return;
+        }
+        
         if (!thief.CanStealMore)
         {
             DivaniPlugin.Instance.Log.LogInfo("Thief: Already at max stolen modifiers!");
