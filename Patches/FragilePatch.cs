@@ -58,10 +58,8 @@ public static class FragileInteraction
             return false;
         var chanceToBreak = OptionGroupSingleton<FragileOptions>.Instance.ChanceToBreak.Value;
         var randNum = UnityEngine.Random.Range(0f, 100f);
-        DivaniPlugin.Instance.Log.LogInfo($"Fragile: Chance to break is {chanceToBreak}%, random roll is {randNum:F1}");
         if (chanceToBreak < 100f && randNum >= chanceToBreak)
         {
-            DivaniPlugin.Instance.Log.LogInfo("Fragile: Player survived (roll >= chance)");
             return false;
         }
 
@@ -227,7 +225,6 @@ public static class FragileTownOfUsButtonPatch
                 }
             }
 
-            DivaniPlugin.Instance.Log.LogInfo($"Fragile: Patched {count} TownOfUs ClickHandler prefix(es) for Fragile.");
         }
         catch (Exception ex)
         {

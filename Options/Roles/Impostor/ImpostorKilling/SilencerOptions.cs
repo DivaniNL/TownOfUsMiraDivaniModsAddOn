@@ -14,4 +14,7 @@ public class SilencerOptions : AbstractOptionGroup<SilencerRole>
 
     [ModdedNumberOption("Minimum Voting Time", 5, 25, 5, MiraNumberSuffixes.Seconds)]
     public float MinimumVotingTime { get; set; } = 10;
+
+    [ModdedToggleOption("Normal Voting Time When Dead")]
+    public bool NormalVotingTimeWhenDead { get; set; } = true;
 }

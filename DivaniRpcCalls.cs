@@ -12,6 +12,7 @@ public enum DivaniRpcCalls : uint
     ResetPortals = 207,
     PlagueDoctorSetInfected = 208,
     PlagueDoctorUpdateProgress = 209,
+    PlagueDoctorTurnIntoAmnesiac = 210,
     PlaceBeacon = 211,
     FragPassBomb = 212,
     InnocentTaunt = 213,

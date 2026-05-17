@@ -39,8 +39,6 @@ public static class BearTrapPatch
         var trap = new ActiveTrap(evt.Source.PlayerId, evt.Target.PlayerId, Time.time + duration);
         ActiveTraps[evt.Source.PlayerId] = trap;
 
-        DivaniPlugin.Instance.Log.LogInfo(
-            $"Bear Trap: froze {evt.Source.Data?.PlayerName} for {duration:0} seconds after killing {evt.Target.Data?.PlayerName}.");
 
         if (evt.Source.AmOwner)
         {
@@ -76,8 +74,6 @@ public static class BearTrapPatch
 
         if (evt.Target.PlayerId == trap.VictimId)
         {
-            DivaniPlugin.Instance.Log.LogInfo(
-                $"Bear Trap: blocked {evt.Reporter.Data?.PlayerName} from self-reporting their trapped victim.");
             evt.Cancel();
         }
     }

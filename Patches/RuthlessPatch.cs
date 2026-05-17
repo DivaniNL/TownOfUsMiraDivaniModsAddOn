@@ -54,7 +54,6 @@ public static class RuthlessEventHandler
                     _invulnerabilityModifierType = type;
             }
             
-            DivaniPlugin.Instance.Log.LogInfo($"Ruthless: Found BaseShieldModifier: {_baseShieldModifierType != null}, InvulnerabilityModifier: {_invulnerabilityModifierType != null}");
         }
         catch (Exception ex)
         {
@@ -122,13 +121,11 @@ public static class RuthlessEventHandler
         
         bool isProtected = IsProtected(target);
         
-        DivaniPlugin.Instance.Log.LogInfo($"Ruthless {context}: {source.Data?.PlayerName} -> {target.Data?.PlayerName}, Protected: {isProtected}");
         
         // Only bypass shields, NOT veteran alert
         if (isProtected)
         {
             ShouldBypassProtection = true;
-            DivaniPlugin.Instance.Log.LogInfo($"Ruthless {context}: Marked for bypass (shield)");
             return true;
         }
         
@@ -164,11 +161,9 @@ public static class RuthlessEventHandler
     {
         if (!ShouldBypassProtection) return;
         
-        DivaniPlugin.Instance.Log.LogInfo($"Ruthless BUTTON_LATE: IsCancelled: {evt.IsCancelled}");
         
         if (evt.IsCancelled)
         {
-            DivaniPlugin.Instance.Log.LogInfo($"Ruthless BUTTON_LATE: UnCancelling button click event");
             evt.UnCancel();
         }
     }
@@ -193,11 +188,9 @@ public static class RuthlessEventHandler
     {
         if (!ShouldBypassProtection) return;
         
-        DivaniPlugin.Instance.Log.LogInfo($"Ruthless MURDER_LATE: IsCancelled: {evt.IsCancelled}");
         
         if (evt.IsCancelled)
         {
-            DivaniPlugin.Instance.Log.LogInfo($"Ruthless MURDER_LATE: UnCancelling murder event");
             evt.UnCancel();
         }
     }
@@ -211,12 +204,10 @@ public static class RuthlessEventHandler
         var target = evt.Target;
         var source = evt.Source;
         var hasDeathHandler = target.HasModifier<TownOfUs.Modifiers.DeathHandlerModifier>();
-        DivaniPlugin.Instance.Log.LogInfo($"[DEBUG] AfterMurder: {source.Data?.PlayerName} killed {target.Data?.PlayerName}, hasDeathHandler: {hasDeathHandler}");
         
         if (hasDeathHandler)
         {
             var dh = target.GetModifier<TownOfUs.Modifiers.DeathHandlerModifier>();
-            DivaniPlugin.Instance.Log.LogInfo($"[DEBUG] DeathHandler: CauseOfDeath={dh?.CauseOfDeath}, KilledBy={dh?.KilledBy}, LockInfo={dh?.LockInfo}");
         }
     }
     
@@ -236,7 +227,6 @@ public static class RuthlessEventHandler
     {
         if (ShouldBypassProtection)
         {
-            DivaniPlugin.Instance.Log.LogInfo("Ruthless: Resetting bypass state");
         }
         ShouldBypassProtection = false;
     }
@@ -293,7 +283,6 @@ public static class RuthlessEventHandler
                 {
                     harmony.Patch(method, prefix: new HarmonyMethod(skipBoolKillSource));
                     patchCount++;
-                    DivaniPlugin.Instance.Log.LogInfo($"Ruthless: Patched {typeName}.{methodName} (bool, kill source)");
                 }
             }
 
@@ -306,7 +295,6 @@ public static class RuthlessEventHandler
                 {
                     harmony.Patch(barrierMethod, prefix: new HarmonyMethod(skipBoolCleric));
                     patchCount++;
-                    DivaniPlugin.Instance.Log.LogInfo($"Ruthless: Patched {typeName}.CheckForClericBarrier (bool, target/source order)");
                 }
             }
 
@@ -324,7 +312,6 @@ public static class RuthlessEventHandler
                 {
                     harmony.Patch(method, prefix: new HarmonyMethod(skipVoidKillSource));
                     patchCount++;
-                    DivaniPlugin.Instance.Log.LogInfo($"Ruthless: Patched {typeName}.{methodName} (void, kill source)");
                 }
             }
 
@@ -339,7 +326,6 @@ public static class RuthlessEventHandler
                 {
                     harmony.Patch(firstMethod, prefix: new HarmonyMethod(skipFirstShield));
                     patchCount++;
-                    DivaniPlugin.Instance.Log.LogInfo("Ruthless: Patched FirstShieldEvents.CheckForFirstDeathShield (void, target then source)");
                 }
             }
 
@@ -351,11 +337,9 @@ public static class RuthlessEventHandler
                 {
                     harmony.Patch(invulnMethod, prefix: new HarmonyMethod(skipVoidInvuln));
                     patchCount++;
-                    DivaniPlugin.Instance.Log.LogInfo("Ruthless: Patched InvulnerabilityEvents.CheckForInvulnerability (void)");
                 }
             }
             
-            DivaniPlugin.Instance.Log.LogInfo($"Ruthless: Patched {patchCount} shield check method(s)");
         }
         catch (Exception ex)
         {
@@ -400,7 +384,6 @@ public static class RuthlessRpcPatches
     {
         if (IsRuthlessAttacker(source))
         {
-            DivaniPlugin.Instance.Log.LogInfo("Ruthless: Skipping shield check (bool, kill source)");
             __result = false;
             return false;
         }
@@ -415,7 +398,6 @@ public static class RuthlessRpcPatches
     {
         if (IsRuthlessAttacker(source))
         {
-            DivaniPlugin.Instance.Log.LogInfo("Ruthless: Skipping cleric barrier check (bool)");
             __result = false;
             return false;
         }
@@ -430,7 +412,6 @@ public static class RuthlessRpcPatches
     {
         if (IsRuthlessAttacker(source))
         {
-            DivaniPlugin.Instance.Log.LogInfo("Ruthless: Skipping warden fortify check (void)");
             return false;
         }
 
@@ -447,7 +428,6 @@ public static class RuthlessRpcPatches
         
         if (IsRuthlessAttacker(source))
         {
-            DivaniPlugin.Instance.Log.LogInfo("Ruthless: Skipping first-death shield check (void)");
             return false;
         }
 
@@ -461,7 +441,6 @@ public static class RuthlessRpcPatches
     {
         if (IsRuthlessAttacker(source))
         {
-            DivaniPlugin.Instance.Log.LogInfo("Ruthless: Skipping invulnerability check (void)");
             return false;
         }
 

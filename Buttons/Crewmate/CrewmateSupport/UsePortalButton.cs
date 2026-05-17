@@ -59,11 +59,9 @@ public class UsePortalButton : CustomActionButton
         
         if (!destination.HasValue)
         {
-            DivaniPlugin.Instance.Log.LogInfo("No valid destination found");
             return;
         }
         
-        DivaniPlugin.Instance.Log.LogInfo($"Using portal to teleport to {destination.Value}");
         PortalManager.RpcUsePortal(player, destination.Value.x, destination.Value.y);
     }
 }

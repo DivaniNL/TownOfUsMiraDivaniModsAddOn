@@ -112,12 +112,10 @@ public class LockdownButton : TownOfUsButton
             }
             
             var duration = OptionGroupSingleton<DeadlockOptions>.Instance.LockdownDuration;
-            DivaniPlugin.Instance.Log.LogInfo($"Deadlock: Starting lockdown for {duration} seconds (Charges: {CurrentCharges})");
             RpcStartLockdown(player, duration);
         }
         else
         {
-            DivaniPlugin.Instance.Log.LogInfo("Deadlock: Ending lockdown early");
             RpcEndLockdown(player);
         }
     }
@@ -132,14 +130,12 @@ public class LockdownButton : TownOfUsButton
     [MethodRpc((uint)DivaniRpcCalls.StartLockdown)]
     public static void RpcStartLockdown(PlayerControl source, float duration)
     {
-        DivaniPlugin.Instance.Log.LogInfo($"Deadlock RPC: Lockdown started by {source.Data.PlayerName} for {duration}s");
         StartLockdownLocal(duration);
     }
     
     [MethodRpc((uint)DivaniRpcCalls.EndLockdown)]
     public static void RpcEndLockdown(PlayerControl source)
     {
-        DivaniPlugin.Instance.Log.LogInfo($"Deadlock RPC: Lockdown ended by {source.Data.PlayerName}");
         EndLockdownLocal();
     }
 
@@ -231,7 +227,6 @@ public class LockdownButton : TownOfUsButton
         var minigame = Minigame.Instance;
         if (minigame != null)
         {
-            DivaniPlugin.Instance.Log.LogInfo("Deadlock: Kicking player from current task");
             minigame.Close();
         }
     }
@@ -248,7 +243,6 @@ public class LockdownButton : TownOfUsButton
         if (amount <= 0) return;
         
         CurrentCharges += amount;
-        DivaniPlugin.Instance.Log.LogInfo($"Deadlock: Added {amount} charge(s). Total: {CurrentCharges}");
     }
     
     public void ResetCharges()

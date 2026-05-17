@@ -57,6 +57,5 @@ public class ShuffleModifier : UniversalGameModifier, IColoredModifier, IWikiDis
     public override void OnActivate()
     {
         _usesRemaining = (int)OptionGroupSingleton<ShuffleOptions>.Instance.ShuffleUses.Value;
-        DivaniPlugin.Instance.Log.LogInfo($"Shuffle modifier activated! Uses: {_usesRemaining}");
     }
 }

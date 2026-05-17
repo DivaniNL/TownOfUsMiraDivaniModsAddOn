@@ -37,11 +37,12 @@ public sealed class BearTrapModifier : TouGameModifier, IColoredModifier, IWikiD
 
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        return base.IsModifierValidOn(role) && role.TeamType == RoleTeamTypes.Crewmate;
+        // role.TeamType is RoleTeamTypes.Crewmate for Neutrals too; use IsCrewmate
+        // which checks ModdedRoleTeams.Crewmate so NK/NE roles are excluded.
+        return base.IsModifierValidOn(role) && role.IsCrewmate();
     }
 
     public override void OnActivate()
     {
-        DivaniPlugin.Instance.Log.LogInfo("Bear Trap modifier activated!");
     }
 }

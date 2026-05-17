@@ -39,7 +39,7 @@ public sealed class BloodyModifier : TouGameModifier, IColoredModifier, IWikiDis
 
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        return base.IsModifierValidOn(role) && role.TeamType == RoleTeamTypes.Crewmate;
+        return base.IsModifierValidOn(role) && role.IsCrewmate();
     }
 
     public List<CustomButtonWikiDescription> Abilities { get; } = [];

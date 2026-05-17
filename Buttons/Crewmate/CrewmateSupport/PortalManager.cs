@@ -47,7 +47,6 @@ public static class PortalManager
         PlayerCooldowns.Clear();
         PortalUsers.Clear();
         ImmovablePortalUsers.Clear();
-        DivaniPlugin.Instance.Log.LogInfo("Portal Manager reset");
     }
     
     public static void ClearPortalUsers()
@@ -118,13 +117,11 @@ public static class PortalManager
         {
             Portal1Position = position;
             CreatePortalVisual(position, 1);
-            DivaniPlugin.Instance.Log.LogInfo($"Portal 1 placed at {position}");
         }
         else if (!Portal2Position.HasValue)
         {
             Portal2Position = position;
             CreatePortalVisual(position, 2);
-            DivaniPlugin.Instance.Log.LogInfo($"Portal 2 placed at {position}");
         }
     }
     
@@ -220,14 +217,12 @@ public static class PortalManager
     [MethodRpc((uint)DivaniRpcCalls.PlacePortal)]
     public static void RpcPlacePortal(PlayerControl sender, float x, float y)
     {
-        DivaniPlugin.Instance.Log.LogInfo($"RpcPlacePortal received from {sender.name}: ({x}, {y})");
         PlacePortal(new Vector2(x, y));
     }
     
     [MethodRpc((uint)DivaniRpcCalls.UsePortal)]
     public static void RpcUsePortal(PlayerControl user, float destX, float destY)
     {
-        DivaniPlugin.Instance.Log.LogInfo($"RpcUsePortal: {user.name} teleporting to ({destX}, {destY})");
 
         if (user.HasModifier<ImmovableModifier>())
         {
@@ -263,7 +258,6 @@ public static class PortalManager
     [MethodRpc((uint)DivaniRpcCalls.ResetPortals)]
     public static void RpcResetPortals(PlayerControl sender)
     {
-        DivaniPlugin.Instance.Log.LogInfo("RpcResetPortals received");
         Reset();
     }
 }

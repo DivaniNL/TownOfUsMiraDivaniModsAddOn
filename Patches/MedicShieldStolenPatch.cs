@@ -87,8 +87,6 @@ public static class MedicShieldStolenPatch
         if (medicSourceFromModifier != null && medicSourceFromModifier.GetRole<MedicRole>() is { } medicRole)
         {
             medicRole.Shielded = thief;
-            DivaniPlugin.Instance.Log.LogInfo(
-                $"MedicShieldStolenPatch: Set Shielded -> {thief.Data?.PlayerName} (medic {medicSourceFromModifier.Data?.PlayerName})");
         }
 
         RebuildMedicShieldedFromModifiers();
@@ -101,7 +99,6 @@ public static class MedicShieldStolenPatch
         yield return null;
         RebuildMedicShieldedFromModifiers();
         TryRefreshLocalMedicRoleTab();
-        DivaniPlugin.Instance.Log.LogInfo("MedicShieldStolenPatch: Deferred sync + tab refresh");
     }
 
     public static void RebuildMedicShieldedFromModifiers()

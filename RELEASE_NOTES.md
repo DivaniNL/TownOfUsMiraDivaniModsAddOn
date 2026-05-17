@@ -1,34 +1,40 @@
-# Divani Mods v1.1.2
+# Divani Mods v1.2.0
 
-**Thief steals Lovers; Ruthless tuning; placement delays for Portalmaker & Sentinel.**
-
-Divani Mods 1.1.2 lets the **Thief** steal **Alliance** modifiers (including **Lover**), with optional **heartbreak** for the player who lost their partner. **Ruthless** gains a **Bypass First Death Shield** toggle (on by default). **Portalmaker** and **Sentinel** now use a **3-second placement delay** with the position locked when you press the button (like Sentry cameras). Portalmaker placement and **Use Portal** behaviour are also improved.
-
-## Added
+## Changes
 
 ### Thief
 
-- **Alliance modifier stealing:** The Thief can steal **Lover** and other Alliance modifiers from targets.
-- **Lover pair rewiring:** Stealing **Lover** from one partner links the Thief to the other partner; the victim is no longer in the pair.
-- **Stealing Lover Breaks Their Heart** (toggle, default **On**): After the pair is swapped, the player who lost **Lover** dies of **heartbreak** (end-game shows *Heartbroken* on all clients).
+- Thief now gets a random modifier if it tries to steal one it already has
+- Thief now priorizes stealing the frag bomb if the target has it
 
-### Ruthless
+### Silencer
 
-- **Bypass First Death Shield** (toggle, default **On**): When enabled, Ruthless kills ignore the first-death shield; turn off to let that shield block Ruthless again.
+- New option: "Normal Voting Time When Dead". If enabled, voting time return to it's initial value
 
-## Improvements
+### Frag
 
-- **Portalmaker:** **Place Portal** uses a **3s** channel; portals are placed where you stood when you clicked, not where you move during the delay.
-- **Sentinel:** **Place Beacon** uses the same **3s** channel and **click-position** placement.
+- Moved to the Neutral Killing faction
+- When a meeting is called (Emergency, report) the bomb holder is Bombed at the start of the meeting
+
+### Plague Doctor
+
+- Moved to the Neutral Evil faction
+- Better display of displaying infection progress (in task header)
+- Option added: "Turn into Amnesiac when cannot win"
+- Option added: "Notify Players When Infection Is Close"
+- Suboption added: "Notify When Uninfected Players Left"
+
 
 ## Bug fixes
+- Frag bomb button no longer sometimes visible in meeting
+- Shuffle can no longer be used in meetings by using its keybind
+- Fixed button uses left on Sentinel
+- Crewmate modifiers can no longer be assigned to Neutral factions
 
-- **Portalmaker:** **Use Portal** button visibility and behaviour fixes.
+## Won't fix:
+- Old Plague Doctor shows up in win screen if new PD is enherited from Amnesiac (actually fun)
 
-## Known bug(s)
-
-- Uses left on Sentinel is not always correct (visual bug).
-- Previous Plague Doctor is not removed from the winners screen when **Amnesiac**
-  inherits PD (Town Of Us end-game display).
-
----
+## Planned:
+- Enable portals after the first meeting (option)
+- Portalmaker can portal to both portals from anywhere (option)
+- Some new roles/modifiers

@@ -18,7 +18,6 @@ public static class SurveillanceMinigamePatch
     [HarmonyPostfix]
     public static void BeginPostfix(SurveillanceMinigame __instance)
     {
-        DivaniPlugin.Instance.Log.LogInfo($"Blindspot: SurveillanceMinigame.Begin called, HasBlindspot={BlindspotHelper.HasBlindspot}");
     }
 }
 
@@ -29,7 +28,6 @@ public static class PlanetSurveillanceMinigamePatch
     [HarmonyPostfix]
     public static void BeginPostfix(PlanetSurveillanceMinigame __instance)
     {
-        DivaniPlugin.Instance.Log.LogInfo($"Blindspot: PlanetSurveillanceMinigame.Begin called, HasBlindspot={BlindspotHelper.HasBlindspot}");
     }
 }
 
@@ -40,7 +38,6 @@ public static class FungleSurveillanceMinigamePatch
     [HarmonyPostfix]
     public static void BeginPostfix(FungleSurveillanceMinigame __instance)
     {
-        DivaniPlugin.Instance.Log.LogInfo($"Blindspot: FungleSurveillanceMinigame.Begin called, HasBlindspot={BlindspotHelper.HasBlindspot}");
     }
 }
 
@@ -53,13 +50,11 @@ public static class ShipStatusPatch
     {
         if (systemType == SystemTypes.Security)
         {
-            DivaniPlugin.Instance.Log.LogInfo($"Blindspot: ShipStatus.RpcUpdateSystem Security called, amount={amount}, HasBlindspot={BlindspotHelper.HasBlindspot}");
         }
         
         if (systemType != SystemTypes.Security) return true;
         if (!BlindspotHelper.HasBlindspot) return true;
         
-        DivaniPlugin.Instance.Log.LogInfo($"Blindspot: BLOCKING security RPC, amount={amount}");
         return false;
     }
 }

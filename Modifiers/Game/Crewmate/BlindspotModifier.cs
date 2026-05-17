@@ -33,11 +33,12 @@ public class BlindspotModifier : TouGameModifier, IColoredModifier, IWikiDiscove
     
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        return role.TeamType == RoleTeamTypes.Crewmate && base.IsModifierValidOn(role);
+        // role.TeamType is RoleTeamTypes.Crewmate for Neutrals too; use IsCrewmate
+        // which checks ModdedRoleTeams.Crewmate so NK/NE roles are excluded.
+        return role.IsCrewmate() && base.IsModifierValidOn(role);
     }
     
     public override void OnActivate()
     {
-        DivaniPlugin.Instance.Log.LogInfo("Blindspot modifier activated!");
     }
 }

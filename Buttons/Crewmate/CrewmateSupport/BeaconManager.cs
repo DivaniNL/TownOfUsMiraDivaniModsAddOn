@@ -133,7 +133,6 @@ public static class BeaconManager
             }
         }
 
-        DivaniPlugin.Instance.Log.LogInfo($"Beacon {Beacons.Count} placed at {position} in {roomName}");
     }
 
     private static void CreateBeaconVisual(BeaconData beacon, int beaconNumber)
@@ -268,6 +267,5 @@ public static class BeaconManager
         }
 
         Beacons.Clear();
-        DivaniPlugin.Instance.Log.LogInfo("Beacon Manager reset");
     }
 }

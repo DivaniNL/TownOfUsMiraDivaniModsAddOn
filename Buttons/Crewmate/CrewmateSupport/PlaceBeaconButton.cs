@@ -111,7 +111,6 @@ public class PlaceBeaconButton : TownOfUsButton
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.SentinelPlaceBeaconButton.LoadAsset());
 
-        DivaniPlugin.Instance.Log.LogInfo($"Sentinel: Placed beacon {label} in {roomName}");
         
         _isPlacing = false;
     }

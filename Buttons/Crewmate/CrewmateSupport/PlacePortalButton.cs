@@ -53,7 +53,6 @@ public class PlacePortalButton : TownOfUsButton
         
         if (PortalManager.PortalsPlaced >= 2)
         {
-            DivaniPlugin.Instance.Log.LogInfo("Both portals already placed");
             return;
         }
         
@@ -67,7 +66,6 @@ public class PlacePortalButton : TownOfUsButton
     {
         _isPlacing = true;
         
-        DivaniPlugin.Instance.Log.LogInfo("Starting portal placement...");
         
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
             "<b><color=#6633CC>Placing portal...</color></b>",
@@ -83,7 +81,6 @@ public class PlacePortalButton : TownOfUsButton
             yield break;
         }
         
-        DivaniPlugin.Instance.Log.LogInfo($"Placing portal at {capturedPosition}");
         PortalManager.RpcPlacePortal(player, capturedPosition.x, capturedPosition.y);
 
         // Local-only SFX: RpcPlacePortal is the network broadcast, PlaySound

@@ -10,7 +10,6 @@ internal static class PortalResetOnGameStart
     private static void Postfix()
     {
         PortalManager.Reset();
-        DivaniPlugin.Instance.Log.LogInfo("Portals reset on game start");
     }
 }
 
@@ -20,7 +19,6 @@ internal static class PortalResetOnGameEnd
     private static void Postfix()
     {
         PortalManager.Reset();
-        DivaniPlugin.Instance.Log.LogInfo("Portals reset on game end");
     }
 }
 

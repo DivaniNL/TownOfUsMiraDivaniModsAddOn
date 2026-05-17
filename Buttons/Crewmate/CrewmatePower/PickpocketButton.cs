@@ -12,6 +12,7 @@ using MiraAPI.Utilities.Assets;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
+using DivaniMods.Buttons.Neutral.NeutralKilling;
 using DivaniMods.Options;
 using DivaniMods.Patches;
 using DivaniMods.Roles.Crewmate.CrewmatePower;
@@ -87,7 +88,13 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         var usesLeft = thief.MaxStolenModifiers - thief.StolenModifierIds.Count;
         SetUses(usesLeft);
         
-        if (!thief.CanStealMore) return false;
+        // Bomb snatch is always allowed even at max stolen modifiers because
+        // it doesn't consume a slot — keep the button live when a holder is nearby.
+        if (!thief.CanStealMore)
+        {
+            var nearby = GetTarget();
+            if (nearby == null || !FragBombState.IsHolder(nearby.PlayerId)) return false;
+        }
         
         return base.CanUse();
     }
@@ -98,9 +105,19 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         if (player == null || Target == null) return;
         
         if (player.Data.Role is not ThiefRole thief) return;
+        
+        // Frag bomb pickpocket: if the target is the current bomb holder, snatch
+        // the bomb instead of stealing a modifier. Doesn't consume a stolen slot.
+        if (FragBombState.IsHolder(Target.PlayerId))
+        {
+            FragBombState.PlayGivePassSoundLocal();
+            FragBombButton.RpcPassBomb(player, player.PlayerId, Target.PlayerId, 0f, 0f);
+            ResetTarget();
+            return;
+        }
+        
         if (!thief.CanStealMore)
         {
-            DivaniPlugin.Instance.Log.LogInfo("Thief: Already at max stolen modifiers!");
             return;
         }
         
@@ -110,7 +127,7 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         if (targetModifiers.Count > 0)
         {
             var thiefHasButtonModifier = HasButtonModifier(player);
-            var stolen = PickTargetModifier(targetModifiers, random, preferNonButtonModifier: thiefHasButtonModifier);
+            var stolen = PickTargetModifier(targetModifiers, random, preferNonButtonModifier: thiefHasButtonModifier, thief: player);
             var canUseModifier = CanThiefUseModifier(stolen, player);
             
             // Pre-pick the fallback random id on the sender so every client applies the
@@ -122,13 +139,11 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
                 fallbackRandomId = PickRandomGivableId(player, random, allowButtonModifiers: !thiefHasButtonModifier);
             }
             
-            DivaniPlugin.Instance.Log.LogInfo($"Thief: Stealing {stolen.ModifierName} from {Target.Data.PlayerName} (can use: {canUseModifier}, fallback: {fallbackRandomId})");
             RpcStealModifier(player, Target.PlayerId, stolen.TypeId, canUseModifier, fallbackRandomId);
         }
         else
         {
             var chosenId = PickRandomGivableId(player, random, allowButtonModifiers: !HasButtonModifier(player));
-            DivaniPlugin.Instance.Log.LogInfo($"Thief: No modifiers on {Target.Data.PlayerName}, giving random modifier id={chosenId}");
             RpcGiveRandomModifier(player, chosenId);
         }
         
@@ -142,15 +157,24 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
     private static BaseModifier PickTargetModifier(
         List<BaseModifier> targetModifiers,
         System.Random random,
-        bool preferNonButtonModifier)
+        bool preferNonButtonModifier,
+        PlayerControl thief)
     {
+        var thiefModifierIds = thief.GetModifiers<BaseModifier>()
+            .Select(m => m.TypeId)
+            .ToHashSet();
+        var nonDuplicateModifiers = targetModifiers
+            .Where(m => !thiefModifierIds.Contains(m.TypeId))
+            .ToList();
+        var baseCandidates = nonDuplicateModifiers.Count > 0 ? nonDuplicateModifiers : targetModifiers;
+
         if (!preferNonButtonModifier)
         {
-            return targetModifiers[random.Next(targetModifiers.Count)];
+            return baseCandidates[random.Next(baseCandidates.Count)];
         }
 
-        var nonButtonModifiers = targetModifiers.Where(x => !IsButtonModifier(x)).ToList();
-        var candidates = nonButtonModifiers.Count > 0 ? nonButtonModifiers : targetModifiers;
+        var nonButtonModifiers = baseCandidates.Where(x => !IsButtonModifier(x)).ToList();
+        var candidates = nonButtonModifiers.Count > 0 ? nonButtonModifiers : baseCandidates;
         return candidates[random.Next(candidates.Count)];
     }
 
@@ -168,7 +192,8 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
     private static List<BaseModifier> GetTargetModifiers(PlayerControl target)
     {
         return target.GetModifiers<BaseModifier>()
-            .Where(m => !IsExcludedFromStealing(m) && !IsNonStealableVisualModifier(m))
+            .Where(m => !IsExcludedFromStealing(m) &&
+                        !IsNonStealableVisualModifier(m))
             .ToList();
     }
 
@@ -218,6 +243,9 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
     
     private static bool CanThiefUseModifier(BaseModifier modifier, PlayerControl thief)
     {
+        if (thief.GetModifiers<BaseModifier>().Any(m => m.TypeId == modifier.TypeId))
+            return false;
+
         var modNamespace = modifier.GetType().Namespace;
         if (modNamespace != null && ExcludedNamespaces.Any(ns => modNamespace.StartsWith(ns, StringComparison.OrdinalIgnoreCase)))
             return false;
@@ -351,14 +379,12 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
             }
         }
         
-        DivaniPlugin.Instance.Log.LogInfo($"Thief: Found {result.Count} givable modifiers");
         return result;
     }
 
     private static PlayerControl? GetShieldSourcePlayer(BaseModifier modifier)
     {
         var modType = modifier.GetType();
-        DivaniPlugin.Instance.Log.LogInfo($"GetShieldSourcePlayer: Checking type {modType.Name}");
         
         var propertyNames = new[] { "Medic", "Cleric", "Mirrorcaster" };
         
@@ -367,14 +393,11 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
             var prop = modType.GetProperty(propName);
             if (prop != null)
             {
-                DivaniPlugin.Instance.Log.LogInfo($"GetShieldSourcePlayer: Found property {propName}");
                 try
                 {
                     var value = prop.GetValue(modifier);
-                    DivaniPlugin.Instance.Log.LogInfo($"GetShieldSourcePlayer: Value is {value?.GetType().Name ?? "null"}");
                     if (value is PlayerControl pc)
                     {
-                        DivaniPlugin.Instance.Log.LogInfo($"GetShieldSourcePlayer: Returning player {pc.Data?.PlayerName ?? "unknown"}");
                         return pc;
                     }
                 }
@@ -385,7 +408,6 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
             }
         }
         
-        DivaniPlugin.Instance.Log.LogInfo("GetShieldSourcePlayer: No source player found");
         return null;
     }
 
@@ -431,7 +453,6 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         {
             loverPartner = existingLover.OtherLover;
             isStealingLover = true;
-            DivaniPlugin.Instance.Log.LogInfo($"Thief: Stealing Lover from {target.Data.PlayerName}; partner = {loverPartner?.Data?.PlayerName ?? "null"}");
         }
         
         target.RemoveModifier(modifierTypeId, null);
@@ -512,7 +533,6 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
                 ButtonRefresher.RefreshAllButtons();
             }
             
-            DivaniPlugin.Instance.Log.LogInfo($"Thief: {thief.Data.PlayerName} stole {displayName} from {target.Data.PlayerName}");
             
             // Heartbreak the old Lover (victim). Deferred via coroutine so the pair-swap
             // RPC body fully completes first; otherwise the kill cascade can fire while
@@ -535,7 +555,6 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
                 loverPartner.RemoveModifier<LoverModifier>();
             }
             
-            DivaniPlugin.Instance.Log.LogInfo($"Thief: {thief.Data.PlayerName} destroyed {displayName} from {target.Data.PlayerName}, giving random modifier (id={fallbackRandomId}) instead");
             ApplyGivenModifier(thief, fallbackRandomId, prefix: "Stole/Gained");
         }
     }
@@ -555,7 +574,6 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
             yield break;
         }
         
-        DivaniPlugin.Instance.Log.LogInfo($"Thief: Heartbreaking old Lover {victim.Data.PlayerName}");
         
         var inMeeting = MeetingHud.Instance != null || ExileController.Instance != null;
         var heartbreakText = TouLocale.Get("DiedToHeartbreak");
@@ -661,6 +679,5 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
             ButtonRefresher.RefreshAllButtons();
         }
         
-        DivaniPlugin.Instance.Log.LogInfo($"Thief: {thief.Data.PlayerName} gained modifier {displayName}");
     }
 }

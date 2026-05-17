@@ -37,6 +37,5 @@ public class FragileModifier : UniversalGameModifier, IColoredModifier, IWikiDis
 
     public override void OnActivate()
     {
-        DivaniPlugin.Instance.Log.LogInfo("Fragile modifier activated!");
     }
 }

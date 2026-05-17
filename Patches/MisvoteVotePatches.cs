@@ -82,9 +82,6 @@ public static class MisvoteVotePatches
 
             @event.Cancel();
 
-            DivaniPlugin.Instance.Log.LogInfo(
-                "Misvote: " + voter.Data.PlayerName + " -> redirected " +
-                voteCount + " vote(s) to random target(s).");
         }
         catch (Exception ex)
         {
@@ -131,9 +128,6 @@ public static class MisvoteVotePatches
             fullVotes.AddRange(KnightedEvents.ExtraKnightVotes);
             @event.ExiledPlayer = VotingUtils.GetExiled(fullVotes, out _);
 
-            DivaniPlugin.Instance.Log.LogInfo(
-                "Misvote: finalized random votes; exiled=" +
-                (@event.ExiledPlayer != null ? @event.ExiledPlayer.PlayerName : "<none>") + ".");
         }
         catch (Exception ex)
         {
@@ -197,9 +191,6 @@ public static class MisvoteVotePatches
                 prosData.VoteForPlayer(targetId);
             }
 
-            DivaniPlugin.Instance.Log.LogInfo(
-                "Misvote: Prosecutor " + prosecutor.Player.Data.PlayerName +
-                " -> redirected 5 prosecute vote(s) to random target(s).");
         }
         catch (Exception ex)
         {
@@ -288,9 +279,6 @@ public static class MisvoteVotePatches
                 anyChanged = true;
             }
 
-            DivaniPlugin.Instance.Log.LogInfo(
-                "Misvote: " + voter.Data.PlayerName + " did not vote -> added " +
-                voteCount + " random vote(s).");
         }
 
         return anyChanged;

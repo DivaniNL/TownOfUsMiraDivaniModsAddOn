@@ -38,6 +38,5 @@ public class RuthlessModifier : TouGameModifier, IColoredModifier, IWikiDiscover
     
     public override void OnActivate()
     {
-        DivaniPlugin.Instance.Log.LogInfo("Ruthless modifier activated!");
     }
 }

@@ -181,6 +181,45 @@
         "\n\n\r<size=108%><b>Compatibility</b></size>",
         "\n\nAmong Us (Steam), BepInEx IL2CPP 6.x, Reactor, MiraAPI, and Town Of Us – Mira."
       ]
+    },
+    {
+      "Date": "2026-05-17T09:45:00Z",
+      "Number": "10006",
+      "ShortTitle": "Divani Mods v1.2.0",
+      "Title": "Thief, Silencer, Frag and Plague Doctor update",
+      "SubTitle": "Neutral alliance changes, new PD/Silencer options, meeting fixes",
+      "Text": [
+        "\r<size=110%><b>Divani Mods v1.2.0</b></size>",
+        "\n\nThis update focuses on Thief, Silencer, Frag, and Plague Doctor changes.",
+        "\n\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.0>Download v1.2.0</link>",
+        "\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases>All releases</link>",
+        "\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki>Wiki</link>",
+        "\n\n\r<size=108%><b>Thief</b></size>",
+        "\n\n- Thief now gets a random modifier if it tries to steal one it already has.",
+        "\n- Thief now prioritizes stealing the Frag bomb if the target has it.",
+        "\n\n\r<size=108%><b>Silencer</b></size>",
+        "\n\n- New option: <b>Normal Voting Time When Dead</b>. If enabled, voting time returns to its initial value after Silencer dies.",
+        "\n\n\r<size=108%><b>Frag</b></size>",
+        "\n\n- Moved to the <b>Neutral Killing</b> faction.",
+        "\n- When a meeting is called, the bomb holder is bombed at the start of the meeting.",
+        "\n\n\r<size=108%><b>Plague Doctor</b></size>",
+        "\n\n- Moved to the <b>Neutral Evil</b> faction.",
+        "\n- Better infection progress display in the task header.",
+        "\n- New option: <b>Turn into Amnesiac when cannot win</b>.",
+        "\n- New option: <b>Notify Players When Infection Is Close</b>.",
+        "\n- New sub-option: <b>Notify When Uninfected Players Left</b>.",
+        "\n\n\r<size=108%><b>Bug fixes</b></size>",
+        "\n\n- Frag bomb button no longer sometimes appears in meetings.",
+        "\n- Shuffle can no longer be used in meetings by using its keybind.",
+        "\n- Fixed button uses left on Sentinel.",
+        "\n- Crewmate modifiers can no longer be assigned to Neutral factions.",
+        "\n\n\r<size=108%><b>Won't fix</b></size>",
+        "\n\n- Old Plague Doctor shows up in win screen if new PD is inherited from Amnesiac.",
+        "\n\n\r<size=108%><b>Planned</b></size>",
+        "\n\n- Enable portals after the first meeting option.",
+        "\n- Portalmaker can portal to both portals from anywhere option.",
+        "\n- Some new roles/modifiers."
+      ]
     }
   ]
 }

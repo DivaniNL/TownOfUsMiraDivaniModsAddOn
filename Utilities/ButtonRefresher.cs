@@ -33,7 +33,6 @@ public static class ButtonRefresher
                 if (bottomLeft != null)
                 {
                     button.CreateButton(bottomLeft);
-                    DivaniPlugin.Instance.Log.LogInfo($"Created button: {button.Name}");
                 }
             }
             
@@ -41,7 +40,6 @@ public static class ButtonRefresher
             {
                 var shouldBeVisible = button.Enabled(role);
                 button.Button.ToggleVisible(shouldBeVisible);
-                DivaniPlugin.Instance.Log.LogInfo($"Button {button.Name} visibility set to {shouldBeVisible}");
             }
         }
     }

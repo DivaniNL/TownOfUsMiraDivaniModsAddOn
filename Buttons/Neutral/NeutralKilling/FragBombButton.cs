@@ -6,11 +6,11 @@ using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Patches;
-using DivaniMods.Roles.Impostor.ImpostorKilling;
+using DivaniMods.Roles.Neutral.NeutralKilling;
 using TownOfUs.Buttons;
 using UnityEngine;
 
-namespace DivaniMods.Buttons.Impostor.ImpostorKilling;
+namespace DivaniMods.Buttons.Neutral.NeutralKilling;
 
 public class FragBombButton : TownOfUsTargetButton<PlayerControl>
 {
@@ -18,12 +18,13 @@ public class FragBombButton : TownOfUsTargetButton<PlayerControl>
 
     public override string Name => "Pass Bomb";
     public override float Cooldown => 0f;
+    public override float InitialCooldown => 0f;
     public override float EffectDuration => 0f;
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.FragPassButton;
     public override float Distance => 1.5f;
-    public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
-    public override Color TextOutlineColor => Palette.ImpostorRed;
+    public override ButtonLocation Location { get; set; } = ButtonLocation.BottomLeft;
+    public override Color TextOutlineColor => FragRole.FragColor;
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
 
     public override bool Enabled(RoleBehaviour? role)
@@ -93,6 +94,12 @@ public class FragBombButton : TownOfUsTargetButton<PlayerControl>
     {
         var instance = Instance;
         if (instance?.Button == null) return;
+
+        if (MeetingHud.Instance != null || ExileController.Instance != null)
+        {
+            instance.Button.ToggleVisible(false);
+            return;
+        }
 
         var localPlayer = PlayerControl.LocalPlayer;
         if (localPlayer == null) return;

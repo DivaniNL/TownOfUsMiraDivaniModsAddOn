@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using MiraAPI.Events;
@@ -6,7 +7,7 @@ using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.GameOptions;
 using TownOfUs.Events;
 using DivaniMods.Options;
-using DivaniMods.Roles.Neutral.NeutralKilling;
+using DivaniMods.Roles.Neutral.NeutralEvil;
 using UnityEngine;
 
 namespace DivaniMods.Patches;
@@ -97,7 +98,6 @@ public static class PlagueDoctorPatch
 
         if (infectKiller)
         {
-            DivaniPlugin.Instance.Log.LogInfo($"PlagueDoctorPatch: Infecting killer {killer.PlayerId} on PD death");
             PlagueDoctorRole.RpcSetInfected(localPlayer, killer.PlayerId);
         }
     }
@@ -219,24 +219,16 @@ public static class PlagueDoctorPatch
 
     private static void UpdateStatusText()
     {
-        if (MeetingHud.Instance != null)
-        {
-            if (PlagueDoctorRole.StatusText != null)
-            {
-                PlagueDoctorRole.StatusText.gameObject.SetActive(false);
-            }
-            return;
-        }
+        var localPlayer = PlayerControl.LocalPlayer;
+        if (localPlayer == null) return;
 
-        if (PlagueDoctorRole.StatusText == null)
-        {
-            CreateStatusText();
-        }
+        var statusTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(localPlayer, 1);
+        statusTask.name = "PlagueDoctorInfectionStatus";
+        statusTask.Text = BuildInfectionStatusText();
+    }
 
-        if (PlagueDoctorRole.StatusText == null) return;
-
-        PlagueDoctorRole.StatusText.gameObject.SetActive(true);
-        
+    private static string BuildInfectionStatusText()
+    {
         var infectDuration = OptionGroupSingleton<PlagueDoctorOptions>.Instance.InfectDuration;
 
         var text = string.Empty;
@@ -250,17 +242,18 @@ public static class PlagueDoctorPatch
 
         text += "<color=#FFC000>[Infection Progress]</color>\n";
 
+        var entries = new List<string>();
         foreach (var p in PlayerControl.AllPlayerControls)
         {
             if (p == null || p == PlagueDoctorRole.PlagueDoctorPlayer) continue;
             if (PlagueDoctorRole.DeadPlayers.ContainsKey(p.PlayerId) && PlagueDoctorRole.DeadPlayers[p.PlayerId]) continue;
             if (p.Data == null || p.Data.IsDead) continue;
 
-            text += $"{p.Data.PlayerName}: ";
+            var entry = $"{TrimName(p.Data.PlayerName)}: ";
 
             if (PlagueDoctorRole.InfectedPlayers.ContainsKey(p.PlayerId))
             {
-                text += "<color=#FF0000>INFECTED</color>";
+                entry += "<color=#FF0000>INFECTED</color>";
             }
             else
             {
@@ -271,52 +264,30 @@ public static class PlagueDoctorPatch
                     color = Color.Lerp(Color.green, Color.yellow, percent * 2f);
                 else
                     color = Color.Lerp(Color.yellow, Color.red, (percent * 2f) - 1f);
-                text += $"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{(percent * 100f):F1}%</color>";
+                entry += $"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{(percent * 100f):F0}%</color>";
             }
 
+            entries.Add(entry);
+        }
+
+        var splitIndex = (entries.Count + 1) / 2;
+        for (var i = 0; i < splitIndex; i++)
+        {
+            text += entries[i];
+            var rightIndex = i + splitIndex;
+            if (rightIndex < entries.Count)
+            {
+                text += $"<pos=80%>{entries[rightIndex]}";
+            }
             text += "\n";
         }
 
-        PlagueDoctorRole.StatusText.text = text;
+        return text;
     }
 
-    private static void CreateStatusText()
+    private static string TrimName(string playerName)
     {
-        if (HudManager.Instance?.roomTracker == null)
-        {
-            DivaniPlugin.Instance.Log.LogWarning("PlagueDoctor: CreateStatusText - roomTracker is null");
-            return;
-        }
-
-        var gameObject = UnityEngine.Object.Instantiate(HudManager.Instance.roomTracker.gameObject);
-        gameObject.transform.SetParent(HudManager.Instance.transform);
-        gameObject.SetActive(true);
-
-        UnityEngine.Object.DestroyImmediate(gameObject.GetComponent<RoomTracker>());
-
-        // TMP_Text may be on a child object in newer Among Us versions
-        PlagueDoctorRole.StatusText = gameObject.GetComponent<TMPro.TMP_Text>()
-                                      ?? gameObject.GetComponentInChildren<TMPro.TMP_Text>();
-
-        if (PlagueDoctorRole.StatusText == null)
-        {
-            DivaniPlugin.Instance.Log.LogError("PlagueDoctor: CreateStatusText - Could not find TMP_Text component!");
-            UnityEngine.Object.Destroy(gameObject);
-            return;
-        }
-
-        var aliveCount = PlayerControl.AllPlayerControls.ToArray()
-            .Count(x => x != null && x.Data != null && !x.Data.IsDead && x != PlagueDoctorRole.PlagueDoctorPlayer);
-
-        gameObject.transform.localPosition = new Vector3(-2.7f, -0.1f - aliveCount * 0.07f, gameObject.transform.localPosition.z);
-        PlagueDoctorRole.StatusText.transform.localScale = Vector3.one;
-        PlagueDoctorRole.StatusText.fontSize = 1.5f;
-        PlagueDoctorRole.StatusText.fontSizeMin = 1.5f;
-        PlagueDoctorRole.StatusText.fontSizeMax = 1.5f;
-        PlagueDoctorRole.StatusText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
-        PlagueDoctorRole.StatusText.alpha = 1f;
-
-        DivaniPlugin.Instance.Log.LogInfo("PlagueDoctor: StatusText created successfully");
+        return playerName;
     }
 
     private static PlayerControl? GetPlayerById(byte id)
