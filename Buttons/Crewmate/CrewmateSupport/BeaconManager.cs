@@ -33,7 +33,7 @@ public static class BeaconManager
     /// </summary>
     public static bool IsInRoom(Vector2 position)
     {
-        if (ShipStatus.Instance == null) return false;
+        if (!ShipStatus.Instance) return false;
 
         foreach (var room in ShipStatus.Instance.FastRooms.Values)
         {
@@ -50,7 +50,7 @@ public static class BeaconManager
     /// </summary>
     public static string? GetRoomName(Vector2 position)
     {
-        if (ShipStatus.Instance == null) return null;
+        if (!ShipStatus.Instance) return null;
 
         foreach (var room in ShipStatus.Instance.FastRooms.Values)
         {
@@ -66,7 +66,7 @@ public static class BeaconManager
     /// </summary>
     public static PlainShipRoom? GetShipRoom(Vector2 position)
     {
-        if (ShipStatus.Instance == null) return null;
+        if (!ShipStatus.Instance) return null;
 
         foreach (var room in ShipStatus.Instance.FastRooms.Values)
         {

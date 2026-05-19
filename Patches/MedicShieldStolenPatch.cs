@@ -142,7 +142,7 @@ public static class MedicShieldStolenPatch
     {
         try
         {
-            if (!HudManager.InstanceExists || HudManager.Instance == null)
+            if (!HudManager.InstanceExists)
             {
                 return;
             }

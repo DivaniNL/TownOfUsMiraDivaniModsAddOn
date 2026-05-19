@@ -25,7 +25,7 @@ public static class BearTrapPatch
     [RegisterEvent]
     public static void OnAfterMurder(AfterMurderEvent evt)
     {
-        if (MeetingHud.Instance != null || evt.Source == null || evt.Target == null)
+        if (MeetingHud.Instance || evt.Source == null || evt.Target == null)
         {
             return;
         }
@@ -165,7 +165,7 @@ public static class BearTrapPatch
 
     private static void PlayBearTrapSound()
     {
-        if (SoundManager.Instance == null)
+        if (!SoundManager.Instance)
         {
             return;
         }
@@ -214,7 +214,7 @@ public static class BearTrapPatch
                ActiveTraps.TryGetValue(killerId, out var currentTrap) &&
                currentTrap == trap &&
                Time.time < trap.EndsAt &&
-               MeetingHud.Instance == null)
+               !MeetingHud.Instance)
         {
             killer.moveable = false;
             killer.transform.position = lockedPosition;
@@ -235,7 +235,7 @@ public static class BearTrapPatch
             ActiveTraps.Remove(killerId);
         }
 
-        if (killer != null && MeetingHud.Instance == null)
+        if (killer != null && !MeetingHud.Instance)
         {
             killer.moveable = originalMoveable;
             UpdateReportButtonVisibility();

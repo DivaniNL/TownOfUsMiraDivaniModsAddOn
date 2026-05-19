@@ -108,7 +108,7 @@ public class PlacePortalButton : TownOfUsButton
     
     private static void PlayPlacePortalSound()
     {
-        if (SoundManager.Instance == null) return;
+        if (!SoundManager.Instance) return;
         try
         {
             var clip = DivaniAssets.PlacePortalSound.LoadAsset();

@@ -179,7 +179,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
 
     private void UpdateInfectionSpread()
     {
-        if (MeetingFlag || MeetingHud.Instance != null) return;
+        if (MeetingFlag || MeetingHud.Instance) return;
         
         var localPlayer = PlayerControl.LocalPlayer;
         if (localPlayer == null) return;
@@ -235,7 +235,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
 
     private static void UpdateStatusText()
     {
-        if (MeetingHud.Instance != null)
+        if (MeetingHud.Instance)
         {
             if (StatusText != null)
             {

@@ -95,7 +95,7 @@ public class FragBombButton : TownOfUsTargetButton<PlayerControl>
         var instance = Instance;
         if (instance?.Button == null) return;
 
-        if (MeetingHud.Instance != null || ExileController.Instance != null)
+        if (MeetingHud.Instance || ExileController.Instance)
         {
             instance.Button.ToggleVisible(false);
             return;

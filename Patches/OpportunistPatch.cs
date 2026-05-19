@@ -234,7 +234,7 @@ public static class OpportunistPatch
 
     private static void TryLockInWin()
     {
-        if (AmongUsClient.Instance == null || !AmongUsClient.Instance.AmHost)
+        if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
         {
             return;
         }

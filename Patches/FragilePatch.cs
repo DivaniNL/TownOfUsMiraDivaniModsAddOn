@@ -77,7 +77,7 @@ public static class FragileInteraction
     /// </summary>
     private static void PlayFragileBreakSound()
     {
-        if (SoundManager.Instance == null) return;
+        if (!SoundManager.Instance) return;
         try
         {
             var clip = DivaniAssets.FragileBreak.LoadAsset();

@@ -178,7 +178,7 @@ public class LockdownButton : TownOfUsButton
         {
             // Pause countdown during meetings / ejection so lockdown resumes for
             // the remaining time once gameplay restarts.
-            if (MeetingHud.Instance == null && ExileController.Instance == null)
+            if (!MeetingHud.Instance && !ExileController.Instance)
             {
                 LockdownTimeRemaining -= Time.deltaTime;
             }

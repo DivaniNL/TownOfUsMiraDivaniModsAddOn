@@ -14,7 +14,7 @@ public static class BloodyPatch
     [RegisterEvent]
     public static void OnAfterMurder(AfterMurderEvent evt)
     {
-        if (MeetingHud.Instance != null || evt.Source == null || evt.Target == null)
+        if (MeetingHud.Instance || evt.Source == null || evt.Target == null)
         {
             return;
         }

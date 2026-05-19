@@ -109,7 +109,7 @@ public class InfectButton : TownOfUsTargetButton<PlayerControl>
 
     private static void PlayInfectSound()
     {
-        if (SoundManager.Instance == null) return;
+        if (!SoundManager.Instance) return;
         try
         {
             var clip = DivaniAssets.InfectSound.LoadAsset();

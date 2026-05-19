@@ -42,7 +42,7 @@ public static class RecruiterPatch
         var wasFirstMeeting = MeetingsEnded == 0;
         MeetingsEnded++;
 
-        if (AmongUsClient.Instance == null || !AmongUsClient.Instance.AmHost || !wasFirstMeeting)
+        if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost || !wasFirstMeeting)
         {
             return;
         }
@@ -83,7 +83,7 @@ public static class RecruiterPatch
     [RegisterEvent]
     public static void OnRoundStartRecruitFollowUp(RoundStartEvent _)
     {
-        if (AmongUsClient.Instance == null || !AmongUsClient.Instance.AmHost)
+        if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
         {
             return;
         }

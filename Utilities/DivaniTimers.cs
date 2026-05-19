@@ -210,7 +210,7 @@ public static class DivaniTimers
                 ForgetReferences();
             }
 
-            var inMeeting = MeetingHud.Instance != null || ExileController.Instance != null;
+            var inMeeting = MeetingHud.Instance || ExileController.Instance;
             if (inMeeting)
             {
                 if (IsAlive(_stackRoot)) _stackRoot!.SetActive(false);
@@ -292,7 +292,7 @@ public static class DivaniTimers
 
     private static bool TryEnsureStack()
     {
-        if (!HudManager.InstanceExists || HudManager.Instance == null) return false;
+        if (!HudManager.InstanceExists) return false;
 
         var hud = HudManager.Instance;
         if (!IsAlive(_stackRoot))
@@ -347,7 +347,7 @@ public static class DivaniTimers
     private static bool TryEnsureRowTemplate()
     {
         if (IsAlive(_rowTemplate)) return true;
-        if (!HudManager.InstanceExists || HudManager.Instance == null) return false;
+        if (!HudManager.InstanceExists) return false;
 
         var notifier = HudManager.Instance.Notifier;
         if (notifier == null) return false;

@@ -117,7 +117,7 @@ public static class LockdownPatch
         
         // Hide the timer during meetings / ejection - the countdown is also paused
         // in LockdownButton.LockdownTimerCoroutine so it resumes after the meeting.
-        bool inMeeting = MeetingHud.Instance != null || ExileController.Instance != null;
+        bool inMeeting = MeetingHud.Instance || ExileController.Instance;
         
         if (LockdownButton.IsLockdownActive && LockdownButton.LockdownTimeRemaining > 0 && !inMeeting)
         {

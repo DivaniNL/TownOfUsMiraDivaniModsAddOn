@@ -72,7 +72,7 @@ public sealed class BloodyKillerFootstepsModifier : BaseModifier
             return;
         }
 
-        if (MeetingHud.Instance != null || Time.time >= _effectEndsAt)
+        if (MeetingHud.Instance || Time.time >= _effectEndsAt)
         {
             ModifierComponent?.RemoveModifier(this);
             return;

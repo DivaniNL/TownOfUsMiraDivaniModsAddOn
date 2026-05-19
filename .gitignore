@@ -74,7 +74,9 @@ agent-transcripts/
 .fake/
 *.log
 *.tmp
-
+.claude/*
+.agents/*
+skills-lock.json
 # Personal TODO scratchpads
 lockdown timer*.txt
 todo.txt

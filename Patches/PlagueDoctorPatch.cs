@@ -127,8 +127,8 @@ public static class PlagueDoctorPatch
         // Tick immunity timer every frame while gameplay is active. Don't tick
         // during meetings or the ejection sequence, or the grace period would
         // silently drain before players can actually move.
-        bool gameplayActive = MeetingHud.Instance == null
-                              && ExileController.Instance == null
+        bool gameplayActive = !MeetingHud.Instance
+                              && !ExileController.Instance
                               && !PlagueDoctorRole.MeetingFlag;
         if (gameplayActive)
         {
@@ -162,7 +162,7 @@ public static class PlagueDoctorPatch
 
     private static void RunInfectionSpread()
     {
-        if (PlagueDoctorRole.MeetingFlag || MeetingHud.Instance != null) return;
+        if (PlagueDoctorRole.MeetingFlag || MeetingHud.Instance) return;
         // Respect the post-meeting immunity grace period.
         if (PlagueDoctorRole.ImmunityTimer > 0f) return;
         

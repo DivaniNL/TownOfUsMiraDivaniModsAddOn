@@ -16,7 +16,7 @@ public static class ButtonRefresher
     {
         yield return new WaitForSeconds(0.1f);
         
-        if (!HudManager.InstanceExists || HudManager.Instance == null)
+        if (!HudManager.InstanceExists)
             yield break;
         
         var player = PlayerControl.LocalPlayer;

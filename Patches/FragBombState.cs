@@ -172,13 +172,13 @@ public static class FragBombState
         // Wait until the meeting cabin's intro animation finishes so the kill
         // plays as a proper in-meeting murder (Assassin-style cabin animation
         // is wired up by TouMira's HandleMeetingMurder via AfterMurderEvent).
-        while (MeetingHud.Instance != null &&
+        while (MeetingHud.Instance &&
                MeetingHud.Instance.state == MeetingHud.VoteStates.Animating)
         {
             yield return null;
         }
 
-        if (MeetingHud.Instance == null) yield break;
+        if (!MeetingHud.Instance) yield break;
 
         yield return new WaitForSeconds(0.25f);
 
@@ -250,7 +250,7 @@ public static class FragBombState
     /// </summary>
     private static void Tick()
     {
-        var inMeeting = MeetingHud.Instance != null || ExileController.Instance != null;
+        var inMeeting = MeetingHud.Instance || ExileController.Instance;
 
         if (!inMeeting)
         {
@@ -295,7 +295,7 @@ public static class FragBombState
             return;
         }
 
-        if (MeetingHud.Instance != null || ExileController.Instance != null)
+        if (MeetingHud.Instance || ExileController.Instance)
         {
             Clear(startGiveCooldown: false);
             return;
@@ -386,7 +386,7 @@ public static class FragBombState
 
     private static void PlayHeartbeat()
     {
-        if (_heartbeatUnavailable || SoundManager.Instance == null) return;
+        if (_heartbeatUnavailable || !SoundManager.Instance) return;
         if (!IsArmed) return;
 
         try
@@ -431,7 +431,7 @@ public static class FragBombState
 
     public static void PlayGivePassSoundLocal()
     {
-        if (SoundManager.Instance == null) return;
+        if (!SoundManager.Instance) return;
 
         try
         {
@@ -470,7 +470,7 @@ public static class FragBombState
     private static void SyncFragTimerRow()
     {
         var local = PlayerControl.LocalPlayer;
-        var inMeeting = MeetingHud.Instance != null || ExileController.Instance != null;
+        var inMeeting = MeetingHud.Instance || ExileController.Instance;
         if (!IsActive || !IsArmed || inMeeting || local == null || local.Data == null || local.Data.IsDead ||
             !IsHolder(local.PlayerId))
         {

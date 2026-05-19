@@ -56,7 +56,7 @@ public static class SentinelPatch
         if (localPlayer.Data.IsDead) return;
 
         // Don't track during meetings or comms sabotage
-        if (MeetingHud.Instance != null || ExileController.Instance != null) return;
+        if (MeetingHud.Instance || ExileController.Instance) return;
         if (PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(localPlayer)) return;
         if (BeaconManager.BeaconsPlaced == 0) return;
 
@@ -122,7 +122,7 @@ public static class SentinelPatch
     /// </summary>
     private static IEnumerator CoFlashSentinel()
     {
-        if (HudManager.Instance == null) yield break;
+        if (!HudManager.Instance) yield break;
 
         var overlay = UnityEngine.Object.Instantiate(HudManager.Instance.FullScreen, HudManager.Instance.transform);
         overlay.transform.localScale = Vector3.one * 10f;

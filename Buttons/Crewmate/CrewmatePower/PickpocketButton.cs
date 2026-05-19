@@ -578,7 +578,7 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         }
         
         
-        var inMeeting = MeetingHud.Instance != null || ExileController.Instance != null;
+        var inMeeting = MeetingHud.Instance || ExileController.Instance;
         var heartbreakText = TouLocale.Get("DiedToHeartbreak");
         
         DeathHandlerModifier.UpdateDeathHandlerImmediate(
@@ -610,7 +610,7 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         }
         else
         {
-            var showAnim = MeetingHud.Instance == null && ExileController.Instance == null;
+            var showAnim = !MeetingHud.Instance && !ExileController.Instance;
             var flags = MurderResultFlags.DecisionByHost | MurderResultFlags.Succeeded;
             victim.CustomMurder(victim, flags, false, showAnim, false, showAnim, false);
         }
