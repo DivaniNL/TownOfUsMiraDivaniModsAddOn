@@ -15,7 +15,7 @@ public class PlaceBeaconButton : TownOfUsButton
 {
     public override string Name => "Place Beacon";
     public override float Cooldown => OptionGroupSingleton<SentinelOptions>.Instance.PlaceBeaconCooldown;
-    public override float EffectDuration => 3f;
+    public override float EffectDuration => OptionGroupSingleton<SentinelOptions>.Instance.PlaceBeaconDuration;
     public override int MaxUses => 0;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.SentinelPlaceBeaconButton;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
@@ -89,7 +89,7 @@ public class PlaceBeaconButton : TownOfUsButton
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.SentinelPlaceBeaconButton.LoadAsset());
         
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(EffectDuration);
         
         if (player == null || player.Data == null || player.Data.IsDead)
         {

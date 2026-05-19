@@ -15,7 +15,7 @@ public class PlacePortalButton : TownOfUsButton
 {
     public override string Name => "Place Portal";
     public override float Cooldown => OptionGroupSingleton<PortalmakerOptions>.Instance.PlacePortalCooldown;
-    public override float EffectDuration => 3f;
+    public override float EffectDuration => OptionGroupSingleton<PortalmakerOptions>.Instance.PlacePortalDuration;
     public override int MaxUses => 2;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.PlacePortalButton;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
@@ -73,7 +73,7 @@ public class PlacePortalButton : TownOfUsButton
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.PortalmakerIcon.LoadAsset());
         
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(EffectDuration);
         
         if (player == null || player.Data == null || player.Data.IsDead)
         {

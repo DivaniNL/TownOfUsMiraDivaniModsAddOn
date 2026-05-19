@@ -23,6 +23,7 @@ using TownOfUs.Interfaces;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
+using TownOfUs.Modifiers.Neutral;
 using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Utilities;
 using TownOfUs.Utilities.Appearances;
@@ -34,14 +35,17 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
 {
     public override string Name => "Pickpocket";
     public override float Cooldown => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketCooldown;
-    public override float EffectDuration => 0f;
+    public override float EffectDuration => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketDuration;
     public override int MaxUses => (int)OptionGroupSingleton<ThiefOptions>.Instance.MaxStolenModifiers;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.PickpocketButton;
     public override float Distance => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketRange * 1.5f;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override Color TextOutlineColor => new Color(0.5f, 0.3f, 0.1f);
     public override BaseKeybind Keybind => Keybinds.PrimaryAction;
-    
+
+    private byte _capturedTargetId;
+    private bool _stealFragBomb;
+
     private static readonly HashSet<string> ExcludedNamespaces = new(StringComparer.OrdinalIgnoreCase)
     {
         "TownOfUs.Modifiers.Neutral",
@@ -95,59 +99,126 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
             var nearby = GetTarget();
             if (nearby == null || !FragBombState.IsHolder(nearby.PlayerId)) return false;
         }
-        
+
+        if (EffectActive) return false;
+
         return base.CanUse();
+    }
+
+    public override void ClickHandler()
+    {
+        if (!CanClick() || PlayerControl.LocalPlayer.HasModifier<GlitchHackedModifier>() ||
+            PlayerControl.LocalPlayer.GetModifiers<DisabledModifier>().Any(x => !x.CanUseAbilities))
+        {
+            return;
+        }
+
+        OnClick();
     }
 
     protected override void OnClick()
     {
         var player = PlayerControl.LocalPlayer;
         if (player == null || Target == null) return;
-        
         if (player.Data.Role is not ThiefRole thief) return;
-        
-        // Frag bomb pickpocket: if the target is the current bomb holder, snatch
-        // the bomb instead of stealing a modifier. Doesn't consume a stolen slot.
-        if (FragBombState.IsHolder(Target.PlayerId))
-        {
-            FragBombState.PlayGivePassSoundLocal();
-            FragBombButton.RpcPassBomb(player, player.PlayerId, Target.PlayerId, 0f, 0f);
-            ResetTarget();
-            return;
-        }
-        
-        if (!thief.CanStealMore)
+        if (EffectActive) return;
+
+        _stealFragBomb = FragBombState.IsHolder(Target.PlayerId);
+        if (!_stealFragBomb && !thief.CanStealMore)
         {
             return;
         }
-        
-        var targetModifiers = GetTargetModifiers(Target);
-        var random = new System.Random();
-        
-        if (targetModifiers.Count > 0)
+
+        _capturedTargetId = Target.PlayerId;
+        var targetName = Target.Data?.PlayerName ?? "them";
+        var delay = EffectDuration;
+
+        MiraAPI.Utilities.Helpers.CreateAndShowNotification(
+            $"<b><color=#804D1A>Pickpocketing {targetName} in {delay:0.#}s...</color></b>",
+            Color.white,
+            new Vector3(0f, 1f, -20f),
+            spr: DivaniAssets.PickpocketButton.LoadAsset());
+
+        if (HasEffect)
         {
-            var thiefHasButtonModifier = HasButtonModifier(player);
-            var stolen = PickTargetModifier(targetModifiers, random, preferNonButtonModifier: thiefHasButtonModifier, thief: player);
-            var canUseModifier = CanThiefUseModifier(stolen, player);
-            
-            // Pre-pick the fallback random id on the sender so every client applies the
-            // same result. Without this, each client ran its own System.Random() and the
-            // thief's end-screen modifier list could diverge from what they actually hold.
-            uint fallbackRandomId = 0;
-            if (!canUseModifier)
-            {
-                fallbackRandomId = PickRandomGivableId(player, random, allowButtonModifiers: !thiefHasButtonModifier);
-            }
-            
-            RpcStealModifier(player, Target.PlayerId, stolen.TypeId, canUseModifier, fallbackRandomId);
+            EffectActive = true;
+            Timer = EffectDuration;
         }
         else
         {
-            var chosenId = PickRandomGivableId(player, random, allowButtonModifiers: !HasButtonModifier(player));
-            RpcGiveRandomModifier(player, chosenId);
+            OnEffectEnd();
         }
-        
+    }
+
+    public override void OnEffectEnd()
+    {
+        var thief = PlayerControl.LocalPlayer;
+        if (thief == null || thief.Data == null || thief.Data.IsDead)
+        {
+            ResetTarget();
+            return;
+        }
+
+        var target = GetPlayerById(_capturedTargetId);
+        if (target == null || !IsTargetValid(target))
+        {
+            ResetTarget();
+            return;
+        }
+
+        PerformSteal(thief, target);
         ResetTarget();
+    }
+
+    private static PlayerControl? GetPlayerById(byte id)
+    {
+        foreach (var player in PlayerControl.AllPlayerControls)
+        {
+            if (player != null && player.PlayerId == id)
+            {
+                return player;
+            }
+        }
+
+        return null;
+    }
+
+    private void PerformSteal(PlayerControl thief, PlayerControl target)
+    {
+        if (_stealFragBomb)
+        {
+            FragBombState.PlayGivePassSoundLocal();
+            FragBombButton.RpcPassBomb(thief, thief.PlayerId, target.PlayerId, 0f, 0f);
+            return;
+        }
+
+        if (thief.Data?.Role is not ThiefRole thiefRole || !thiefRole.CanStealMore)
+        {
+            return;
+        }
+
+        var targetModifiers = GetTargetModifiers(target);
+        var random = new System.Random();
+
+        if (targetModifiers.Count > 0)
+        {
+            var thiefHasButtonModifier = HasButtonModifier(thief);
+            var stolen = PickTargetModifier(targetModifiers, random, preferNonButtonModifier: thiefHasButtonModifier, thief: thief);
+            var canUseModifier = CanThiefUseModifier(stolen, thief);
+
+            uint fallbackRandomId = 0;
+            if (!canUseModifier)
+            {
+                fallbackRandomId = PickRandomGivableId(thief, random, allowButtonModifiers: !thiefHasButtonModifier);
+            }
+
+            RpcStealModifier(thief, target.PlayerId, stolen.TypeId, canUseModifier, fallbackRandomId);
+        }
+        else
+        {
+            var chosenId = PickRandomGivableId(thief, random, allowButtonModifiers: !HasButtonModifier(thief));
+            RpcGiveRandomModifier(thief, chosenId);
+        }
     }
     
     /// <summary>

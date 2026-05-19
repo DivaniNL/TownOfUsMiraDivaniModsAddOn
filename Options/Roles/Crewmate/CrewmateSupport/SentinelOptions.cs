@@ -15,6 +15,9 @@ public class SentinelOptions : AbstractOptionGroup<SentinelRole>
     [ModdedNumberOption("Place Beacon Cooldown", 5, 60, 5, MiraNumberSuffixes.Seconds)]
     public float PlaceBeaconCooldown { get; set; } = 15;
 
+    [ModdedNumberOption("Place Beacon Duration", 1f, 10f, 0.5f, MiraNumberSuffixes.Seconds)]
+    public float PlaceBeaconDuration { get; set; } = 3f;
+
     [ModdedToggleOption("Show Room Activity In Chat")]
     public bool ShowChatReport { get; set; } = false;
 }
