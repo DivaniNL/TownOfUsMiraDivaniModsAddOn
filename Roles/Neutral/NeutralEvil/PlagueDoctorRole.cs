@@ -410,11 +410,6 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
         return false;
     }
 
-    /// <summary>
-    /// Called when the round actually starts (players can move again, after any
-    /// ejection animation). This is when the immunity grace period should begin
-    /// so the timer isn't eaten up by the ejection sequence.
-    /// </summary>
     public static void OnRoundStart()
     {
         var immunityTime = OptionGroupSingleton<PlagueDoctorOptions>.Instance.ImmunityTime;
@@ -423,10 +418,6 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
 
     }
 
-    /// <summary>
-    /// Ticks down the immunity timer. Called each frame from HudManagerUpdate
-    /// while gameplay is active (meeting/ejection paused in the patch).
-    /// </summary>
     public static void TickImmunityTimer(float deltaTime)
     {
         if (ImmunityTimer > 0f)

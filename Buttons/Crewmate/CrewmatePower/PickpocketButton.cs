@@ -221,10 +221,6 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         }
     }
     
-    /// <summary>
-    /// Sender-side pick so all clients apply the same modifier. Returns 0 when the thief
-    /// already owns every givable modifier.
-    /// </summary>
     private static BaseModifier PickTargetModifier(
         List<BaseModifier> targetModifiers,
         System.Random random,
@@ -297,9 +293,6 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         return false;
     }
 
-    /// <summary>
-    /// Il2CppInterop often uses wrapper types, so <c>is MedicShieldModifier</c> fails. Match by type name like Harmony/TOU patches do.
-    /// </summary>
     private static bool IsMedicShieldModifierIl2Cpp(BaseModifier modifier)
     {
         var type = modifier.GetType();
@@ -348,16 +341,6 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         return modifier is IButtonModifier;
     }
     
-    /// <summary>
-    /// True when the modifier's <c>FactionType</c> fits a crew-aligned Thief. Namespaces alone
-    /// don't cover modifiers like DoubleShot that live in the generic
-    /// <c>TownOfUs.Modifiers.Game</c> namespace but are marked as AssailantUtility.
-    /// Works across all three mods: TownOfUsMira uses <see cref="TouGameModifier"/> and
-    /// <see cref="UniversalGameModifier"/>; TouMiraRolesExtension uses UniversalGameModifier
-    /// plus TimedModifier/BaseModifier (which are already filtered by HideOnUi); DivaniMods
-    /// uses TouGameModifier for alignment-specific modifiers and UniversalGameModifier for anyone.
-    /// Both base classes expose a <c>ModifierFaction FactionType</c>.
-    /// </summary>
     private static bool IsFactionValidForThief(BaseModifier modifier)
     {
         var factionName = modifier switch
@@ -633,12 +616,6 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         }
     }
     
-    /// <summary>
-    /// Waits a short delay so the Lover pair-swap (thief.AddModifier + partner.OtherLover swap)
-    /// fully settles, then kills the old Lover with a Heartbroken cause on this client.
-    /// Mirrors LoverEvents.PlayerDeathEventHandler pattern: every client runs this locally
-    /// (no host gate) so each client spawns the body and shows the death.
-    /// </summary>
     private static IEnumerator HeartbreakOldLoverCoroutine(PlayerControl victim)
     {
         yield return new WaitForSeconds(0.25f);
@@ -693,10 +670,6 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         ApplyGivenModifier(thief, chosenId, prefix: "Gained");
     }
     
-    /// <summary>
-    /// Applies a sender-chosen modifier id on every client so the end-screen / role tab
-    /// view agrees with the thief's local stolen list.
-    /// </summary>
     private static void ApplyGivenModifier(PlayerControl thief, uint chosenId, string prefix)
     {
         if (chosenId == 0)

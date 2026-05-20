@@ -17,25 +17,6 @@ using TownOfUs.Utilities;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// Redirects every vote a Misvoted player casts to an independently-chosen
-/// random alive target. Covers:
-///   - normal single votes (via HandleVoteEvent),
-///   - revealed Mayor's 3 votes (via HandleVoteEvent, replacing MayorEvents),
-///   - Knighted bonus votes when "Show Knighted Votes" is on (via HandleVoteEvent,
-///     replacing KnightedEvents),
-///   - Knighted bonus votes when "Show Knighted Votes" is off (via ProcessVotesEvent,
-///     rewriting the extras KnightedEvents duplicates),
-///   - Prosecutor's 5 prosecute votes (via CheckForEndVotingEvent, replacing the
-///     votes ProsecutorEvents casts),
-///   - players who never submitted a vote at all (via ProcessVotesEvent, adding
-///     their full weighted vote count to random targets).
-///
-/// Prosecutor punishment still relies on <c>ProsecutorEvents.WrapUpEvent</c>,
-/// which checks the player who actually got exiled - not the intended victim -
-/// so a misvoted prosecution that exiles a crewmate still punishes the
-/// Prosecutor, and one that exiles an evil does not.
-/// </summary>
 public static class MisvoteVotePatches
 {
     // Priority 100 = runs AFTER MayorEvents/KnightedEvents.HandleVoteEvent (default 0).

@@ -29,12 +29,6 @@ public static class PlagueDoctorPatch
         PlagueDoctorRole.OnMeetingEnd();
     }
 
-    /// <summary>
-    /// Fires when the round actually starts (players regain control after the
-    /// ejection animation). This is when the post-meeting immunity grace period
-    /// starts - if we started it at EndMeetingEvent it would tick down during
-    /// the ejection sequence and be gone by the time anyone can move.
-    /// </summary>
     [RegisterEvent]
     public static void OnRoundStart(RoundStartEvent evt)
     {
@@ -42,10 +36,6 @@ public static class PlagueDoctorPatch
         PlagueDoctorRole.OnRoundStart();
     }
 
-    /// <summary>
-    /// If the stored PD is still alive but no longer has <see cref="PlagueDoctorRole"/> (e.g. recruited Impostor),
-    /// tear down infection state and HUD. Dead PD may keep ghost win logic — do not clear when <see cref="PlayerControl.Data.IsDead"/>.
-    /// </summary>
     internal static void TryClearStalePlagueDoctorStateIfNeeded()
     {
         if (PlagueDoctorRole.PlagueDoctorPlayer == null)
@@ -72,9 +62,6 @@ public static class PlagueDoctorPatch
         _lastProgressUpdate = 0f;
     }
 
-    /// <summary>
-    /// Handle Plague Doctor death - infect the killer if option is enabled.
-    /// </summary>
     [RegisterEvent]
     public static void OnAfterMurder(AfterMurderEvent evt)
     {

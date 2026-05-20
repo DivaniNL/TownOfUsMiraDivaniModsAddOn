@@ -18,27 +18,9 @@ using UnityEngine;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// All state + behavior for the Frag bomb in one place.
-///
-/// Lifecycle:
-/// 1. Frag clicks Give Bomb → <see cref="PassBomb"/> with armingDelay 2-7s.
-///    Bomb is dormant: no UI, no heartbeat, no Pass button on the holder.
-/// 2. Arming window elapses → bomb ARMS:
-///    - Pass button enables for the holder.
-///    - Heartbeat starts for the holder.
-///    - On-screen notification (icon + text + timer) appears.
-///    All three flip on the SAME frame inside <see cref="Tick"/>.
-/// 3. Holder can Pass to a non-immune player at any point post-arming.
-///    A pass keeps the bomb armed (no second arming delay).
-/// 4. TimeRemaining hits 0 → Frag's RpcSpecialMurder kills the holder.
-/// 5. Meeting starts → bomb is fully defused, no death.
-/// </summary>
 public static class FragBombState
 {
-    /// <summary>DivaniTimers row id for the bomb-ticking notification.</summary>
     public const string TimerId = "divani.frag_bomb";
-    /// <summary>Stack priority - sits below Lockdown when both are active.</summary>
     private const int TimerPriority = 20;
 
     private const byte NoPlayer = byte.MaxValue;
@@ -54,12 +36,6 @@ public static class FragBombState
     private static bool _tickRunning;
     private static bool _explosionTriggered;
 
-    /// <summary>
-    /// When &gt; 0, <see cref="OnBeforeMurder"/> does nothing. Used while
-    /// running a synthetic <see cref="BeforeMurderEvent"/> so TownOfUs shield
-    /// handlers (Medic, Warden fortify, Cleric, GA, etc.) see the same murder
-    /// attempt without Frag's blanket kill cancel firing first.
-    /// </summary>
     private static int _beforeMurderShieldProbeDepth;
 
     private static AudioSource? _heartbeatSource;
@@ -70,10 +46,6 @@ public static class FragBombState
     public static bool IsHolder(byte playerId) => IsActive && HolderId == playerId;
     public static bool IsImmune(byte playerId) => IsActive && ImmuneId == playerId;
 
-    /// <summary>
-    /// Seconds until the bomb would explode (arming wait + fuse while not armed; fuse only once armed).
-    /// Used for Frag's Give Bomb button countdown.
-    /// </summary>
     public static float GetSecondsUntilExplosionForDisplay()
     {
         if (!IsActive) return 0f;
@@ -87,10 +59,6 @@ public static class FragBombState
         return IsActive && local != null && local.Data?.Role is FragRole;
     }
 
-    /// <summary>
-    /// Begin or pass the bomb. armingDelay is only used on the first call (initial give).
-    /// Subsequent passes inherit the existing TimeRemaining and are armed instantly.
-    /// </summary>
     public static void PassBomb(PlayerControl sender, byte targetId, byte immuneId, float duration, float armingDelay)
     {
         var wasActive = IsActive;
@@ -242,12 +210,6 @@ public static class FragBombState
         _tickRunning = false;
     }
 
-    /// <summary>
-    /// Single per-frame update that advances timers, fires the explosion when
-    /// due and keeps the heartbeat in sync with state. Button-refresh happens
-    /// the moment the bomb arms so the Pass button appears at the exact same
-    /// frame the heartbeat starts and the HUD becomes visible.
-    /// </summary>
     private static void Tick()
     {
         var inMeeting = MeetingHud.Instance || ExileController.Instance;
@@ -330,13 +292,6 @@ public static class FragBombState
         }
     }
 
-    /// <summary>
-    /// Invokes the same <see cref="BeforeMurderEvent"/> stack TownOfUs uses for
-    /// real kills. Handlers run even after <see cref="MiraCancelableEvent.Cancel"/>;
-    /// if anything cancels (or Ruthless late-uncancels, etc.), we mirror the
-    /// final cancelled state. Cooldowns / flashes are applied inside those
-    /// handlers — not duplicated here.
-    /// </summary>
     private static bool TryBlockExplosionIfBeforeMurderCancelled(PlayerControl frag, PlayerControl holder)
     {
         if (holder.PlayerId == frag.PlayerId) return false;
@@ -548,11 +503,6 @@ public static class FragBombState
         }
     }
 
-    /// <summary>
-    /// Frag cannot use the regular impostor kill button while a bomb is in
-    /// play. We let the bomb's own RpcSpecialMurder through via the
-    /// _explosionTriggered guard - otherwise it would also be canceled here.
-    /// </summary>
     [RegisterEvent(-500)]
     public static void OnBeforeMurder(BeforeMurderEvent evt)
     {
@@ -568,10 +518,6 @@ public static class FragBombState
         evt.Cancel();
     }
 
-    /// <summary>
-    /// Re-arm both Frag cooldowns at the start of every round so the impostor
-    /// gets a fresh slate post-meeting (per spec).
-    /// </summary>
     [RegisterEvent]
     public static void OnRoundStart(RoundStartEvent _)
     {

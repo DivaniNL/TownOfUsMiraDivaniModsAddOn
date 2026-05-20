@@ -9,33 +9,12 @@ using Object = UnityEngine.Object;
 
 namespace DivaniMods.Utilities;
 
-/// <summary>
-/// Renders a vertical stack of timed (or static) status lines at the top of
-/// the HUD, using the same <see cref="LobbyNotificationMessage"/> prefab the
-/// game and Mira use for bottom notifications (e.g. Thief / Sentinel /
-/// Disperser via <see cref="Helpers.CreateAndShowNotification"/>) so text and
-/// icon scale match 1:1.
-/// <para>
-/// Add / remove by string id. Order is controlled by the optional
-/// <c>priority</c> parameter passed to <see cref="Set"/> - lower values are
-/// stacked nearer the top. Callers own their own ids and priorities; this
-/// utility never hard-codes consumers.
-/// </para>
-/// <para>
-/// All HUD-touching code is wrapped in defensive try / catch + Unity null
-/// checks so a single bad frame (e.g. stale references after returning to the
-/// lobby) cannot bubble up out of <c>HudManager.Update</c> and break unrelated
-/// Harmony postfixes (which is what was causing custom buttons to stay
-/// visible during meetings).
-/// </para>
-/// </summary>
 public static class DivaniTimers
 {
     public const int DefaultPriority = 100;
 
     private const float TopAnchorY = 2.5f;
     private const float ZLayer = -20f;
-    /// <summary>Vertical gap between row centers (roughly one notification line).</summary>
     private const float RowStep = 0.42f;
 
     private static GameObject? _stackRoot;
@@ -52,11 +31,8 @@ public static class DivaniTimers
         public string TitleRich = "";
         public float? SecondsRemaining;
         public bool IsCountingDown;
-        /// <summary>When true, <see cref="Tick"/> decrements <see cref="SecondsRemaining"/>. When false, the caller sets seconds (game state is authoritative).</summary>
         public bool UseLocalTimeDelta;
-        /// <summary>Lower values are placed nearer the top of the stack.</summary>
         public int Priority = DefaultPriority;
-        /// <summary>Stable tiebreaker so equal-priority rows keep insertion order.</summary>
         public int InsertionOrder;
     }
 
@@ -76,15 +52,6 @@ public static class DivaniTimers
         }
     }
 
-    /// <summary>
-    /// Add or update a timer row.
-    /// </summary>
-    /// <param name="id">Stable identifier the caller owns (e.g. <c>"divani.lockdown"</c>).</param>
-    /// <param name="titleRichText">Rich text for the line (e.g. <c>&lt;b&gt;&lt;color=#CC3333&gt;LOCKDOWN&lt;/color&gt;&lt;/b&gt;</c>).</param>
-    /// <param name="icon">Optional icon; if null, the icon side stays empty.</param>
-    /// <param name="seconds">If <see langword="null"/>, no countdown suffix is shown and the row is static until removed.</param>
-    /// <param name="useLocalTimeDelta">If <see langword="true"/>, <see cref="Tick"/> counts down and removes the row at 0. If <see langword="false"/>, only the supplied <paramref name="seconds"/> is displayed; the caller must <see cref="Remove"/> when done.</param>
-    /// <param name="priority">Lower values are stacked higher up. Default <see cref="DefaultPriority"/>.</param>
     public static void Set(
         string id,
         string titleRichText,
@@ -171,12 +138,6 @@ public static class DivaniTimers
         }
     }
 
-    /// <summary>
-    /// Drop every timer and forget all references. Called on game end and on
-    /// the next intro so we never reuse a GameObject that belonged to the
-    /// previous HudManager (those become destroyed Unity objects when the
-    /// scene reloads, and using them throws inside HudManager.Update).
-    /// </summary>
     public static void Clear()
     {
         try
@@ -197,7 +158,6 @@ public static class DivaniTimers
         }
     }
 
-    /// <summary>Per-frame: countdown and hide during meeting/exile.</summary>
     public static void Tick()
     {
         try
@@ -284,10 +244,6 @@ public static class DivaniTimers
         RowPool.Add(go);
     }
 
-    /// <summary>
-    /// Robust Unity null-check: a destroyed Unity object is not "really" null
-    /// from the C# side but its overloaded == operator returns true.
-    /// </summary>
     private static bool IsAlive(UnityEngine.Object? obj) => obj != null;
 
     private static bool TryEnsureStack()
@@ -343,7 +299,6 @@ public static class DivaniTimers
         return true;
     }
 
-    /// <summary>Clone source for one notification line - same prefab Mira uses for CreateAndShowNotification.</summary>
     private static bool TryEnsureRowTemplate()
     {
         if (IsAlive(_rowTemplate)) return true;
@@ -359,10 +314,6 @@ public static class DivaniTimers
         return IsAlive(_rowTemplate);
     }
 
-    /// <summary>
-    /// Disable animator + the prefab's own self-destroying MonoBehaviour on the
-    /// clone so the row stays on-screen instead of sliding off and despawning.
-    /// </summary>
     private static void StopAutoDispose(GameObject go)
     {
         foreach (var a in go.GetComponentsInChildren<Animator>(true))

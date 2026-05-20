@@ -11,16 +11,12 @@ namespace DivaniMods.Buttons.Crewmate.CrewmateSupport;
 
 public static class BeaconManager
 {
-    /// <summary>
-    /// Represents a placed beacon with its position, room name, and tracking data.
-    /// </summary>
     public class BeaconData
     {
         public Vector2 Position { get; set; }
         public string RoomName { get; set; } = string.Empty;
         public GameObject? Visual { get; set; }
         public HashSet<string> PlayersPassedThrough { get; } = new();
-        /// <summary>Players currently inside the beacon room (for enter/exit detection).</summary>
         public HashSet<byte> PlayersInRoom { get; } = new();
     }
 
@@ -28,9 +24,6 @@ public static class BeaconManager
 
     public static int BeaconsPlaced => Beacons.Count;
 
-    /// <summary>
-    /// Check if a position is inside a valid room (not hallway/outside).
-    /// </summary>
     public static bool IsInRoom(Vector2 position)
     {
         if (!ShipStatus.Instance) return false;
@@ -44,10 +37,6 @@ public static class BeaconManager
         return false;
     }
 
-    /// <summary>
-    /// Get the room name for a given position using the game's translation system.
-    /// Returns null if the position is not in any room.
-    /// </summary>
     public static string? GetRoomName(Vector2 position)
     {
         if (!ShipStatus.Instance) return null;
@@ -61,9 +50,6 @@ public static class BeaconManager
         return null;
     }
 
-    /// <summary>
-    /// Get the PlainShipRoom at a given position. Returns null if not in any room.
-    /// </summary>
     public static PlainShipRoom? GetShipRoom(Vector2 position)
     {
         if (!ShipStatus.Instance) return null;
@@ -77,10 +63,6 @@ public static class BeaconManager
         return null;
     }
 
-    /// <summary>
-    /// Check if a player is in the same room as any beacon.
-    /// Returns the beacon if found, null otherwise.
-    /// </summary>
     public static BeaconData? GetBeaconInSameRoom(Vector2 playerPosition)
     {
         var playerRoom = GetShipRoom(playerPosition);
@@ -149,11 +131,6 @@ public static class BeaconManager
         beacon.Visual = go;
     }
 
-    /// <summary>
-    /// Track players entering/exiting beacon rooms each frame.
-    /// Returns list of (beacon, playerName) for new entries (for flash triggers).
-    /// Only call on the Sentinel's local client.
-    /// </summary>
     public static List<(BeaconData Beacon, string PlayerName)> UpdatePlayerTracking()
     {
         var newEntries = new List<(BeaconData, string)>();
@@ -199,9 +176,6 @@ public static class BeaconManager
         return newEntries;
     }
 
-    /// <summary>
-    /// Generate meeting chat report for the Sentinel.
-    /// </summary>
     public static void ReportBeaconActivity(PlayerControl sentinel)
     {
         if (!sentinel.AmOwner) return;

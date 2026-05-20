@@ -8,9 +8,6 @@ using UnityEngine;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// Meeting nameplate tint + ⊕ for the taunted killer. Shared helpers keep symbol + color paths in sync.
-/// </summary>
 internal static class InnocentTauntMeetingDisplay
 {
     private const string TauntSymbol = "⊕";
@@ -72,7 +69,6 @@ internal static class InnocentTauntMeetingDisplay
         result += chunk;
     }
 
-    /// <summary>True if <paramref name="killer"/> still carries the taunt marker for this innocent.</summary>
     internal static bool KillerHasTauntMarkerForInnocent(PlayerControl killer, byte innocentPlayerId)
     {
         return killer.GetModifiers<InnocentTargetModifier>().Any(m => m.InnocentPlayerId == innocentPlayerId);
@@ -90,7 +86,6 @@ public static class InnocentTargetSymbolPatch
     }
 }
 
-/// <summary>Ghost / dead UI calls the <see cref="DataVisibility"/> overload, not the bool one.</summary>
 [HarmonyPatch(typeof(PlayerRoleTextExtensions), nameof(PlayerRoleTextExtensions.UpdateTargetSymbols),
     new[] { typeof(string), typeof(PlayerControl), typeof(DataVisibility) })]
 public static class InnocentTargetSymbolDataVisibilityPatch

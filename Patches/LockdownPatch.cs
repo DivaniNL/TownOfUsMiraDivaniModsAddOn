@@ -14,9 +14,7 @@ namespace DivaniMods.Patches;
 [HarmonyPatch]
 public static class LockdownPatch
 {
-    /// <summary>DivaniTimers row id for the Lockdown countdown.</summary>
     public const string TimerId = "divani.lockdown";
-    /// <summary>Stack priority for Lockdown - lower than Frag so it sits on top when both are active.</summary>
     private const int TimerPriority = 10;
 
     // Only block TASK consoles during a lockdown. Vanilla task consoles set
@@ -168,9 +166,6 @@ public static class LockdownPatch
     }
 }
 
-/// <summary>
-/// Event handler for granting Deadlock charges on kill.
-/// </summary>
 public static class DeadlockKillEventHandler
 {
     [RegisterEvent]

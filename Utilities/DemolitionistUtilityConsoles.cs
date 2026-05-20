@@ -18,12 +18,8 @@ public enum DemolitionistUtilityKind : byte
     DoorLog = 4,
 }
 
-/// <summary>
-/// Utility console detection aligned with <c>HackerSystem</c> (map-specific admin/cams/vitals/door log).
-/// </summary>
 public static class DemolitionistUtilityConsoles
 {
-    /// <summary>Loose scan radius; <see cref="IsInConsoleUseRange"/> still requires vanilla <c>couldUse</c>.</summary>
     private const float ConsoleSearchRadius = 2f;
 
     private static SystemConsole[]? _cachedSystemConsoles;
@@ -233,10 +229,6 @@ public static class DemolitionistUtilityConsoles
             || Vector2.Distance(pos, plantedPosition) <= 0.25f;
     }
 
-    /// <summary>
-    /// Same range as the vanilla Use button (<see cref="MapConsole.CanUse"/> <c>couldUse</c>).
-    /// Demolitionist plant may use distance-only on utilities disabled by a prior explosion.
-    /// </summary>
     public static bool IsInConsoleUseRange(
         MapConsole console,
         PlayerControl player,
@@ -256,9 +248,6 @@ public static class DemolitionistUtilityConsoles
         return IsInConsoleUseRangeInternal(console, player, kind, forDemolitionistPlant);
     }
 
-    /// <summary>
-    /// When the vanilla Use button is on a utility console, mirror that target exactly.
-    /// </summary>
     private static bool TryGetFromVanillaUseButton(
         PlayerControl player,
         bool forDemolitionistPlant,
@@ -387,7 +376,6 @@ public static class DemolitionistUtilityConsoles
         return float.MaxValue;
     }
 
-    /// <summary>Vanilla <see cref="Console.UsableDistance"/> on this console.</summary>
     public static float GetUsableDistance(Component console)
     {
         if (console == null)
@@ -654,9 +642,6 @@ public static class DemolitionistUtilityConsoles
         _cachedKeypadAssetPrefab = null;
     }
 
-    /// <summary>
-    /// Last resort when no in-scene console exposes a <see cref="KeypadGame"/> prefab (e.g. odd map load order).
-    /// </summary>
     private static bool TryGetKeypadPrefabFromResources(out Minigame? prefab)
     {
         prefab = null;

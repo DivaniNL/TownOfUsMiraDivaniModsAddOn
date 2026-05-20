@@ -14,7 +14,6 @@ namespace DivaniMods.Modifiers.Game.Crewmate;
 
 public sealed class BloodyModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
 {
-    /// <summary>Impostor red for lobby UI / freeplay (footprints stay impostor red).</summary>
     public static readonly Color ModifierUiColor = Palette.ImpostorRed;
 
     public override string ModifierName => "Bloody";

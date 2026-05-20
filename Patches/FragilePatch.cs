@@ -12,30 +12,17 @@ using UnityEngine;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// When any player-targeting ability button is used on another player, if that player has Fragile they die.
-/// Same networking rule as Veteran: only <c>source.AmOwner</c> runs the RPC.
-/// Uses <c>target.RpcCustomMurder(target, …)</c> so the death plays as the fragile player killing themselves (suicide-style anim),
-/// not as the interactor killing them.
-/// </summary>
 public static class FragileInteraction
 {
     private static int _lastFragileKillFrame = -1;
     private static byte _lastFragileKillVictimId = byte.MaxValue;
 
-    /// <summary>
-    /// If the button targets a fragile player, applies fragile death and returns <c>true</c> so the caller can skip
-    /// <see cref="CustomActionButton.ClickHandler"/> / TownOfUs <c>OnClick</c> (no shield, douse, etc.).
-    /// </summary>
     public static bool TryConsumeFragilePlayerTargetedClick(PlayerControl? source, object? buttonInstance)
     {
         var target = TryGetPlayerTarget(buttonInstance);
         return TryApplyFragileDeath(source, target);
     }
 
-    /// <summary>
-    /// Returns <c>true</c> if a fragile death RPC was sent (caller should cancel the rest of the click).
-    /// </summary>
     public static bool TryApplyFragileDeath(PlayerControl? source, PlayerControl? target)
     {
         if (MeetingHud.Instance || ExileController.Instance)
@@ -71,10 +58,6 @@ public static class FragileInteraction
         return true;
     }
 
-    /// <summary>
-    /// Glass-break SFX for the interactor that just broke a fragile player.
-    /// Only runs on source.AmOwner path, so only the killer hears it (by design).
-    /// </summary>
     private static void PlayFragileBreakSound()
     {
         if (!SoundManager.Instance) return;
@@ -118,10 +101,6 @@ public static class FragileInteraction
     }
 }
 
-/// <summary>
-/// Prefix on Mira <see cref="CustomActionButton.ClickHandler"/> so fragile is handled before <see cref="CustomActionButton.OnClick"/>.
-/// TownOfUs buttons use their own <c>ClickHandler</c> overrides and are patched separately.
-/// </summary>
 [HarmonyPatch(typeof(CustomActionButton), nameof(CustomActionButton.ClickHandler))]
 internal static class FragileCustomActionButtonClickPatch
 {
@@ -137,11 +116,6 @@ internal static class FragileCustomActionButtonClickPatch
     }
 }
 
-/// <summary>
-/// Patches TownOfUs <c>ClickHandler</c> overrides — TOU replaces <see cref="CustomActionButton.ClickHandler"/> entirely
-/// (<see href="https://github.com/AU-Avengers/TOU-Mira/blob/main/TownOfUs/Buttons/TownOfUsButton.cs">TownOfUsButton.cs</see>),
-/// so a postfix runs <i>after</i> <c>OnClick</c> (shield/douse already applied). A prefix skips the original when fragile triggers.
-/// </summary>
 public static class FragileTownOfUsButtonPatch
 {
     private static bool _initialized;

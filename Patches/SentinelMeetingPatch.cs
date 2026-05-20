@@ -6,9 +6,6 @@ using DivaniMods.Roles.Crewmate.CrewmateSupport;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// Reports beacon activity in chat at the start of each meeting (if option enabled).
-/// </summary>
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
 internal static class SentinelMeetingPatch
 {

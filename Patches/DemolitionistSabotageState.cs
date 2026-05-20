@@ -30,7 +30,6 @@ namespace DivaniMods.Patches;
 
 
 
-/// <summary>
 
 /// Shared state + RPC entry points for the Demolitionist sabotage.
 
@@ -146,9 +145,6 @@ public static class DemolitionistSabotageState
 
 
 
-    /// <summary>
-    /// Vanilla critical sabotage is live. Matches Grenadier flash (non–SabotageFlashing): <c>system is {{ AnyActive: true }}</c>.
-    /// </summary>
     public static bool IsCriticalVanillaSabotageActive()
     {
         var system = ShipStatus.Instance.Systems[SystemTypes.Sabotage].Cast<SabotageSystemType>();
@@ -330,10 +326,6 @@ public static class DemolitionistSabotageState
         DemolitionistPlantButton.SyncAfterSabotageEnded(startCooldown: true);
     }
 
-    /// <summary>
-    /// If the local player is mid-defuse when the sabotage expires and the option is on,
-    /// kill them as a suicide. Each client checks locally so only the actual defuser dies.
-    /// </summary>
     private static void KillLocalIfDefusing()
     {
         if (!OptionGroupSingleton<DemolitionistOptions>.Instance.ExplosionKillsDefusers)
@@ -360,10 +352,6 @@ public static class DemolitionistSabotageState
         local.RpcCustomMurder(local, MeetingCheck.OutsideMeeting);
     }
 
-    /// <summary>
-    /// Force-close any open minigame matching the exploded utility kind. Runs on every client
-    /// (each closes their own open minigame), so anyone inside the console is ejected.
-    /// </summary>
     private static void EjectFromExplodedUtility(DemolitionistUtilityKind kind)
     {
         switch (kind)
@@ -484,7 +472,6 @@ public static class DemolitionistSabotageState
 
 
 
-    /// <summary>
 
     /// Same proximity rules as Plant: must be at the planted utility console.
 
@@ -641,7 +628,6 @@ public static class DemolitionistSabotageState
 
 
 
-    /// <summary>Alternates with screen flash / task list (primary blue, secondary gold).</summary>
     private static Color GetCurrentPulseColor() =>
         (FlashPulseIndex & 1) == 0 ? DemolitionistRole.DemolitionistColor : SecondaryColor;
 

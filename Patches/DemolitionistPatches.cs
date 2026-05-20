@@ -12,9 +12,6 @@ using UnityEngine;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// Harmony glue for Demolitionist: imp sabotage mutex, emergency meeting, sabotage map, consoles, button visibility.
-/// </summary>
 [HarmonyPatch]
 public static class DemolitionistPatches
 {
@@ -339,9 +336,6 @@ public static class DemolitionistPatches
 
     #region Imp sabotage map (grey/disable while Demolitionist sabo active)
 
-    /// <summary>
-    /// Imp sabotage uses <see cref="MapBehaviour"/> + <see cref="InfectedOverlay"/>, not a SabotageMinigame type.
-    /// </summary>
     internal static class SabotageMap
     {
         private static readonly Color DisabledTint = new(0.45f, 0.45f, 0.45f, 0.55f);
@@ -392,7 +386,6 @@ public static class DemolitionistPatches
             _sabotageMapOpen = false;
         }
 
-        /// <summary>Harmony prefix: false blocks the sabotage click.</summary>
         public static bool AllowMapRoomSabotage() => !DemolitionistSabotageState.IsActive;
 
         private static void ApplyState(MapBehaviour map, bool blocked)

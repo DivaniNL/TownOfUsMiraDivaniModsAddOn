@@ -87,10 +87,6 @@ public sealed class FragRole(IntPtr cppPtr)
         return console == null || console.AllowImpostor;
     }
 
-    /// <summary>
-    /// Glitch-style: Frag wins by being the last killer faction left. Requires every
-    /// non-Frag killer dead AND Frag count to be at least equal to the non-Frag alive count.
-    /// </summary>
     public bool WinConditionMet()
     {
         var fragCount = CustomRoleUtils.GetActiveRolesOfType<FragRole>().Count(x => !x.Player.HasDied());

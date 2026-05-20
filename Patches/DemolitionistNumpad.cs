@@ -24,9 +24,6 @@ internal enum DemolitionistNumpadAction
     Defuse,
 }
 
-/// <summary>
-/// Numpad plant/defuse flow: session controller, keypad Harmony patches, fake O₂ task.
-/// </summary>
 internal static class DemolitionistNumpad
 {
     public static void Register(Harmony harmony, ManualLogSource log) => Keypad.Register(harmony, log);
@@ -47,8 +44,6 @@ internal static class DemolitionistNumpad
         public static bool InProgress => _task != null;
         public static bool DefuseInProgress => _task != null && _action == DemolitionistNumpadAction.Defuse;
 
-        /// <summary>Read-and-clear the "numpad plant just succeeded" flag so the plant button can
-        /// begin its arming effect after the minigame closes. The button owns the arming countdown.</summary>
         public static bool ConsumePlantSuccess()
         {
             if (!_plantSucceeded)
@@ -519,9 +514,6 @@ internal static class DemolitionistNumpad
         }
     }
 
-    /// <summary>
-    /// Minimal <see cref="NoOxyTask"/> for <see cref="KeypadGame.Begin"/>.
-    /// </summary>
     [RegisterInIl2Cpp]
     public sealed class DemolitionistKeypadNoOxyTask(nint cppPtr) : NoOxyTask(cppPtr)
     {

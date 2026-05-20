@@ -16,16 +16,11 @@ using DivaniMods.Roles.Impostor.ImpostorSupport;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// First-meeting recruitment: host sets vanilla Impostor, then (same pattern as TOU Amnesiac → Imp)
-/// either adds <see cref="TownOfUs.Modifiers.Game.Impostor.ImpostorAssassinModifier"/> or leaves a plain imp.
-/// </summary>
 [HarmonyPatch]
 public static class RecruiterPatch
 {
     internal static int MeetingsEnded { get; private set; }
 
-    /// <summary>Recruits that still need follow-up after <see cref="RoundStartEvent"/> (TOU may assign assassin late).</summary>
     private static readonly HashSet<byte> PendingRecruitFollowUpIds = new();
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGame))]
@@ -110,9 +105,6 @@ public static class RecruiterPatch
     private static bool RecruitedShouldBecomeAssassin() =>
         OptionGroupSingleton<RecruiterOptions>.Instance.RecruitedBecomesAssassin;
 
-    /// <summary>
-    /// Sync recruited imp state on every client: vanilla imp only, or imp + Impostor Assassin modifier (Amnesiac-style <c>AddModifier(typeId)</c>).
-    /// </summary>
     [MethodRpc((uint)DivaniRpcCalls.RecruitImpostorFollowUp)]
     public static void RpcRecruitImpostorFollowUp(PlayerControl _, byte targetPlayerId)
     {

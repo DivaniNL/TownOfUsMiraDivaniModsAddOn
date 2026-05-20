@@ -23,11 +23,6 @@ using UnityEngine;
 
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
-/// <summary>
-/// Neutral Evil — plants sabotages from utility consoles (admin/cams/vitals/doorlog).
-/// Wins solo after detonating the configured number of sabotages without anyone defusing
-/// them. Mutually exclusive with the impostor sabotage system (see DemolitionistSabotageState).
-/// </summary>
 public sealed class DemolitionistRole(IntPtr cppPtr)
     : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
@@ -49,7 +44,6 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
-    /// <summary>Spec: Demolitionist has impostor vision.</summary>
     public bool HasImpostorVision => true;
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -126,10 +120,6 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
         return console == null || console.AllowImpostor;
     }
 
-    /// <summary>
-    /// Solo win: detonated the configured number of sabotages without them being defused.
-    /// Tracked in <see cref="DemolitionistSabotageState"/>.
-    /// </summary>
     public bool WinConditionMet()
     {
         var needed = (int)OptionGroupSingleton<DemolitionistOptions>.Instance.SabotagesToWin;

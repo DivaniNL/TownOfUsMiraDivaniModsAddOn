@@ -7,11 +7,6 @@ using UnityEngine;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// Vanilla <see cref="SabotageTask"/> on each client while Demolitionist sabotage is
-/// active — implements <see cref="IHudOverrideTask"/> (blocks meetings). Emergency
-/// table UX is handled in <see cref="DemolitionistPatches"/> like vanilla sabos.
-/// </summary>
 [RegisterInIl2Cpp]
 public sealed class DemolitionistSabotageTask(nint cppPtr) : SabotageTask(cppPtr)
 {

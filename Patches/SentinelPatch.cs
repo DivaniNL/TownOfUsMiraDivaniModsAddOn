@@ -8,16 +8,9 @@ using UnityEngine;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// Handles Sentinel beacon tracking each frame and triggers flashes on new room entries.
-/// Also handles button visibility (only show when in a valid room).
-/// </summary>
 [HarmonyPatch]
 public static class SentinelPatch
 {
-    /// <summary>
-    /// Reset beacons at game start.
-    /// </summary>
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
     [HarmonyPostfix]
     public static void ResetOnGameStart()
@@ -25,9 +18,6 @@ public static class SentinelPatch
         BeaconManager.Reset();
     }
 
-    /// <summary>
-    /// Reset beacons at game end.
-    /// </summary>
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     [HarmonyPostfix]
     public static void ResetOnGameEnd()
@@ -35,10 +25,6 @@ public static class SentinelPatch
         BeaconManager.Reset();
     }
 
-    /// <summary>
-    /// Main update loop: track player room entries and trigger flashes for the Sentinel.
-    /// Also controls button visibility.
-    /// </summary>
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     [HarmonyPostfix]
     public static void HudManagerUpdate(HudManager __instance)
@@ -77,9 +63,6 @@ public static class SentinelPatch
         }
     }
 
-    /// <summary>
-    /// Show/hide the Place Beacon button based on whether the player is in a valid room.
-    /// </summary>
     private static void UpdateButtonVisibility(PlayerControl player, bool isSentinel)
     {
         var buttonInstance = PlaceBeaconButton.Instance;
@@ -117,9 +100,6 @@ public static class SentinelPatch
         }
     }
 
-    /// <summary>
-    /// Full-screen flash in Sentinel color. Uses same pattern as Medic flash (MiscUtils.CoFlash).
-    /// </summary>
     private static IEnumerator CoFlashSentinel()
     {
         if (!HudManager.Instance) yield break;

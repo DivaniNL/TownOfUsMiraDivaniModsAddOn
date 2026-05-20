@@ -24,7 +24,6 @@ public class PlaceBeaconButton : TownOfUsButton
     private static readonly Color SentinelColor = SentinelRole.SentinelColor;
     public override Color TextOutlineColor => SentinelColor;
 
-    /// <summary>Button instance for visibility patch.</summary>
     public static PlaceBeaconButton? Instance { get; private set; }
     
     private bool _isPlacing;

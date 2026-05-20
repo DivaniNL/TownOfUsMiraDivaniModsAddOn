@@ -13,13 +13,10 @@ namespace DivaniMods.Patches;
 
 public static class SilencerPatch
 {
-    /// <summary>Total seconds accumulated from Silencer kills since the game started.</summary>
     private static float _totalKillSeconds;
 
-    /// <summary>Reduction (seconds) chosen at meeting start, clamped against the voting-time floor.</summary>
     private static float _cachedReduction;
 
-    /// <summary>Whether the cached reduction has already been applied to this meeting's timer.</summary>
     private static bool _appliedThisMeeting;
 
     [RegisterEvent]

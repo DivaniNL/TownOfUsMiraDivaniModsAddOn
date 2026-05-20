@@ -43,7 +43,6 @@ public sealed class RecruiterRole(IntPtr cppPtr)
         MaxRoleCount = 1,
     };
 
-    /// <summary>Synced selection for the host to read when the first meeting closes (255 = none).</summary>
     public byte PendingRecruitTargetId { get; set; } = 255;
 
     private MeetingMenu? _meetingMenu;

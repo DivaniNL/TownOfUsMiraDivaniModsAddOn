@@ -17,17 +17,6 @@ using TownOfUs.Modifiers.Crewmate;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// Ruthless modifier: Impostor can kill through shields (Medic, GA, Survivor, first-death shield, etc.).
-/// Veterans on alert still counter-kill the impostor normally.
-/// 
-/// Strategy:
-/// 1. EARLY button click handler: Set bypass flag BEFORE TOU checks shields
-/// 2. LATE button click handler: UnCancel if TOU cancelled it (for shields only)
-/// 3. EARLY murder handler: Set bypass flag (backup)
-/// 4. LATE murder handler: UnCancel if TOU cancelled it (for shields only)
-/// 5. Harmony patches on TOU's shield RPCs to suppress flash notifications
-/// </summary>
 public static class RuthlessEventHandler
 {
     private static Type? _baseShieldModifierType;
@@ -61,10 +50,6 @@ public static class RuthlessEventHandler
         }
     }
 
-    /// <summary>
-    /// Il2CppInterop uses wrapper CLR types; <see cref="Type.IsAssignableFrom"/> against types from TownOfUsMira.dll often fails.
-    /// Walk the runtime type chain by name (same approach as thief / Harmony patches).
-    /// </summary>
     private static bool TypeChainContains(Type? t, string typeName)
     {
         while (t != null)
@@ -132,9 +117,6 @@ public static class RuthlessEventHandler
         return false;
     }
 
-    /// <summary>
-    /// EARLY button click: Set bypass flag BEFORE TOU's handler
-    /// </summary>
     [RegisterEvent(-1000)]
     public static void OnButtonClickEarly(MiraButtonClickEvent evt)
     {
@@ -153,9 +135,6 @@ public static class RuthlessEventHandler
         CheckRuthlessKill(source, target, "BUTTON_EARLY");
     }
 
-    /// <summary>
-    /// LATE button click: UnCancel if TOU cancelled it and we have Ruthless bypass
-    /// </summary>
     [RegisterEvent(1000)]
     public static void OnButtonClickLate(MiraButtonClickEvent evt)
     {
@@ -168,9 +147,6 @@ public static class RuthlessEventHandler
         }
     }
 
-    /// <summary>
-    /// EARLY murder: Backup check in case button click didn't fire
-    /// </summary>
     [RegisterEvent(-1000)]
     public static void OnBeforeMurderEarly(BeforeMurderEvent evt)
     {
@@ -180,9 +156,6 @@ public static class RuthlessEventHandler
         }
     }
 
-    /// <summary>
-    /// LATE murder: UnCancel if TOU cancelled it and we have Ruthless bypass
-    /// </summary>
     [RegisterEvent(1000)]
     public static void OnBeforeMurderLate(BeforeMurderEvent evt)
     {
@@ -195,9 +168,6 @@ public static class RuthlessEventHandler
         }
     }
 
-    /// <summary>
-    /// After murder: Log death info state for debugging
-    /// </summary>
     [RegisterEvent(-100)]
     public static void OnAfterMurderDebug(AfterMurderEvent evt)
     {
@@ -211,18 +181,12 @@ public static class RuthlessEventHandler
         }
     }
     
-    /// <summary>
-    /// After murder: Reset bypass flag
-    /// </summary>
     [RegisterEvent]
     public static void OnAfterMurder(AfterMurderEvent evt)
     {
         ResetBypassState();
     }
     
-    /// <summary>
-    /// Resets all bypass state variables.
-    /// </summary>
     public static void ResetBypassState()
     {
         if (ShouldBypassProtection)
@@ -231,9 +195,6 @@ public static class RuthlessEventHandler
         ShouldBypassProtection = false;
     }
     
-    /// <summary>
-    /// Reset bypass state when a meeting starts.
-    /// </summary>
     [RegisterEvent]
     public static void OnMeetingStart(StartMeetingEvent evt)
     {
@@ -350,10 +311,6 @@ public static class RuthlessEventHandler
 
 public static class RuthlessRpcPatches
 {
-    /// <summary>
-    /// Shield checks run on every client with the real attacker as <paramref name="source"/>.
-    /// Must not use <see cref="PlayerControl.LocalPlayer"/> — only the killer's client is local to the impostor.
-    /// </summary>
     public static bool IsRuthlessAttacker(PlayerControl? source)
     {
         if (source == null)
@@ -377,9 +334,6 @@ public static class RuthlessRpcPatches
         return false;
     }
 
-    /// <summary>
-    /// Prefix for <c>CheckForMedicShield</c> / <c>CheckForMagicMirror</c>: (event, source, target).
-    /// </summary>
     public static bool SkipIfRuthlessBoolKillSource(ref bool __result, PlayerControl source)
     {
         if (IsRuthlessAttacker(source))
@@ -391,9 +345,6 @@ public static class RuthlessRpcPatches
         return true;
     }
 
-    /// <summary>
-    /// Prefix for <c>CheckForClericBarrier</c>: (event, target, source).
-    /// </summary>
     public static bool SkipIfRuthlessBoolClericBarrier(ref bool __result, PlayerControl target, PlayerControl source)
     {
         if (IsRuthlessAttacker(source))
@@ -405,9 +356,6 @@ public static class RuthlessRpcPatches
         return true;
     }
 
-    /// <summary>
-    /// Prefix for <c>CheckForWardenFortify</c>: (event, source, target).
-    /// </summary>
     public static bool SkipIfRuthlessVoidKillSource(PlayerControl source)
     {
         if (IsRuthlessAttacker(source))
@@ -418,9 +366,6 @@ public static class RuthlessRpcPatches
         return true;
     }
 
-    /// <summary>
-    /// Prefix for <c>FirstShieldEvents.CheckForFirstDeathShield</c>: (event, target, source).
-    /// </summary>
     public static bool SkipIfRuthlessFirstDeathShield(PlayerControl target, PlayerControl source)
     {
         if (!OptionGroupSingleton<RuthlessOptions>.Instance.BypassFirstDeathShield)
@@ -434,9 +379,6 @@ public static class RuthlessRpcPatches
         return true;
     }
 
-    /// <summary>
-    /// Prefix for <c>CheckForInvulnerability</c>: (miraEvent, source, target, killAttempt).
-    /// </summary>
     public static bool SkipIfRuthlessVoidInvulnerability(PlayerControl source)
     {
         if (IsRuthlessAttacker(source))

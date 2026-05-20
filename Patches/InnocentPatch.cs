@@ -108,10 +108,6 @@ public static class InnocentPatch
         }
     }
 
-    /// <summary>
-    /// After the first meeting following a taunt kill, drop the meeting marker: either the win branch
-    /// (target voted out) or the taunt window expired without voting out the killer.
-    /// </summary>
     [RegisterEvent]
     public static void OnRoundStart(RoundStartEvent evt)
     {

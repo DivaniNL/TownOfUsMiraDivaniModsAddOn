@@ -11,12 +11,6 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Universal;
 
-/// <summary>
-/// Universal modifier: every vote the player casts - including Skip, and every
-/// bonus vote from Mayor, Knighted, or Prosecutor's prosecution - is silently
-/// redirected to an independently chosen random alive player each meeting.
-/// The re-rolls run in <see cref="DivaniMods.Patches.MisvoteVotePatches"/>.
-/// </summary>
 public sealed class MisvoteModifier : UniversalGameModifier, IColoredModifier, IWikiDiscoverable
 {
     public static readonly Color MisvoteColor = new Color32(180, 180, 180, 255);

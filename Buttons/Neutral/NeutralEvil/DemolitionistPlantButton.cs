@@ -13,19 +13,10 @@ using UnityEngine;
 
 namespace DivaniMods.Buttons.Neutral.NeutralEvil;
 
-/// <summary>
-/// Plant button (<see cref="CustomActionButton"/>). Shown while near any utility
-/// console (admin / cameras / vitals / door log). Hold duration fills the button
-/// ring like Sentinel beacon placement.
-/// </summary>
 public class DemolitionistPlantButton : TownOfUsButton
 {
     public override string Name => "Plant";
     public override float Cooldown => OptionGroupSingleton<DemolitionistOptions>.Instance.PlantCooldown;
-    /// <summary>
-    /// While arming (after a successful plant) this is the Plant→Sabotage delay so the button's
-    /// effect ring counts that down and shakes. Otherwise it's the timed-style plant hold time.
-    /// </summary>
     public override float EffectDuration => _arming
         ? OptionGroupSingleton<DemolitionistOptions>.Instance.PlantToSabotageDelay
         : OptionGroupSingleton<DemolitionistOptions>.Instance.IsTimedSabotageStyle
@@ -36,7 +27,6 @@ public class DemolitionistPlantButton : TownOfUsButton
     // and CanUse is always false (button permanently greyed). True = unlimited uses.
     public override bool ZeroIsInfinite { get; set; } = true;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.DemolitionistSabotageButton;
-    /// <summary>BottomRight conflicts with impostor vent when <see cref="DemolitionistOptions.CanVent"/> is on — use left row for plant in that case.</summary>
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight; 
     public override Color TextOutlineColor => DemolitionistRole.DemolitionistColor;
     public override BaseKeybind Keybind => Keybinds.PrimaryAction;
@@ -70,9 +60,6 @@ public class DemolitionistPlantButton : TownOfUsButton
         return base.CanUse();
     }
 
-    /// <summary>
-    /// Do not start cooldown on click — only after a successful plant (numpad or timed).
-    /// </summary>
     public override void ClickHandler()
     {
         if (!CanClick())
@@ -84,7 +71,6 @@ public class DemolitionistPlantButton : TownOfUsButton
         Button?.SetDisabled();
     }
 
-    /// <summary>Called when sabotage ends so the plant button is not stuck grey/disabled.</summary>
     public static void SyncAfterSabotageEnded(bool startCooldown)
     {
         var plant = Instance;
@@ -247,11 +233,6 @@ public class DemolitionistPlantButton : TownOfUsButton
         }
     }
 
-    /// <summary>
-    /// Begin the arming effect after a successful plant. The button shakes and counts down the
-    /// Plant→Sabotage delay (MiraAPI effect ring), then <see cref="OnEffectEnd"/> starts the
-    /// sabotage. Mirrors the Pickpocket button's post-click effect.
-    /// </summary>
     private void StartArming()
     {
         _isPlanting = false;
@@ -280,7 +261,6 @@ public class DemolitionistPlantButton : TownOfUsButton
         }
     }
 
-    /// <summary>MiraAPI calls this when the arming effect timer expires.</summary>
     public override void OnEffectEnd()
     {
         if (!_arming)

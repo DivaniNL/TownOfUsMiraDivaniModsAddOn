@@ -5,12 +5,6 @@ using UnityEngine;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// Appends a biohazard symbol (☣) next to fully-infected players' names during
-/// meetings and on the HUD. Uses the same text-symbol approach as the medic
-/// shield (+), executioner target (X), etc., so the indicator renders below the
-/// minimap overlay instead of on top of it.
-/// </summary>
 // Target the (string, PlayerControl, bool) overload explicitly. TownOfUs added
 // a second UpdateTargetSymbols(string, PlayerControl, DataVisibility) overload,
 // and without the parameter list Harmony throws AmbiguousMatchException out of

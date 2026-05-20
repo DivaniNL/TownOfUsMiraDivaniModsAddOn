@@ -12,9 +12,6 @@ using UnityEngine;
 
 namespace DivaniMods.Buttons.Neutral.NeutralEvil;
 
-/// <summary>
-/// Defuse at the planted utility while Demolitionist sabotage is active (demolitionist or crew).
-/// </summary>
 public class DemolitionistDefuseButton : TownOfUsButton
 {
     public override string Name => "Defuse";

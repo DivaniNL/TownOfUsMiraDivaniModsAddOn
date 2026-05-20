@@ -17,10 +17,6 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Crewmate;
 
-/// <summary>
-/// Temporary trail on the killer after slaying a crewmate with Bloody. Uses Investigator-style spacing;
-/// footprints are impostor red for all players. Runtime-only (not lobby-assignable).
-/// </summary>
 public sealed class BloodyKillerFootstepsModifier : BaseModifier
 {
     public Dictionary<GameObject, SpriteRenderer>? CurrentSteps;

@@ -14,7 +14,6 @@ namespace DivaniMods.Buttons.Neutral.NeutralKilling;
 public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>
 {
     private static bool _cooldownQueued;
-    /// <summary>True while we drive <see cref="Timer"/> from <see cref="FragBombState"/> for the on-button fuse.</summary>
     private static bool _bombCountdownOnButton;
 
     public static FragGiveBombButton? Instance { get; private set; }
@@ -22,9 +21,6 @@ public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>
     public override string Name => "Give Bomb";
     public override float Cooldown => OptionGroupSingleton<FragOptions>.Instance.GiveBombCooldown;
 
-    /// <summary>
-    /// Fuse ring denominator (Mirrorcaster-style effect timer). Must fit arming (≤7s) + longest fuse.
-    /// </summary>
     public override float EffectDuration =>
         Mathf.Max(OptionGroupSingleton<FragOptions>.Instance.BombTimer + 7f, 1f);
     public override int MaxUses => 0;

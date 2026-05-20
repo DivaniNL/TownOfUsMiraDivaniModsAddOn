@@ -13,55 +13,45 @@ public class DemolitionistOptions : AbstractOptionGroup<DemolitionistRole>, IWik
 {
     public override string GroupName => "Demolitionist";
 
-    /// <summary>Sabotages the Demolitionist must successfully detonate to win alone.</summary>
     [ModdedNumberOption("Successful Sabotages To Win", 1f, 4f, 1f)]
     public float SabotagesToWin { get; set; } = 2f;
 
-    /// <summary>Cooldown between Plant attempts. Mirrors the impostor sabotage cooldown so plant/sabo
-    /// pace at the same rate.</summary>
     [ModdedNumberOption("Plant Cooldown", 10f, 60f, 5f, MiraNumberSuffixes.Seconds)]
     public float PlantCooldown { get; set; } = 30f;
 
-    /// <summary>Delay between a successful Plant and the sabotage actually starting.</summary>
     [ModdedNumberOption("Plant To Sabotage Delay", 1f, 10f, 1f, MiraNumberSuffixes.Seconds)]
     public float PlantToSabotageDelay { get; set; } = 3f;
 
-    /// <summary>Sabotage duration on The Skeld / Dleks.</summary>
     public ModdedNumberOption SabotageDurationSkeld { get; } =
         new("Sabotage Duration (Skeld)", 30f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.Skeld),
         };
 
-    /// <summary>Sabotage duration on MIRA HQ.</summary>
     public ModdedNumberOption SabotageDurationMiraHQ { get; } =
         new("Sabotage Duration (MIRA HQ)", 45f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.MiraHq),
         };
 
-    /// <summary>Sabotage duration on Polus.</summary>
     public ModdedNumberOption SabotageDurationPolus { get; } =
         new("Sabotage Duration (Polus)", 60f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.Polus),
         };
 
-    /// <summary>Sabotage duration on The Fungle.</summary>
     public ModdedNumberOption SabotageDurationFungle { get; } =
         new("Sabotage Duration (Fungle)", 60f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.Fungle),
         };
 
-    /// <summary>Sabotage duration on The Airship.</summary>
     public ModdedNumberOption SabotageDurationAirship { get; } =
         new("Sabotage Duration (Airship)", 90f, 10f, 180f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.Airship),
         };
 
-    /// <summary>Picks the duration for the current map. Dleks shares Skeld value.</summary>
     public float SabotageDuration => GetSabotageDurationOptionForMap(MiscUtils.GetCurrentMap).Value;
 
     public ModdedEnumOption SabotageStyle { get; } = new(
@@ -69,14 +59,12 @@ public class DemolitionistOptions : AbstractOptionGroup<DemolitionistRole>, IWik
         (int)DemolitionistSabotageStyle.Numpad,
         typeof(DemolitionistSabotageStyle));
 
-    /// <summary>Time the Demolitionist must hold to finish the Plant action.</summary>
     public ModdedNumberOption PlantTime { get; } = new(
         "Plant Time", 5f, 2f, 10f, 1f, MiraNumberSuffixes.Seconds)
     {
         Visible = () => OptionGroupSingleton<DemolitionistOptions>.Instance.IsTimedSabotageStyle,
     };
 
-    /// <summary>Time required to defuse a planted sabotage.</summary>
     public ModdedNumberOption DefuseTime { get; } = new(
         "Defuse Time", 5f, 2f, 10f, 1f, MiraNumberSuffixes.Seconds)
     {
@@ -86,12 +74,9 @@ public class DemolitionistOptions : AbstractOptionGroup<DemolitionistRole>, IWik
     [ModdedToggleOption("Demolitionist Can Vent")]
     public bool CanVent { get; set; } = false;
 
-    /// <summary>After a sabotage explodes, that utility cannot be used by anyone for the rest of the game.</summary>
     [ModdedToggleOption("Disable Exploded Utility For Game")]
     public bool DisableExplodedConsoles { get; set; } = true;
 
-    /// <summary>If a player is mid-defuse (inside the defuse keypad) when the sabotage explodes,
-    /// kill them (recorded as suicide). Off by default.</summary>
     [ModdedToggleOption("Explosion Kills Active Defusers")]
     public bool ExplosionKillsDefusers { get; set; } = false;
 
@@ -135,7 +120,6 @@ public class DemolitionistOptions : AbstractOptionGroup<DemolitionistRole>, IWik
             _ => SabotageDurationSkeld,
         };
 
-    /// <summary>Lobby: show every map's duration. In-game: only the loaded ship's map.</summary>
     private static bool ShouldShowMapDurationOption(ExpandedMapNames mapOption)
     {
         if (ShipStatus.Instance == null)

@@ -48,11 +48,9 @@ public sealed class BloodyOptions : AbstractOptionGroup<BloodyModifier>
     [ModdedNumberOption("Bloody Footprint Size", 1f, 10f, suffixType: MiraNumberSuffixes.Multiplier)]
     public float FootprintSize { get; set; } = 4f;
 
-    /// <summary>How long each footprint sprite stays on the map (Investigator-style).</summary>
     public ModdedNumberOption SingleFootprintFadeSeconds { get; } = new(
         "Single Footprint Fade", 4f, 1f, 15f, 0.5f, MiraNumberSuffixes.Seconds);
 
-    /// <summary>How long the killer keeps leaving footprints after slaying a Bloody crewmate.</summary>
     public ModdedNumberOption KillerTrailDurationSeconds { get; } = new(
         "Footprint Duration", 4f, 1f, 15f, 1f, MiraNumberSuffixes.Seconds);
 
