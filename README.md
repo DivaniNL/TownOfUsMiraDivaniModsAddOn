@@ -90,7 +90,7 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 
 # Source inspiration
 
-Some Divani roles and modifiers take design cues from other Among Us mod communities. These pages were useful references:
+Some of my roles and modifiers take design cues from other Among Us mod communities. These pages were useful references:
 
 - **Opportunist** — [TOHE: Collector](https://tohe.weareten.ca/options/Neutrals/Chaos/Collector.html) (vote-collection win pattern)
 - **Innocent** — [TOHE: Innocent](https://tohe.weareten.ca/options/Neutrals/Evil/Innocent.html)
