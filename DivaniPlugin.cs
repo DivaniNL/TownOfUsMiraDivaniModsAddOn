@@ -42,6 +42,7 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
         DutchMemeSoundpackPatch.Register(Harmony);
         VersionDisplay.Register();
         DivaniModAnnouncementPatch.EnsureLoaded();
+        DivaniWikiTermsPatch.RegisterLocale();
         Log.LogInfo($"Divani Mods v{Version} loaded successfully!");
     }
 }
