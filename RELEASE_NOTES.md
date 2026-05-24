@@ -1,40 +1,54 @@
-# Divani Mods v1.2.0
+# Divani Mods v1.2.2
 
-## Changes
+## Added Role
 
-### Thief
+### Demolitionist
 
-- Thief now gets a random modifier if it tries to steal one it already has
-- Thief now priorizes stealing the frag bomb if the target has it
+CS:GO Joins Divani Mods
+Plant bombs for your other shipmates to defuse. Detonate x bombs to win! (configurable)
+Choose for a timed plant version, or take it to the next level and enable the **Numpad** Sabotage style.
 
-### Silencer
+Thanks @jaydoeswitchcraft for the role and button assets
 
-- New option: "Normal Voting Time When Dead". If enabled, voting time return to it's initial value
+## Added modifier
+
+### Memento
+
+Reveal information about what your identity was during meetings.
+One of the options include to even show all the modifiers a Memento holder had (Yes, also bait. BUSTED!!!!)
+- Special thanks to asterisken (discord) for making the modifier icon
+
+## Role/Modifier Changes/Bugfixes
 
 ### Frag
+- Changed Frag role color to match icon color
+- Added a better way of displaying the difference between arming and armed state for the role holder in the button
+- Fixed heartbeat sounds from looping after leaving/DC 
 
-- Moved to the Neutral Killing faction
-- When a meeting is called (Emergency, report) the bomb holder is Bombed at the start of the meeting
+### Portalmaker
+- Added configurable effect duration (the delay between clicking the button and placing a portal)
+- Added option to enable the portal pair after the next meeting
+- Removed extra unnecicary button shake
+
+### Sentinel
+- Added configurable effect duration (the delay between clicking the button and placing a beacon)
+- Removed extra unnecicary button shake
+
+### Thief
+- Added configurable effect duration (the delay between clicking the button and pickpocketing a modifier)
 
 ### Plague Doctor
+- Refactored role to now work around a hidden modifier
 
-- Moved to the Neutral Evil faction
-- Better display of displaying infection progress (in task header)
-- Option added: "Turn into Amnesiac when cannot win"
-- Option added: "Notify Players When Infection Is Close"
-- Suboption added: "Notify When Uninfected Players Left"
+### Deadlock
+- Removed extra unnecicary button shake
 
+### Bloody
+- New modifier icon. Special thanks to @jaydoeswitchcraft
 
-## Bug fixes
-- Frag bomb button no longer sometimes visible in meeting
-- Shuffle can no longer be used in meetings by using its keybind
-- Fixed button uses left on Sentinel
-- Crewmate modifiers can no longer be assigned to Neutral factions
-
-## Won't fix:
-- Old Plague Doctor shows up in win screen if new PD is enherited from Amnesiac (actually fun)
-
-## Planned:
-- Enable portals after the first meeting (option)
-- Portalmaker can portal to both portals from anywhere (option)
-- Some new roles/modifiers
+## Other changes
+- Stability and performance improvements
+- Cleric now cleanses negative effects of Roles and Modifiers from Divani Mods (if i missed any let me knmow)
+- Added intro texts for modifiers
+- Added Causes of Death for Murders inside Divani mods (Silenced,Shattered,Fragged)
+- I listen to your feedback, changed some of the default values for Roles/Modifier Options

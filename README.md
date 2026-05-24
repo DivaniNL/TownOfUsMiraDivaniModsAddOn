@@ -41,6 +41,7 @@ new roles and modifiers on top of [Town Of Us &ndash; Mira](https://github.com/A
   <img src="./Resources/Headers/UniMods.png" alt="Universal modifiers"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#fragile"><img width="10%" src="./Resources/Icons/Fragile.png" alt="Fragile"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#shuffle"><img width="10%" src="./Resources/Icons/Shuffle.png" alt="Shuffle"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#memento"><img width="10%" src="./Resources/Icons/Memento.png" alt="Memento"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#misvote"><img width="10%" src="./Resources/Icons/Misvote.png" alt="Misvote"/></a>
 </p>
 
@@ -84,14 +85,17 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 
 ## Asset credits
 
-- Thank you to [@AtonyGit](https://github.com/AtonyGit) for making most role icons based of [Town Of Us: Mira](https://github.com/AU-Avengers/TOU-Mira).
-- Bloody and Demolitionist icons by @jaydoeswitchcraft (Discord).
-- Glass&ndash;break SFX from [Freesound](https://freesound.org/) (community).
+- [@AtonyGit](https://github.com/AtonyGit)/[Town Of Us: Mira](https://github.com/AU-Avengers/TOU-Mira) - All assets that are not specified below
+- @jaydoeswitchcraft (discord) - Bloody modifier icon and Demolitionist role icon and Button assets
+- [Freesound](https://freesound.org/) (community) -Glass&ndash;break SFX for Fragile
+- @aasteriisken (discord) - Memento modifier icon [Follow Asterisken on GitHub](https://github.com/aasteriisken)
+
 
 # Source inspiration
 
 Some of my roles and modifiers take design cues from other Among Us mod communities. These pages were useful references:
 
+- **Demolitionist** - [Conter Strike](https://www.counter-strike.net/) (Plant/Defuse bombs + the colorcodes)
 - **Opportunist** — [TOHE: Collector](https://tohe.weareten.ca/options/Neutrals/Chaos/Collector.html) (vote-collection win pattern)
 - **Innocent** — [TOHE: Innocent](https://tohe.weareten.ca/options/Neutrals/Evil/Innocent.html)
 - **Plague Doctor** — [TheOtherRoles GMIA wiki — Neutral roles](https://github.com/GMIA-Nexus/TheOtherRolesGMIA/wiki/Neutral-Roles#plague-doctor)
