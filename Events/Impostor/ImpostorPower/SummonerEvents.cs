@@ -11,6 +11,7 @@ using DivaniMods.Buttons.Impostor.ImpostorAfterlife;
 using DivaniMods.Options;
 using DivaniMods.Roles.Impostor.ImpostorAfterlife;
 using DivaniMods.Roles.Impostor.ImpostorPower;
+using TownOfUs.Events.TouEvents;
 using TownOfUs.Utilities;
 
 namespace DivaniMods.Events.Impostor.ImpostorPower;
@@ -19,7 +20,15 @@ public static class SummonerState
 {
     public static readonly System.Collections.Generic.HashSet<string> RevenantNames = new();
 
+    public static readonly System.Collections.Generic.HashSet<byte> KillVictims = new();
+
     public static int KillsSinceRevenant { get; set; }
+
+    public static void ResetKills()
+    {
+        KillsSinceRevenant = 0;
+        KillVictims.Clear();
+    }
 
     public static int Required =>
         (int)OptionGroupSingleton<SummonerOptions>.Instance.KillsRequiredForSummon.Value;
@@ -35,9 +44,25 @@ public static class SummonerEvents
     [RegisterEvent]
     public static void OnAfterMurder(AfterMurderEvent evt)
     {
-        if (evt.Source != null && evt.Source.Data?.Role is SummonerRole)
+        if (evt.Source != null && evt.Source.Data?.Role is SummonerRole && evt.Target != null)
         {
             SummonerState.KillsSinceRevenant++;
+            SummonerState.KillVictims.Add(evt.Target.PlayerId);
+        }
+    }
+
+    [RegisterEvent]
+    public static void OnPlayerRevive(PlayerReviveEvent evt)
+    {
+        var revived = evt.Player;
+        if (revived == null || revived.Data == null)
+        {
+            return;
+        }
+
+        if (SummonerState.KillVictims.Remove(revived.PlayerId) && SummonerState.KillsSinceRevenant > 0)
+        {
+            SummonerState.KillsSinceRevenant--;
         }
     }
 
@@ -88,7 +113,7 @@ public static class SummonerEvents
     {
         if (evt.TriggeredByIntro)
         {
-            SummonerState.KillsSinceRevenant = 0;
+            SummonerState.ResetKills();
             SummonerState.RevenantNames.Clear();
         }
 

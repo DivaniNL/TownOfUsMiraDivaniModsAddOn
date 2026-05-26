@@ -39,7 +39,7 @@ public static class RevenantEvents
             return;
         }
 
-        SummonerState.KillsSinceRevenant = 0;
+        SummonerState.ResetKills();
 
         var hex = ColorUtility.ToHtmlStringRGB(RevenantRole.RevenantColor);
 

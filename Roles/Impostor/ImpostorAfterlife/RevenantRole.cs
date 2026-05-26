@@ -123,14 +123,14 @@ public sealed class RevenantRole(IntPtr cppPtr)
         Caught = true;
         Player.Exiled();
 
-        DivaniMods.Events.Impostor.ImpostorPower.SummonerState.KillsSinceRevenant = 0;
+        DivaniMods.Events.Impostor.ImpostorPower.SummonerState.ResetKills();
     }
 
     public override void Initialize(PlayerControl player)
     {
         RoleBehaviourStubs.Initialize(this, player);
 
-        DivaniMods.Events.Impostor.ImpostorPower.SummonerState.KillsSinceRevenant = 0;
+        DivaniMods.Events.Impostor.ImpostorPower.SummonerState.ResetKills();
 
         if (!Player.HasModifier<BasicGhostModifier>())
         {
