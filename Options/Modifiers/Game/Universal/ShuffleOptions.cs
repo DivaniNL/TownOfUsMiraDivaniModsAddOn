@@ -21,7 +21,7 @@ public class ShuffleOptions : AbstractOptionGroup<ShuffleModifier>
         new("Shuffle Cooldown", 30f, 10f, 60f, 5f, MiraNumberSuffixes.Seconds);
     
     public ModdedToggleOption ShuffleDeadBodiesOption { get; } =
-        new("Shuffle Dead Bodies", false);
+        new("Shuffle Dead Bodies", true);
     
     public bool ShuffleDeadBodies => ShuffleDeadBodiesOption.Value;
 }
