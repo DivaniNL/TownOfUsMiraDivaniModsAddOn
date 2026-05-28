@@ -11,6 +11,8 @@
 An [Among Us](https://store.steampowered.com/app/945360/Among_Us/) mod that adds
 new roles and modifiers on top of [Town Of Us &ndash; Mira](https://github.com/AU-Avengers/TOU-Mira).
 
+Join the Discord:
+[Link](https://discord.gg/dqzQrcxqdx)
 <p align="center">
   <img src="./Resources/Headers/CrewPower.png" alt="Crewmate Power"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#thief"><img width="10%" src="./Resources/Icons/Thief.png" alt="Thief"/></a>
