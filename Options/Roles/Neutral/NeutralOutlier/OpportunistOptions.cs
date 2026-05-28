@@ -11,4 +11,6 @@ public class OpportunistOptions : AbstractOptionGroup<OpportunistRole>
 
     public ModdedNumberOption VotesNeeded { get; } = new(
         "Required Number of Votes", 15f, 2f, 20f, 1f, MiraNumberSuffixes.None);
+
+    public ModdedToggleOption CanUseWildcard { get; } = new("Opportunist can use Wildcard", true);
 }

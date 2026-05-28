@@ -39,7 +39,52 @@ public static class OpportunistPatch
         {
             opp.CurrentMeetingTargetId = null;
             opp.VotedThisMeeting = false;
+            opp.WildcardActiveThisMeeting = false;
+            opp.PendingWildcardSkip = false;
         }
+    }
+
+    [RegisterEvent]
+    public static void OnBeforeVote(BeforeVoteEvent evt)
+    {
+        var local = PlayerControl.LocalPlayer;
+        if (local == null)
+        {
+            return;
+        }
+
+        if (!OpportunistRole.ActiveOpportunists.TryGetValue(local.PlayerId, out var opp))
+        {
+            return;
+        }
+
+        if (opp.WildcardButton == null || evt.VoteArea != opp.WildcardButton)
+        {
+            return;
+        }
+
+        evt.Cancel();
+
+        if (opp.WildcardUsed || opp.WildcardActiveThisMeeting ||
+            !OptionGroupSingleton<OpportunistOptions>.Instance.CanUseWildcard.Value)
+        {
+            return;
+        }
+
+        RpcOpportunistWildcard(local, local.PlayerId);
+        opp.PendingWildcardSkip = true;
+    }
+
+    [MethodRpc((uint)DivaniRpcCalls.OpportunistWildcard)]
+    public static void RpcOpportunistWildcard(PlayerControl sender, byte opportunistId)
+    {
+        if (!OpportunistRole.ActiveOpportunists.TryGetValue(opportunistId, out var opp))
+        {
+            return;
+        }
+
+        opp.WildcardActiveThisMeeting = true;
+        opp.WildcardUsed = true;
     }
 
 
@@ -82,20 +127,31 @@ public static class OpportunistPatch
                 continue;
             }
 
-            if (!opp.VotedThisMeeting || !opp.CurrentMeetingTargetId.HasValue)
-            {
-                continue;
-            }
-
             var oppId = opp.Player.PlayerId;
-            var oppTarget = ApplyActiveSwaps(opp.CurrentMeetingTargetId.Value);
-
             var votesAdded = 0;
 
-            votesAdded += CountVotesOnTarget(@event.Votes, oppId, oppTarget);
+            if (opp.WildcardActiveThisMeeting && OpportunistSkipped(@event.Votes, oppId))
+            {
+                votesAdded += CountSkipVotes(@event.Votes, oppId);
+                votesAdded += CountSkipVotes(KnightedEvents.ExtraKnightVotes, oppId);
+            }
+            else
+            {
+                if (opp.WildcardActiveThisMeeting)
+                {
+                    RpcRefundOpportunistWildcard(PlayerControl.LocalPlayer, oppId);
+                }
 
+                if (!opp.VotedThisMeeting || !opp.CurrentMeetingTargetId.HasValue)
+                {
+                    continue;
+                }
 
-            votesAdded += CountVotesOnTarget(KnightedEvents.ExtraKnightVotes, oppId, oppTarget);
+                var oppTarget = ApplyActiveSwaps(opp.CurrentMeetingTargetId.Value);
+
+                votesAdded += CountVotesOnTarget(@event.Votes, oppId, oppTarget);
+                votesAdded += CountVotesOnTarget(KnightedEvents.ExtraKnightVotes, oppId, oppTarget);
+            }
 
             if (votesAdded == 0)
             {
@@ -123,6 +179,53 @@ public static class OpportunistPatch
             }
 
             if (vote.Suspect != target)
+            {
+                continue;
+            }
+
+            count++;
+        }
+        return count;
+    }
+
+
+    private const byte SkipVoteId = 253;
+
+    private static bool OpportunistSkipped(System.Collections.Generic.IEnumerable<CustomVote> votes, byte oppId)
+    {
+        foreach (var vote in votes)
+        {
+            if (vote.Voter == oppId && vote.Suspect == SkipVoteId)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    [MethodRpc((uint)DivaniRpcCalls.OpportunistWildcardRefund)]
+    public static void RpcRefundOpportunistWildcard(PlayerControl sender, byte opportunistId)
+    {
+        if (!OpportunistRole.ActiveOpportunists.TryGetValue(opportunistId, out var opp))
+        {
+            return;
+        }
+
+        opp.WildcardActiveThisMeeting = false;
+        opp.WildcardUsed = false;
+    }
+
+    private static int CountSkipVotes(System.Collections.Generic.IEnumerable<CustomVote> votes, byte oppId)
+    {
+        var count = 0;
+        foreach (var vote in votes)
+        {
+            if (vote.Voter == oppId)
+            {
+                continue;
+            }
+
+            if (vote.Suspect != SkipVoteId)
             {
                 continue;
             }
@@ -191,6 +294,9 @@ public static class OpportunistPatch
         {
             opp.CurrentMeetingTargetId = null;
             opp.VotedThisMeeting = false;
+            opp.WildcardActiveThisMeeting = false;
+            opp.PendingWildcardSkip = false;
+            opp.WildcardButton = null;
         }
     }
 

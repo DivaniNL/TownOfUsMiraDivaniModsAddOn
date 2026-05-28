@@ -28,4 +28,6 @@ public enum DivaniRpcCalls : uint
     SummonerSetPendingTarget = 223,
     SummonerRecruitRevenant = 224,
     RevenantKill = 225,
+    OpportunistWildcard = 226,
+    OpportunistWildcardRefund = 227,
 }
