@@ -40,4 +40,13 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
         {
             Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.BloodyAmount.Value > 0
         };
+
+    public ModdedNumberOption SproutAmount { get; } = new(
+        "Sprout Amount", 0f, 0f, 5f, 1f, MiraNumberSuffixes.None);
+
+    public ModdedNumberOption SproutChance { get; } =
+        new("Sprout Chance", 50f, 0, 100f, 10f, MiraNumberSuffixes.Percent)
+        {
+            Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.SproutAmount.Value > 0
+        };
 }

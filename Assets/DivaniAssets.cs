@@ -23,6 +23,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> DomesmithPlaceDomeButton { get; } = new LoadableResourceAsset($"{ShortPath}.DomesmithPlaceDome.png");
     public static LoadableAsset<Sprite> PlagueDoctorInfectButton { get; } = new LoadableResourceAsset($"{ShortPath}.PlagueDoctorInfect.png");
     public static LoadableAsset<Sprite> ShuffleAbilityButton { get; } = new LoadableResourceAsset($"{IconPath}.Shuffle.png", 250f);
+    public static LoadableAsset<Sprite> SproutCollectButton { get; } = new LoadableResourceAsset($"{ShortPath}.Collect.png", 100);
 
     // Role icons (200 ppu)
     public static LoadableAsset<Sprite> ThiefIcon { get; } = new LoadableResourceAsset($"{IconPath}.Thief.png", 200);
@@ -50,6 +51,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> BearTrapIcon { get; } = new LoadableResourceAsset($"{IconPath}.Beartrap.png", 200);
     public static LoadableAsset<Sprite> BloodyIcon { get; } = new LoadableResourceAsset($"{IconPath}.Bloody.png", 200);
     public static LoadableAsset<Sprite> RuthlessIcon { get; } = new LoadableResourceAsset($"{IconPath}.Ruthless.png", 200);
+    public static LoadableAsset<Sprite> SproutIcon { get; } = new LoadableResourceAsset($"{IconPath}.Sprout.png", 200);
     
     // Audio clips (16000hz)
     public static LoadableAsset<AudioClip> FragileBreak { get; } = new LoadableAudioResourceAsset($"{ShortPath}.FragileBreak.wav");

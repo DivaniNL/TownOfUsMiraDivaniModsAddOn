@@ -141,6 +141,8 @@
     <EmbeddedResource Include="Resources\Icons\Domesmith.png" />
     <EmbeddedResource Include="Resources\Icons\Summoner.png" />
     <EmbeddedResource Include="Resources\Icons\Revenant.png" />
+    <EmbeddedResource Include="Resources\Icons\Sprout.png" Condition="Exists('Resources\Icons\Sprout.png')" />
+    <EmbeddedResource Include="Resources\Collect.png" Condition="Exists('Resources\Collect.png')" />
     <EmbeddedResource Include="Resources\DomesmithPlaceDome.png" />
     <EmbeddedResource Include="Resources\Icons\Memento.png" />
     <EmbeddedResource Include="Resources\DemolitionistPlant.png" />

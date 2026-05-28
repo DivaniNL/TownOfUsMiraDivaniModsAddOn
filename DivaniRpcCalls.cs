@@ -30,4 +30,5 @@ public enum DivaniRpcCalls : uint
     RevenantKill = 225,
     OpportunistWildcard = 226,
     OpportunistWildcardRefund = 227,
+    SproutCollect = 228,
 }
