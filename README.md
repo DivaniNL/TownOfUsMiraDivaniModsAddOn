@@ -95,7 +95,9 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 - [@AtonyGit](https://github.com/AtonyGit)/[Town Of Us: Mira](https://github.com/AU-Avengers/TOU-Mira) - All assets that are not specified below
 - @jaydoeswitchcraft (discord) - Bloody modifier icon and Demolitionist role icon and Button assets
 - [Freesound](https://freesound.org/) (community) -Glass&ndash;break SFX for Fragile
-- @aasteriisken (discord) - Memento modifier icon [Follow Asterisken on GitHub](https://github.com/aasteriisken)
+- Espeon(@mystic_haze2 on discord) - Sprout Assets, Summoner role and meeting icon, providing more intro sounds
+- @aasteriisken (discord) - Memento modifier icon, Domesmith Assets, Revenant icon
+[Follow Asterisken on GitHub](https://github.com/aasteriisken)
 
 
 # Source inspiration
