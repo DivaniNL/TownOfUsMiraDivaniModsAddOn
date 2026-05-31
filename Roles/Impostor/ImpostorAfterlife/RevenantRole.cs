@@ -126,9 +126,18 @@ public sealed class RevenantRole(IntPtr cppPtr)
         DivaniMods.Events.Impostor.ImpostorPower.SummonerState.ResetKills();
     }
 
+    public static int ActiveCount { get; private set; }
+
+    public static void ResetActiveCount()
+    {
+        ActiveCount = 0;
+    }
+
     public override void Initialize(PlayerControl player)
     {
         RoleBehaviourStubs.Initialize(this, player);
+
+        ActiveCount++;
 
         DivaniMods.Events.Impostor.ImpostorPower.SummonerState.ResetKills();
 
@@ -141,6 +150,11 @@ public sealed class RevenantRole(IntPtr cppPtr)
     public override void Deinitialize(PlayerControl targetPlayer)
     {
         RoleBehaviourStubs.Deinitialize(this, targetPlayer);
+
+        if (ActiveCount > 0)
+        {
+            ActiveCount--;
+        }
     }
 
     public override bool CanUse(IUsable console)

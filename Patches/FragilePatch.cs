@@ -189,27 +189,8 @@ public static class FragileTownOfUsButtonPatch
                 }
             }
 
-            foreach (var type in assembly.GetTypes())
-            {
-                if (type.IsAbstract || type.IsInterface)
-                    continue;
-                if (!type.Name.EndsWith("Button", StringComparison.Ordinal))
-                    continue;
-
-                var m = type.GetMethod("ClickHandler", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-                if (m == null)
-                    continue;
-
-                try
-                {
-                    harmony.Patch(m, prefix: harmonyMethod);
-                    count++;
-                }
-                catch
-                {
-                    // already patched or incompatible
-                }
-            }
+            PatchNamedClickHandlers(harmony, harmonyMethod, assembly, "MonarchKnightButton");
+            PatchNamedClickHandlers(harmony, harmonyMethod, Assembly.GetExecutingAssembly(), "PickpocketButton", "FragGiveBombButton");
 
         }
         catch (Exception ex)
@@ -227,5 +208,27 @@ public static class FragileTownOfUsButtonPatch
             return false;
 
         return true;
+    }
+
+    private static void PatchNamedClickHandlers(Harmony harmony, HarmonyMethod prefix, Assembly assembly, params string[] typeNames)
+    {
+        foreach (var type in assembly.GetTypes())
+        {
+            if (Array.IndexOf(typeNames, type.Name) < 0)
+                continue;
+
+            var m = type.GetMethod("ClickHandler", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            if (m == null)
+                continue;
+
+            try
+            {
+                harmony.Patch(m, prefix: prefix);
+            }
+            catch
+            {
+                // already patched or incompatible
+            }
+        }
     }
 }

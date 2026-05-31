@@ -12,6 +12,11 @@ internal static class RevenantOutlinePatch
     [HarmonyPostfix]
     public static void Postfix()
     {
+        if (RevenantRole.ActiveCount == 0)
+        {
+            return;
+        }
+
         if (PlayerControl.AllPlayerControls == null)
         {
             return;

@@ -636,9 +636,6 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
             inMeeting ? DeathHandlerOverride.SetFalse : DeathHandlerOverride.SetTrue,
             lockInfo: DeathHandlerOverride.SetTrue);
         
-        // UpdateDeathHandlerImmediate is async. CustomMurder must not run until CauseOfDeath
-        // and LockInfo are written, or AfterMurderEventHandler overwrites with default "Killed"
-        // on remote clients (only the victim's own client tended to win the race before).
         while (DeathHandlerModifier.IsAltCoroutineRunning)
         {
             yield return null;

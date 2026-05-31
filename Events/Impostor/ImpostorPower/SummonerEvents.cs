@@ -115,6 +115,7 @@ public static class SummonerEvents
         {
             SummonerState.ResetKills();
             SummonerState.RevenantNames.Clear();
+            RevenantRole.ResetActiveCount();
         }
 
         if (PlayerControl.LocalPlayer?.Data?.Role is not RevenantRole)

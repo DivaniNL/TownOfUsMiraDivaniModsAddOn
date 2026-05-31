@@ -22,7 +22,7 @@ namespace DivaniMods;
 public class DivaniPlugin : BasePlugin, IMiraPlugin
 {
     public const string Id = "com.divani.mods";
-    public const string Version = "1.2.3";
+    public const string Version = "1.2.4";
     
     public static DivaniPlugin Instance { get; private set; } = null!;
     public new ManualLogSource Log => base.Log;
@@ -45,6 +45,6 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
         DivaniModAnnouncementPatch.EnsureLoaded();
         DivaniLocale.Register();
         DivaniWikiTermsPatch.RegisterLocale();
-        Log.LogInfo($"Divani Mods v{Version} loaded successfully!");
+        Log.LogInfo($"Divani Mods v{Version}-starlight-betatesting loaded successfully!");
     }
 }
