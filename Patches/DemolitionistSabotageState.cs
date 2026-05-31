@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
+using MiraAPI.Events;
+using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.GameOptions;
 using MiraAPI.Networking;
 
@@ -121,6 +123,28 @@ public static class DemolitionistSabotageState
         DemolitionistNumpad.Controller.ResetAll();
 
     }
+
+    public static void StopForMeeting()
+    {
+        if (!IsActive)
+        {
+            return;
+        }
+
+        if (DemolitionistNumpad.Controller.InProgress)
+        {
+            DemolitionistNumpad.Controller.CancelActive();
+        }
+
+        LocalPlantInProgress = false;
+        LocalDefuseInProgress = false;
+
+        ClearActiveSabotage();
+        DemolitionistPlantButton.SyncAfterSabotageEnded(startCooldown: true);
+    }
+
+    [RegisterEvent]
+    public static void OnMeetingStart(StartMeetingEvent _) => StopForMeeting();
 
     public static bool IsUtilityDisabled(int consoleKey, DemolitionistUtilityKind kind)
     {
@@ -784,6 +808,12 @@ public static class DemolitionistSabotageState
 
             _flashRoutine = null;
 
+        }
+
+        if (MiscUtils.FlashRenderer != null)
+        {
+            MiscUtils.FlashRenderer.enabled = false;
+            MiscUtils.FlashRenderer.gameObject.SetActive(false);
         }
 
     }
