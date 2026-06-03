@@ -25,7 +25,7 @@ public sealed class RecruiterRole(IntPtr cppPtr)
     public string LocaleKey => "Recruiter";
     public string RoleDescription => "Pick your partner!";
     public string RoleLongDescription =>
-        "During the first meeting only, recruit a non-Impostor to become an Impostor.";
+        "In any meeting, recruit a non-Impostor to become an Impostor once.";
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorSupport;
@@ -82,8 +82,9 @@ public sealed class RecruiterRole(IntPtr cppPtr)
             return;
         }
 
-        var firstMeeting = RecruiterPatch.MeetingsEnded == 0;
-        var usable = firstMeeting &&
+        _localSelectedId = 255;
+
+        var usable = !RecruiterPatch.RecruitingDisabled &&
                        !Player.HasDied() &&
                        !Player.HasModifier<JailedModifier>();
         var hud = MeetingHud.Instance;

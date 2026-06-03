@@ -21,6 +21,9 @@ public static class RecruiterPatch
 {
     internal static int MeetingsEnded { get; private set; }
 
+    // Recruiting is a one-time pick allowed only on the 2nd or 3rd meeting. Once used, it's locked off.
+    internal static bool RecruitingDisabled { get; private set; }
+
     private static readonly HashSet<byte> PendingRecruitFollowUpIds = new();
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGame))]
@@ -28,19 +31,22 @@ public static class RecruiterPatch
     public static void ResetOnGameStart()
     {
         MeetingsEnded = 0;
+        RecruitingDisabled = false;
         PendingRecruitFollowUpIds.Clear();
     }
 
     [RegisterEvent]
     public static void OnEndMeeting(EndMeetingEvent _)
     {
-        var wasFirstMeeting = MeetingsEnded == 0;
         MeetingsEnded++;
 
-        if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost || !wasFirstMeeting)
+        if (RecruitingDisabled)
         {
             return;
         }
+
+        var isHost = AmongUsClient.Instance && AmongUsClient.Instance.AmHost;
+        var recruitedSomeone = false;
 
         foreach (var pc in PlayerControl.AllPlayerControls)
         {
@@ -49,12 +55,14 @@ public static class RecruiterPatch
                 continue;
             }
 
+            var id = recruiter.PendingRecruitTargetId;
+            recruiter.PendingRecruitTargetId = byte.MaxValue;
+
             if (recruiter.Player.Data == null || recruiter.Player.Data.IsDead)
             {
                 continue;
             }
 
-            var id = recruiter.PendingRecruitTargetId;
             if (id == byte.MaxValue)
             {
                 continue;
@@ -66,12 +74,23 @@ public static class RecruiterPatch
                 continue;
             }
 
-            target!.RpcSetRole(RoleTypes.Impostor, true);
-            PendingRecruitFollowUpIds.Add(target.PlayerId);
-            if (PlayerControl.LocalPlayer != null)
+            recruitedSomeone = true;
+
+            if (isHost)
             {
-                RpcRecruitImpostorFollowUp(PlayerControl.LocalPlayer, target.PlayerId);
+                target!.RpcSetRole(RoleTypes.Impostor, true);
+                PendingRecruitFollowUpIds.Add(target.PlayerId);
+                if (PlayerControl.LocalPlayer != null)
+                {
+                    RpcRecruitImpostorFollowUp(PlayerControl.LocalPlayer, target.PlayerId);
+                }
             }
+        }
+
+        // Lock recruiting once a valid pick is made (runs on every client so the menu hides for the recruiter).
+        if (recruitedSomeone)
+        {
+            RecruitingDisabled = true;
         }
     }
 
