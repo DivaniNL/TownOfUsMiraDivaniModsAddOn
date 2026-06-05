@@ -186,6 +186,10 @@
     <EmbeddedResource Include="Resources\SummonerIntro.wav" />
     <EmbeddedResource Include="Resources\SentinelIntro.wav" />
     <EmbeddedResource Include="Resources\RecruiterIntro.wav" />
+    <EmbeddedResource Include="Resources\Icons\Mosquito.png" />
+    <EmbeddedResource Include="Resources\MosquitoSting.png" />
+    <EmbeddedResource Include="Resources\MosquitoIntro.wav" Condition="Exists('Resources\MosquitoIntro.wav')" />
+    <EmbeddedResource Include="Resources\MosquitoSwat.wav" Condition="Exists('Resources\MosquitoSwat.wav')" />
   </ItemGroup>
 
   <Target Name="CopyToPlugins" AfterTargets="Build">

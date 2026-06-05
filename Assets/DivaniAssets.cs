@@ -25,6 +25,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> PlagueDoctorInfectButton { get; } = new LoadableResourceAsset($"{ShortPath}.PlagueDoctorInfect.png");
     public static LoadableAsset<Sprite> ShuffleAbilityButton { get; } = new LoadableResourceAsset($"{IconPath}.Shuffle.png", 250f);
     public static LoadableAsset<Sprite> SproutCollectButton { get; } = new LoadableResourceAsset($"{ShortPath}.Collect.png", 100);
+    public static LoadableAsset<Sprite> MosquitoStingButton { get; } = new LoadableResourceAsset($"{ShortPath}.MosquitoSting.png");
 
     // Role icons (200 ppu)
     public static LoadableAsset<Sprite> ThiefIcon { get; } = new LoadableResourceAsset($"{IconPath}.Thief.png", 200);
@@ -41,6 +42,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> DomesmithIcon { get; } = new LoadableResourceAsset($"{IconPath}.Domesmith.png", 200);
     public static LoadableAsset<Sprite> SummonerIcon { get; } = new LoadableResourceAsset($"{IconPath}.Summoner.png", 200);
     public static LoadableAsset<Sprite> RevenantIcon { get; } = new LoadableResourceAsset($"{IconPath}.Revenant.png", 200);
+    public static LoadableAsset<Sprite> MosquitoIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mosquito.png", 200);
 
     // Modifier icons (200 ppu)
     public static LoadableAsset<Sprite> MementoIcon { get; } = new LoadableResourceAsset($"{IconPath}.Memento.png", 200);
@@ -74,6 +76,8 @@ public static class DivaniAssets
     public static LoadableAsset<AudioClip> SummonerIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.SummonerIntro.wav");
     public static LoadableAsset<AudioClip> SentinelIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.SentinelIntro.wav");
     public static LoadableAsset<AudioClip> RecruiterIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.RecruiterIntro.wav");
+    public static LoadableAsset<AudioClip> MosquitoIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.MosquitoIntro.wav");
+    public static LoadableAsset<AudioClip> MosquitoSwatSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.MosquitoSwat.wav");
     // Dutch Meme Soundpack door SFX - used by DutchMemeSoundpackPatch to replace
     // the vanilla door open/close audio clips when the matching lobby toggle is on.
     public static LoadableAsset<AudioClip> DutchDoorOpen { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DoorOpen.wav");
