@@ -22,7 +22,9 @@ public static class PlagueDoctorMeetingPatch
                          (PlagueDoctorRole.PlagueDoctorPlayer != null &&
                           localPlayer.PlayerId == PlagueDoctorRole.PlagueDoctorPlayer.PlayerId);
 
-        if (!isLocalPD) return;
+        bool localIsDead = localPlayer.Data?.IsDead ?? false;
+
+        if (!isLocalPD && !localIsDead) return;
 
         if (player == null || player.Data == null) return;
 
