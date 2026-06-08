@@ -62,7 +62,7 @@ public static class DutchMemeSoundpackPatch
 
     public static void PollDoorsPostfix()
     {
-        if (!OptionGroupSingleton<SoundpackOptions>.Instance.UseDutchMemeSoundpack) return;
+        if (!OptionGroupSingleton<DivaniOptions>.Instance.UseDutchMemeSoundpack) return;
 
         var ship = ShipStatus.Instance;
         if (ship == null) return;
@@ -154,7 +154,7 @@ public static class DutchMemeSoundpackPatch
         var doors = __instance.AllDoors;
         if (doors == null) return;
 
-        var useSoundpack = OptionGroupSingleton<SoundpackOptions>.Instance.UseDutchMemeSoundpack;
+        var useSoundpack = OptionGroupSingleton<DivaniOptions>.Instance.UseDutchMemeSoundpack;
         var openClip = useSoundpack ? GetBoostedOpen() : null;
         var closeClip = useSoundpack ? GetBoostedClose() : null;
 

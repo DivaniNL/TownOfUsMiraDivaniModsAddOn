@@ -44,7 +44,7 @@ public sealed class RevenantRole(IntPtr cppPtr)
     public string RoleName => "Revenant";
     public string RoleDescription => "Kill for the Impostors from beyond the grave.";
     public string RoleLongDescription =>
-        "You were summoned as the Impostor afterlife Revenant. You can kill once per round and vent. Anyone can click you to put you to rest.\n" +
+        "You were summoned as the Impostor afterlife Revenant. Kill and vent! Anyone can click you to put you to rest.\n" +
         "You will be put to rest in the final four";
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
