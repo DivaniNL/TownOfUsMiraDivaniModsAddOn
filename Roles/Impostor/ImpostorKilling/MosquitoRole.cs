@@ -9,7 +9,7 @@ using UnityEngine;
 using TownOfUs.Extensions;
 
 
-namespace DivaniMods.Roles.Impostor.ImpostorPower;
+namespace DivaniMods.Roles.Impostor.ImpostorKilling;
 
 public sealed class MosquitoRole(IntPtr cppPtr)
     : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
@@ -21,7 +21,7 @@ public sealed class MosquitoRole(IntPtr cppPtr)
         "Launch a mosquito that flies to a target and stings it to death.";
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
-    public RoleAlignment RoleAlignment => RoleAlignment.ImpostorPower;
+    public RoleAlignment RoleAlignment => RoleAlignment.ImpostorKilling;
 
     public DoomableType DoomHintType => DoomableType.Insight;
 

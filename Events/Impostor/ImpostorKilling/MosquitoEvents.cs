@@ -3,12 +3,12 @@ using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.Hud;
-using DivaniMods.Buttons.Impostor.ImpostorPower;
+using DivaniMods.Buttons.Impostor.ImpostorKilling;
 using DivaniMods.Modules.Mosquito;
-using DivaniMods.Roles.Impostor.ImpostorPower;
+using DivaniMods.Roles.Impostor.ImpostorKilling;
 using TownOfUs.Utilities;
 
-namespace DivaniMods.Events.Impostor.ImpostorPower;
+namespace DivaniMods.Events.Impostor.ImpostorKilling;
 
 [HarmonyPatch]
 public static class MosquitoEvents

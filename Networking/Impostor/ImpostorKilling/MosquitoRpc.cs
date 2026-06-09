@@ -1,12 +1,12 @@
 using MiraAPI.Hud;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
-using DivaniMods.Buttons.Impostor.ImpostorPower;
+using DivaniMods.Buttons.Impostor.ImpostorKilling;
 using DivaniMods.Modules.Mosquito;
-using DivaniMods.Roles.Impostor.ImpostorPower;
+using DivaniMods.Roles.Impostor.ImpostorKilling;
 using UnityEngine;
 
-namespace DivaniMods.Networking.Impostor.ImpostorPower;
+namespace DivaniMods.Networking.Impostor.ImpostorKilling;
 
 public static class MosquitoRpc
 {

@@ -3,15 +3,15 @@ using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
-using DivaniMods.Networking.Impostor.ImpostorPower;
+using DivaniMods.Networking.Impostor.ImpostorKilling;
 using DivaniMods.Options;
-using DivaniMods.Roles.Impostor.ImpostorPower;
+using DivaniMods.Roles.Impostor.ImpostorKilling;
 using TownOfUs.Buttons;
 using TownOfUs.Modifiers.Neutral;
 using TownOfUs.Utilities;
 using UnityEngine;
 
-namespace DivaniMods.Buttons.Impostor.ImpostorPower;
+namespace DivaniMods.Buttons.Impostor.ImpostorKilling;
 
 public sealed class MosquitoStingButton : TownOfUsButton
 {

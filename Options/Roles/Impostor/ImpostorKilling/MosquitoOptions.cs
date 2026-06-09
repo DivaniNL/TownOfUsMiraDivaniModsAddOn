@@ -1,7 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.OptionTypes;
 using MiraAPI.Utilities;
-using DivaniMods.Roles.Impostor.ImpostorPower;
+using DivaniMods.Roles.Impostor.ImpostorKilling;
 
 namespace DivaniMods.Options;
 
