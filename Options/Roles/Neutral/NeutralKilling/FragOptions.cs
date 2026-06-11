@@ -14,4 +14,6 @@ public class FragOptions : AbstractOptionGroup<FragRole>
 
     public ModdedNumberOption GiveBombCooldown { get; } = new(
         "Give Frag Cooldown", 25f, 10f, 60f, 5f, MiraNumberSuffixes.Seconds);
+
+    public ModdedToggleOption CanVent { get; } = new("Frag Can Vent", false);
 }

@@ -133,6 +133,7 @@
     <EmbeddedResource Include="Resources\BeaconAsset.png" />
     <EmbeddedResource Include="Resources\FragGive.png" Condition="Exists('Resources\FragGive.png')" />
     <EmbeddedResource Include="Resources\FragPass.png" Condition="Exists('Resources\FragPass.png')" />
+    <EmbeddedResource Include="Resources\FragVentButton.png" Condition="Exists('Resources\FragVentButton.png')" />
     <!-- Role / modifier icons (logical name DivaniMods.Resources.Icons.* — see DivaniAssets.IconPath) -->
     <EmbeddedResource Include="Resources\Icons\Thief.png" />
     <EmbeddedResource Include="Resources\Icons\Blindspot.png" />
