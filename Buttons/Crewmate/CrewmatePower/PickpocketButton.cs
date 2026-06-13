@@ -17,6 +17,8 @@ using DivaniMods.Options;
 using DivaniMods.Patches;
 using DivaniMods.Roles.Crewmate.CrewmatePower;
 using DivaniMods.Utilities;
+using TownOfUs;
+using TownOfUs.Assets;
 using TownOfUs.Buttons;
 using TownOfUs.Events;
 using TownOfUs.Interfaces;
@@ -31,20 +33,21 @@ using UnityEngine;
 
 namespace DivaniMods.Buttons.Crewmate.CrewmatePower;
 
-public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
+public class PickpocketButton : TownOfUsButton
 {
     public override string Name => "Pickpocket";
     public override float Cooldown => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketCooldown.Value;
     public override float EffectDuration => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketDuration.Value;
     public override int MaxUses => (int)OptionGroupSingleton<ThiefOptions>.Instance.MaxStolenModifiers.Value;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.PickpocketButton;
-    public override float Distance => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketRange.Value * 1.5f;
+    public float Distance => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketRange.Value * 1.5f;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override Color TextOutlineColor => new Color(0.5f, 0.3f, 0.1f);
     public override BaseKeybind Keybind => Keybinds.PrimaryAction;
 
     private byte _capturedTargetId;
     private bool _stealFragBomb;
+    private PlayerControl? _target;
 
     private static readonly HashSet<string> ExcludedNamespaces = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -77,23 +80,29 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         return role is ThiefRole;
     }
 
-    public override PlayerControl? GetTarget()
+    private PlayerControl? GetTarget()
     {
         return PlayerControl.LocalPlayer.GetClosestPlayer(true, Distance, true);
     }
 
-    public override void SetOutline(bool active)
+    private void SetOutline(bool active)
     {
-        if (Target == null) return;
-        Target.cosmetics.SetOutline(active, new Il2CppSystem.Nullable<Color>(Color.yellow));
+        if (_target == null) return;
+        _target.cosmetics.SetOutline(active, new Il2CppSystem.Nullable<Color>(Color.yellow));
     }
 
-    public override bool IsTargetValid(PlayerControl? target)
+    private static bool IsTargetValid(PlayerControl? target)
     {
         if (target == null) return false;
         if (target.Data == null || target.Data.IsDead) return false;
         if (target == PlayerControl.LocalPlayer) return false;
         return true;
+    }
+
+    private void ResetTarget()
+    {
+        SetOutline(false);
+        _target = null;
     }
 
     public override bool CanUse()
@@ -102,20 +111,31 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
         if (player == null || player.Data == null || player.Data.IsDead) return false;
         if (player.Data.Role is not ThiefRole thief) return false;
 
+        if (MeetingHud.Instance || ExileController.Instance)
+        {
+            ResetTarget();
+            return false;
+        }
+
         var usesLeft = thief.MaxStolenModifiers - thief.StolenModifierIds.Count;
         SetUses(usesLeft);
-        
+
+        // Manual targeting (non-target button): pick closest, refresh outline each frame.
+        var newTarget = GetTarget();
+        if (newTarget != _target) SetOutline(false);
+        _target = IsTargetValid(newTarget) ? newTarget : null;
+        SetOutline(true);
+
         // Bomb snatch is always allowed even at max stolen modifiers because
         // it doesn't consume a slot — keep the button live when a holder is nearby.
         if (!thief.CanStealMore)
         {
-            var nearby = GetTarget();
-            if (nearby == null || !FragBombState.IsHolder(nearby.PlayerId)) return false;
+            if (_target == null || !FragBombState.IsHolder(_target.PlayerId)) return false;
         }
 
         if (EffectActive) return false;
 
-        return base.CanUse();
+        return base.CanUse() && _target != null;
     }
 
     public override void ClickHandler()
@@ -132,25 +152,25 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
     protected override void OnClick()
     {
         var player = PlayerControl.LocalPlayer;
-        if (player == null || Target == null) return;
+        if (player == null || _target == null) return;
         if (player.Data.Role is not ThiefRole thief) return;
         if (EffectActive) return;
 
-        _stealFragBomb = FragBombState.IsHolder(Target.PlayerId);
+        _stealFragBomb = FragBombState.IsHolder(_target.PlayerId);
         if (!_stealFragBomb && !thief.CanStealMore)
         {
             return;
         }
 
-        _capturedTargetId = Target.PlayerId;
-        var targetName = Target.Data?.PlayerName ?? "them";
+        _capturedTargetId = _target.PlayerId;
+        var targetName = _target.Data?.PlayerName ?? "them";
         var delay = EffectDuration;
 
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
             $"<b><color=#804D1A>Pickpocketing {targetName} in {delay:0.#}s...</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
-            spr: DivaniAssets.PickpocketButton.LoadAsset());
+            spr: DivaniAssets.ThiefIcon.LoadAsset());
 
         if (HasEffect)
         {
@@ -167,6 +187,13 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
     {
         var thief = PlayerControl.LocalPlayer;
         if (thief == null || thief.Data == null || thief.Data.IsDead)
+        {
+            ResetTarget();
+            return;
+        }
+
+        // A meeting interrupting the steal cancels it — no steal resolves mid-meeting.
+        if (MeetingHud.Instance || ExileController.Instance)
         {
             ResetTarget();
             return;
@@ -514,7 +541,8 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                 $"<b><color=#804D1A>Your {displayName} modifier was stolen!</color></b>",
                 Color.white,
-                new Vector3(0f, 1f, -20f));
+                new Vector3(0f, 1f, -20f),
+                spr: DivaniAssets.ThiefIcon.LoadAsset());
         }
         
         if (canUseModifier)
@@ -544,8 +572,9 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
                 {
                     MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                         $"<b><color=#FF66CC>You are now in love with {thief.Data.PlayerName}!</color></b>",
-                        Color.white,
-                        new Vector3(0f, 1f, -20f));
+                        TownOfUsColors.Lover,
+                        new Vector3(0f, 1f, -20f),
+                        spr: TouModifierIcons.Lover.LoadAsset());
                 }
             }
             else
@@ -572,13 +601,15 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
             
             if (thief == PlayerControl.LocalPlayer)
             {
-                var stolenMsg = isStealingLover && loverPartner != null
-                    ? $"<b><color=#FF66CC>Stole Lover! You are now in love with {loverPartner.Data.PlayerName}!</color></b>"
+                var stoleLover = isStealingLover && loverPartner != null;
+                var stolenMsg = stoleLover
+                    ? $"<b><color=#FF66CC>Stole Lover! You are now in love with {loverPartner!.Data.PlayerName}!</color></b>"
                     : $"<b><color=#804D1A>Stole/Gained {displayName}!</color></b>";
                 MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                     stolenMsg,
-                    Color.white,
-                    new Vector3(0f, 1f, -20f));
+                    stoleLover ? TownOfUsColors.Lover : Color.white,
+                    new Vector3(0f, 1f, -20f),
+                    spr: (stoleLover ? TouModifierIcons.Lover : DivaniAssets.ThiefIcon).LoadAsset());
                 
                 ButtonRefresher.RefreshAllButtons();
             }
@@ -665,7 +696,8 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
                 MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                     $"<b><color=#804D1A>No new modifiers available!</color></b>",
                     Color.white,
-                    new Vector3(0f, 1f, -20f));
+                    new Vector3(0f, 1f, -20f),
+                    spr: DivaniAssets.ThiefIcon.LoadAsset());
             }
             return;
         }
@@ -706,7 +738,8 @@ public class PickpocketButton : TownOfUsTargetButton<PlayerControl>
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                 $"<b><color=#804D1A>{prefix} {displayName}!</color></b>",
                 Color.white,
-                new Vector3(0f, 1f, -20f));
+                new Vector3(0f, 1f, -20f),
+                spr: DivaniAssets.ThiefIcon.LoadAsset());
             
             ButtonRefresher.RefreshAllButtons();
         }
