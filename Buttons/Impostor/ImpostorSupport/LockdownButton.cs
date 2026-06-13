@@ -167,7 +167,8 @@ public class LockdownButton : TownOfUsButton
         
         while (LockdownTimeRemaining > 0 && IsLockdownActive)
         {
-            if (!MeetingHud.Instance && !ExileController.Instance)
+            if (!MeetingHud.Instance && !ExileController.Instance &&
+                !TownOfUs.Modules.TimeLordRewindSystem.IsRewinding)
             {
                 LockdownTimeRemaining -= Time.deltaTime;
             }

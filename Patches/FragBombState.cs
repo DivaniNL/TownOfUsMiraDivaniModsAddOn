@@ -191,7 +191,7 @@ public static class FragBombState
     {
         var inMeeting = MeetingHud.Instance || ExileController.Instance;
 
-        if (!inMeeting)
+        if (!inMeeting && !TownOfUs.Modules.TimeLordRewindSystem.IsRewinding)
         {
             if (!IsArmed)
             {

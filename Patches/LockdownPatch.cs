@@ -3,6 +3,7 @@ using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.GameOptions;
+using DivaniMods.Assets;
 using DivaniMods.Buttons.Impostor.ImpostorSupport;
 using DivaniMods.Options;
 using DivaniMods.Roles.Impostor.ImpostorSupport;
@@ -16,6 +17,23 @@ public static class LockdownPatch
 {
     public const string TimerId = "divani.lockdown";
     private const int TimerPriority = 10;
+
+    private static Sprite? _cachedDeadlockIcon;
+
+    private static Sprite? GetDeadlockRoleIcon()
+    {
+        if (_cachedDeadlockIcon != null) return _cachedDeadlockIcon;
+        try
+        {
+            _cachedDeadlockIcon = DivaniAssets.DeadlockIcon.LoadAsset();
+        }
+        catch
+        {
+            // non-fatal
+        }
+
+        return _cachedDeadlockIcon;
+    }
 
     [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
     [HarmonyPrefix]
@@ -99,7 +117,7 @@ public static class LockdownPatch
             DivaniTimers.Set(
                 TimerId,
                 "<b><color=#CC3333>LOCKDOWN</color></b>",
-                null,
+                GetDeadlockRoleIcon(),
                 Mathf.Max(0f, LockdownButton.LockdownTimeRemaining),
                 useLocalTimeDelta: false,
                 priority: TimerPriority);

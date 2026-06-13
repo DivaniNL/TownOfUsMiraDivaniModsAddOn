@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using HarmonyLib;
 using MiraAPI.Utilities;
 using TMPro;
+using TownOfUs.Modules;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -76,7 +77,11 @@ public static class DivaniTimers
                     e.UseLocalTimeDelta = useLocalTimeDelta;
                     var oldPriority = e.Priority;
                     e.Priority = priority;
-                    if (icon != null && IsAlive(e.Go)) ApplyIcon(e.Go!, icon);
+                    if (IsAlive(e.Go))
+                    {
+                        if (icon != null) ApplyIcon(e.Go!, icon);
+                        else ClearIcon(e.Go!);
+                    }
                     ApplyText(e);
                     if (oldPriority != priority)
                     {
@@ -105,6 +110,7 @@ public static class DivaniTimers
             };
 
             if (icon != null) ApplyIcon(go, icon);
+            else ClearIcon(go);
             ApplyText(entry);
 
             Entries.Add(entry);
@@ -186,11 +192,13 @@ public static class DivaniTimers
 
             _stackRoot!.SetActive(true);
 
+            var rewinding = TimeLordRewindSystem.IsRewinding;
+
             var anyRemoved = false;
             for (var i = 0; i < Entries.Count;)
             {
                 var e = Entries[i];
-                if (e.IsCountingDown && e.SecondsRemaining.HasValue && e.UseLocalTimeDelta)
+                if (e.IsCountingDown && e.SecondsRemaining.HasValue && e.UseLocalTimeDelta && !rewinding)
                 {
                     e.SecondsRemaining -= Time.deltaTime;
                     if (e.SecondsRemaining <= 0f)
@@ -363,6 +371,36 @@ public static class DivaniTimers
             if (r == null || r.gameObject == go) continue;
             if (r.gameObject.name.IndexOf("Icon", StringComparison.OrdinalIgnoreCase) < 0) continue;
             r.sprite = icon;
+            return;
+        }
+    }
+
+    private static void ClearIcon(GameObject go)
+    {
+        var t = go.transform.Find("Icon");
+        if (t == null) t = go.transform.Find("icon");
+        if (t != null)
+        {
+            var sr = t.GetComponent<SpriteRenderer>();
+            if (sr != null) sr.sprite = null;
+            var img = t.GetComponent<Image>();
+            if (img != null) img.sprite = null;
+            return;
+        }
+
+        foreach (var img in go.GetComponentsInChildren<Image>(true))
+        {
+            if (img == null) continue;
+            if (img.gameObject.name.IndexOf("Icon", StringComparison.OrdinalIgnoreCase) < 0) continue;
+            img.sprite = null;
+            return;
+        }
+
+        foreach (var r in go.GetComponentsInChildren<SpriteRenderer>(true))
+        {
+            if (r == null || r.gameObject == go) continue;
+            if (r.gameObject.name.IndexOf("Icon", StringComparison.OrdinalIgnoreCase) < 0) continue;
+            r.sprite = null;
             return;
         }
     }
