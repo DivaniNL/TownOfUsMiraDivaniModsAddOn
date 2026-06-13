@@ -1,5 +1,7 @@
 using HarmonyLib;
 using MiraAPI.GameOptions;
+using MiraAPI.LocalSettings;
+using DivaniMods.Modules;
 using DivaniMods.Options;
 using TownOfUs.Modules.RainbowMod;
 using TownOfUs.Patches;
@@ -20,6 +22,12 @@ public static class RainbowCamoCommsPatch
         }
 
         if (!OptionGroupSingleton<DivaniOptions>.Instance.RainbowCamoComms)
+        {
+            return;
+        }
+
+        // Local opt-out: when set, camo bodies keep their default grey instead of rainbow.
+        if (LocalSettingsTabSingleton<DivaniLocalSettings>.Instance.DisableRainbowComms.Value)
         {
             return;
         }

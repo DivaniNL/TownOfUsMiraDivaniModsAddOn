@@ -120,4 +120,8 @@ public static class DivaniAssets
     // Announcement badge
     public static LoadableAsset<Sprite> ModNewsLogo { get; } =
         new LoadableResourceAsset($"{ShortPath}.Banners.DivaniModNewsLogo.png", 220f);
+
+    // Local settings tab icon (lower ppu = larger sprite, ~100px)
+    public static LoadableAsset<Sprite> LocalSettingsTabIcon { get; } =
+        new LoadableResourceAsset($"{ShortPath}.Banners.DivaniModNewsLogo.png", 66f);
 }
