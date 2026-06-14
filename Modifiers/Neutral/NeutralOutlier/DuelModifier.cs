@@ -200,7 +200,7 @@ public sealed class DuelModifier(byte opponentId, bool isDuelist, Vector2 return
                 var button = CustomButtonSingleton<DuelButton>.Instance;
                 if (button != null)
                 {
-                    button.SetTimer(button.Cooldown);
+                    button.SetTimer(Mathf.Max(button.Cooldown, button.Timer));
                 }
             }
         }

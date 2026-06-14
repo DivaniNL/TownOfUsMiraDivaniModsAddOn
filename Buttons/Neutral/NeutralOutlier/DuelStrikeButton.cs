@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace DivaniMods.Buttons.Neutral.NeutralOutlier;
 
-public sealed class DuelStrikeButton : TownOfUsTargetButton<PlayerControl>, IKillButton
+public sealed class DuelStrikeButton : TownOfUsTargetButton<PlayerControl>, IKillButton, IDiseaseableButton
 {
     public override string Name => "Strike";
     public override BaseKeybind Keybind => Keybinds.PrimaryAction;
@@ -28,7 +28,10 @@ public sealed class DuelStrikeButton : TownOfUsTargetButton<PlayerControl>, IKil
         var lp = PlayerControl.LocalPlayer;
         return lp != null && !lp.HasDied() && lp.HasModifier<DuelModifier>();
     }
-
+    public void SetDiseasedTimer(float multiplier)
+    {
+        SetTimer(Cooldown * multiplier);
+    }
     public override PlayerControl? GetTarget()
     {
         var lp = PlayerControl.LocalPlayer;

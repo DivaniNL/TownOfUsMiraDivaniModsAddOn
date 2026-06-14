@@ -11,10 +11,11 @@ using UnityEngine;
 
 namespace DivaniMods.Buttons.Neutral.NeutralKilling;
 
-public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>
+public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>, IDiseaseableButton
 {
     private static bool _cooldownQueued;
     private static bool _bombCountdownOnButton;
+    private static bool _giveCooldownRunning;
 
     public static FragGiveBombButton? Instance { get; private set; }
 
@@ -38,7 +39,10 @@ public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>
         ApplyQueuedCooldown();
         return role is FragRole;
     }
-
+    public void SetDiseasedTimer(float multiplier)
+    {
+        SetTimer(Cooldown * multiplier);
+    }
     public override PlayerControl? GetTarget()
     {
         var localPlayer = PlayerControl.LocalPlayer;
@@ -126,6 +130,7 @@ public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>
         {
             instance.OverrideName(FragBombState.IsArmed ? "ARMED" : "ARMING");
             _bombCountdownOnButton = true;
+            _giveCooldownRunning = false;
             instance.TimerPaused = true;
             instance.EffectActive = true;
             instance.SetTimer(Mathf.Max(0f, FragBombState.GetSecondsUntilExplosionForDisplay()));
@@ -139,10 +144,15 @@ public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>
             if (_bombCountdownOnButton)
             {
                 _bombCountdownOnButton = false;
-                if (!FragBombState.IsActive && !_cooldownQueued)
+                if (!FragBombState.IsActive && !_cooldownQueued && !_giveCooldownRunning)
                 {
                     instance.SetTimer(0f);
                 }
+            }
+
+            if (_giveCooldownRunning && instance.Timer <= 0f)
+            {
+                _giveCooldownRunning = false;
             }
 
             instance.Button.buttonLabelText.color = Color.white;
@@ -157,5 +167,6 @@ public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>
         instance.Timer = instance.Cooldown;
         instance.Button?.SetDisabled();
         _cooldownQueued = false;
+        _giveCooldownRunning = true;
     }
 }

@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace DivaniMods.Buttons.Neutral.NeutralOutlier;
 
-public sealed class DuelButton : TownOfUsRoleButton<DuelistRole>
+public sealed class DuelButton : TownOfUsRoleButton<DuelistRole>, IDiseaseableButton
 {
     public override string Name => "Duel";
     public override float Cooldown => OptionGroupSingleton<DuelistOptions>.Instance.DuelCooldown.Value;
@@ -47,7 +47,10 @@ public sealed class DuelButton : TownOfUsRoleButton<DuelistRole>
         }
         return HasAnyTarget(player) && Timer <= 0;
     }
-
+    public void SetDiseasedTimer(float multiplier)
+    {
+        SetTimer(Cooldown * multiplier);
+    }
     private static bool HasAnyTarget(PlayerControl me)
     {
         foreach (var p in PlayerControl.AllPlayerControls)

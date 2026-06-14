@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace DivaniMods.Buttons.Impostor.ImpostorKilling;
 
-public sealed class MosquitoStingButton : TownOfUsButton
+public sealed class MosquitoStingButton : TownOfUsButton, IDiseaseableButton
 {
     public override string Name => "Sting";
     public override float Cooldown => OptionGroupSingleton<MosquitoOptions>.Instance.StingCooldown.Value;
@@ -50,6 +50,11 @@ public sealed class MosquitoStingButton : TownOfUsButton
     {
         Instance = this;
         return role is MosquitoRole;
+    }
+
+    public void SetDiseasedTimer(float multiplier)
+    {
+        SetTimer(Cooldown * multiplier);
     }
 
     private static MosquitoTargetMode Mode =>
