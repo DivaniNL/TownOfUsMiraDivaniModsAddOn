@@ -8,7 +8,7 @@
     
     <AssemblyName>DivaniMods</AssemblyName>
     <RootNamespace>DivaniMods</RootNamespace>
-    <Version>1.2.7</Version>
+    <Version>1.2.8</Version>
     <!--
       TownOfUs + TouMiraRolesExtension live in-repo for reference only. Do not compile them here:
       this project already references TownOfUsMira.dll from BepInEx. Compiling sources duplicates
@@ -214,9 +214,19 @@
     <EmbeddedResource Include="Resources\CunctatorIntro.wav" />
     <EmbeddedResource Include="Resources\InnocentIntro.wav" />
     <EmbeddedResource Include="Resources\Icons\Duellist.png" />
+    <EmbeddedResource Include="Resources\Icons\Clockstopper.png" />
     <EmbeddedResource Include="Resources\DuelistDuel.png" />
     <EmbeddedResource Include="Resources\DuelStrikeButton.png" />
     <EmbeddedResource Include="Resources\DuelistIntro.wav" />
+    <EmbeddedResource Include="Resources\ClockstopperIntro.wav" />
+    <EmbeddedResource Include="Resources\RetributionistIntro.wav" />
+    <EmbeddedResource Include="Resources\Icons\Retributionist.png" />
+    <EmbeddedResource Include="Resources\VengefulSoulRevenge.png" />
+    <EmbeddedResource Include="Resources\Icons\UAV.png" />
+    <EmbeddedResource Include="Resources\UAVAirMap.png" />
+    <EmbeddedResource Include="Resources\UAVFriendly.wav" />
+    <EmbeddedResource Include="Resources\UAVEnemy.wav" />
+    <EmbeddedResource Include="Resources\UAVEnd.wav" />
 
   </ItemGroup>
 

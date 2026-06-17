@@ -112,7 +112,7 @@ public sealed class DuelButton : TownOfUsRoleButton<DuelistRole>, IDiseaseableBu
                 }
 
                 DuelistRpc.RpcStartDuel(player, plr.PlayerId, duelistDest, targetDest,
-                    player.GetTruePosition(), plr.GetTruePosition());
+                    player.transform.position, plr.transform.position);
             });
     }
 }

@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using MiraAPI.Utilities;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
+using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralOutlier;
 using TownOfUs.Utilities;
 using UnityEngine;
@@ -84,6 +87,24 @@ public static class DuelManager
             return false;
         }
 
+        var spawnType = (DuelSpawnType)OptionGroupSingleton<DuelistOptions>.Instance.SpawnType.Value;
+
+        if (spawnType == DuelSpawnType.Far &&
+            DuelRoomPositions.TryGetFarRooms(out var farA, out var farB) &&
+            TryGetRoomDest(farA, out var farDestA) && TryGetRoomDest(farB, out var farDestB))
+        {
+            duelistDest = farDestA;
+            targetDest = farDestB;
+            return true;
+        }
+
+        if (spawnType == DuelSpawnType.Random && TryGetRandomDestinations(out var randA, out var randB))
+        {
+            duelistDest = randA;
+            targetDest = randB;
+            return true;
+        }
+
         var from = duelist.GetTruePosition();
         var currentRoom = GetRoomAt(from);
 
@@ -115,6 +136,59 @@ public static class DuelManager
         return true;
     }
 
+    private static bool TryGetRoomDest(SystemTypes room, out Vector2 dest)
+    {
+        dest = Vector2.zero;
+
+        if (DuelRoomPositions.TryGet(room, out var pos))
+        {
+            dest = new Vector2(pos.x, pos.y + 0.3636f);
+            return true;
+        }
+
+        foreach (var r in ShipStatus.Instance.FastRooms.Values)
+        {
+            if (r != null && r.roomArea != null && r.RoomId == room)
+            {
+                dest = r.roomArea.bounds.center;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool TryGetRandomDestinations(out Vector2 destA, out Vector2 destB)
+    {
+        destA = Vector2.zero;
+        destB = Vector2.zero;
+
+        var rooms = DuelRoomPositions.GetAllRooms();
+        rooms.Shuffle();
+
+        var found = new List<Vector2>();
+        foreach (var room in rooms)
+        {
+            if (TryGetRoomDest(room, out var dest))
+            {
+                found.Add(dest);
+            }
+            if (found.Count == 2)
+            {
+                break;
+            }
+        }
+
+        if (found.Count < 2)
+        {
+            return false;
+        }
+
+        destA = found[0];
+        destB = found[1];
+        return true;
+    }
+
     private static PlainShipRoom? GetRoomAt(Vector2 pos)
     {
         foreach (var room in ShipStatus.Instance.FastRooms.Values)
@@ -130,7 +204,7 @@ public static class DuelManager
     private static Vector2 GetRoomDest(PlainShipRoom room)
     {
         return DuelRoomPositions.TryGet(room.RoomId, out var pos)
-            ? pos
+            ? new Vector2(pos.x, pos.y + 0.3636f)
             : room.roomArea.bounds.center;
     }
 
@@ -240,12 +314,14 @@ public static class DuelManager
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                 $"<b><color=#{hex}>You won the duel!</color></b>", Color.white,
                 new Vector3(0f, 1f, -20f), spr: icon);
+            Coroutines.Start(MiscUtils.CoFlash(Color.green, alpha: 0.4f));
         }
         else if (local.PlayerId == loser.PlayerId)
         {
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                 $"<b><color=#{hex}>You lost the duel!</color></b>", Color.white,
                 new Vector3(0f, 1f, -20f), spr: icon);
+            Coroutines.Start(MiscUtils.CoFlash(Color.red, alpha: 0.4f));
         }
     }
 

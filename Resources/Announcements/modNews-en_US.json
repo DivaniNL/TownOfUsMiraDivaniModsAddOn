@@ -456,6 +456,39 @@
         "\n\n<b>Thief</b>",
         "\n- Removed Giant,Mini,Flash from the stealing+random pool."
       ]
+    },
+    {
+      "Date": "2026-06-17T12:00:00Z",
+      "Number": "10014",
+      "ShortTitle": "Divani Mods v1.2.8",
+      "Title": "New Roles and Modifier + Duelist option + adjustments",
+      "SubTitle": "Retributionist, Clockstopper and UAV join Divani Mods!",
+      "Text": [
+        "\r<size=110%><b>Divani Mods v1.2.8</b></size>",
+        "\n\nNew Roles and Modifier + Duelist option + adjustments",
+        "\n\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.8>Download v1.2.8</link>",
+        "\n\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki>Wiki</link>",
+        "\n\n\r<size=108%><b>Added</b></size>",
+        "\n\n<b>Added Role: Retributionist</b> (Crewmate Killing)",
+        "\n\nWhen you get killed, you spawn on a random vent as the Vengeful Soul and you get a limited time to find and kill your killer.",
+        "\nIf you succeed, you get to live again. If you fail, you become a normal ghost.",
+        "\nYour killer cannot vent or report and Concealing impostors and the Glitch cannot use their Buttons",
+        "\n\n<b>Added Role: Clockstopper</b> (Crewmate Support)",
+        "\n\nFinish a set amount of tasks to reset kill- and ability-button cooldowns of Impostors and a configured set of Neutral roles.",
+        "\n\n<b>Added Modifier: UAV</b> (Universal Utility)",
+        "\n\nCall in a UAV: while active, open the map to see everyone walking around.",
+        "\nIf configured, teammates can see this effect too! Enemy teams are alerted about an active enemy UAV.",
+        "\n\n\r<size=108%><b>Bugfixes</b></size>",
+        "\n\n<b>Duelist</b>",
+        "\n- Fixed a bug where a teleport-back causes a player to get stuck in walls",
+        "\n- Fixed a bug where trapper (Revealer-TOUE) recorded players in Duel.",
+        "\n- Fixed a bug where spectators and dead people couldn't see Duelists duelling",
+        "\n\n\r<size=108%><b>Role/Modifier Changes</b></size>",
+        "\n\n<b>Duelist</b>",
+        "\n- Added option to configure Duel start spawns: Close (unchanged default), Far (two set points on each map far away from each other) or Random (Gamble, Gamble)",
+        "\n- Disable buttons of players returning to the ship",
+        "\n- When a duel ends, players get a red/green flash if they lose/win"
+      ]
     }
   ]
 }

@@ -18,7 +18,9 @@ public sealed class DuelReturnInvisModifier : ConcealedModifier, IVisualAppearan
 
     public VisualAppearance GetVisualAppearance()
     {
-        var playerColor = Player.AmOwner ? new Color(0f, 0f, 0f, 0.1f) : Color.clear;
+        var observer = PlayerControl.LocalPlayer;
+        var canSee = Player.AmOwner || (observer != null && observer.HasDied());
+        var playerColor = canSee ? new Color(0f, 0f, 0f, 0.1f) : Color.clear;
 
         var app = new VisualAppearance(Player.GetDefaultAppearance(), TownOfUsAppearances.PlayerNameOnly)
         {
@@ -39,6 +41,10 @@ public sealed class DuelReturnInvisModifier : ConcealedModifier, IVisualAppearan
     {
         Player.RawSetAppearance(this);
         Player.cosmetics.ToggleNameVisible(false);
+        if (!Player.HasModifier<DuelReturnDisabledModifier>())
+        {
+            Player.AddModifier<DuelReturnDisabledModifier>();
+        }
     }
 
     public override void FixedUpdate()
@@ -67,5 +73,18 @@ public sealed class DuelReturnInvisModifier : ConcealedModifier, IVisualAppearan
     {
         Player.ResetAppearance();
         Player.cosmetics.ToggleNameVisible(true);
+        if (Player.HasModifier<DuelReturnDisabledModifier>())
+        {
+            Player.RemoveModifier<DuelReturnDisabledModifier>();
+        }
     }
+}
+
+public sealed class DuelReturnDisabledModifier : DisabledModifier
+{
+    public override string ModifierName => "Duel Returning";
+    public override float Duration => 5f;
+    public override bool AutoStart => true;
+    public override bool RemoveOnComplete => false;
+    public override bool CanUseAbilities => false;
 }
