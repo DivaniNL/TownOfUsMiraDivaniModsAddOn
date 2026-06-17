@@ -36,7 +36,7 @@ public class UAVOptions : AbstractOptionGroup<UAVModifier>
         new("Notify Players of UAV", true);
 
     public ModdedToggleOption FriendliesShareVisionOption { get; } =
-        new("Friendlies Share UAV Map", false);
+        new("Friendlies Share UAV Map", true);
 
     public ModdedEnumOption RevealMode { get; } =
         new("Reveal Mode", (int)UAVRevealMode.Constant, typeof(UAVRevealMode));
