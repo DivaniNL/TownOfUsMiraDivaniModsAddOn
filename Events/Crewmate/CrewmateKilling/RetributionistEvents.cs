@@ -49,6 +49,11 @@ public static class RetributionistEvents
                 return;
             }
 
+            if (!opts.RevengeOnCrewmateKill && killer.IsCrewmate())
+            {
+                return;
+            }
+
             var pos = target.transform.position;
             RetributionistRpc.RpcStartRevenge(target, killer, pos.x, pos.y);
         }

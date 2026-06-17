@@ -57,6 +57,9 @@ public class RetributionistOptions : AbstractOptionGroup<RetributionistRole>, IW
     [ModdedToggleOption("Revenge Breaks Through Shields")]
     public bool RevengeBreaksShields { get; set; } = false;
 
+    [ModdedToggleOption("Revenge Triggers On Crewmate Kill")]
+    public bool RevengeOnCrewmateKill { get; set; } = false;
+
     public IReadOnlySet<StringNames> WikiHiddenOptionKeys =>
         ShipStatus.Instance != null
             ? new HashSet<StringNames>
