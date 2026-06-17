@@ -11,6 +11,13 @@ public enum DuelistWinType
     LeaveInVictory,
 }
 
+public enum DuelSpawnType
+{
+    Close,
+    Far,
+    Random,
+}
+
 public class DuelistOptions : AbstractOptionGroup<DuelistRole>
 {
     public override string GroupName => "Duelist";
@@ -30,4 +37,8 @@ public class DuelistOptions : AbstractOptionGroup<DuelistRole>
     public ModdedEnumOption WinType { get; } = new(
         "When Victorious", (int)DuelistWinType.WinAlone, typeof(DuelistWinType),
         ["Win Alone", "Leave In Victory"]);
+
+    public ModdedEnumOption SpawnType { get; } = new(
+        "Duelers Spawn", (int)DuelSpawnType.Close, typeof(DuelSpawnType),
+        ["Close", "Far", "Random"]);
 }

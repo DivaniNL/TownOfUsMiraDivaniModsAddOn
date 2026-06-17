@@ -3,6 +3,7 @@ using MiraAPI.Modifiers;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Crewmate;
+using TownOfUs.Modules;
 using TownOfUs.Patches.Roles;
 using TownOfUs.Roles.Crewmate;
 
@@ -115,5 +116,14 @@ public static class DuelStrikeLookoutExemptPatch
     public static bool Prefix(PlayerControl source, PlayerControl target)
     {
         return !(source.HasModifier<DuelModifier>() && target.HasModifier<DuelModifier>());
+    }
+}
+
+[HarmonyPatch(typeof(Trap), nameof(Trap.Update))]
+public static class TrapDuelExemptPatch
+{
+    public static void Postfix(Trap __instance)
+    {
+        __instance._owner?.TrappedPlayers.RemoveAll(r => r?.Player != null && r.Player.HasModifier<DuelModifier>());
     }
 }

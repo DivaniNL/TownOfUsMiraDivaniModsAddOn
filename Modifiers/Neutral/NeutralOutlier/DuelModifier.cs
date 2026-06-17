@@ -47,8 +47,9 @@ public sealed class DuelModifier(byte opponentId, bool isDuelist, Vector2 return
         var observer = PlayerControl.LocalPlayer;
         var isParticipant = observer != null &&
             (observer.PlayerId == Player.PlayerId || observer.PlayerId == OpponentId);
+        var isDeadSpectator = observer != null && !isParticipant && observer.HasDied();
 
-        if (!isParticipant)
+        if (!isParticipant && !isDeadSpectator)
         {
             var invisible = new VisualAppearance(Player.GetDefaultAppearance(), TownOfUsAppearances.PlayerNameOnly)
             {
@@ -152,7 +153,8 @@ public sealed class DuelModifier(byte opponentId, bool isDuelist, Vector2 return
         var observer = PlayerControl.LocalPlayer;
         var isParticipant = observer != null &&
             (observer.PlayerId == Player.PlayerId || observer.PlayerId == OpponentId);
-        if (!isParticipant)
+        var isDeadSpectator = observer != null && !isParticipant && observer.HasDied();
+        if (!isParticipant && !isDeadSpectator)
         {
             SetAnimHoldersActive(false);
         }

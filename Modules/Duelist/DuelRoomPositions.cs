@@ -127,8 +127,37 @@ public static class DuelRoomPositions
         },
     };
 
+    private static readonly Dictionary<int, (SystemTypes A, SystemTypes B)> FarRooms = new()
+    {
+        [0] = (SystemTypes.Reactor, SystemTypes.Nav),         // Skeld
+        [3] = (SystemTypes.Reactor, SystemTypes.Nav),         // Dleks
+        [1] = (SystemTypes.Launchpad, SystemTypes.Greenhouse), // MIRA HQ
+        [2] = (SystemTypes.Laboratory, SystemTypes.BoilerRoom), // Polus
+        [4] = (SystemTypes.Armory, SystemTypes.Records),       // Airship
+        [5] = (SystemTypes.Kitchen, SystemTypes.Comms),        // The Fungle
+    };
+
     private static int CurrentMapId =>
         GameOptionsManager.Instance == null ? 0 : GameOptionsManager.Instance.CurrentGameOptions.MapId;
+
+    public static bool TryGetFarRooms(out SystemTypes a, out SystemTypes b)
+    {
+        a = b = default;
+        if (!FarRooms.TryGetValue(CurrentMapId, out var pair))
+        {
+            return false;
+        }
+        a = pair.A;
+        b = pair.B;
+        return true;
+    }
+
+    public static List<SystemTypes> GetAllRooms()
+    {
+        return Maps.TryGetValue(CurrentMapId, out var table)
+            ? new List<SystemTypes>(table.Keys)
+            : new List<SystemTypes>();
+    }
 
     public static bool TryGet(SystemTypes room, out Vector2 pos)
     {
