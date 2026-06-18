@@ -31,6 +31,10 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> VengefulSoulRevengeButton { get; } = new LoadableResourceAsset($"{ShortPath}.VengefulSoulRevenge.png");
     public static LoadableAsset<Sprite> ShuffleButton { get; } = new LoadableResourceAsset($"{ShortPath}.ShuffleButton.png",100);
     public static LoadableAsset<Sprite> UavButton { get; } = new LoadableResourceAsset($"{ShortPath}.UAVAirMap.png", 100);
+    public static LoadableAsset<Sprite> CupidMatchmakeButton { get; } = new LoadableResourceAsset($"{ShortPath}.CupidMatchmake.png");
+    public static LoadableAsset<Sprite> CupidProtectButton { get; } = new LoadableResourceAsset($"{ShortPath}.CupidProtect.png");
+    public static LoadableAsset<Sprite> CupidProtectOneButton { get; } = new LoadableResourceAsset($"{ShortPath}.CupidProtectOne.png");
+    public static LoadableAsset<Sprite> CupidProtectTwoButton { get; } = new LoadableResourceAsset($"{ShortPath}.CupidProtectTwo.png");
     // Role icons (200 ppu)
     public static LoadableAsset<Sprite> ThiefIcon { get; } = new LoadableResourceAsset($"{IconPath}.Thief.png", 200);
     public static LoadableAsset<Sprite> DeadlockIcon { get; } = new LoadableResourceAsset($"{IconPath}.Deadlock.png", 200);
@@ -50,6 +54,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> DuelistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Duellist.png", 200);
     public static LoadableAsset<Sprite> ClockstopperIcon { get; } = new LoadableResourceAsset($"{IconPath}.Clockstopper.png", 200);
     public static LoadableAsset<Sprite> RetributionistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Retributionist.png", 200);
+    public static LoadableAsset<Sprite> CupidIcon { get; } = new LoadableResourceAsset($"{IconPath}.Cupid.png", 200);
 
     // Modifier icons (200 ppu)
     public static LoadableAsset<Sprite> MementoIcon { get; } = new LoadableResourceAsset($"{IconPath}.Memento.png", 200);

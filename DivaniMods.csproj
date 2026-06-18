@@ -227,6 +227,11 @@
     <EmbeddedResource Include="Resources\UAVFriendly.wav" />
     <EmbeddedResource Include="Resources\UAVEnemy.wav" />
     <EmbeddedResource Include="Resources\UAVEnd.wav" />
+    <EmbeddedResource Include="Resources\Icons\Cupid.png" />
+    <EmbeddedResource Include="Resources\CupidMatchmake.png" />
+    <EmbeddedResource Include="Resources\CupidProtect.png" />
+    <EmbeddedResource Include="Resources\CupidProtectOne.png" />
+    <EmbeddedResource Include="Resources\CupidProtectTwo.png" />
 
   </ItemGroup>
 

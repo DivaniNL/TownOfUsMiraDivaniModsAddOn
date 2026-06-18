@@ -31,7 +31,7 @@ public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>, IDiseasea
     public override float Distance => 1.5f;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override Color TextOutlineColor => FragRole.FragColor;
-    public override BaseKeybind Keybind => Keybinds.SecondaryAction;
+    public override BaseKeybind Keybind => Keybinds.TertiaryAction;
 
     public override bool Enabled(RoleBehaviour? role)
     {

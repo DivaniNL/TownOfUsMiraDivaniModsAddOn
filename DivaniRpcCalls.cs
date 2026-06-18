@@ -45,4 +45,6 @@ public enum DivaniRpcCalls : uint
     RetributionistRevengeFailed = 240,
     UavCall = 241,
     UavEnd = 242,
+    CupidSetMatchTarget = 243,
+    CupidFinalizeLovers = 244,
 }

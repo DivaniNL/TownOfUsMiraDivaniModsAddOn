@@ -240,6 +240,12 @@ public class PickpocketButton : TownOfUsButton
         }
 
         var targetModifiers = GetTargetModifiers(target);
+
+        if (thief.HasModifier<LoverModifier>())
+        {
+            targetModifiers = targetModifiers.Where(m => m is not LoverModifier).ToList();
+        }
+
         var random = new System.Random();
 
         if (targetModifiers.Count > 0)
