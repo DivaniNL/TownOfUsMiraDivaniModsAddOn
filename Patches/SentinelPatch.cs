@@ -11,6 +11,8 @@ namespace DivaniMods.Patches;
 [HarmonyPatch]
 public static class SentinelPatch
 {
+    private static bool _wasInMeeting;
+
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
     [HarmonyPostfix]
     public static void ResetOnGameStart()
@@ -44,7 +46,19 @@ public static class SentinelPatch
         if (!isSentinel) return;
         if (localPlayer.Data.IsDead) return;
 
-        if (MeetingHud.Instance || ExileController.Instance) return;
+        if (MeetingHud.Instance || ExileController.Instance)
+        {
+            _wasInMeeting = true;
+            return;
+        }
+
+        if (_wasInMeeting)
+        {
+            _wasInMeeting = false;
+            BeaconManager.ReseedAllBeacons();
+            return;
+        }
+
         if (PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(localPlayer)) return;
         if (BeaconManager.BeaconsPlaced == 0) return;
 

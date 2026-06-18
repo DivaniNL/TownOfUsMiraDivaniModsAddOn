@@ -90,26 +90,36 @@ public static class BeaconManager
         CreateBeaconVisual(beacon, Beacons.Count + 1);
         Beacons.Add(beacon);
 
-        var beaconRoom = GetShipRoom(position);
-        if (beaconRoom != null)
-        {
-            foreach (var player in PlayerControl.AllPlayerControls)
-            {
-                if (player == null || player.Data == null || player.Data.IsDead) continue;
-                if (player.Data.Disconnected) continue;
-                if (player.Data.Role is SentinelRole) continue; 
-                var duelmodifiers = player.GetModifiers<DuelModifier>()?.ToList();
-                if (duelmodifiers == null || duelmodifiers.Count == 0)
-                    continue;
+        SeedPlayersInRoom(beacon);
+    }
 
-                var playerRoom = GetShipRoom(player.GetTruePosition());
-                if (playerRoom != null && playerRoom.RoomId == beaconRoom.RoomId)
-                {
-                    beacon.PlayersInRoom.Add(player.PlayerId);
-                }
+    private static void SeedPlayersInRoom(BeaconData beacon)
+    {
+        beacon.PlayersInRoom.Clear();
+
+        var beaconRoom = GetShipRoom(beacon.Position);
+        if (beaconRoom == null) return;
+
+        foreach (var player in PlayerControl.AllPlayerControls)
+        {
+            if (player == null || player.Data == null || player.Data.IsDead) continue;
+            if (player.Data.Disconnected) continue;
+            if (player.Data.Role is SentinelRole) continue;
+
+            var playerRoom = GetShipRoom(player.GetTruePosition());
+            if (playerRoom != null && playerRoom.RoomId == beaconRoom.RoomId)
+            {
+                beacon.PlayersInRoom.Add(player.PlayerId);
             }
         }
+    }
 
+    public static void ReseedAllBeacons()
+    {
+        foreach (var beacon in Beacons)
+        {
+            SeedPlayersInRoom(beacon);
+        }
     }
 
     private static void CreateBeaconVisual(BeaconData beacon, int beaconNumber)
@@ -201,23 +211,7 @@ public static class BeaconManager
         foreach (var beacon in Beacons)
         {
             beacon.PlayersPassedThrough.Clear();
-            beacon.PlayersInRoom.Clear();
-
-            var beaconRoom = GetShipRoom(beacon.Position);
-            if (beaconRoom == null) continue;
-
-            foreach (var player in PlayerControl.AllPlayerControls)
-            {
-                if (player == null || player.Data == null || player.Data.IsDead) continue;
-                if (player.Data.Disconnected) continue;
-                if (player.Data.Role is SentinelRole) continue;
-
-                var playerRoom = GetShipRoom(player.GetTruePosition());
-                if (playerRoom != null && playerRoom.RoomId == beaconRoom.RoomId)
-                {
-                    beacon.PlayersInRoom.Add(player.PlayerId);
-                }
-            }
+            SeedPlayersInRoom(beacon);
         }
     }
 
