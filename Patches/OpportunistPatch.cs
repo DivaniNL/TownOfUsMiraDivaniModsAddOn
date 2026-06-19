@@ -159,7 +159,23 @@ public static class OpportunistPatch
             }
 
             opp.VotesCollected += votesAdded;
+
+            if (PlayerControl.LocalPlayer != null)
+            {
+                RpcSyncOpportunistVotes(PlayerControl.LocalPlayer, oppId, opp.VotesCollected);
+            }
         }
+    }
+
+    [MethodRpc((uint)DivaniRpcCalls.OpportunistVotesSync)]
+    public static void RpcSyncOpportunistVotes(PlayerControl sender, byte opportunistId, int votesCollected)
+    {
+        if (!OpportunistRole.ActiveOpportunists.TryGetValue(opportunistId, out var opp))
+        {
+            return;
+        }
+
+        opp.VotesCollected = votesCollected;
     }
 
 
