@@ -1,17 +1,19 @@
+using System;
 using System.Linq;
 using HarmonyLib;
 using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
-using DivaniMods.Events.Crewmate.CrewmateSupport;
-using DivaniMods.Roles.Crewmate.CrewmateSupport;
+using DivaniMods.Options;
+using DivaniMods.Roles.Neutral.NeutralOutlier;
 using TownOfUs.Options;
 using TownOfUs.Patches;
 using TownOfUs.Utilities;
+using UnityEngine;
 
 namespace DivaniMods.Patches;
 
 [HarmonyPatch(typeof(HudManagerPatches), nameof(HudManagerPatches.UpdateRoleNameText))]
-public static class ClockstopperNameCounterPatch
+public static class DuelistNameCounterPatch
 {
     [HarmonyPostfix]
     public static void Postfix()
@@ -27,31 +29,35 @@ public static class ClockstopperNameCounterPatch
             return;
         }
 
-        var clock = PlayerControl.AllPlayerControls.ToArray()
-            .FirstOrDefault(p => p != null && p.Data?.Role is ClockstopperRole);
-        if (clock == null)
+        var duel = PlayerControl.AllPlayerControls.ToArray()
+            .FirstOrDefault(p => p != null && p.Data?.Role is DuelistRole);
+        if (duel == null)
         {
             return;
         }
 
         var genOpt = OptionGroupSingleton<GeneralOptions>.Instance;
-        if (!clock.AmOwner && !(local.DiedOtherRound() && genOpt.TheDeadKnow))
+        if (!duel.AmOwner && !(local.DiedOtherRound() && genOpt.TheDeadKnow))
         {
             return;
         }
 
-        var nameText = clock.cosmetics?.nameText;
+        var nameText = duel.cosmetics?.nameText;
         if (nameText == null)
         {
             return;
         }
 
-        var role = (ClockstopperRole)clock.Data.Role;
+        var role = (DuelistRole)duel.Data.Role;
+        var winsNeeded = (int)OptionGroupSingleton<DuelistOptions>.Instance.DuelsToWin.Value;
+        var lossesToDie = (int)OptionGroupSingleton<DuelistOptions>.Instance.DuelsLostToDie.Value;
+        var wins = Math.Min(role.DuelWins, winsNeeded);
+        var losses = Math.Min(role.DuelLosses, lossesToDie);
         var counter =
-            $"<size=80%>{role.RoleColor.ToTextColor()}({ClockstopperEvents.GetProgress(clock)}/{ClockstopperEvents.GetNeeded()})</color></size>";
+            $"<size=80%>{Color.green.ToTextColor()}({wins}/{winsNeeded})</color> {Color.red.ToTextColor()}({losses}/{lossesToDie})</color></size>";
 
         var text = nameText.text;
-        var taskStr = $"<size=80%>{clock.TaskInfo()}</size>";
+        var taskStr = $"<size=80%>{duel.TaskInfo()}</size>";
         var idx = text.IndexOf(taskStr);
         if (idx >= 0)
         {

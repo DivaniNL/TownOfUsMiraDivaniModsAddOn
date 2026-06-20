@@ -1,9 +1,10 @@
+using System;
 using System.Linq;
 using HarmonyLib;
 using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
-using DivaniMods.Events.Crewmate.CrewmateSupport;
-using DivaniMods.Roles.Crewmate.CrewmateSupport;
+using DivaniMods.Options;
+using DivaniMods.Roles.Neutral.NeutralEvil;
 using TownOfUs.Options;
 using TownOfUs.Patches;
 using TownOfUs.Utilities;
@@ -11,7 +12,7 @@ using TownOfUs.Utilities;
 namespace DivaniMods.Patches;
 
 [HarmonyPatch(typeof(HudManagerPatches), nameof(HudManagerPatches.UpdateRoleNameText))]
-public static class ClockstopperNameCounterPatch
+public static class DemolitionistNameCounterPatch
 {
     [HarmonyPostfix]
     public static void Postfix()
@@ -27,31 +28,33 @@ public static class ClockstopperNameCounterPatch
             return;
         }
 
-        var clock = PlayerControl.AllPlayerControls.ToArray()
-            .FirstOrDefault(p => p != null && p.Data?.Role is ClockstopperRole);
-        if (clock == null)
+        var demo = PlayerControl.AllPlayerControls.ToArray()
+            .FirstOrDefault(p => p != null && p.Data?.Role is DemolitionistRole);
+        if (demo == null)
         {
             return;
         }
 
         var genOpt = OptionGroupSingleton<GeneralOptions>.Instance;
-        if (!clock.AmOwner && !(local.DiedOtherRound() && genOpt.TheDeadKnow))
+        if (!demo.AmOwner && !(local.DiedOtherRound() && genOpt.TheDeadKnow))
         {
             return;
         }
 
-        var nameText = clock.cosmetics?.nameText;
+        var nameText = demo.cosmetics?.nameText;
         if (nameText == null)
         {
             return;
         }
 
-        var role = (ClockstopperRole)clock.Data.Role;
+        var role = (DemolitionistRole)demo.Data.Role;
+        var needed = (int)OptionGroupSingleton<DemolitionistOptions>.Instance.SabotagesToWin.Value;
+        var capped = Math.Min(DemolitionistSabotageState.SuccessfulSabotages, needed);
         var counter =
-            $"<size=80%>{role.RoleColor.ToTextColor()}({ClockstopperEvents.GetProgress(clock)}/{ClockstopperEvents.GetNeeded()})</color></size>";
+            $"<size=80%>{role.RoleColor.ToTextColor()}({capped}/{needed})</color></size>";
 
         var text = nameText.text;
-        var taskStr = $"<size=80%>{clock.TaskInfo()}</size>";
+        var taskStr = $"<size=80%>{demo.TaskInfo()}</size>";
         var idx = text.IndexOf(taskStr);
         if (idx >= 0)
         {

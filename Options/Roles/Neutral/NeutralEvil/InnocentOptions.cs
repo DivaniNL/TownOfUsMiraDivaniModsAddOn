@@ -15,4 +15,7 @@ public class InnocentOptions : AbstractOptionGroup<InnocentRole>
 
     [ModdedToggleOption("Can Taunt in First Round")]
     public bool CanTauntFirstRound { get; set; } = false;
+
+    [ModdedToggleOption("Taunted Player Can Report Body")]
+    public bool TauntedPlayerCanReportBody { get; set; } = false;
 }

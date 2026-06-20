@@ -5,6 +5,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralOutlier;
+using TownOfUs.Options;
 using TownOfUs.Patches;
 using TownOfUs.Utilities;
 
@@ -34,7 +35,8 @@ public static class OpportunistNameCounterPatch
             return;
         }
 
-        if (!opp.AmOwner && !local.HasDied())
+        var genOpt = OptionGroupSingleton<GeneralOptions>.Instance;
+        if (!opp.AmOwner && !(local.DiedOtherRound() && genOpt.TheDeadKnow))
         {
             return;
         }

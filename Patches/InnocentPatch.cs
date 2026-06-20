@@ -5,15 +5,20 @@ using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.Events.Vanilla.Player;
+using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using MiraAPI.Utilities;
 using DivaniMods.Modifiers.Neutral.NeutralEvil;
+using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralEvil;
+using UnityEngine;
 
 namespace DivaniMods.Patches;
 
 [HarmonyPatch]
 public static class InnocentPatch
 {
+
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGame))]
     [HarmonyPostfix]
     public static void ResetOnGameStart()
@@ -136,6 +141,110 @@ public static class InnocentPatch
         }
     }
 
+    [RegisterEvent]
+    public static void OnReportBody(ReportBodyEvent evt)
+    {
+        if (evt.Target == null)
+        {
+            return;
+        }
+
+        if (IsReportBlockedFor(evt.Reporter, evt.Target.PlayerId))
+        {
+            evt.Cancel();
+        }
+    }
+
+    // Only the killer the innocent taunted (TauntedKillerId) is barred from reporting that
+    // innocent's body; everyone else reports normally.
+    private static bool IsReportBlockedFor(PlayerControl reporter, byte bodyPlayerId)
+    {
+        if (reporter == null || OptionGroupSingleton<InnocentOptions>.Instance.TauntedPlayerCanReportBody)
+        {
+            return false;
+        }
+
+        return InnocentRole.ActiveInnocents.TryGetValue(bodyPlayerId, out var innocent) &&
+               innocent.AwaitingNextMeetingExile &&
+               innocent.TauntedKillerId == reporter.PlayerId;
+    }
+
+    [HarmonyPatch(typeof(ReportButton), nameof(ReportButton.DoClick))]
+    [HarmonyPriority(Priority.First)]
+    [HarmonyPrefix]
+    public static bool BlockTauntedReportClick()
+    {
+        var localPlayer = PlayerControl.LocalPlayer;
+        if (localPlayer == null)
+        {
+            return true;
+        }
+
+        var closest = GetClosestReportableBody(localPlayer);
+        return closest == null || !IsReportBlockedFor(localPlayer, closest.ParentId);
+    }
+
+    public static void UpdateReportButtonGreyout()
+    {
+        if (!HudManager.InstanceExists || HudManager.Instance.ReportButton == null)
+        {
+            return;
+        }
+
+        var localPlayer = PlayerControl.LocalPlayer;
+        if (localPlayer == null)
+        {
+            return;
+        }
+
+        var closest = GetClosestReportableBody(localPlayer);
+        if (closest != null && IsReportBlockedFor(localPlayer, closest.ParentId))
+        {
+            HudManager.Instance.ReportButton.SetDisabled();
+        }
+    }
+
+    private static DeadBody? GetClosestReportableBody(PlayerControl reporter)
+    {
+        if (reporter.Data == null || reporter.Data.IsDead || reporter.inVent)
+        {
+            return null;
+        }
+
+        DeadBody? best = null;
+        var bestDistance = float.MaxValue;
+        var reporterPosition = reporter.GetTruePosition();
+
+        foreach (var body in UnityEngine.Object.FindObjectsOfType<DeadBody>())
+        {
+            if (body == null || body.Reported)
+            {
+                continue;
+            }
+
+            var bodyPosition = body.TruePosition;
+            var distance = Vector2.Distance(reporterPosition, bodyPosition);
+            if (distance > reporter.MaxReportDistance || distance >= bestDistance)
+            {
+                continue;
+            }
+
+            if (PhysicsHelpers.AnythingBetween(
+                    reporterPosition,
+                    bodyPosition,
+                    Constants.ShipAndObjectsMask,
+                    false))
+            {
+                continue;
+            }
+
+            best = body;
+            bestDistance = distance;
+        }
+
+        return best;
+    }
+
     private static IEnumerable<InnocentRole> GetInnocents()
     {
         return InnocentRole.ActiveInnocents.Values;
@@ -200,5 +309,15 @@ public static class InnocentPatch
                 comp.RemoveModifier(m);
             }
         }
+    }
+}
+
+[HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
+public static class InnocentReportHudPatch
+{
+    [HarmonyPostfix]
+    public static void HudManagerUpdatePostfix()
+    {
+        InnocentPatch.UpdateReportButtonGreyout();
     }
 }

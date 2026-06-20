@@ -14,6 +14,7 @@ using DivaniMods.Roles.Crewmate.CrewmateAfterlife;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using TownOfUs.Events;
 using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Modules;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Utilities;
@@ -151,6 +152,46 @@ public static class RetributionistRpc
             roleWhenAlive: roleWhenAlive,
             flashColor: RetributionistRole.RetributionistColor,
             revivedOwnerNotificationText: "Your revenge is complete. You returned to the ship",
+            reviverOwnerNotificationText: null,
+            notificationIcon: DivaniAssets.RetributionistIcon.LoadAsset());
+
+        ReviveHeartbrokenLover(soul, revivePos);
+    }
+
+    private static void ReviveHeartbrokenLover(PlayerControl soul, Vector2 revivePos)
+    {
+        if (!soul.TryGetModifier<LoverModifier>(out var love) || love.OtherLover == null)
+        {
+            return;
+        }
+
+        var lover = love.OtherLover;
+        if (!lover.HasDied())
+        {
+            return;
+        }
+
+        if (!lover.TryGetModifier<DeathHandlerModifier>(out var loverDeath) ||
+            loverDeath.CauseOfDeath != TouLocale.Get("DiedToHeartbreak"))
+        {
+            return;
+        }
+
+        var loverRoleWhenAlive = lover.GetRoleWhenAlive();
+        if (loverRoleWhenAlive == null)
+        {
+            return;
+        }
+
+        var loverPos = revivePos + new Vector2(0.4f, 0f);
+
+        ReviveUtilities.RevivePlayer(
+            reviver: soul,
+            revived: lover,
+            position: loverPos,
+            roleWhenAlive: loverRoleWhenAlive,
+            flashColor: RetributionistRole.RetributionistColor,
+            revivedOwnerNotificationText: "Your lover took their revenge. You returned to the ship",
             reviverOwnerNotificationText: null,
             notificationIcon: DivaniAssets.RetributionistIcon.LoadAsset());
     }
