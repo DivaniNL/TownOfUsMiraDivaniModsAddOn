@@ -69,6 +69,22 @@ public class DemolitionistPlantButton : TownOfUsButton
         Button?.SetDisabled();
     }
 
+    public static void CancelPlantOrArmingForMeeting()
+    {
+        var plant = Instance;
+        if (plant == null)
+        {
+            return;
+        }
+
+        if (!plant._isPlanting && !plant._arming)
+        {
+            return;
+        }
+
+        plant.AbortPlant();
+    }
+
     public static void SyncAfterSabotageEnded(bool startCooldown)
     {
         var plant = Instance;
@@ -171,6 +187,12 @@ public class DemolitionistPlantButton : TownOfUsButton
                 yield break;
             }
 
+            if (MeetingHud.Instance != null || ExileController.Instance != null)
+            {
+                AbortPlant();
+                yield break;
+            }
+
             elapsed += Time.deltaTime;
             Timer = plantTime - elapsed;
             if (Button != null)
@@ -247,10 +269,31 @@ public class DemolitionistPlantButton : TownOfUsButton
         {
             EffectActive = true;
             Timer = delay;
+            Coroutines.Start(ArmingWatchCoroutine());
         }
         else
         {
             FireSabotage();
+        }
+    }
+
+    private IEnumerator ArmingWatchCoroutine()
+    {
+        while (_arming)
+        {
+            if (DemolitionistSabotageState.IsCriticalVanillaSabotageActive())
+            {
+                var colorHex = ColorUtility.ToHtmlStringRGB(DemolitionistRole.DemolitionistColor);
+                MiraAPI.Utilities.Helpers.CreateAndShowNotification(
+                    $"<b><color=#{colorHex}>Plant cancelled, impostor sabotage started</color></b>",
+                    Color.white,
+                    new Vector3(0f, 1f, -20f),
+                    spr: DivaniAssets.DemolitionistIcon.LoadAsset());
+                AbortPlant();
+                yield break;
+            }
+
+            yield return null;
         }
     }
 

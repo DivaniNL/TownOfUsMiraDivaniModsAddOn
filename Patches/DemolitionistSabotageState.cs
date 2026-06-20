@@ -128,6 +128,8 @@ public static class DemolitionistSabotageState
 
     public static void StopForMeeting()
     {
+        DemolitionistPlantButton.CancelPlantOrArmingForMeeting();
+
         if (!IsActive)
         {
             return;
