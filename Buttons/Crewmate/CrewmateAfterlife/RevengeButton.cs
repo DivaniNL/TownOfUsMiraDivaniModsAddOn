@@ -17,7 +17,8 @@ public sealed class RevengeButton : TownOfUsKillRoleButton<VengefulSoulRole, Pla
     public override float Cooldown => 0f;
     public override float InitialCooldown => 0f;
     public override float EffectDuration => 0f;
-    public override int MaxUses => 1;
+    public override int MaxUses => 0;
+    public override bool ZeroIsInfinite { get; set; } = true;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.VengefulSoulRevengeButton;
     public override float Distance => 1.5f;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
