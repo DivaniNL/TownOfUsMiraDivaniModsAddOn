@@ -29,7 +29,7 @@ public sealed class DreamerRole(IntPtr cppPtr)
     public string RoleName => "Dreamer";
     public string RoleDescription => "Reimagine fellow Crewmates!";
     public string RoleLongDescription => "Dream other players to become the roles you desire. Your dream fails if it targets a Non-Crewmate.";
-    public Color RoleColor => new Color(0.5f, 0.3f, 0.1f); //what even is this color type
+    public Color RoleColor => new Color32(51, 51, 153, 255);
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmatePower;
 
@@ -54,7 +54,7 @@ public sealed class DreamerRole(IntPtr cppPtr)
 
         if (Player.AmOwner)
         {
-            DreamTargetId = byte.MaxValue; // is this needed??
+            DreamTargetId = byte.MaxValue;
 
             meetingMenu = new MeetingMenu(
                 this,
@@ -98,7 +98,6 @@ public sealed class DreamerRole(IntPtr cppPtr)
 
         var target = GameData.Instance.GetPlayerById(voteArea.TargetPlayerId)?.Object;
 
-        // hide on dead players, already dreaming players, and insomniac players
         return target == null
             || target.HasDied()
             || target.HasModifier<DreamerTargetDreamingModifier>()
@@ -125,8 +124,6 @@ public sealed class DreamerRole(IntPtr cppPtr)
         }
 
         dreamMenu = GuesserMenu.Create();
-        // Tiny lambda so we can also hand the clicked target's id to OnRoleSelected
-        // (a plain method can't see this local 'dreamTarget' on its own).
         dreamMenu.Begin(IsRoleValid, role => OnRoleSelected(role, dreamTarget.PlayerId));
     }
 

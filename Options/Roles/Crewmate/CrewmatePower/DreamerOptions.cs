@@ -29,7 +29,4 @@ public class DreamerOptions : AbstractOptionGroup<DreamerRole>
 
     public ModdedNumberOption InsomniaRounds { get; } = new(
         "Insomnia Lasts For Rounds", 1f, 1f, 3f, 1f, MiraNumberSuffixes.None);
-
-    /*public ModdedToggleOption RespectMaxRoleCount { get; } = new(
-        "Respect Max Role Count On Reimagine?", true);*/
 }

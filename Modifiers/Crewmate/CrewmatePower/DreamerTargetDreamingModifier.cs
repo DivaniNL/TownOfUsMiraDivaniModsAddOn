@@ -9,7 +9,7 @@ namespace DivaniMods.Modifiers.Crewmate.CrewmatePower;
 
 public sealed class DreamerTargetDreamingModifier(ushort originalRole, ushort dreamRole) : BaseModifier
 {
-    public override string ModifierName => "Dreaming"; // "information tag" carries info for revert, cannot be stolen because hidden on ui
+    public override string ModifierName => "Dreaming";
     public override bool HideOnUi => true;
 
     public ushort OriginalRole { get; set; } = originalRole;
