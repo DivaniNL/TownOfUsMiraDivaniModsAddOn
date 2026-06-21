@@ -37,6 +37,8 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#recruiter"><img width="10%" src="./Resources/Icons/Recruiter.png" alt="Recruiter"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#summoner"><img width="10%" src="./Resources/Icons/Summoner.png" alt="Summoner"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#revenant"><img width="10%" src="./Resources/Icons/Revenant.png" alt="Revenant"/></a>
+  <img src="./Resources/Headers/NeutBenign.png" alt="Neutral Benign"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#cupid"><img width="10%" src="./Resources/Icons/Cupid.png" alt="Cupid"/></a>
   <img src="./Resources/Headers/NeutEvil.png" alt="Neutral Evil"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#innocent"><img width="10%" src="./Resources/Icons/Innocent.png" alt="Innocent"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#plague-doctor"><img width="10%" src="./Resources/Icons/PlagueDoctor.png" alt="Plague Doctor"/></a>
@@ -56,6 +58,7 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#strong"><img width="10%" src="./Resources/Icons/Strong.png" alt="Strong"/></a>
   <img src="./Resources/Headers/ImpMods.png" alt="Impostor modifiers"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#ruthless"><img width="10%" src="./Resources/Icons/Ruthless.png" alt="Ruthless"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#nullified"><img width="10%" src="./Resources/Icons/Nullified.png" alt="Nullified"/></a>
   <img src="./Resources/Headers/NeutMods.png" alt="Neutral modifiers"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#sniper"><img width="10%" src="./Resources/Icons/Sniper.png" alt="Sniper"/></a>
   <img src="./Resources/Headers/UniMods.png" alt="Universal modifiers"/>
@@ -115,8 +118,8 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 - [@AtonyGit](https://github.com/AtonyGit)/[Town Of Us: Mira](https://github.com/AU-Avengers/TOU-Mira) - All assets that are not specified below
 - @jaydoeswitchcraft (discord) - Bloody modifier icon and Demolitionist role icon and Button assets, Skilled, Strong and Incompetent modifier icons, Retributionist assets
 - [Freesound](https://freesound.org/) (community) -Glass&ndash;break SFX for Fragile
-- Espeon(@mystic_haze2 on discord) - Sprout Assets, Summoner role and meeting icon, Obfuscator role icon, Cunctator role icon, Mosquito assets, providing more intro sounds, Duelist assets, Armored assets
-- @aasteriisken (discord) - Memento modifier icon, Domesmith Assets, Revenant icon, UAV Assets, Clockstopper icon
+- Espeon(@mystic_haze2 on discord) - Sprout Assets, Summoner role and meeting icon, Obfuscator role icon, Cunctator role icon, Mosquito assets, providing more intro sounds, Duelist assets, Armored assets, Cupid assets
+- @aasteriisken (discord) - Memento modifier icon, Domesmith Assets, Revenant icon, UAV Assets, Clockstopper icon, Nullified modifier icon
 [Follow Asterisken on GitHub](https://github.com/aasteriisken)
 - @maybe_xinav (discord) - Animated Portalmaker portals and portal button icons, Frag button icons, Plague Doctor button icon, Shuffle button icon, Sentinel beacon sprite, Sentinel palce beacon button,Lockdown button sprite
 
