@@ -1,3 +1,4 @@
+using AmongUs.GameOptions;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Crewmate.CrewmatePower;
 using DivaniMods.Options;
@@ -162,6 +163,20 @@ public sealed class DreamerRole(IntPtr cppPtr)
 
         dreamerRole.DreamTargetId = targetId;
         dreamerRole.DreamRole = roleId;
+
+
+        if (dreamer.AmOwner)
+        {
+            var targetName = GameData.Instance.GetPlayerById(targetId)?.Object?.Data?.PlayerName ?? "them";
+            var roleObj = RoleManager.Instance.GetRole((RoleTypes)roleId) as ITownOfUsRole;
+            var dreamRole = roleObj?.RoleName ?? "a new role";
+            var dreamRoleHex = roleObj != null ? ColorUtility.ToHtmlStringRGB(roleObj.RoleColor) : "9999FF";
+
+            Helpers.CreateAndShowNotification(
+                $"<b>You will reimagine <color=white>{targetName}</color> as the <color=#{dreamRoleHex}>{dreamRole}</color> in the next meeting!</b>",
+                new Color32(51, 51, 153, 255), spr: DivaniAssets.DreamerIcon.LoadAsset()
+            );
+        }
     }
 
     [MethodRpc((uint)DivaniRpcCalls.DreamerNotifyDreamFailed)]
@@ -172,15 +187,15 @@ public sealed class DreamerRole(IntPtr cppPtr)
         if (target != null && target.AmOwner && options.NotifyNonCrewOnAttempt.Value)
         {
             Helpers.CreateAndShowNotification(
-                "<b>The Dreamer tried to <color=#804D19>reimagine</color> you but failed!</b>",
-                Color.white, spr: DivaniAssets.DreamerIcon.LoadAsset());
+                "<b>The Dreamer tried to <color=white>reimagine</color> you but failed!</b>",
+                new Color32(51, 51, 153, 255), spr: DivaniAssets.DreamerIcon.LoadAsset());
         }
 
         if (dreamer != null && dreamer.AmOwner && options.NotifyDreamerOnFail.Value)
         {
             Helpers.CreateAndShowNotification(
                 $"<b>Your dream on {target?.Data?.PlayerName ?? "them"} failed! They are not a Crew Role!</b>",
-                Color.white, spr: DivaniAssets.DreamerIcon.LoadAsset());
+                new Color32(51, 51, 153, 255), spr: DivaniAssets.DreamerIcon.LoadAsset());
         }
     }
 
