@@ -116,7 +116,7 @@ public static class FragBombState
     {
         var holderIdCapture = HolderId;
         var fragIdCapture = FragId;
-        var shouldKill = IsActive;
+        var shouldKill = IsActive && IsArmed;
 
         Clear(startGiveCooldown: false);
 

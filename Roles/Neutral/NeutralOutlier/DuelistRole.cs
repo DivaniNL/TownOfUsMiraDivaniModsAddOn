@@ -99,11 +99,15 @@ public sealed class DuelistRole(IntPtr cppPtr)
         {
             return false;
         }
-        if (WinType != DuelistWinType.WinAlone)
+        if (!HasMetWinGoal)
         {
             return false;
         }
-        return HasMetWinGoal;
+        if (WinType == DuelistWinType.WinAlone)
+        {
+            return true;
+        }
+        return MiscUtils.RealKillersAliveCount == 0;
     }
     public override bool CanUse(IUsable usable)
     {

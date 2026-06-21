@@ -41,8 +41,14 @@ public class CupidOptions : AbstractOptionGroup<CupidRole>
         ["Cupid", "Cupid And Lovers", "Everyone"]);
 
     public ModdedEnumOption OnLoverDeath { get; } = new(
-        "When A Lover Dies, Cupid Becomes", (int)CupidBecomeOptions.Amnesiac, typeof(CupidBecomeOptions),
-        ["Crewmate", "Amnesiac", "Survivor", "Mercenary", "Jester", "Cupid Dies"]);
+        "When A Lover Dies, Cupid", (int)CupidBecomeOptions.Amnesiac, typeof(CupidBecomeOptions),
+        ["Becomes Crewmate", "Becomes Amnesiac", "Becomes Survivor", "Becomes Mercenary", "Becomes Jester", "Dies"]);
+
+    public ModdedToggleOption CupidRevivedOnLoversRevive { get; } = new(
+        "Cupid is revived on Lovers Revive (When Both Lovers Die And Revive Together is on)", false)
+    {
+        Visible = () => OptionGroupSingleton<CupidOptions>.Instance.OnLoverDeath.Value == (int)CupidBecomeOptions.CupidDies,
+    };
 
     [ModdedToggleOption("Lovers Know Cupid Exists")]
     public bool LoversKnowCupid { get; set; } = true;
@@ -52,4 +58,5 @@ public class CupidOptions : AbstractOptionGroup<CupidRole>
 
     [ModdedToggleOption("Protect Lovers Separately")]
     public bool ProtectSeparately { get; set; } = false;
+
 }

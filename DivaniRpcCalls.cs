@@ -48,6 +48,7 @@ public enum DivaniRpcCalls : uint
     CupidSetMatchTarget = 243,
     CupidFinalizeLovers = 244,
     OpportunistVotesSync = 245,
+    DuelistAddWin = 246,
     DreamerSetReimagineTarget = 400,
     DreamerNotifyDreamFailed = 401
 }

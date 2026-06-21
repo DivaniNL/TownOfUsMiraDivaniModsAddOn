@@ -10,6 +10,7 @@ using MiraAPI.Utilities;
 using DivaniMods.Modifiers.Game.Universal;
 using DivaniMods.Modifiers.Universal;
 using DivaniMods.Options;
+using TownOfUs.Events.TouEvents;
 using TownOfUs.Modules;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
@@ -61,6 +62,23 @@ public static class MementoPatch
         }
 
         pc.AddModifier<MementoRevealModifier>(role);
+    }
+
+    [RegisterEvent]
+    public static void OnPlayerRevive(PlayerReviveEvent evt)
+    {
+        var pc = evt.Player;
+        if (pc == null)
+        {
+            return;
+        }
+
+        EjectedPlayers.Remove(pc.PlayerId);
+
+        if (pc.TryGetModifier<MementoRevealModifier>(out var reveal))
+        {
+            reveal.ModifierComponent?.RemoveModifier(reveal);
+        }
     }
 
     public static ModdedRoleTeams Faction(RoleBehaviour role)

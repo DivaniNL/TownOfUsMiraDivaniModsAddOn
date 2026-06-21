@@ -6,6 +6,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Modules.Duelist;
+using DivaniMods.Networking.Neutral.NeutralOutlier;
 using DivaniMods.Options;
 using TownOfUs.Events;
 using TownOfUs.Events.TouEvents;
@@ -68,6 +69,10 @@ public static class DuelistEvents
             return;
         }
 
+        if (sm.IsDuelist)
+        {
+            DuelistRpc.RpcAddDuelWin(src);
+        }
         DuelManager.MarkResolved(src.PlayerId, tgt.PlayerId);
     }
 
@@ -87,10 +92,6 @@ public static class DuelistEvents
             return;
         }
 
-        if (sm.IsDuelist)
-        {
-            DuelManager.AddWin(src.PlayerId);
-        }
         DuelManager.MarkDuelDeath(tgt.PlayerId);
 
         var cause = TouLocale.Get("DiedToDuelist");

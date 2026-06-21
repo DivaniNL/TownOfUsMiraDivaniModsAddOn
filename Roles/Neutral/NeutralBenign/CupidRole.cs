@@ -12,6 +12,7 @@ using MiraAPI.Roles;
 using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
+using DivaniMods.Events.Neutral.NeutralBenign;
 using DivaniMods.Modifiers.Neutral.NeutralBenign;
 using DivaniMods.Options;
 using TownOfUs;
@@ -44,11 +45,11 @@ public sealed class CupidRole(IntPtr cppPtr)
 
     public string LocaleKey => "Cupid";
     public string RoleName => "Cupid";
-    public string RoleDescription => "Bind two players together in love.";
+    public string RoleDescription => "Spread the love!";
     public string RoleLongDescription =>
-        "Use Matchmake to mark two players as provisional lovers.\n" +
-        "When a meeting ends, they become Lovers forever.\n" +
-        "You then Bestow protection upon them. You win if they win.";
+        "Use Matchmake to make two people fall in love next round\n" +
+        "You can Bestow your lovers to protect them";
+
     public Color RoleColor => CupidColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralBenign;
@@ -63,7 +64,7 @@ public sealed class CupidRole(IntPtr cppPtr)
     public CustomRoleConfiguration Configuration => new(this)
     {
         Icon = DivaniAssets.CupidIcon,
-        IntroSound = TouAudio.GuardianAngelSound,
+        IntroSound = DivaniAssets.CupidIntroSound,
         MaxRoleCount = 1,
         GhostRole = (RoleTypes)RoleId.Get<NeutralGhostRole>()
     };
@@ -203,6 +204,20 @@ public sealed class CupidRole(IntPtr cppPtr)
         }
     }
 
+    [HideFromIl2Cpp]
+    public void RestoreFinalizedCouple(PlayerControl? loverOne, PlayerControl? loverTwo)
+    {
+        LoverOne = loverOne;
+        LoverTwo = loverTwo;
+        Finalized = true;
+        ProvisionalTargets.Clear();
+
+        var couple = new List<PlayerControl>();
+        if (loverOne != null) couple.Add(loverOne);
+        if (loverTwo != null) couple.Add(loverTwo);
+        _lastKnownCoupleKey = CoupleKey(couple);
+    }
+
     public bool IsLover(PlayerControl player)
     {
         if (player == null)
@@ -225,7 +240,7 @@ public sealed class CupidRole(IntPtr cppPtr)
 
         if (!Finalized)
         {
-            stringB.Append(TownOfUsPlugin.Culture, $"\n<b>{CupidColor.ToTextColor()}Provisional lovers</color></b>");
+            stringB.Append(TownOfUsPlugin.Culture, $"\n<b>{CupidColor.ToTextColor()}Provisional lovers:</color></b>");
             foreach (var id in ProvisionalTargets)
             {
                 var plr = MiscUtils.PlayerById(id);
@@ -347,6 +362,7 @@ public sealed class CupidRole(IntPtr cppPtr)
         role.Finalized = true;
         role.ProvisionalTargets.Clear();
         role._lastKnownCoupleKey = CoupleKey([loverOne, loverTwo]);
+        CupidLoverReviveEvents.FinalizedCouples[cupid.PlayerId] = (loverOneId, loverTwoId);
 
         if (cupid.AmOwner)
         {

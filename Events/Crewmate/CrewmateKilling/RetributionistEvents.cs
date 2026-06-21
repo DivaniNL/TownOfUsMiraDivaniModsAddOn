@@ -42,7 +42,8 @@ public static class RetributionistEvents
 
         if (target != null && target.GetRoleWhenAlive() is RetributionistRole &&
             killer != null && killer != target && !killer.HasDied() &&
-            killer.Data?.Role is not PestilenceRole)
+            killer.Data?.Role is not PestilenceRole &&
+            !MeetingHud.Instance)
         {
             var opts = OptionGroupSingleton<RetributionistOptions>.Instance;
             if (opts.TurnIntoSoulOnce && RetributionistManager.UsedRevenge.Contains(target.PlayerId))

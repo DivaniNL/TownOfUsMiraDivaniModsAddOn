@@ -8,7 +8,7 @@
     
     <AssemblyName>DivaniMods</AssemblyName>
     <RootNamespace>DivaniMods</RootNamespace>
-    <Version>1.2.8</Version>
+    <Version>1.2.9</Version>
     <!--
       TownOfUs + TouMiraRolesExtension live in-repo for reference only. Do not compile them here:
       this project already references TownOfUsMira.dll from BepInEx. Compiling sources duplicates
@@ -233,6 +233,7 @@
     <EmbeddedResource Include="Resources\CupidProtect.png" />
     <EmbeddedResource Include="Resources\CupidProtectOne.png" />
     <EmbeddedResource Include="Resources\CupidProtectTwo.png" />
+    <EmbeddedResource Include="Resources\CupidIntro.wav" Condition="Exists('Resources\CupidIntro.wav')" />
     <EmbeddedResource Include="Resources\Icons\Dreamer.png" />
     <EmbeddedResource Include="Resources\DreamerMeetingDream.png" />
     <EmbeddedResource Include="Resources\DreamerIntro.wav" />

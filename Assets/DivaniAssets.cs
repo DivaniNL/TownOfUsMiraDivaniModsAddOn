@@ -107,6 +107,7 @@ public static class DivaniAssets
     public static LoadableAsset<AudioClip> UavFriendlySound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVFriendly.wav");
     public static LoadableAsset<AudioClip> UavEnemySound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVEnemy.wav");
     public static LoadableAsset<AudioClip> UavEndSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVEnd.wav");
+    public static LoadableAsset<AudioClip> CupidIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.CupidIntro.wav");
     public static LoadableAsset<AudioClip> DreamerIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DreamerIntro.wav");
     // Dutch Meme Soundpack door SFX - used by DutchMemeSoundpackPatch to replace
     // the vanilla door open/close audio clips when the matching lobby toggle is on.

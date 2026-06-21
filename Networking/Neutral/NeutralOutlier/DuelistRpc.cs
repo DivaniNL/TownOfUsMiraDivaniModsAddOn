@@ -45,6 +45,17 @@ public static class DuelistRpc
         ShowStartNotifs(duelist, target);
     }
 
+    [MethodRpc((uint)DivaniRpcCalls.DuelistAddWin, LocalHandling = RpcLocalHandling.Before)]
+    public static void RpcAddDuelWin(PlayerControl duelist)
+    {
+        if (duelist == null || duelist.Data == null || duelist.Data.Role is not DuelistRole)
+        {
+            return;
+        }
+
+        DuelManager.AddWin(duelist.PlayerId);
+    }
+
     private static void ShowStartNotifs(PlayerControl duelist, PlayerControl target)
     {
         var local = PlayerControl.LocalPlayer;
