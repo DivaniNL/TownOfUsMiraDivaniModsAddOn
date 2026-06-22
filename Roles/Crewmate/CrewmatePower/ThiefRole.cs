@@ -30,7 +30,7 @@ public sealed class ThiefRole(IntPtr cppPtr)
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
     
-    public List<uint> StolenModifierIds { get; } = new();
+    [HideFromIl2Cpp] public List<uint> StolenModifierIds { get; } = new();
     
     public int MaxStolenModifiers => (int)OptionGroupSingleton<ThiefOptions>.Instance.MaxStolenModifiers;
     

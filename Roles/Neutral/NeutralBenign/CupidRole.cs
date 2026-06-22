@@ -35,8 +35,7 @@ public sealed class CupidRole(IntPtr cppPtr)
 {
     public static readonly Color CupidColor = new Color32(222, 125, 127, 255);
 
-    [HideFromIl2Cpp]
-    public List<byte> ProvisionalTargets { get; } = new();
+    [HideFromIl2Cpp] public List<byte> ProvisionalTargets { get; } = new();
     public bool Finalized { get; set; }
     public PlayerControl? LoverOne { get; set; }
     public PlayerControl? LoverTwo { get; set; }
@@ -146,8 +145,7 @@ public sealed class CupidRole(IntPtr cppPtr)
         notif.AdjustNotification();
     }
 
-    [HideFromIl2Cpp]
-    public List<PlayerControl> GetCurrentCouple()
+    [HideFromIl2Cpp] public List<PlayerControl> GetCurrentCouple()
     {
         PlayerControl? anchor = null;
         if (LoverOne != null && LoverOne.HasModifier<LoverModifier>())
