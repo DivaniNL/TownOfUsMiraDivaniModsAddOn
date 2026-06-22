@@ -20,6 +20,7 @@ using TownOfUs.Roles;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
+using TownOfUs.Modifiers;
 
 namespace DivaniMods.Roles.Crewmate.CrewmatePower;
 
@@ -102,10 +103,12 @@ public sealed class DreamerRole(IntPtr cppPtr)
 
         var target = GameData.Instance.GetPlayerById(voteArea.TargetPlayerId)?.Object;
 
-        return target == null
-            || target.HasDied()
-            || target.HasModifier<DreamerTargetDreamingModifier>()
-            || target.HasModifier<DreamerInsomniaModifier>();
+        if (target == null || target.HasDied() || target.HasModifier<DreamerTargetDreamingModifier>() || target.HasModifier<DreamerInsomniaModifier>() || target.HasModifier<BaseRevealModifier>())
+        {
+            return true;
+        }
+
+        return false;
     }
 
     [HideFromIl2Cpp]
@@ -220,6 +223,23 @@ public sealed class DreamerRole(IntPtr cppPtr)
                 $"<b>Your dream on {target?.Data?.PlayerName ?? "them"} failed!</b>",
                 new Color32(51, 51, 153, 255), spr: DivaniAssets.DreamerIcon.LoadAsset());
         }
+    }
+
+    [MethodRpc((uint)DivaniRpcCalls.DreamerNotifyDreamRedirected)]
+    public static void RpcNotifyDreamRedirected(PlayerControl dreamer, ushort newRoleId)
+    {
+        if (dreamer == null || !dreamer.AmOwner || !OptionGroupSingleton<DreamerOptions>.Instance.NotifyDreamerOnFail.Value)
+        {
+            return;
+        }
+
+        var roleObj = RoleManager.Instance.GetRole((RoleTypes)newRoleId) as ITownOfUsRole;
+        var roleName = roleObj?.RoleName ?? "a new role";
+        var roleHex = roleObj != null ? ColorUtility.ToHtmlStringRGB(roleObj.RoleColor) : "9999FF";
+
+        Helpers.CreateAndShowNotification(
+            $"<b>The role you choose was unavailable- your dream role became the <color=#{roleHex}>{roleName}</color>!</b>",
+            new Color32(51, 51, 153, 255), spr: DivaniAssets.DreamerIcon.LoadAsset());
     }
 
     public static bool IsValidDreamTarget(PlayerControl? target, PlayerControl dreamer)

@@ -8,6 +8,7 @@ using DivaniMods.Options;
 using DivaniMods.Roles.Crewmate.CrewmatePower;
 using TownOfUs.Extensions;
 using TownOfUs.Utilities;
+using MiraAPI.Utilities;
 
 namespace DivaniMods.Events.Crewmate.CrewmatePower;
 
@@ -108,6 +109,7 @@ public static class DreamerEvents
                         }
 
                         dreamer.DreamRole = (ushort)randomRole.Role;
+                        DreamerRole.RpcNotifyDreamRedirected(dreamer.Player, dreamer.DreamRole);
                     }
                     else
                     {

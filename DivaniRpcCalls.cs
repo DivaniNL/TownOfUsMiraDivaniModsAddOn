@@ -50,5 +50,6 @@ public enum DivaniRpcCalls : uint
     OpportunistVotesSync = 245,
     DuelistAddWin = 246,
     DreamerSetReimagineTarget = 400,
-    DreamerNotifyDreamFailed = 401
+    DreamerNotifyDreamFailed = 401,
+    DreamerNotifyDreamRedirected = 402
 }
