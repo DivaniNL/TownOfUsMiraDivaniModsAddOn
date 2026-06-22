@@ -21,6 +21,7 @@ using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
 using TownOfUs.Modifiers;
+using System.Text;
 
 namespace DivaniMods.Roles.Crewmate.CrewmatePower;
 
@@ -45,13 +46,31 @@ public sealed class DreamerRole(IntPtr cppPtr)
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
     public byte DreamTargetId { get; set; } = byte.MaxValue;
-    public ushort DreamRole { get; set; }
+    public ushort DreamRoleId { get; set; } = default;
 
     public CustomRoleConfiguration Configuration => new(this)
     {
         Icon = DivaniAssets.DreamerIcon,
         IntroSound = DivaniAssets.DreamerIntroSound,
     };
+
+    [HideFromIl2Cpp]
+    public StringBuilder SetTabText()
+    {
+        var stringB = new StringBuilder();
+
+        stringB.AppendLine($"Current Dreams:");
+
+        if (ShowChosenDream())
+        {
+            var targetName = GameData.Instance.GetPlayerById(DreamTargetId)?.Object?.Data?.PlayerName;
+            var roleName = (RoleManager.Instance.GetRole((RoleTypes)DreamRoleId) as ITownOfUsRole)?.RoleName;
+            stringB.AppendLine($"<b>Dream Target: {targetName}. Dream Role: {roleName}</b>");
+            return stringB;
+        }
+
+        return stringB;
+    }
 
     public override void Initialize(PlayerControl player)
     {
@@ -188,7 +207,7 @@ public sealed class DreamerRole(IntPtr cppPtr)
         }
 
         dreamerRole.DreamTargetId = targetId;
-        dreamerRole.DreamRole = roleId;
+        dreamerRole.DreamRoleId = roleId;
 
 
         if (dreamer.AmOwner)
@@ -265,7 +284,7 @@ public sealed class DreamerRole(IntPtr cppPtr)
     public void ClearDream()
     {
         DreamTargetId = byte.MaxValue;
-        DreamRole = default;
+        DreamRoleId = default;
     }
 
     [HideFromIl2Cpp]
@@ -290,5 +309,10 @@ public sealed class DreamerRole(IntPtr cppPtr)
             .ToList();
 
         return pool.Count == 0 ? null : pool[UnityEngine.Random.Range(0, pool.Count)];
+    }
+
+    public bool ShowChosenDream()
+    {
+        return !(DreamRoleId == default) || !(DreamTargetId == byte.MaxValue);
     }
 }

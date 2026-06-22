@@ -74,6 +74,7 @@ public static class DreamerEvents
 
             if (!DreamerRole.IsValidDreamTarget(target, dreamer.Player))
             {
+                dreamer.SetTabText();
                 dreamer.ClearDream();
                 continue;
             }
@@ -81,6 +82,7 @@ public static class DreamerEvents
             if (!target!.IsCrewmate())
             {
                 DreamerRole.RpcNotifyDreamFailed(dreamer.Player, target);
+                dreamer.SetTabText();
                 dreamer.ClearDream();
                 continue;
             }
@@ -93,7 +95,7 @@ public static class DreamerEvents
 
             if (options.RespectMaxRoleCount.Value)
             {
-                var chosenRole = RoleManager.Instance.GetRole((AmongUs.GameOptions.RoleTypes)dreamer.DreamRole);
+                var chosenRole = RoleManager.Instance.GetRole((AmongUs.GameOptions.RoleTypes)dreamer.DreamRoleId);
                 if (chosenRole != null && DreamerRole.IsBreakingMaxRoleCount(chosenRole))
                 {
                     var onBreak = (DreamerOnDreamBreakMaxRoleCount)options.OnMaxRoleCountBroken.Value;
@@ -104,16 +106,20 @@ public static class DreamerEvents
                         if (randomRole == null)
                         {
                             DreamerRole.RpcNotifyDreamFailed(dreamer.Player, target);
+                            dreamer.SetTabText();
                             dreamer.ClearDream();
                             continue;
                         }
 
-                        dreamer.DreamRole = (ushort)randomRole.Role;
-                        DreamerRole.RpcNotifyDreamRedirected(dreamer.Player, dreamer.DreamRole);
+                        dreamer.DreamRoleId = (ushort)randomRole.Role;
+                        dreamer.SetTabText();
+                        dreamer.SetTabText();
+                        DreamerRole.RpcNotifyDreamRedirected(dreamer.Player, dreamer.DreamRoleId);
                     }
                     else
                     {
                         DreamerRole.RpcNotifyDreamFailed(dreamer.Player, target);
+                        dreamer.SetTabText();
                         dreamer.ClearDream();
                         continue;
                     }
@@ -121,9 +127,9 @@ public static class DreamerEvents
             }
 
             var originalRole = (ushort)target.Data.Role.Role;
-            target.RpcChangeRole(dreamer.DreamRole);
-            target.RpcAddModifier<DreamerTargetDreamingModifier>(originalRole, dreamer.DreamRole);
-
+            target.RpcChangeRole(dreamer.DreamRoleId);
+            target.RpcAddModifier<DreamerTargetDreamingModifier>(originalRole, dreamer.DreamRoleId);
+            dreamer.SetTabText();
             dreamer.ClearDream();
         }
     }
