@@ -1,8 +1,10 @@
 using AmongUs.GameOptions;
+using System.Linq;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Crewmate.CrewmatePower;
 using DivaniMods.Options;
 using Il2CppInterop.Runtime.Attributes;
+using Il2CppSystem.Runtime.InteropServices;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
@@ -15,6 +17,7 @@ using TownOfUs.Modules;
 using TownOfUs.Modules.Components;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
+using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
 
@@ -136,6 +139,11 @@ public sealed class DreamerRole(IntPtr cppPtr)
             return false;
         }
 
+        if (role is MayorRole or PoliticianRole or MonarchRole or TimeLordRole)
+        {
+            return false;
+        }
+
         var restriction = (DreamerReimagineRestriction)OptionGroupSingleton<DreamerOptions>.Instance.CannotReimagineInto.Value;
         return restriction switch
         {
@@ -148,8 +156,23 @@ public sealed class DreamerRole(IntPtr cppPtr)
     [HideFromIl2Cpp]
     public void OnRoleSelected(RoleBehaviour role, byte targetId)
     {
-        dreamMenu?.Close();
+        var options = OptionGroupSingleton<DreamerOptions>.Instance;
 
+        if (options.RespectMaxRoleCount.Value
+            && (DreamerOnDreamBreakMaxRoleCount)options.OnMaxRoleCountBroken.Value == DreamerOnDreamBreakMaxRoleCount.DreamRedo
+            && IsBreakingMaxRoleCount(role))
+        {
+            Helpers.CreateAndShowNotification(
+                "<b>That role is already maxed out — <color=#9999FF>choose another role!</color></b>",
+                new Color32(51, 51, 153, 255), spr: DivaniAssets.DreamerIcon.LoadAsset());
+
+            dreamMenu?.Close();
+            dreamMenu = GuesserMenu.Create();
+            dreamMenu.Begin(IsRoleValid, newRole => OnRoleSelected(newRole, targetId));
+            return;
+        }
+
+        dreamMenu?.Close();
         RpcSetReimagineTarget(Player, targetId, RoleId.Get(role.GetType()));
     }
 
@@ -194,7 +217,7 @@ public sealed class DreamerRole(IntPtr cppPtr)
         if (dreamer != null && dreamer.AmOwner && options.NotifyDreamerOnFail.Value)
         {
             Helpers.CreateAndShowNotification(
-                $"<b>Your dream on {target?.Data?.PlayerName ?? "them"} failed! They are not a Crew Role!</b>",
+                $"<b>Your dream on {target?.Data?.PlayerName ?? "them"} failed!</b>",
                 new Color32(51, 51, 153, 255), spr: DivaniAssets.DreamerIcon.LoadAsset());
         }
     }
@@ -223,5 +246,29 @@ public sealed class DreamerRole(IntPtr cppPtr)
     {
         DreamTargetId = byte.MaxValue;
         DreamRole = default;
+    }
+
+    [HideFromIl2Cpp]
+    public static bool IsBreakingMaxRoleCount(RoleBehaviour role)
+    {
+        if (role is not ICustomRole customRole || customRole.GetCount() is not int cap || cap == 0)
+        {
+            return false;
+        }
+
+        var aliveWithRole = PlayerControl.AllPlayerControls.ToArray()
+            .Count(p => p != null && p.Data?.Role != null && p.Data.Role.Role == role.Role && !p.HasDied());
+
+        return aliveWithRole >= cap;
+    }
+
+    [HideFromIl2Cpp]
+    public static RoleBehaviour? GetRandomValidRole()
+    {
+        var pool = MiscUtils.GetPotentialRoles()
+            .Where(r => IsRoleValid(r) && !IsBreakingMaxRoleCount(r))
+            .ToList();
+
+        return pool.Count == 0 ? null : pool[UnityEngine.Random.Range(0, pool.Count)];
     }
 }

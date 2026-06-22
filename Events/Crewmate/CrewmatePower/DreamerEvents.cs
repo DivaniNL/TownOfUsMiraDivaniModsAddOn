@@ -90,6 +90,34 @@ public static class DreamerEvents
                 continue;
             }
 
+            if (options.RespectMaxRoleCount.Value)
+            {
+                var chosenRole = RoleManager.Instance.GetRole((AmongUs.GameOptions.RoleTypes)dreamer.DreamRole);
+                if (chosenRole != null && DreamerRole.IsBreakingMaxRoleCount(chosenRole))
+                {
+                    var onBreak = (DreamerOnDreamBreakMaxRoleCount)options.OnMaxRoleCountBroken.Value;
+
+                    if (onBreak == DreamerOnDreamBreakMaxRoleCount.ApplyRandom)
+                    {
+                        var randomRole = DreamerRole.GetRandomValidRole();
+                        if (randomRole == null)
+                        {
+                            DreamerRole.RpcNotifyDreamFailed(dreamer.Player, target);
+                            dreamer.ClearDream();
+                            continue;
+                        }
+
+                        dreamer.DreamRole = (ushort)randomRole.Role;
+                    }
+                    else
+                    {
+                        DreamerRole.RpcNotifyDreamFailed(dreamer.Player, target);
+                        dreamer.ClearDream();
+                        continue;
+                    }
+                }
+            }
+
             var originalRole = (ushort)target.Data.Role.Role;
             target.RpcChangeRole(dreamer.DreamRole);
             target.RpcAddModifier<DreamerTargetDreamingModifier>(originalRole, dreamer.DreamRole);
