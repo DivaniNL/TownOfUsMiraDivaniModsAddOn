@@ -32,6 +32,7 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#silencer"><img width="10%" src="./Resources/Icons/Silencer.png" alt="Silencer"/></a>
   <img src="./Resources/Headers/ImpSupport.png" alt="Impostor Support"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#deadlock"><img width="10%" src="./Resources/Icons/Deadlock.png" alt="Deadlock"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#councillor"><img width="10%" src="./Resources/Icons/Councillor.png" alt="Councillor"/></a>
   <img src="./Resources/Headers/ImpPower.png" alt="Impostor Power"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#obfuscator"><img width="10%" src="./Resources/Icons/Obfuscator.png" alt="Obfuscator"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#recruiter"><img width="10%" src="./Resources/Icons/Recruiter.png" alt="Recruiter"/></a>
@@ -118,7 +119,7 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 - [@AtonyGit](https://github.com/AtonyGit)/[Town Of Us: Mira](https://github.com/AU-Avengers/TOU-Mira) - All assets that are not specified below
 - @jaydoeswitchcraft (discord) - Bloody modifier icon and Demolitionist role icon and Button assets, Skilled, Strong and Incompetent modifier icons, Retributionist assets
 - [Freesound](https://freesound.org/) (community) -Glass&ndash;break SFX for Fragile
-- Espeon(@mystic_haze2 on discord) - Sprout Assets, Summoner role and meeting icon, Obfuscator role icon, Cunctator role icon, Mosquito assets, providing more intro sounds, Duelist assets, Armored assets, Cupid assets
+- Espeon(@mystic_haze2 on discord) - Sprout Assets, Summoner role and meeting icon, Obfuscator role icon, Cunctator role icon, Mosquito assets, providing more intro sounds, Duelist assets, Armored assets, Cupid assets, Councillor role icon
 - @aasteriisken (discord) - Memento modifier icon, Domesmith Assets, Revenant icon, UAV Assets, Clockstopper icon, Nullified modifier icon
 [Follow Asterisken on GitHub](https://github.com/aasteriisken)
 - @maybe_xinav (discord) - Animated Portalmaker portals and portal button icons, Frag button icons, Plague Doctor button icon, Shuffle button icon, Sentinel beacon sprite, Sentinel palce beacon button,Lockdown button sprite
