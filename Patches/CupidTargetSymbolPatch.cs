@@ -18,6 +18,8 @@ internal static class CupidProvisionalDisplay
     private const string LoverOneCircle = "<color=#AB30A5>●</color> ";
     private const string LoverTwoCircle = "<color=#25972B>●</color> ";
 
+    private const string OriginalLoverHeart = "<color=#FF66CC> ♥</color>";
+
     private static string? _provisionalHeartChunk;
     private static string? _loverHeartChunk;
 
@@ -80,6 +82,19 @@ internal static class CupidProvisionalDisplay
         }
     }
 
+    internal static void TryStripOriginalLoverHeart(ref string result, PlayerControl row)
+    {
+        if (OwningCupidVisibleTo(row) == null)
+        {
+            return;
+        }
+
+        if (result.Contains(OriginalLoverHeart))
+        {
+            result = result.Replace(OriginalLoverHeart, string.Empty);
+        }
+    }
+
     private static CupidRole? OwningCupidVisibleTo(PlayerControl row)
     {
         if (row == null)
@@ -100,7 +115,10 @@ internal static class CupidProvisionalDisplay
                 continue;
             }
 
-            if (!local.Data.IsDead && local.PlayerId != cupid.Player.PlayerId)
+            var localIsLover = (cupid.LoverOne != null && cupid.LoverOne.PlayerId == local.PlayerId) ||
+                               (cupid.LoverTwo != null && cupid.LoverTwo.PlayerId == local.PlayerId);
+
+            if (!local.Data.IsDead && local.PlayerId != cupid.Player.PlayerId && !localIsLover)
             {
                 continue;
             }
@@ -118,6 +136,12 @@ internal static class CupidProvisionalDisplay
     internal static void TryPrependLoverCircle(ref string result, PlayerControl row)
     {
         if (!OptionGroupSingleton<CupidOptions>.Instance.ProtectSeparately)
+        {
+            return;
+        }
+
+        var local = PlayerControl.LocalPlayer;
+        if (local == null || local.Data == null || !local.Data.IsDead && local.Data.Role is not CupidRole)
         {
             return;
         }
@@ -168,6 +192,17 @@ public static class CupidTargetSymbolDataVisibilityPatch
     {
         CupidProvisionalDisplay.TryAppendHeartSymbol(ref __result, player);
         CupidProvisionalDisplay.TryPrependLoverCircle(ref __result, player);
+    }
+}
+
+[HarmonyPatch(typeof(PlayerRoleTextExtensions), nameof(PlayerRoleTextExtensions.UpdateAllianceSymbols),
+    new[] { typeof(string), typeof(PlayerControl), typeof(DataVisibility) })]
+public static class CupidStripLoverHeartPatch
+{
+    [HarmonyPostfix]
+    public static void Postfix(ref string __result, PlayerControl player, DataVisibility visibility)
+    {
+        CupidProvisionalDisplay.TryStripOriginalLoverHeart(ref __result, player);
     }
 }
 
