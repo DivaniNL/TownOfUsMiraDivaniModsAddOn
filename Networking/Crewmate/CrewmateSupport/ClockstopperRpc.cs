@@ -8,6 +8,8 @@ using DivaniMods.Roles.Crewmate.CrewmateSupport;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using UnityEngine;
+using MiraAPI.Modifiers;
+using TownOfUs.Modifiers.Game.Alliance;
 
 namespace DivaniMods.Networking.Crewmate.CrewmateSupport;
 
@@ -16,7 +18,7 @@ public static class ClockstopperRpc
     [MethodRpc((uint)DivaniRpcCalls.ClockstopperResetCooldowns, LocalHandling = RpcLocalHandling.Before)]
     public static void RpcResetCooldowns(PlayerControl clockstopper)
     {
-        if (clockstopper == null || clockstopper.Data?.Role is not ClockstopperRole || clockstopper.HasDied())
+        if (clockstopper == null || clockstopper.Data?.Role is not ClockstopperRole cr || clockstopper.HasDied())
         {
             return;
         }
@@ -40,7 +42,7 @@ public static class ClockstopperRpc
             return;
         }
 
-        if (!ShouldResetFor(local))
+        if (!ShouldResetFor(local, clockstopper))
         {
             return;
         }
@@ -67,8 +69,23 @@ public static class ClockstopperRpc
             Color.white, pos, spr: icon);
     }
 
-    private static bool ShouldResetFor(PlayerControl player)
+    private static bool ShouldResetFor(PlayerControl player, PlayerControl clockstopper)
     {
+        if (clockstopper.IsImpostorAligned())
+        {
+            return !player.IsImpostorAligned();
+        }
+        
+        if (clockstopper.HasModifier<EgotistModifier>())
+        {
+            return player.IsCrewmate();
+        }
+
+        if (clockstopper.IsLover())
+        {
+            return !player.IsLover();
+        }
+
         if (player.IsImpostorAligned())
         {
             return true;
