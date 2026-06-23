@@ -9,6 +9,7 @@ using MiraAPI.Networking;
 using MiraAPI.Utilities;
 using Reactor.Utilities;
 using DivaniMods.Assets;
+using DivaniMods.Options;
 using DivaniMods.Buttons.Neutral.NeutralKilling;
 using DivaniMods.Roles.Neutral.NeutralKilling;
 using DivaniMods.Utilities;
@@ -31,6 +32,7 @@ public static class FragBombState
     public static byte HolderId { get; private set; } = NoPlayer;
     public static byte ImmuneId { get; private set; } = NoPlayer;
     public static float TimeRemaining { get; private set; }
+    public static float Duration { get; private set; }
     private static float ArmingRemaining;
     public static float ArmingDuration { get; private set; }
 
@@ -69,6 +71,7 @@ public static class FragBombState
         {
             FragId = sender.PlayerId;
             TimeRemaining = duration;
+            Duration = duration;
             ArmingRemaining = Mathf.Clamp(armingDelay, 2f, 7f);
             ArmingDuration = ArmingRemaining;
             IsArmed = false;
@@ -98,6 +101,7 @@ public static class FragBombState
         HolderId = NoPlayer;
         ImmuneId = NoPlayer;
         TimeRemaining = 0f;
+        Duration = 0f;
         ArmingRemaining = 0f;
         _explosionTriggered = false;
 
@@ -190,8 +194,21 @@ public static class FragBombState
     private static void Tick()
     {
         var inMeeting = MeetingHud.Instance || ExileController.Instance;
+        var rewinding = TownOfUs.Modules.TimeLordRewindSystem.IsRewinding;
 
-        if (!inMeeting && !TownOfUs.Modules.TimeLordRewindSystem.IsRewinding)
+        if (!inMeeting && rewinding &&
+            OptionGroupSingleton<FragOptions>.Instance.OnTimelordRewind.Value == (int)FragRewindBehavior.Rewind)
+        {
+            if (!IsArmed)
+            {
+                ArmingRemaining = Mathf.Min(ArmingDuration, ArmingRemaining + Time.deltaTime);
+            }
+            else
+            {
+                TimeRemaining = Mathf.Min(Duration, TimeRemaining + Time.deltaTime);
+            }
+        }
+        else if (!inMeeting && !rewinding)
         {
             if (!IsArmed)
             {
@@ -209,7 +226,7 @@ public static class FragBombState
             }
         }
 
-        if (IsArmed && TimeRemaining <= 0f && !_explosionTriggered && !inMeeting)
+        if (IsArmed && TimeRemaining <= 0f && !_explosionTriggered && !inMeeting && !rewinding)
         {
             TriggerExplosion();
         }

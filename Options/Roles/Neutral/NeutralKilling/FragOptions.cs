@@ -5,6 +5,12 @@ using DivaniMods.Roles.Neutral.NeutralKilling;
 
 namespace DivaniMods.Options;
 
+public enum FragRewindBehavior
+{
+    Pause,
+    Rewind
+}
+
 public class FragOptions : AbstractOptionGroup<FragRole>
 {
     public override string GroupName => "Frag";
@@ -16,4 +22,8 @@ public class FragOptions : AbstractOptionGroup<FragRole>
         "Give Frag Cooldown", 25f, 10f, 60f, 5f, MiraNumberSuffixes.Seconds);
 
     public ModdedToggleOption CanVent { get; } = new("Frag Can Vent", false);
+
+    public ModdedEnumOption OnTimelordRewind { get; } = new(
+        "On Timelord Rewind", (int)FragRewindBehavior.Pause, typeof(FragRewindBehavior),
+        ["Pause Timer", "Rewind Timer"]);
 }
