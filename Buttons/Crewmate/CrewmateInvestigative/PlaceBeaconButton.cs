@@ -95,12 +95,12 @@ public class PlaceBeaconButton : TownOfUsButton
 
         var position = player.GetTruePosition();
         if (!BeaconManager.IsInRoom(position)) return;
-        
+
         if (_isPlacing) return;
 
         Coroutines.Start(PlaceBeaconCoroutine(player, position));
     }
-    
+
     private IEnumerator PlaceBeaconCoroutine(PlayerControl player, Vector2 capturedPosition)
     {
         _isPlacing = true;
