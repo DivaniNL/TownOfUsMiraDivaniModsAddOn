@@ -8,6 +8,8 @@ using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using UnityEngine;
+using MiraAPI.Modifiers;
+using TownOfUs.Modifiers.Game;
 
 namespace DivaniMods.Roles.Crewmate.CrewmateProtective;
 
@@ -19,7 +21,10 @@ public sealed class DomesmithRole(IntPtr cppPtr)
     public string RoleName => "Domesmith";
     public string RoleDescription => "Shield the group!";
     public string RoleLongDescription =>
-        "Drop protective domes on the ground to protect the group!";
+        PlayerControl.LocalPlayer
+        && PlayerControl.LocalPlayer.TryGetModifier<AllianceGameModifier>(out var allyMod) && !allyMod.GetsPunished
+            ? "Drop protective domes on the ground to <b>protect evils!</b>"
+            : "Drop protective domes on the ground to protect the group!";
     
     public Color RoleColor => DomesmithColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
