@@ -546,6 +546,36 @@
         "\n\n<b>UAV</b>",
         "\n- Setting \"Notify Players of UAV\" to false now also silences notifications for enemy teams."
       ]
+    },
+    {
+      "Date": "2026-06-23T12:00:00Z",
+      "Number": "10016",
+      "ShortTitle": "Divani Mods v1.3.0",
+      "Title": "Councillor joins Divani Mods + General improvements",
+      "SubTitle": "Councillor joins Divani Mods + General improvements",
+      "Text": [
+        "\r<size=110%><b>Divani Mods v1.3.0</b></size>",
+        "\n\nCouncillor joins Divani Mods + General improvements",
+        "\n\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.0>Download v1.3.0</link>",
+        "\n\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki>Wiki</link>",
+        "\n\n\r<size=108%><b>Added</b></size>",
+        "\n\n<b>Added Role: Councillor (Impostor Support)</b>",
+        "\n\nEach kill gives you extra votes in the next meeting. If configured, you also get extra votes if killing a player that has more votes (Knighted or Mayor)",
+        "\nWith anonymous votes off, these extra votes appear grey.",
+        "\n\n\r<size=108%><b>General changes</b></size>",
+        "\n\n- Fixed some warnings/errors in the code",
+        "\n- Added option banners to the Divani Mods roles settings",
+        "\n- Fixed Doomsayer buckets. Most of them were set to Insight. This was not always the correct bucket.",
+        "\n- Added corresponding buttons to the role info in wiki under Abilities",
+        "\n\n\r<size=108%><b>Bugfixes:</b></size>",
+        "\n\n<b>Cupid</b>",
+        "\n\n- Fixed a visual bug which also showed the original pink lovers heart to dead players. This has now been fixed. Cupid lovers hearts are always and only in the Cupid role color for everyone that sees them.",
+        "\n\n<b>Revenant</b>",
+        "\n\n- Fixed a bug where Revenant was able to kill its impostor teammates. This can now only happen during Camouflaged Comms (if Kill anyone during Comms is enabled)",
+        "\n\n\r<size=108%><b>Role/Modifier Changes:</b></size>",
+        "\n\n<b>Frag</b>",
+        "\n\n- Added Option: On Time Lord Rewind. This can be set to make the Frag timer rewind during Time Lord rewind. Pause is the current behaviour"
+      ]
     }
   ]
 }

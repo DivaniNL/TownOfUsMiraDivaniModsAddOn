@@ -713,7 +713,7 @@ public class PickpocketButton : TownOfUsButton
     [MethodRpc((uint)DivaniRpcCalls.GiveRandomModifier)]
     public static void RpcGiveRandomModifier(PlayerControl thief, uint chosenId)
     {
-        ApplyGivenModifier(thief, chosenId, prefix: "Gained");
+        ApplyGivenModifier(thief, chosenId, prefix: "Stole/Gained");
     }
     
     private static void ApplyGivenModifier(PlayerControl thief, uint chosenId, string prefix)

@@ -1,3 +1,4 @@
+using Il2CppInterop.Runtime.Attributes;
 using System;
 using AmongUs.GameOptions;
 using MiraAPI.GameOptions;
@@ -6,6 +7,7 @@ using MiraAPI.Roles;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using TownOfUs;
+using TownOfUs.Assets;
 using TownOfUs.Extensions;
 using TownOfUs.Interfaces;
 using TownOfUs.Modules.Localization;
@@ -46,8 +48,14 @@ public sealed class InnocentRole(IntPtr cppPtr)
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new("Taunt", "Force a player to immediately kill you.You will win if that player is voted out in the next meeting.", TouNeutAssets.JesterHauntSprite)
+    ];
+
     public CustomRoleConfiguration Configuration => new(this)
     {
+        OptionsScreenshot = DivaniAssets.InnocentBanner,
         Icon = DivaniAssets.InnocentIcon,
         IntroSound = DivaniAssets.InnocentIntroSound,
         GhostRole = (RoleTypes)RoleId.Get<NeutralGhostRole>(),

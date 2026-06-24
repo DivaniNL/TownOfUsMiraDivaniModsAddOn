@@ -26,7 +26,7 @@ public sealed class CunctatorRole(IntPtr cppPtr)
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorConcealing;
 
-    public DoomableType DoomHintType => DoomableType.Insight;
+    public DoomableType DoomHintType => DoomableType.Perception;
 
     public RoleBehaviour CrewVariant =>
         RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<EngineerTouRole>());
@@ -42,6 +42,7 @@ public sealed class CunctatorRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        OptionsScreenshot = DivaniAssets.CunctatorBanner,
         Icon = DivaniAssets.CunctatorIcon,
         IntroSound = DivaniAssets.CunctatorIntroSound,
         MaxRoleCount = 1,

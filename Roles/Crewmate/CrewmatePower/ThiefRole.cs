@@ -1,3 +1,4 @@
+using Il2CppInterop.Runtime.Attributes;
 using System;
 using System.Collections.Generic;
 using MiraAPI.GameOptions;
@@ -29,15 +30,21 @@ public sealed class ThiefRole(IntPtr cppPtr)
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
     
-    public List<uint> StolenModifierIds { get; } = new();
+    [HideFromIl2Cpp] public List<uint> StolenModifierIds { get; } = new();
     
     public int MaxStolenModifiers => (int)OptionGroupSingleton<ThiefOptions>.Instance.MaxStolenModifiers;
     
     public bool CanStealMore => StolenModifierIds.Count < MaxStolenModifiers;
 
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new("Pickpocket", "Steal a modifier from a nearby player. Trying to steal a non-crewmate or universal modifier, as well as stealing from a player which has none will give you a random Crew/Universal modifier", DivaniAssets.PickpocketButton)
+    ];
+
     public CustomRoleConfiguration Configuration => new(this)
     {
         Icon = DivaniAssets.ThiefIcon,
+        OptionsScreenshot = DivaniAssets.ThiefBanner,
         IntroSound = DivaniAssets.ThiefIntroSound,
     };
     

@@ -32,7 +32,15 @@ public sealed class RevenantKillButton : TownOfUsKillRoleButton<RevenantRole, Pl
     public override PlayerControl? GetTarget()
     {
         var player = PlayerControl.LocalPlayer;
-        return player == null ? null : player.GetClosestLivingPlayer(true, Distance);
+        return player == null ? null : MiscUtils.GetImpostorTarget(Distance);
+    }
+
+    public override void SetOutline(bool active)
+    {
+        if (Target is PlayerControl target)
+        {
+            target.cosmetics.SetOutline(active, new Il2CppSystem.Nullable<Color>(RevenantRole.RevenantColor));
+        }
     }
 
     public override bool CanUse()

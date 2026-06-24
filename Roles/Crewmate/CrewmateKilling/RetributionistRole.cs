@@ -22,7 +22,7 @@ public sealed class RetributionistRole(IntPtr cppPtr)
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmateKilling;
 
-    public DoomableType DoomHintType => DoomableType.Relentless;
+    public DoomableType DoomHintType => DoomableType.Death;
 
     public string GetAdvancedDescription() =>
         "When you get killed, you spawn on a random vent as the Vengeful Soul and you get a " +
@@ -33,6 +33,7 @@ public sealed class RetributionistRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        OptionsScreenshot = DivaniAssets.RetributionistBanner,
         Icon = DivaniAssets.RetributionistIcon,
         IntroSound = DivaniAssets.RetributionistIntroSound,
         MaxRoleCount = 1,

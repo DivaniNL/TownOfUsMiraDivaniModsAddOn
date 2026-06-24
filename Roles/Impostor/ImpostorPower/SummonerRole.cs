@@ -32,7 +32,7 @@ public sealed class SummonerRole(IntPtr cppPtr)
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorPower;
 
-    public DoomableType DoomHintType => DoomableType.Insight;
+    public DoomableType DoomHintType => DoomableType.Death;
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
@@ -58,8 +58,14 @@ public sealed class SummonerRole(IntPtr cppPtr)
         return sb;
     }
 
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new("Summon", "In a meeting, mark a dead player to become a Revenant from next round.", DivaniAssets.SummonerMeetingActive)
+    ];
+
     public CustomRoleConfiguration Configuration => new(this)
     {
+        OptionsScreenshot = DivaniAssets.SummonerBanner,
         Icon = DivaniAssets.SummonerIcon,
         IntroSound = DivaniAssets.SummonerIntroSound,
         MaxRoleCount = 1,

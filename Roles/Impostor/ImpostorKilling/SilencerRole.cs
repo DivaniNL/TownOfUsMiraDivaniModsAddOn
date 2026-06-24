@@ -25,7 +25,7 @@ public sealed class SilencerRole(IntPtr cppPtr)
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorKilling;
 
-    public DoomableType DoomHintType => DoomableType.Insight;
+    public DoomableType DoomHintType => DoomableType.Fearmonger;
 
     public RoleBehaviour CrewVariant =>
         RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<EngineerTouRole>());
@@ -34,6 +34,7 @@ public sealed class SilencerRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        OptionsScreenshot = DivaniAssets.SilencerBanner,
         Icon = DivaniAssets.SilencerIcon,
         IntroSound = DivaniAssets.SilencerIntroSound,
         MaxRoleCount = 1,

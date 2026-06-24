@@ -1,3 +1,4 @@
+using Il2CppInterop.Runtime.Attributes;
 using System;
 using AmongUs.GameOptions;
 using MiraAPI.Modifiers;
@@ -30,12 +31,17 @@ public sealed class RecruiterRole(IntPtr cppPtr)
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorPower;
 
-    public DoomableType DoomHintType => DoomableType.Insight;
+    public DoomableType DoomHintType => DoomableType.Trickster;
 
     public RoleBehaviour CrewVariant =>
         RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<EngineerTouRole>());
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
+
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new("Recruit", "During the first meeting, mark one non-Impostor to convert them into an vanilla Impostor.", DivaniAssets.RecruitMeetingImpostor)
+    ];
 
     public CustomRoleConfiguration Configuration => new(this)
     {

@@ -1,3 +1,4 @@
+using Il2CppInterop.Runtime.Attributes;
 using System;
 using System.Linq;
 using AmongUs.GameOptions;
@@ -30,18 +31,16 @@ public sealed class FragRole(IntPtr cppPtr)
     public static readonly Color FragColor = new Color32(232, 168, 124, 255);
 
     public string RoleName => "Frag";
-    public string RoleDescription => "Hot potato time!";
+    public string RoleDescription => "Here, Hold this!";
     public string RoleLongDescription =>
-        "Give a time bomb to a player.\n" +
-        "After a short random delay the timer starts.\n" +
-        "The holder can pass it on, but not back\n" +
-        "to the previous holder until it moves again.\n" +
-        "Win by outlasting all other killers.";
+        "Give a Frag to a player.\n" +
+        "Everyone can pass this Frag to one other\n"+
+        "The one holding it at the end, dies!";
     public Color RoleColor => FragColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralKilling;
 
-    public DoomableType DoomHintType => DoomableType.Relentless;
+    public DoomableType DoomHintType => DoomableType.Fearmonger;
 
     public RoleBehaviour CrewVariant =>
         RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<TrapperRole>());
@@ -50,8 +49,15 @@ public sealed class FragRole(IntPtr cppPtr)
 
     public bool HasImpostorVision => true;
 
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new("Give Frag", "Give the Frag to someone.", DivaniAssets.FragGiveButton),
+        new("Pass Frag", "While holding the Frag, pass it on to another player before it explodes.", DivaniAssets.FragPassButton)
+    ];
+
     public CustomRoleConfiguration Configuration => new(this)
     {
+        OptionsScreenshot = DivaniAssets.FragBanner,
         Icon = DivaniAssets.FragIcon,
         IntroSound = DivaniAssets.FragIntroSound,
         MaxRoleCount = 1,

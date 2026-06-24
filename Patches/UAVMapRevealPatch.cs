@@ -45,7 +45,7 @@ public static class UAVMapRevealPatch
         }
 
         var showColors = opts.ShowPlayerColors;
-        var scale = ShipStatus.Instance.MapScale;
+        var scale = ShipStatus.Instance!.MapScale;
         var signX = Mathf.Sign(ShipStatus.Instance.transform.localScale.x);
 
         foreach (var player in PlayerControl.AllPlayerControls)

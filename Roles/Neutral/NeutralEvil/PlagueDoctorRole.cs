@@ -64,6 +64,11 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
 
     public bool HasImpostorVision => true;
 
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new("Infect", "Directly infect a player.", DivaniAssets.PlagueDoctorInfectButton)
+    ];
+
     public CustomRoleConfiguration Configuration => new(this)
     {
         CanUseVent = OptionGroupSingleton<PlagueDoctorOptions>.Instance.CanVent,

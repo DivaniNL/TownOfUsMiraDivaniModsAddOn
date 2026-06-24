@@ -1,3 +1,4 @@
+using Il2CppInterop.Runtime.Attributes;
 using System;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
@@ -24,12 +25,18 @@ public sealed class MosquitoRole(IntPtr cppPtr)
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorKilling;
 
-    public DoomableType DoomHintType => DoomableType.Insight;
+    public DoomableType DoomHintType => DoomableType.Hunter;
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new("Sting", "Launch a mosquito that flies to a target and stings it to death. The mosquitos can be swatted by clicking/tapping them", DivaniAssets.MosquitoStingButton)
+    ];
+
     public CustomRoleConfiguration Configuration => new(this)
     {
+        OptionsScreenshot = DivaniAssets.MosquitoBanner,
         UseVanillaKillButton = false,
         Icon = DivaniAssets.MosquitoIcon,
         IntroSound = DivaniAssets.MosquitoIntroSound,

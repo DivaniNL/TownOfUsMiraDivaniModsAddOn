@@ -42,8 +42,15 @@ public sealed class DuelistRole(IntPtr cppPtr)
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new("Duel", "Challenge a shipmate to a duel.", DivaniAssets.DuelistDuelButton),
+        new("Strike", "Attack your opponent during the duel.", DivaniAssets.DuelStrikeButton)
+    ];
+
     public CustomRoleConfiguration Configuration => new(this)
     {
+        OptionsScreenshot = DivaniAssets.DuelistBanner,
         Icon = DivaniAssets.DuelistIcon,
         IntroSound = DivaniAssets.DuelistIntroSound,
         MaxRoleCount = 1,

@@ -14,7 +14,7 @@ public static class DivaniTimers
 {
     public const int DefaultPriority = 100;
 
-    private const float TopAnchorY = 2.5f;
+    private const float TopAnchorY = 2.2f;
     private const float ZLayer = -20f;
     private const float RowStep = 0.42f;
 

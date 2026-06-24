@@ -8,7 +8,7 @@
     
     <AssemblyName>DivaniMods</AssemblyName>
     <RootNamespace>DivaniMods</RootNamespace>
-    <Version>1.2.9</Version>
+    <Version>1.3.0</Version>
     <!--
       TownOfUs + TouMiraRolesExtension live in-repo for reference only. Do not compile them here:
       this project already references TownOfUsMira.dll from BepInEx. Compiling sources duplicates
@@ -141,6 +141,7 @@
     <EmbeddedResource Include="Resources\Icons\Blindspot.png" />
     <EmbeddedResource Include="Resources\Icons\Fragile.png" />
     <EmbeddedResource Include="Resources\Icons\Deadlock.png" />
+    <EmbeddedResource Include="Resources\Icons\Councillor.png" />
     <EmbeddedResource Include="Resources\Icons\PortalMaker.png" />
     <EmbeddedResource Include="Resources\Icons\Ruthless.png" />
     <EmbeddedResource Include="Resources\Icons\Nullified.png" />
@@ -179,6 +180,7 @@
     <EmbeddedResource Include="Resources\ThiefIntro.wav" />
     <EmbeddedResource Include="Resources\PortalMakerIntro.wav" />
     <EmbeddedResource Include="Resources\DeadlockIntro.wav" />
+    <EmbeddedResource Include="Resources\CouncillorIntro.wav" />
     <EmbeddedResource Include="Resources\PlacePortalSound.wav" />
     <EmbeddedResource Include="Resources\FragHeartbeat.wav" Condition="Exists('Resources\FragHeartbeat.wav')" />
     <EmbeddedResource Include="Resources\FragIntro.wav" Condition="Exists('Resources\FragIntro.wav')" />
@@ -189,6 +191,22 @@
     <EmbeddedResource Include="Resources\DoorClose.wav" />
     <EmbeddedResource Include="Resources\Banners\DivaniModNewsLogo.png" />
     <EmbeddedResource Include="Resources\Banners\DivaniModsLogoNew.png" Condition="Exists('Resources\Banners\DivaniModsLogoNew.png')" />
+    <EmbeddedResource Include="Resources\OptionBanners\ThiefBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\ClockstopperBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\CunctatorBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\CupidBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\DeadlockBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\DemolitionistBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\DomesmithBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\DuelistBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\FragBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\InnocentBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\MosquitoBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\PortalmakerBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\RetributionistBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\SentinelBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\SilencerBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\SummonerBanner.png" />
     <EmbeddedResource Include="Resources\OpportunistIntro.wav" />
     <EmbeddedResource Include="Resources\DemolitionistIntro.wav" />
     <EmbeddedResource Include="Resources\DemolitionistExplosion.wav" />

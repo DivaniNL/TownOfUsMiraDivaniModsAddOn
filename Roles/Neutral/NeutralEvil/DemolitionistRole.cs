@@ -37,7 +37,7 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralEvil;
 
-    public DoomableType DoomHintType => DoomableType.Relentless;
+    public DoomableType DoomHintType => DoomableType.Fearmonger;
 
     public RoleBehaviour CrewVariant =>
         RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<EngineerTouRole>());
@@ -46,8 +46,15 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
 
     public bool HasImpostorVision => true;
 
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new("Plant", "Plant a bomb at a console to start a sabotage. It explodes unless the crew defuses it in time.", DivaniAssets.DemolitionistPlantButton),
+        new("Defuse", "Defuse the planted bomb before it triggers an explosion", DivaniAssets.DemolitionistDefuseButton)
+    ];
+
     public CustomRoleConfiguration Configuration => new(this)
     {
+        OptionsScreenshot = DivaniAssets.DemolitionistBanner,
         Icon = DivaniAssets.DemolitionistIcon,
         IntroSound = DivaniAssets.DemolitionistIntroSound,
         MaxRoleCount = 1,

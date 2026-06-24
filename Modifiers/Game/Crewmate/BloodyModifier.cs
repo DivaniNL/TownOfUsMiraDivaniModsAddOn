@@ -1,3 +1,4 @@
+using Il2CppInterop.Runtime.Attributes;
 using AmongUs.GameOptions;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
@@ -42,5 +43,5 @@ public sealed class BloodyModifier : TouGameModifier, IColoredModifier, IWikiDis
         return base.IsModifierValidOn(role) && role.IsCrewmate();
     }
 
-    public List<CustomButtonWikiDescription> Abilities { get; } = [];
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } = [];
 }

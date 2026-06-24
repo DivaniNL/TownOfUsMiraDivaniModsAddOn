@@ -35,8 +35,7 @@ public sealed class CupidRole(IntPtr cppPtr)
 {
     public static readonly Color CupidColor = new Color32(222, 125, 127, 255);
 
-    [HideFromIl2Cpp]
-    public List<byte> ProvisionalTargets { get; } = new();
+    [HideFromIl2Cpp] public List<byte> ProvisionalTargets { get; } = new();
     public bool Finalized { get; set; }
     public PlayerControl? LoverOne { get; set; }
     public PlayerControl? LoverTwo { get; set; }
@@ -63,14 +62,13 @@ public sealed class CupidRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        OptionsScreenshot = DivaniAssets.CupidBanner,
         Icon = DivaniAssets.CupidIcon,
         IntroSound = DivaniAssets.CupidIntroSound,
         MaxRoleCount = 1,
         GhostRole = (RoleTypes)RoleId.Get<NeutralGhostRole>()
     };
-
-    [HideFromIl2Cpp]
-    public List<CustomButtonWikiDescription> Abilities { get; } =
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
         new("Matchmake", "Mark a player as a provisional lover.", DivaniAssets.CupidMatchmakeButton),
         new("Bestow", "Protect your lovers from death for a short time.", DivaniAssets.CupidProtectButton)
@@ -148,8 +146,7 @@ public sealed class CupidRole(IntPtr cppPtr)
         notif.AdjustNotification();
     }
 
-    [HideFromIl2Cpp]
-    public List<PlayerControl> GetCurrentCouple()
+    [HideFromIl2Cpp] public List<PlayerControl> GetCurrentCouple()
     {
         PlayerControl? anchor = null;
         if (LoverOne != null && LoverOne.HasModifier<LoverModifier>())

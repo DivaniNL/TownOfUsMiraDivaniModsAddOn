@@ -3,6 +3,7 @@ using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using DivaniMods.Roles.Impostor.ImpostorSupport;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers.Game;
 using TownOfUs.Modules.Wiki;
@@ -34,4 +35,9 @@ public sealed class MisvoteModifier : UniversalGameModifier, IColoredModifier, I
 
     public override int GetAmountPerGame() =>
         (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.MisvoteAmount.Value;
+
+    public override bool IsModifierValidOn(RoleBehaviour role)
+    {
+        return base.IsModifierValidOn(role) && role is not CouncillorRole;
+    }
 }

@@ -50,7 +50,8 @@ internal static class RetributionistCursePatches
     public static void ForceDisableButtonsPostfix()
     {
         var local = PlayerControl.LocalPlayer;
-        if (local?.Data?.Role == null || !local.HasModifier<CursedModifier>())
+        if (local == null || local.gameObject == null || local.Data?.Role == null
+            || !local.HasModifier<CursedModifier>())
         {
             return;
         }

@@ -37,6 +37,11 @@ public sealed class ObfuscatorRole(IntPtr cppPtr)
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new("Transfer Votes", "Select two players in a meeting that will swap votes at the end.", DivaniAssets.ObfuscateActive)
+    ];
+
     public CustomRoleConfiguration Configuration => new(this)
     {
         Icon = DivaniAssets.ObfuscatorIcon,

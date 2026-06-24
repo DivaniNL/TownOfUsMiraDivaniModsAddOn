@@ -1,5 +1,6 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
+using MiraAPI.PluginLoading;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -10,6 +11,7 @@ using UnityEngine;
 
 namespace DivaniMods.Buttons.Crewmate.CrewmateSupport;
 
+[MiraIgnore]
 public abstract class PortalTeleportButtonBase : TownOfUsButton
 {
     protected abstract int PortalIndex { get; }

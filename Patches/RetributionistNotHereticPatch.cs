@@ -57,6 +57,7 @@ internal static class RetributionistNotHereticPatch
                             !x.HasModifier<InquisitorHereticModifier>() &&
                             x.PlayerId != __instance.Player.PlayerId &&
                             !taken.Contains(x.PlayerId) &&
+                            x.Data != null &&
                             !SpectatorRole.TrackedSpectators.Contains(x.Data.PlayerName))
                 .ToList();
 

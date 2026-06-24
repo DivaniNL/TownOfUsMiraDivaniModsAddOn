@@ -139,7 +139,7 @@ public static class OpportunistPatch
             {
                 if (opp.WildcardActiveThisMeeting)
                 {
-                    RpcRefundOpportunistWildcard(PlayerControl.LocalPlayer, oppId);
+                    RpcRefundOpportunistWildcard(PlayerControl.LocalPlayer!, oppId);
                 }
 
                 if (!opp.VotedThisMeeting || !opp.CurrentMeetingTargetId.HasValue)
