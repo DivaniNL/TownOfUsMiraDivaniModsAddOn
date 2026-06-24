@@ -252,6 +252,9 @@
     <EmbeddedResource Include="Resources\CupidProtectOne.png" />
     <EmbeddedResource Include="Resources\CupidProtectTwo.png" />
     <EmbeddedResource Include="Resources\CupidIntro.wav" Condition="Exists('Resources\CupidIntro.wav')" />
+    <EmbeddedResource Include="Resources\Icons\Dreamer.png" />
+    <EmbeddedResource Include="Resources\DreamerMeetingDream.png" />
+    <EmbeddedResource Include="Resources\DreamerIntro.wav" />
 
   </ItemGroup>
 

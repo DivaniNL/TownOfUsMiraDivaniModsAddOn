@@ -56,6 +56,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> ClockstopperIcon { get; } = new LoadableResourceAsset($"{IconPath}.Clockstopper.png", 200);
     public static LoadableAsset<Sprite> RetributionistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Retributionist.png", 200);
     public static LoadableAsset<Sprite> CupidIcon { get; } = new LoadableResourceAsset($"{IconPath}.Cupid.png", 200);
+    public static LoadableAsset<Sprite> DreamerIcon { get; } = new LoadableResourceAsset($"{IconPath}.Dreamer.png", 200);
 
     // Modifier icons (200 ppu)
     public static LoadableAsset<Sprite> MementoIcon { get; } = new LoadableResourceAsset($"{IconPath}.Memento.png", 200);
@@ -109,6 +110,7 @@ public static class DivaniAssets
     public static LoadableAsset<AudioClip> UavEnemySound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVEnemy.wav");
     public static LoadableAsset<AudioClip> UavEndSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVEnd.wav");
     public static LoadableAsset<AudioClip> CupidIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.CupidIntro.wav");
+    public static LoadableAsset<AudioClip> DreamerIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DreamerIntro.wav");
     // Dutch Meme Soundpack door SFX - used by DutchMemeSoundpackPatch to replace
     // the vanilla door open/close audio clips when the matching lobby toggle is on.
     public static LoadableAsset<AudioClip> DutchDoorOpen { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DoorOpen.wav");
@@ -119,6 +121,10 @@ public static class DivaniAssets
 
     // Beacon on map (550 ppu – source image is ~1024px so high ppu keeps it small in-game)
     public static LoadableAsset<Sprite> BeaconSprite { get; } = new LoadableResourceAsset($"{ShortPath}.BeaconAsset.png", 550);
+
+    // Meeting nameplate buttons:
+    public static LoadableAsset<Sprite> DreamerMeetingDream { get; } =
+        new LoadableResourceAsset($"{ShortPath}.DreamerMeetingDream.png", 440f);
 
     // Meeting nameplate toggles:
     public static LoadableAsset<Sprite> RecruitMeetingCrewmate { get; } =
