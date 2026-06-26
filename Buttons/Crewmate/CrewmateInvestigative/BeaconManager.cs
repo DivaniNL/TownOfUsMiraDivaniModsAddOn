@@ -8,7 +8,9 @@ using TownOfUs.Utilities;
 using UnityEngine;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Modules.Duelist;
+using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using DivaniMods.Options;
 using TownOfUs.Modifiers.Impostor;
 
 namespace DivaniMods.Buttons.Crewmate.CrewmateInvestigative;
@@ -22,6 +24,7 @@ public static class BeaconManager
         public GameObject? Visual { get; set; }
         public HashSet<string> PlayersPassedThrough { get; } = new();
         public HashSet<byte> PlayersInRoom { get; } = new();
+        public HashSet<byte> BodiesFound { get; } = new();
     }
 
     public static List<BeaconData> Beacons { get; } = new();
@@ -139,10 +142,22 @@ public static class BeaconManager
     {
         var newEntries = new List<(BeaconData, string)>();
 
+        var bodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+
         foreach (var beacon in Beacons)
         {
             var beaconRoom = GetShipRoom(beacon.Position);
             if (beaconRoom == null) continue;
+
+            foreach (var body in bodies)
+            {
+                if (body == null) continue;
+
+                var bodyRoom = GetShipRoom(body.TruePosition);
+                if (bodyRoom == null || bodyRoom.RoomId != beaconRoom.RoomId) continue;
+
+                beacon.BodiesFound.Add(body.ParentId);
+            }
 
             var currentPlayersInRoom = new HashSet<byte>();
 
@@ -208,10 +223,45 @@ public static class BeaconManager
 
         MiscUtils.AddFakeChat(sentinel.Data, title, sb.ToString().TrimEnd(), false, true);
 
+        if (OptionGroupSingleton<SentinelOptions>.Instance.ShowBodyReport)
+        {
+            var bodySb = new StringBuilder();
+            var anyBodies = false;
+
+            char bodyLabel = 'A';
+            foreach (var beacon in Beacons)
+            {
+                if (beacon.BodiesFound.Count > 0)
+                {
+                    anyBodies = true;
+                    var names = string.Join(", ", beacon.BodiesFound
+                        .Select(id => GameData.Instance?.GetPlayerById(id)?.PlayerName ?? "Unknown"));
+                    bodySb.AppendLine($"Beacon {bodyLabel} ({beacon.RoomName}): {names}");
+                }
+
+                bodyLabel++;
+            }
+
+            if (anyBodies)
+            {
+                var bodyTitle = $"<color=#{colorHex}>Dead Bodies that were present in your room(s)</color>";
+                MiscUtils.AddFakeChat(sentinel.Data, bodyTitle, bodySb.ToString().TrimEnd(), false, true);
+            }
+        }
+
         foreach (var beacon in Beacons)
         {
             beacon.PlayersPassedThrough.Clear();
+            beacon.BodiesFound.Clear();
             SeedPlayersInRoom(beacon);
+        }
+    }
+
+    public static void ForgetBody(byte playerId)
+    {
+        foreach (var beacon in Beacons)
+        {
+            beacon.BodiesFound.Remove(playerId);
         }
     }
 

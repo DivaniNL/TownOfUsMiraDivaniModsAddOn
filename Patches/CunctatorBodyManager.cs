@@ -3,6 +3,7 @@ using HarmonyLib;
 using MiraAPI.Modifiers;
 using MiraAPI.Networking;
 using Reactor.Utilities;
+using DivaniMods.Buttons.Crewmate.CrewmateInvestigative;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using DivaniMods.Roles.Impostor.ImpostorConcealing;
 using TownOfUs.Modifiers.Game.Crewmate;
@@ -42,6 +43,8 @@ public static class CunctatorBodyManager
             body.gameObject.SetActive(false);
             Object.Destroy(body.gameObject);
         }
+
+        BeaconManager.ForgetBody(target.PlayerId);
 
         Pending.RemoveAll(p => p.TargetId == target.PlayerId);
         Pending.Add(new PendingBody
