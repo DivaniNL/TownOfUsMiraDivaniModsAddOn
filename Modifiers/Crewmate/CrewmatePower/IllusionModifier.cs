@@ -18,7 +18,7 @@ namespace DivaniMods.Modifiers.Crewmate.CrewmatePower;
 
 public sealed class IllusionModifier(PlayerControl mage) : TimedModifier, IVisualAppearance
 {
-    public override string ModifierName => "Illusion";
+    public override string ModifierName => "Swooped";
     public override float Duration => OptionGroupSingleton<MageOptions>.Instance.IllusionDuration.Value;
     public override bool AutoStart => true;
     public override bool HideOnUi => true;

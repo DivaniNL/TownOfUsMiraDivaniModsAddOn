@@ -264,6 +264,16 @@
     <EmbeddedResource Include="Resources\CupidProtectOne.png" />
     <EmbeddedResource Include="Resources\CupidProtectTwo.png" />
     <EmbeddedResource Include="Resources\CupidIntro.wav" Condition="Exists('Resources\CupidIntro.wav')" />
+    <EmbeddedResource Include="Resources\Icons\Watcher.png" />
+    <EmbeddedResource Include="Resources\WatcherWatch.png" />
+    <EmbeddedResource Include="Resources\WatcherKillButton.png" Condition="Exists('Resources\WatcherKillButton.png')" />
+    <EmbeddedResource Include="Resources\WatcherVentButton.png" Condition="Exists('Resources\WatcherVentButton.png')" />
+    <EmbeddedResource Include="Resources\WatcherGreenLight.png" />
+    <EmbeddedResource Include="Resources\WatcherRedLight.png" />
+    <EmbeddedResource Include="Resources\WatcherGo.wav" Condition="Exists('Resources\WatcherGo.wav')" />
+    <EmbeddedResource Include="Resources\WatcherStop.wav" Condition="Exists('Resources\WatcherStop.wav')" />
+    <EmbeddedResource Include="Resources\WatcherIntro.wav" Condition="Exists('Resources\WatcherIntro.wav')" />
+    <EmbeddedResource Include="Resources\WatcherShoot.wav" Condition="Exists('Resources\WatcherShoot.wav')" />
 
   </ItemGroup>
 

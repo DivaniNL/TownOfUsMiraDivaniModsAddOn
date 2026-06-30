@@ -63,6 +63,14 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> RetributionistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Retributionist.png", 200);
     public static LoadableAsset<Sprite> CupidIcon { get; } = new LoadableResourceAsset($"{IconPath}.Cupid.png", 200);
     public static LoadableAsset<Sprite> MageIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mage.png", 200);
+    public static LoadableAsset<Sprite> WatcherIcon { get; } = new LoadableResourceAsset($"{IconPath}.Watcher.png", 200);
+
+    // Watcher (Squid Game red/green light) sprites
+    public static LoadableAsset<Sprite> WatcherWatchButton { get; } = new LoadableResourceAsset($"{ShortPath}.WatcherWatch.png");
+    public static LoadableAsset<Sprite> WatcherKillButton { get; } = new LoadableResourceAsset($"{ShortPath}.WatcherKillButton.png");
+    public static LoadableAsset<Sprite> WatcherVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.WatcherVentButton.png");
+    public static LoadableAsset<Sprite> WatcherGreenLight { get; } = new LoadableResourceAsset($"{ShortPath}.WatcherGreenLight.png", 200);
+    public static LoadableAsset<Sprite> WatcherRedLight { get; } = new LoadableResourceAsset($"{ShortPath}.WatcherRedLight.png", 200);
 
     // Modifier icons (200 ppu)
     public static LoadableAsset<Sprite> MementoIcon { get; } = new LoadableResourceAsset($"{IconPath}.Memento.png", 200);
@@ -117,6 +125,10 @@ public static class DivaniAssets
     public static LoadableAsset<AudioClip> UavEnemySound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVEnemy.wav");
     public static LoadableAsset<AudioClip> UavEndSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVEnd.wav");
     public static LoadableAsset<AudioClip> CupidIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.CupidIntro.wav");
+    public static LoadableAsset<AudioClip> WatcherIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WatcherIntro.wav");
+    public static LoadableAsset<AudioClip> WatcherGoSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WatcherGo.wav");
+    public static LoadableAsset<AudioClip> WatcherStopSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WatcherStop.wav");
+    public static LoadableAsset<AudioClip> WatcherShootSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WatcherShoot.wav");
     public static LoadableAsset<AudioClip> MageIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.MageIntro.wav");
     public static LoadableAsset<AudioClip> TacInsertHoverSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TacInsertHover.wav");
     public static LoadableAsset<AudioClip> TacInsertPlaceSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TacInsertPlace.wav");

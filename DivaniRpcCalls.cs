@@ -52,4 +52,7 @@ public enum DivaniRpcCalls : uint
     TacticalInsertionMark = 247,
     MageEnergize = 248,
     MageShockShieldAttacked = 249,
+    WatcherStartLights = 250,
+    WatcherReportMover = 251,
+    WatcherNeutralizeGhost = 252,
 }

@@ -36,5 +36,6 @@ public static class DivaniLocale
         en.TryAdd("DiedToCunctator", "Delayed");
         en.TryAdd("DiedToObfuscator", "Obfuscated");
         en.TryAdd("DiedToDuelist", "Defeated");
+        en.TryAdd("DiedToWatcher", "Watched");
     }
 }

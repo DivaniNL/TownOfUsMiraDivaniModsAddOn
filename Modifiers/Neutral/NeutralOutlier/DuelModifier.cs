@@ -23,9 +23,7 @@ public sealed class DuelModifier(byte opponentId, bool isDuelist, Vector2 return
 {
     public override string ModifierName => "In Duel";
     public override bool HideOnUi => true;
-    public override bool AutoStart => true;
-    public override bool RemoveOnComplete => false;
-    public override float Duration => 600f;
+    public override bool AutoStart => false;
     public bool VisualPriority => true;
     public override bool CanBeInteractedWith => false;
     public override bool CanUseConsoles => true;
