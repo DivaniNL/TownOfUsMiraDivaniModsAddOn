@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
@@ -397,15 +398,28 @@ public class PickpocketButton : TownOfUsButton
         return modifier is IButtonModifier;
     }
     
+    private static readonly PropertyInfo? TouFactionProperty =
+        typeof(TouGameModifier).GetProperty("FactionType");
+    private static readonly PropertyInfo? UniversalFactionProperty =
+        typeof(UniversalGameModifier).GetProperty("FactionType");
+
     private static bool IsFactionValidForThief(BaseModifier modifier)
     {
-        var factionName = modifier switch
+        string? factionName;
+        try
         {
-            TouGameModifier tgm => tgm.FactionType.ToString(),
-            UniversalGameModifier ugm => ugm.FactionType.ToString(),
-            _ => null,
-        };
-        
+            factionName = modifier switch
+            {
+                TouGameModifier tgm => TouFactionProperty?.GetValue(tgm)?.ToString(),
+                UniversalGameModifier ugm => UniversalFactionProperty?.GetValue(ugm)?.ToString(),
+                _ => null,
+            };
+        }
+        catch
+        {
+            return true;
+        }
+
         if (factionName == null) return true;
         
         if (factionName.Contains("Impostor", StringComparison.OrdinalIgnoreCase)) return false;
