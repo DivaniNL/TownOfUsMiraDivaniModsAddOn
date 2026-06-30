@@ -82,6 +82,11 @@ public static class WatcherLightSystem
         return Options.BlockSabotage.Value && IsActive && IsAffected(player);
     }
 
+    public static bool BlocksKill(PlayerControl player)
+    {
+        return IsRedLightActive && IsAffected(player);
+    }
+
     public static void Start(byte watcherId, float greenDuration, float redDuration, float grace, int loops)
     {
         Stop();
@@ -112,6 +117,12 @@ public static class WatcherLightSystem
 
         var emergency = Minigame.Instance == null ? null : Minigame.Instance.TryCast<EmergencyMinigame>();
         emergency?.Close();
+    }
+
+    private static void CloseOpenPlayerMenu()
+    {
+        var menu = Minigame.Instance == null ? null : Minigame.Instance.TryCast<CustomPlayerMenu>();
+        menu?.ForceClose();
     }
 
     public static void Stop()
@@ -202,6 +213,7 @@ public static class WatcherLightSystem
         Flash(WatcherRole.RedLightColor, _redDuration + 0.25f);
         PlaySound(DivaniAssets.WatcherStopSound.LoadAsset());
         AddLocalWatched();
+        CloseOpenPlayerMenu();
     }
 
     private static void FinishRedLight()
@@ -266,6 +278,7 @@ public static class WatcherLightSystem
 
                 case Phase.Red:
                     UpdateRedTimer(_phaseEndTime - now);
+                    LockButtonsDuringRed();
 
                     if (!_refCaptured && now >= _redStartTime + _grace)
                     {
@@ -530,6 +543,25 @@ public static class WatcherLightSystem
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.WatcherIcon.LoadAsset());
+    }
+
+    private static void LockButtonsDuringRed()
+    {
+        var me = PlayerControl.LocalPlayer;
+        if (me == null || !me.IsRole<WatcherRole>())
+        {
+            return;
+        }
+
+        foreach (var button in CustomButtonManager.Buttons)
+        {
+            if (button is WatcherKillButton or WatcherWatchButton)
+            {
+                continue;
+            }
+
+            button.Button?.SetDisabled();
+        }
     }
 
     private static void AddLocalWatched()
