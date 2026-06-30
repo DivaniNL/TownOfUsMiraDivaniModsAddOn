@@ -148,14 +148,7 @@ public sealed class DuelModifier(byte opponentId, bool isDuelist, Vector2 return
             Player.AddModifier<IndirectAttackerModifier>(true);
         }
 
-        var observer = PlayerControl.LocalPlayer;
-        var isParticipant = observer != null &&
-            (observer.PlayerId == Player.PlayerId || observer.PlayerId == OpponentId);
-        var isDeadSpectator = observer != null && !isParticipant && DeathHandlerModifier.IsFullyDead(observer);
-        if (!isParticipant && !isDeadSpectator)
-        {
-            SetAnimHoldersActive(false);
-        }
+        SetAnimHoldersActive(false);
 
         var mushroom = Object.FindObjectOfType<MushroomMixupSabotageSystem>();
         if ((mushroom && mushroom.IsActive) || GetShapeshiftAppearance() != null
@@ -285,11 +278,20 @@ public sealed class DuelModifier(byte opponentId, bool isDuelist, Vector2 return
         }
 
         cos.ToggleNameVisible(!hidden);
+
+        SetAnimHolders(p, !hidden);
     }
+
     [HideFromIl2Cpp]
     private void SetAnimHoldersActive(bool active)
     {
-        var t = Player == null ? null : Player.transform;
+        SetAnimHolders(Player, active);
+    }
+
+    [HideFromIl2Cpp]
+    private static void SetAnimHolders(PlayerControl p, bool active)
+    {
+        var t = p == null ? null : p.transform;
         if (t == null || t.childCount < 3)
         {
             return;
