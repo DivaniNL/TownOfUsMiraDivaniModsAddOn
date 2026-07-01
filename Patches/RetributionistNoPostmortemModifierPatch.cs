@@ -1,5 +1,6 @@
 using System.Reflection;
 using HarmonyLib;
+using DivaniMods.Modifiers.Game.Crewmate;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using TownOfUs.Modifiers.Game;
 
@@ -16,6 +17,12 @@ public static class RetributionistNoPostmortemModifierPatch
         if (role is not RetributionistRole)
         {
             return true;
+        }
+
+        if (__instance is BearTrapModifier or BloodyModifier)
+        {
+            __result = false;
+            return false;
         }
 
         string? faction;
