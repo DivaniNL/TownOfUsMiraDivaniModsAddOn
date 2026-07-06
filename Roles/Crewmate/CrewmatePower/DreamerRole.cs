@@ -161,6 +161,11 @@ public sealed class DreamerRole(IntPtr cppPtr)
             return false;
         }
 
+        if (role.GetRoleAlignment() is RoleAlignment.CrewmateAfterlife)
+        {
+            return false;
+        }
+
         if (role is MayorRole or PoliticianRole or MonarchRole or TimeLordRole)
         {
             return false;
