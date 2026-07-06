@@ -34,7 +34,7 @@ public sealed class DreamerRole(IntPtr cppPtr)
 
     public string RoleName => "Dreamer";
     public string RoleDescription => "Reimagine fellow Crewmates!";
-    public string RoleLongDescription => "Dream other players to become the roles you desire. Your dream fails if it targets a Non-Crewmate.";
+    public string RoleLongDescription => "Dream other players to become the roles you desire.\nYour dream fails if it targets a Non-Crewmate.";
     public Color RoleColor => new Color32(51, 51, 153, 255);
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmatePower;
@@ -57,7 +57,7 @@ public sealed class DreamerRole(IntPtr cppPtr)
     [HideFromIl2Cpp]
     public StringBuilder SetTabText()
     {
-        var stringB = new StringBuilder();
+       var stringB = ITownOfUsRole.SetNewTabText(this);
 
         stringB.AppendLine($"Current Dreams:");
 
