@@ -28,17 +28,23 @@ public class DreamerOptions : AbstractOptionGroup<DreamerRole>
         typeof(DreamerReimagineRestriction),
         ["Crewmate Killing", "Crewmate Power", "Nothing"]);
 
-    public ModdedToggleOption NotifyNonCrewOnAttempt { get; } =
-        new("Non-Crew Are Notified On Attempt", false);
+    public ModdedToggleOption NotifyTargetOnAttempt { get; } =
+        new("Target Is Notified On Failed Attempt", false);
 
     public ModdedToggleOption NotifyDreamerOnFail { get; } =
         new("Dreamer Notified On Failed Dream", false);
 
     public ModdedNumberOption InsomniaRounds { get; } = new(
-        "Insomnia Lasts For Rounds", 1f, 1f, 3f, 1f, MiraNumberSuffixes.None);
+        "After Reimagine, Cannot Be Reimagined Again For Rounds", 1f, 1f, 3f, 1f, MiraNumberSuffixes.None);
+    
+    public ModdedToggleOption AliveReimaginedGrantKillImmunity { get; } =
+        new ("Alive Reimagined Players Grant Kill Immunity", false);
 
     public ModdedToggleOption RespectMaxRoleCount { get; } = new(
         "Respect Max Role Count On Reimagine?", true);
+
+    public ModdedToggleOption FailDreamOnNoChange { get; } =
+        new ("Fail Dream If Target And Dream Role Are Same", true);
     
     public ModdedEnumOption OnMaxRoleCountBroken { get; } = new(
         "If Dream Breaks Max Role Count", (int)DreamerOnDreamBreakMaxRoleCount.ApplyRandom,

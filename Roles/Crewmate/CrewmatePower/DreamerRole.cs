@@ -64,8 +64,10 @@ public sealed class DreamerRole(IntPtr cppPtr)
         if (ShowChosenDream())
         {
             var targetName = GameData.Instance.GetPlayerById(DreamTargetId)?.Object?.Data?.PlayerName;
-            var roleName = (RoleManager.Instance.GetRole((RoleTypes)DreamRoleId) as ITownOfUsRole)?.RoleName;
-            stringB.AppendLine($"<b>Dream Target: {targetName}. Dream Role: {roleName}</b>");
+            var roleObj = RoleManager.Instance.GetRole((RoleTypes)DreamRoleId) as ITownOfUsRole;
+            var roleName = roleObj?.RoleName;
+            var roleColor = roleObj != null ? ColorUtility.ToHtmlStringRGB(roleObj.RoleColor) : "9999FF";
+            stringB.AppendLine($"<b>Dream Target: {targetName}. Dream Role: <color=#{roleColor}>{roleName}</color></b>");
             return stringB;
         }
 
@@ -75,6 +77,8 @@ public sealed class DreamerRole(IntPtr cppPtr)
     public override void Initialize(PlayerControl player)
     {
         RoleBehaviourStubs.Initialize(this, player);
+
+        ClearDream();
 
         if (Player.AmOwner)
         {
@@ -94,6 +98,8 @@ public sealed class DreamerRole(IntPtr cppPtr)
     public override void OnMeetingStart()
     {
         RoleBehaviourStubs.OnMeetingStart(this);
+
+        ClearDream();
 
         var meeting = MeetingHud.Instance;
         if (Player.AmOwner && meeting != null && !Player.HasDied())
@@ -185,17 +191,22 @@ public sealed class DreamerRole(IntPtr cppPtr)
     {
         var options = OptionGroupSingleton<DreamerOptions>.Instance;
 
+        var target = GameData.Instance.GetPlayerById(targetId)?.Object;
+
+        if (target == null)
+        {
+            return;
+        }
+
         if (options.RespectMaxRoleCount.Value
             && (DreamerOnDreamBreakMaxRoleCount)options.OnMaxRoleCountBroken.Value == DreamerOnDreamBreakMaxRoleCount.DreamRedo
-            && IsBreakingMaxRoleCount(role))
+            && IsBreakingMaxRoleCount(role, target))
         {
             Helpers.CreateAndShowNotification(
-                "<b>That role is already maxed out — <color=#9999FF>choose another role!</color></b>",
+                "<b>That role is unavailable — <color=#9999FF>choose another role!</color></b>",
                 new Color32(51, 51, 153, 255), spr: DivaniAssets.DreamerIcon.LoadAsset());
 
             dreamMenu?.Close();
-            dreamMenu = GuesserMenu.Create();
-            dreamMenu.Begin(IsRoleValid, newRole => OnRoleSelected(newRole, targetId));
             return;
         }
 
@@ -234,7 +245,7 @@ public sealed class DreamerRole(IntPtr cppPtr)
     {
         var options = OptionGroupSingleton<DreamerOptions>.Instance;
 
-        if (target != null && target.AmOwner && options.NotifyNonCrewOnAttempt.Value)
+        if (target != null && target.AmOwner && options.NotifyTargetOnAttempt.Value)
         {
             Helpers.CreateAndShowNotification(
                 "<b>The Dreamer tried to <color=white>reimagine</color> you but failed!</b>",
@@ -293,7 +304,7 @@ public sealed class DreamerRole(IntPtr cppPtr)
     }
 
     [HideFromIl2Cpp]
-    public static bool IsBreakingMaxRoleCount(RoleBehaviour role)
+    public static bool IsBreakingMaxRoleCount(RoleBehaviour role, PlayerControl target)
     {
         if (role is not ICustomRole customRole || customRole.GetCount() is not int cap || cap == 0)
         {
@@ -301,16 +312,16 @@ public sealed class DreamerRole(IntPtr cppPtr)
         }
 
         var aliveWithRole = PlayerControl.AllPlayerControls.ToArray()
-            .Count(p => p != null && p.Data?.Role != null && p.Data.Role.Role == role.Role && !p.HasDied());
+            .Count(p => p != null && p.Data?.Role != null && p.Data.Role.Role == role.Role && !p.HasDied() && p != target);
 
         return aliveWithRole >= cap;
     }
 
     [HideFromIl2Cpp]
-    public static RoleBehaviour? GetRandomValidRole()
+    public static RoleBehaviour? GetRandomValidRole(PlayerControl target)
     {
         var pool = MiscUtils.GetPotentialRoles()
-            .Where(r => IsRoleValid(r) && !IsBreakingMaxRoleCount(r))
+            .Where(r => IsRoleValid(r) && !IsBreakingMaxRoleCount(r, target))
             .ToList();
 
         return pool.Count == 0 ? null : pool[UnityEngine.Random.Range(0, pool.Count)];

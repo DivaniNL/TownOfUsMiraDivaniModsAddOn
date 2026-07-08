@@ -9,6 +9,10 @@ using DivaniMods.Roles.Crewmate.CrewmatePower;
 using TownOfUs.Extensions;
 using TownOfUs.Utilities;
 using MiraAPI.Utilities;
+using TownOfUs.Options;
+using MiraAPI.Events.Mira;
+using TownOfUs.Buttons;
+using MiraAPI.Hud;
 
 namespace DivaniMods.Events.Crewmate.CrewmatePower;
 
@@ -66,6 +70,7 @@ public static class DreamerEvents
             }
 
             var target = GameData.Instance.GetPlayerById(dreamer.DreamTargetId)?.Object;
+            var chosenRole = RoleManager.Instance.GetRole((AmongUs.GameOptions.RoleTypes)dreamer.DreamRoleId);
 
             if (target == null)
             {
@@ -74,53 +79,47 @@ public static class DreamerEvents
 
             if (!DreamerRole.IsValidDreamTarget(target, dreamer.Player))
             {
-                dreamer.SetTabText();
-                dreamer.ClearDream();
+                continue;
+            }
+
+            if (chosenRole == target.Data.Role && options.FailDreamOnNoChange)
+            {
+                DreamerRole.RpcNotifyDreamFailed(dreamer.Player, target);
                 continue;
             }
 
             if (!target!.IsCrewmate())
             {
                 DreamerRole.RpcNotifyDreamFailed(dreamer.Player, target);
-                dreamer.SetTabText();
-                dreamer.ClearDream();
                 continue;
             }
 
             if (target.HasModifier<DreamerTargetDreamingModifier>())
             {
-                dreamer.ClearDream();
                 continue;
             }
 
             if (options.RespectMaxRoleCount.Value)
             {
-                var chosenRole = RoleManager.Instance.GetRole((AmongUs.GameOptions.RoleTypes)dreamer.DreamRoleId);
-                if (chosenRole != null && DreamerRole.IsBreakingMaxRoleCount(chosenRole))
+                if (chosenRole != null && DreamerRole.IsBreakingMaxRoleCount(chosenRole, target))
                 {
                     var onBreak = (DreamerOnDreamBreakMaxRoleCount)options.OnMaxRoleCountBroken.Value;
 
                     if (onBreak == DreamerOnDreamBreakMaxRoleCount.ApplyRandom)
                     {
-                        var randomRole = DreamerRole.GetRandomValidRole();
+                        var randomRole = DreamerRole.GetRandomValidRole(target);
                         if (randomRole == null)
                         {
                             DreamerRole.RpcNotifyDreamFailed(dreamer.Player, target);
-                            dreamer.SetTabText();
-                            dreamer.ClearDream();
                             continue;
                         }
 
                         dreamer.DreamRoleId = (ushort)randomRole.Role;
-                        dreamer.SetTabText();
-                        dreamer.SetTabText();
                         DreamerRole.RpcNotifyDreamRedirected(dreamer.Player, dreamer.DreamRoleId);
                     }
                     else
                     {
                         DreamerRole.RpcNotifyDreamFailed(dreamer.Player, target);
-                        dreamer.SetTabText();
-                        dreamer.ClearDream();
                         continue;
                     }
                 }
@@ -129,8 +128,69 @@ public static class DreamerEvents
             var originalRole = (ushort)target.Data.Role.Role;
             target.RpcChangeRole(dreamer.DreamRoleId);
             target.RpcAddModifier<DreamerTargetDreamingModifier>(originalRole, dreamer.DreamRoleId);
-            dreamer.SetTabText();
-            dreamer.ClearDream();
         }
+    }
+
+    [RegisterEvent]
+    public static void MiraButtonClickEventHandler(MiraButtonClickEvent @event)
+    {
+        var button = @event.Button as CustomActionButton<PlayerControl>;
+        var target = button?.Target;
+
+        if (target == null || button == null || button is not IKillButton || !button.CanClick())
+            return;
+
+        if (CheckForMonarchImmunity(@event, target))
+        {
+            ResetButtonTimer(PlayerControl.LocalPlayer, button);
+        }
+    }
+
+    [RegisterEvent]
+    public static void BeforeMurderEventHandler(BeforeMurderEvent @event)
+    {
+        var source = @event.Source;
+        var target = @event.Target;
+
+        if (CheckForMonarchImmunity(@event, target))
+        {
+            ResetButtonTimer(source);
+        }
+    }
+
+    private static bool CheckForMonarchImmunity(MiraCancelableEvent? @event, PlayerControl target)
+    {
+        if (!OptionGroupSingleton<DreamerOptions>.Instance.AliveReimaginedGrantKillImmunity)
+            return false;
+
+        if (MeetingHud.Instance || ExileController.Instance)
+            return false;
+
+        if (target.Data?.Role is not DreamerRole)
+            return false;
+
+        var reimaginedAlive = Helpers.GetAlivePlayers()
+            .Any(p =>
+                p.HasModifier<DreamerTargetDreamingModifier>() && p.IsCrewmate()
+            );
+
+        if (!reimaginedAlive)
+            return false;
+
+        @event?.Cancel();
+        return true;
+    }
+
+    private static void ResetButtonTimer(PlayerControl source, CustomActionButton<PlayerControl>? button = null)
+    {
+        if (!source.AmOwner)
+        {
+            return;
+        }
+
+        var reset = OptionGroupSingleton<GeneralOptions>.Instance.TempSaveCdReset;
+
+        button?.SetTimer(reset);
+        source.SetKillTimer(reset);
     }
 }
