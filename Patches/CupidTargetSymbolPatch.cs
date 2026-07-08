@@ -5,6 +5,7 @@ using MiraAPI.Roles;
 using DivaniMods.Modifiers.Neutral.NeutralBenign;
 using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralBenign;
+using TownOfUs.Modifiers;
 using TownOfUs.Utilities;
 using UnityEngine;
 
@@ -44,7 +45,7 @@ internal static class CupidProvisionalDisplay
             return false;
         }
 
-        if (local.Data.IsDead)
+        if (DeathHandlerModifier.IsFullyDead(local))
         {
             return true;
         }
@@ -118,7 +119,7 @@ internal static class CupidProvisionalDisplay
             var localIsLover = (cupid.LoverOne != null && cupid.LoverOne.PlayerId == local.PlayerId) ||
                                (cupid.LoverTwo != null && cupid.LoverTwo.PlayerId == local.PlayerId);
 
-            if (!local.Data.IsDead && local.PlayerId != cupid.Player.PlayerId && !localIsLover)
+            if (!DeathHandlerModifier.IsFullyDead(local) && local.PlayerId != cupid.Player.PlayerId && !localIsLover)
             {
                 continue;
             }
@@ -141,7 +142,7 @@ internal static class CupidProvisionalDisplay
         }
 
         var local = PlayerControl.LocalPlayer;
-        if (local == null || local.Data == null || !local.Data.IsDead && local.Data.Role is not CupidRole)
+        if (local == null || local.Data == null || !DeathHandlerModifier.IsFullyDead(local) && local.Data.Role is not CupidRole)
         {
             return;
         }

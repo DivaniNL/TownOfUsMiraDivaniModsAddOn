@@ -49,7 +49,19 @@ public enum DivaniRpcCalls : uint
     CupidFinalizeLovers = 244,
     OpportunistVotesSync = 245,
     DuelistAddWin = 246,
-    DreamerSetReimagineTarget = 400,
-    DreamerNotifyDreamFailed = 401,
-    DreamerNotifyDreamRedirected = 402
+    TacticalInsertionMark = 247,
+    MageEnergize = 248,
+    MageShockShieldAttacked = 249,
+    WatcherStartLights = 250,
+    WatcherReportMover = 251,
+    WatcherNeutralizeGhost = 252,
+    MolePlaceVent = 253,
+    MoleShowVent = 254,
+    TelecomSetTransmission = 255,
+    TelecomClearTransmission = 256,
+    TelecomSendChat = 257,
+    TelecomSetPendingMeetingTarget = 258,
+    DreamerSetReimagineTarget = 259,
+    DreamerNotifyDreamFailed = 260,
+    DreamerNotifyDreamRedirected = 261
 }

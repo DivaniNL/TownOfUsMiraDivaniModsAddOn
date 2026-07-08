@@ -8,6 +8,7 @@ using System.Linq;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
+using DivaniMods.Modifiers.Game.Impostor.ImpostorPassive;
 using DivaniMods.Modifiers.Game.Universal;
 using UnityEngine;
 using TownOfUs;
@@ -123,8 +124,7 @@ public static class ArmoredEventHandler
             return false;
         }
 
-        // Ruthless kills bypass shields entirely; it un-cancels late, so don't block or tick down here.
-        if (RuthlessEventHandler.ShouldBypassProtection)
+        if (source.HasModifier<RuthlessModifier>())
         {
             return false;
         }

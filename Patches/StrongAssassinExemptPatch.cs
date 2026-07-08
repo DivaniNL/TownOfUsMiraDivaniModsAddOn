@@ -59,7 +59,7 @@ public static class StrongVigilanteExemptPatch
 [HarmonyPatch(typeof(AssassinModifier), "IsModifierValid")]
 public static class StrongAssassinModifierGuessPatch
 {
-    public static void Postfix(BaseModifier modifier, ref bool __result)
+    public static void Postfix([HarmonyArgument(0)] BaseModifier modifier, ref bool __result)
     {
         if (__result && modifier is StrongModifier)
         {
@@ -71,7 +71,7 @@ public static class StrongAssassinModifierGuessPatch
 [HarmonyPatch(typeof(VigilanteRole), "IsModifierValid")]
 public static class StrongVigilanteModifierGuessPatch
 {
-    public static void Postfix(BaseModifier modifier, ref bool __result)
+    public static void Postfix([HarmonyArgument(0)] BaseModifier modifier, ref bool __result)
     {
         if (__result && modifier is StrongModifier)
         {

@@ -105,7 +105,6 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
         uint chosenId = 0;
         uint sourceId = 0;
         var targetId = deadPlayer?.PlayerId ?? byte.MaxValue;
-        var fromBody = false;
 
         if (deadPlayer != null)
         {
@@ -114,7 +113,6 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
             {
                 chosenId = collectible[random.Next(collectible.Count)];
                 sourceId = chosenId;
-                fromBody = true;
             }
             else
             {
@@ -127,7 +125,7 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
             chosenId = PickRandomGivableId(collector, random);
         }
 
-        RpcSproutCollect(collector, chosenId, fromBody, targetId, sourceId);
+        RpcSproutCollect(collector, chosenId, targetId, sourceId);
     }
 
     private static List<uint> GetCollectibleModifierIds(PlayerControl deadPlayer, PlayerControl collector)
@@ -140,7 +138,8 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
             .Where(m => !IsExcluded(m) &&
                         !IsLover(m) &&
                         IsFactionValidForCrew(m) &&
-                        !collectorIds.Contains(m.TypeId))
+                        !collectorIds.Contains(m.TypeId) &&
+                        !ModifierExclusions.ConflictsWithOwned(collector, m))
             .Select(m => m.TypeId)
             .Distinct()
             .ToList();
@@ -190,7 +189,8 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
             if (!IsFactionValidForCrew(modifier)) continue;
 
             var typeId = ModifierManager.GetModifierTypeId(modifier.GetType());
-            if (typeId.HasValue && !existingIds.Contains(typeId.Value))
+            if (typeId.HasValue && !existingIds.Contains(typeId.Value) &&
+                !ModifierExclusions.ConflictsWithOwned(collector, typeId.Value))
             {
                 availableIds.Add(typeId.Value);
             }
@@ -240,30 +240,39 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
         return modifier.GetType().Namespace != "TownOfUs.Modifiers.Game.Universal";
     }
 
+    private static readonly string[] NonCrewFactionMarkers =
+    {
+        "Neutral", "Impostor", "Assailant", "NonCrew", "NonImp", "NonNeut",
+        "Hns", "Hider", "Seeker", "External",
+    };
+
     private static bool IsFactionValidForCrew(BaseModifier modifier)
     {
-        var factionName = modifier switch
+        string? factionName = null;
+        try
         {
-            TouGameModifier tgm => tgm.FactionType.ToString(),
-            UniversalGameModifier ugm => ugm.FactionType.ToString(),
-            _ => null,
-        };
+            var prop = modifier.GetType().GetProperty("FactionType");
+            factionName = prop?.GetValue(modifier)?.ToString();
+        }
+        catch
+        {
+            factionName = null;
+        }
 
-        if (factionName == null) return true;
+        if (factionName != null)
+        {
+            return factionName.Equals("Alliance", StringComparison.OrdinalIgnoreCase)
+                || factionName.Equals("Universal", StringComparison.OrdinalIgnoreCase)
+                || factionName.StartsWith("Crewmate", StringComparison.OrdinalIgnoreCase)
+                || factionName.StartsWith("Universal", StringComparison.OrdinalIgnoreCase);
+        }
 
-        if (factionName.Contains("Impostor", StringComparison.OrdinalIgnoreCase)) return false;
-        if (factionName.Contains("Assailant", StringComparison.OrdinalIgnoreCase)) return false;
-        if (factionName.Contains("Neutral", StringComparison.OrdinalIgnoreCase)) return false;
-        if (factionName.Contains("NonCrew", StringComparison.OrdinalIgnoreCase)) return false;
-        if (factionName.Contains("Hider", StringComparison.OrdinalIgnoreCase)) return false;
-        if (factionName.Contains("Seeker", StringComparison.OrdinalIgnoreCase)) return false;
-        if (factionName.Contains("External", StringComparison.OrdinalIgnoreCase)) return false;
-
-        return true;
+        var ns = modifier.GetType().Namespace ?? string.Empty;
+        return !NonCrewFactionMarkers.Any(m => ns.Contains(m, StringComparison.OrdinalIgnoreCase));
     }
 
     [MethodRpc((uint)DivaniRpcCalls.SproutCollect)]
-    public static void RpcSproutCollect(PlayerControl collector, uint chosenId, bool fromBody, byte targetId, uint sourceId)
+    public static void RpcSproutCollect(PlayerControl collector, uint chosenId, byte targetId, uint sourceId)
     {
         if (collector == null) return;
 
@@ -297,8 +306,7 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
 
         if (collector == PlayerControl.LocalPlayer)
         {
-            var prefix = fromBody ? "Collected" : "Gained";
-            Notify($"<b><color=#7CC85A>{prefix} {displayName}!</color></b>");
+            Notify($"<b><color=#7CC85A>Collected/Gained {displayName}!</color></b>");
             ButtonRefresher.RefreshAllButtons();
         }
     }

@@ -1,32 +1,66 @@
-# Divani Mods v1.3.0
-Councillor joins Divani Mods + General improvements
+# Divani Mods v1.3.2
+
+It is time to play: Red Light, Green Light.
+Also, more Crewmate roles are added + some small bugfixes
+
+> [!NOTE]
+> This version is not guarenteed to work on Town of Us versions newer then 1.6.2
+
 ## Added
 
-### Added Role: Councillor (Impostor Support)
+### Added Role: Locator (Crewmate Support)
 
-Each kill gives you extra votes in the next meeting. If configured, you also get extra votes if killing a player that has more votes (Knighted or Mayor)
-With anonymous votes off, these extra votes appear grey.
+Mark a player to give them the Noisemaker Modifier until the next meeting.
 
+### Added Role: Mole (Crewmate Support)
+
+Dig vents around the map to connect a tunnel network.
+
+### Added Role: Telecom (Crewmate Support)
+
+Transmit to a player to open a private chat!
+
+### Added Role: Watcher (Neutral Killing)
+
+Click on the Watch button to make everyone play Red Light, Green Light. Earn  charges after getting some regular kills
 
 ## General changes
 
-- Fixed some warnings/errors in the code
-- Added option banners to the Divani Mods roles settings
-- Fixed Doomsayer buckets. Most of them were set to Insight. This was not always the correct bucket.
-- Added corresponding buttons to the role info in wiki under Abilities
+- New icons for Sprout, Armored, Cunctator, Retributionist and the Mosquito drone
 
 ## Bugfixes:
 
-### Cupid
 
-- Fixed a visual bug which also showed the original pink lovers heart to dead players. This has now been fixed. Cupid lovers hearts are always and only in the Cupid role color for everyone that sees them.
+### Rainbow Camouflaged Comms
 
-### Revenant
+- Fixed a bug where reaped players turned into the basic Grey with the setting on
+- Fixed a bug where Venerer camouflage also defaulted to the regular grey
 
-- Fixed a bug where Revenant was able to kill its impostor teammates. This can now only happen during Camouflaged Comms (if Kill anyone during Comms is enabled)
+### Duelist
+
+- Fixed a bug which showed the visual of the First Death Shield in duels, even though this is negated.
+- Removed the limit of a 10 minute duel (Most useless change ever, but cleaner)
+
+### Thief
+
+- Fixed a bug where Thief was able to be assigned Neutral Modifiers randomly
+
+### Sprout
+
+- Fixed a bug where Sprout was able to colelct Neutral Modifiers randomly
+
+### Demolitionist
+
+- Fixed a bug where the Spellslinger was able to launch a Hex Bomb when a Demolitionist Sabotage is active
+
 
 ## Role/Modifier Changes:
 
-### Frag
+### Clockstopper (Addition)
 
-- Added Option: On Time Lord Rewind. This can be set to make the Frag timer rewind during Time Lord rewind. Pause is the current behaviour
+- Alliance Modifiers now change who is reset ([#17](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/17))
+
+### Domesmith (Addition)
+
+- Alliance Modifiers now change who is protected ([#17](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/17))
+

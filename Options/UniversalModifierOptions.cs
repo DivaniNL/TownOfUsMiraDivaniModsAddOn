@@ -65,4 +65,13 @@ public sealed class UniversalModifierOptions : AbstractOptionGroup
         {
             Visible = () => OptionGroupSingleton<UniversalModifierOptions>.Instance.UavAmount.Value > 0
         };
+
+    public ModdedNumberOption TacticalInsertionAmount { get; } = new(
+        "Tactical Insertion Amount", 0f, 0f, 5f, 1f, MiraNumberSuffixes.None);
+
+    public ModdedNumberOption TacticalInsertionChance { get; } =
+        new("Tactical Insertion Chance", 50f, 0, 100f, 10f, MiraNumberSuffixes.Percent)
+        {
+            Visible = () => OptionGroupSingleton<UniversalModifierOptions>.Instance.TacticalInsertionAmount.Value > 0
+        };
 }

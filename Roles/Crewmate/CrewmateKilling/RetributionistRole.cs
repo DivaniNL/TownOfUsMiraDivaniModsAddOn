@@ -13,7 +13,7 @@ namespace DivaniMods.Roles.Crewmate.CrewmateKilling;
 public sealed class RetributionistRole(IntPtr cppPtr)
     : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
 {
-    public static readonly Color RetributionistColor = new Color32(175, 22, 48, 255);
+    public static readonly Color RetributionistColor = new Color32(175, 22, 81, 255);
 
     public string RoleName => "Retributionist";
     public string RoleDescription => "Seek revenge on your killer!";

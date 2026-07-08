@@ -3,6 +3,7 @@ using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using TownOfUs.Interfaces;
+using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Utilities;
@@ -22,7 +23,7 @@ public class RuthlessModifier : TouGameModifier, IColoredModifier, IWikiDiscover
 
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.RuthlessIcon;
     
-    public override string GetDescription() => "Your kills bypass shields. Veteran alerts still kill you.";
+    public override string GetDescription() => "Your kills bypass shields. With Veteran an Shock Shield both die";
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
     

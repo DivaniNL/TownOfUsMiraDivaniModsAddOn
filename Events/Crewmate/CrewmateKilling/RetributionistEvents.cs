@@ -8,9 +8,11 @@ using DivaniMods.Options;
 using DivaniMods.Roles.Crewmate.CrewmateAfterlife;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using TownOfUs.Events.TouEvents;
+using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Modules;
 using TownOfUs.Utilities;
 using TownOfUs.Roles.Neutral;
+using MiraAPI.Modifiers;
 
 namespace DivaniMods.Events.Crewmate.CrewmateKilling;
 
@@ -52,6 +54,11 @@ public static class RetributionistEvents
             }
 
             if (!opts.RevengeOnCrewmateKill && killer.IsCrewmate())
+            {
+                return;
+            }
+
+            if (target.TryGetModifier<LoverModifier>(out var love) && love.OtherLover == killer)
             {
                 return;
             }

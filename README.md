@@ -16,9 +16,13 @@ Join the Discord:
 <p align="center">
   <img src="./Resources/Headers/CrewPower.png" alt="Crewmate Power"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#thief"><img width="10%" src="./Resources/Icons/Thief.png" alt="Thief"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#mage"><img width="10%" src="./Resources/Icons/Mage.png" alt="Mage"/></a>
   <img src="./Resources/Headers/CrewSupport.png" alt="Crewmate Support"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#clockstopper"><img width="10%" src="./Resources/Icons/Clockstopper.png" alt="Clockstopper"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#locator"><img width="10%" src="./Resources/Icons/Locator.png" alt="Locator"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#Mole"><img width="10%" src="./Resources/Icons/Mole.png" alt="Mole"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#portalmaker"><img width="10%" src="./Resources/Icons/PortalMaker.png" alt="Portalmaker"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#telecom"><img width="10%" src="./Resources/Icons/Telecom.png" alt="Telecom"/></a>
   <img src="./Resources/Headers/CrewInvestigative.png" alt="Crewmate Investigative"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#sentinel"><img width="10%" src="./Resources/Icons/Sentinel.png" alt="Sentinel"/></a>
   <img src="./Resources/Headers/CrewProtective.png" alt="Crewmate Protective"/>
@@ -46,6 +50,7 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#demolitionist"><img width="10%" src="./Resources/Icons/Demolitionist.png" alt="Demolitionist"/></a>
   <img src="./Resources/Headers/NeutKilling.png" alt="Neutral Killing"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#frag"><img width="10%" src="./Resources/Icons/Frag.png" alt="Frag"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#watcher"><img width="10%" src="./Resources/Icons/Watcher.png" alt="Watcher"/></a>
     <img src="./Resources/Headers/NeutOutlier.png" alt="Neutral Outlier"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#duelist"><img width="10%" src="./Resources/Icons/Duellist.png" alt="Duelist"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#opportunist"><img width="10%" src="./Resources/Icons/Opportunist.png" alt="Opportunist"/></a>
@@ -69,6 +74,7 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#memento"><img width="10%" src="./Resources/Icons/Memento.png" alt="Memento"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#misvote"><img width="10%" src="./Resources/Icons/Misvote.png" alt="Misvote"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#uav"><img width="10%" src="./Resources/Icons/UAV.png" alt="UAV"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#tactical-insertion"><img width="10%" src="./Resources/Icons/TacticalInsertion.png" alt="Tactical Insertion"/></a>
 </p>
 
 ---
@@ -91,49 +97,67 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 
 | Game Version      | Mod Version | Town Of Us: Mira | Download link |
 | ----------------- | ----------- | ---------------- | ------------- |
-| 17.3 (2026.3.31)  | 1.2.5       | 1.6.0+           | [v1.2.5](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.5) |
-| 17.3 (2026.3.31)  | 1.2.4       | 1.6.0+           | [v1.2.4](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.4) |
-| 17.3 (2026.3.31)  | 1.2.3       | 1.6.0+           | [v1.2.3](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.3) |
-| 17.3 (2026.3.31)  | 1.2.3-beta  | 1.6.0+           | [v1.2.3-beta](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.3-beta) |
-| 17.3 (2026.3.31)  | 1.2.2       | 1.6.0+           | [v1.2.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.2) |
-| 17.3 (2026.3.31)  | 1.2.1       | 1.6.0+           | [v1.2.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.1) |
-| 17.3 (2026.3.31)  | 1.2.0       | 1.6.0+           | [v1.2.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.0) |
-| 17.3 (2026.3.31)  | 1.1.2       | 1.6.0+           | [v1.1.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.1.2) |
-| 17.3 (2026.3.31)  | 1.1.1       | 1.6.0+           | [v1.1.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.1.1) |
-| 17.3 (2026.3.31)  | 1.1.0       | 1.6.0+           | [v1.1.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.1.0) |
-| Steam             | 1.0.2       | —                | [v1.0.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.0.2) |
-| Steam             | 1.0.1       | —                | [v1.0.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.0.1) |
-| Steam             | 1.0.0       | —                | [v1.0.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.0.0) |
+| 17.3 (2026.3.31)  | 1.3.2       | 1.6.0 - 1.6.2    | [v1.3.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.2) |
+| 17.3 (2026.3.31)  | 1.3.1       | 1.6.0+           | [v1.3.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.1) |
+| 17.3 (2026.3.31)  | 1.3.0       | 1.6.0 - 1.6.2    | [v1.3.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.0) |
+| 17.3 (2026.3.31)  | 1.2.9       | 1.6.0 - 1.6.2    | [v1.2.9](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.9) |
+| 17.3 (2026.3.31)  | 1.2.8       | 1.6.0 - 1.6.2    | [v1.2.8](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.8) |
+| 17.3 (2026.3.31)  | 1.2.7       | 1.6.0 - 1.6.2    | [v1.2.7](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.7) |
+| 17.3 (2026.3.31)  | 1.2.6       | 1.6.0 - 1.6.2    | [v1.2.6](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.6) |
+| 17.3 (2026.3.31)  | 1.2.5       | 1.6.0 - 1.6.2    | [v1.2.5](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.5) |
+| 17.3 (2026.3.31)  | 1.2.4       | 1.6.0 - 1.6.2          | [v1.2.4](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.4) |
+| 17.3 (2026.3.31)  | 1.2.3       | 1.6.0 - 1.6.2          | [v1.2.3](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.3) |
+| 17.3 (2026.3.31)  | 1.2.3-beta  | 1.6.0 - 1.6.2          | [v1.2.3-beta](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.3-beta) |
+| 17.3 (2026.3.31)  | 1.2.2       | 1.6.0 - 1.6.2          | [v1.2.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.2) |
+| 17.3 (2026.3.31)  | 1.2.1       | 1.6.0 - 1.6.2          | [v1.2.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.1) |
+| 17.3 (2026.3.31)  | 1.2.0       | 1.6.0 - 1.6.2           | [v1.2.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.0) |
+| 17.3 (2026.3.31)  | 1.1.2       | 1.6.0 - 1.6.2         | [v1.1.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.1.2) |
+| 17.3 (2026.3.31)  | 1.1.1       | 1.6.0 - 1.6.2          | [v1.1.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.1.1) |
+| 17.3 (2026.3.31)  | 1.1.0       | 1.6.0 - 1.6.2        | [v1.1.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.1.0) |
+| Steam             | 1.0.2       | 1.6.0 - 1.6.2              | [v1.0.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.0.2) |
+| Steam             | 1.0.1       | 1.6.0 - 1.6.2                | [v1.0.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.0.1) |
+| Steam             | 1.0.0       | 1.6.0 - 1.6.2               | [v1.0.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.0.0) |
 
 ---
 
 # Contributions & Credits
 
-[MiraAPI](https://github.com/All-Of-Us-Mods/MiraAPI) — Mod framework and API\
-[Town Of Us: Mira](https://github.com/AU-Avengers/TOU-Mira) — Base mod, inspiration, and shared assets\
-[Reactor](https://github.com/NuclearPowered/Reactor) — Networking and build dependency\
-[BepInEx](https://github.com/BepInEx/BepInEx) — IL2CPP plugin loader and Harmony hooks
+[MiraAPI](https://github.com/All-Of-Us-Mods/MiraAPI): Mod framework and API\
+[Town Of Us: Mira](https://github.com/AU-Avengers/TOU-Mira): Base mod, inspiration, and shared assets\
+[Reactor](https://github.com/NuclearPowered/Reactor): Networking and build dependency\
+[BepInEx](https://github.com/BepInEx/BepInEx): IL2CPP plugin loader and Harmony hooks
+
+## Code Contributors
+
+[Xinav](https://github.com/xinavGit) - [Alliance Modifier support on Clockstopper and Domesmith](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/17)
 
 ## Asset credits
 
 - [@AtonyGit](https://github.com/AtonyGit)/[Town Of Us: Mira](https://github.com/AU-Avengers/TOU-Mira) - All assets that are not specified below
-- @jaydoeswitchcraft (discord) - Bloody modifier icon and Demolitionist role icon and Button assets, Skilled, Strong and Incompetent modifier icons, Retributionist assets
+- @jaydoeswitchcraft (discord) - Bloody modifier icon and Demolitionist role icon and Button assets, Skilled, Strong and Incompetent modifier icons, Retributionist assets, Mage assets, Cunctator role icon, Locator assets
 - [Freesound](https://freesound.org/) (community) -Glass&ndash;break SFX for Fragile
-- Espeon(@mystic_haze2 on discord) - Sprout Assets, Summoner role and meeting icon, Obfuscator role icon, Cunctator role icon, Mosquito assets, providing more intro sounds, Duelist assets, Armored assets, Cupid assets, Councillor role icon
-- @aasteriisken (discord) - Memento modifier icon, Domesmith Assets, Revenant icon, UAV Assets, Clockstopper icon, Nullified modifier icon
+- Espeon(@mystic_haze2 on discord) - Sprout Assets, Summoner role and meeting icon, Obfuscator role icon, Mosquito assets, providing more intro sounds, Duelist assets, Cupid assets, Councillor role icon, Mole assets, Watcher assets
+- @aasteriisken (discord) - Memento modifier icon, Domesmith Assets, Revenant icon, UAV Assets, Clockstopper icon, Nullified modifier icon, Telecom assets, Armored assets
 [Follow Asterisken on GitHub](https://github.com/aasteriisken)
-- @maybe_xinav (discord) - Animated Portalmaker portals and portal button icons, Frag button icons, Plague Doctor button icon, Shuffle button icon, Sentinel beacon sprite, Sentinel palce beacon button,Lockdown button sprite
+- @maybe_xinav (discord) - Animated Portalmaker portals and portal button icons, Frag button icons, Plague Doctor button icon, Shuffle button icon, Sentinel beacon sprite, Sentinel palce beacon button,Lockdown button sprite, Tactical Insertion assets
 
 ## Idea box Ideas (Divani Mods Discord)
 
-@jaydoeswitchcraft - Retributionist
+@jaydoeswitchcraft - Retributionist, Mage, Locator
+@aasteriisken - Telecom
+@mystic_haze2 - Watcher thought process, Mole
+
+## Testers
+
+@skillrain_ (Luka) - Testing Watcher
 
 # Source inspiration
 
 Some of my roles and modifiers take design cues from other Among Us mod communities. These pages were useful references:
 
 - **Demolitionist** - [Counter Strike](https://www.counter-strike.net/) (Plant/Defuse bombs + the colorcodes)
-- **Opportunist** — [TOHE: Collector](https://tohe.weareten.ca/options/Neutrals/Chaos/Collector.html) (vote-collection win pattern)
-- **Innocent** — [TOHE: Innocent](https://tohe.weareten.ca/options/Neutrals/Evil/Innocent.html)
-- **Plague Doctor** — [TheOtherRoles GMIA wiki — Neutral roles](https://github.com/GMIA-Nexus/TheOtherRolesGMIA/wiki/Neutral-Roles#plague-doctor)
-- **Bear Trap** (modifier) — [TOHE: Beartrap](https://tohe.weareten.ca/options/Addons/Helpful/Beartrap.html)
+- **Opportunist** - [TOHE: Collector](https://tohe.weareten.ca/options/Neutrals/Chaos/Collector.html) (vote-collection win pattern)
+- **Innocent** - [TOHE: Innocent](https://tohe.weareten.ca/options/Neutrals/Evil/Innocent.html)
+- **Plague Doctor** - [TheOtherRoles GMIA wiki — Neutral roles](https://github.com/GMIA-Nexus/TheOtherRolesGMIA/wiki/Neutral-Roles#plague-doctor)
+- **Bear Trap** (modifier) - [TOHE: Beartrap](https://tohe.weareten.ca/options/Addons/Helpful/Beartrap.html)
+- **Watcher** - Squid Game

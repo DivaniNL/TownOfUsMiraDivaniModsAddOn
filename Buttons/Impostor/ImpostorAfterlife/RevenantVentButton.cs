@@ -2,6 +2,7 @@ using System.Linq;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
+using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles.Impostor.ImpostorAfterlife;
@@ -9,7 +10,6 @@ using TMPro;
 using TownOfUs.Assets;
 using TownOfUs.Buttons;
 using TownOfUs.Modifiers;
-using TownOfUs.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -23,7 +23,7 @@ public sealed class RevenantVentButton : TownOfUsRoleButton<RevenantRole, Vent>
     public override Color TextOutlineColor => RevenantRole.RevenantColor;
     public override float Cooldown => OptionGroupSingleton<SummonerOptions>.Instance.RevenantVentCooldown.Value;
     public override LoadableAsset<Sprite> Sprite => TouAssets.VentSprite;
-    public override ButtonLocation Location { get; set; } = ButtonLocation.BottomLeft;
+    public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override bool ShouldPauseInVent => false;
     public override bool UsableInDeath => true;
 
@@ -41,7 +41,28 @@ public sealed class RevenantVentButton : TownOfUsRoleButton<RevenantRole, Vent>
 
     public override Vent? GetTarget()
     {
-        return TouRoleUtils.GetClosestUsableVent(true);
+        var player = PlayerControl.LocalPlayer;
+        if (player == null)
+        {
+            return null;
+        }
+
+        var filter = Helpers.CreateFilter(Constants.Usables);
+        var vent = player.GetNearestObjectOfType<Vent>(player.MaxReportDistance, filter);
+        if (vent == null || !(player.CanMove || player.inVent))
+        {
+            return null;
+        }
+
+        var center = new Vector2(player.Collider.bounds.center.x, player.Collider.bounds.center.y);
+        var position = new Vector2(vent.transform.position.x, vent.transform.position.y);
+        if (Vector2.Distance(center, position) > vent.UsableDistance ||
+            PhysicsHelpers.AnythingBetween(player.Collider, center, position, Constants.ShipOnlyMask, false))
+        {
+            return null;
+        }
+
+        return vent;
     }
 
     public override bool CanUse()

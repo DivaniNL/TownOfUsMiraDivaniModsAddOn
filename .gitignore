@@ -50,7 +50,8 @@ desktop.ini
 # Local-only source references (kept out of the public repo)
 # These folders ship game source trees used for reading, not building.
 # -----------------------------------------------------------------------------
-/TownOfUs/
+/TownOfUs-1.6.3
+/TOU-Mira-1.6.2
 /TouMiraRolesExtension/
 /TheOtherRolesGMIA-main/
 /wiki/

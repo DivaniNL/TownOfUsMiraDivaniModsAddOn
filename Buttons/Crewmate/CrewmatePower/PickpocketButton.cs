@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
@@ -207,7 +208,14 @@ public class PickpocketButton : TownOfUsButton
             return;
         }
 
-        PerformSteal(thief, target);
+        try
+        {
+            PerformSteal(thief, target);
+        }
+        catch (Exception ex)
+        {
+            DivaniPlugin.Instance.Log.LogError($"[Thief] PerformSteal threw: {ex}");
+        }
         ResetTarget();
     }
 
@@ -299,7 +307,9 @@ public class PickpocketButton : TownOfUsButton
         var existingIds = thief.GetModifiers<BaseModifier>()
             .Select(m => m.TypeId)
             .ToHashSet();
-        var availableIds = givableIds.Where(id => !existingIds.Contains(id)).ToList();
+        var availableIds = givableIds
+            .Where(id => !existingIds.Contains(id) && !ModifierExclusions.ConflictsWithOwned(thief, id))
+            .ToList();
         if (availableIds.Count == 0) return 0;
         return availableIds[random.Next(availableIds.Count)];
     }
@@ -317,7 +327,10 @@ public class PickpocketButton : TownOfUsButton
     {
         if (modifier is ExcludedGameModifier)
             return true;
-        
+
+        if (modifier.GetType().Name.StartsWith("Test", StringComparison.OrdinalIgnoreCase))
+            return true;
+
         if (modifier.GetType().Name == "MagicMirrorModifier")
             return true;
 
@@ -365,6 +378,9 @@ public class PickpocketButton : TownOfUsButton
         if (!IsAllowedSource(modifier))
             return false;
 
+        if (ModifierExclusions.ConflictsWithOwned(thief, modifier))
+            return false;
+
         var modNamespace = modifier.GetType().Namespace;
         if (modNamespace != null && ExcludedNamespaces.Any(ns => modNamespace.StartsWith(ns, StringComparison.OrdinalIgnoreCase)))
             return false;
@@ -391,27 +407,36 @@ public class PickpocketButton : TownOfUsButton
     {
         return modifier is IButtonModifier;
     }
-    
+   
+    private static readonly string[] NonCrewFactionMarkers =
+    {
+        "Neutral", "Impostor", "Assailant", "NonCrew", "NonImp", "NonNeut",
+        "Hns", "Hider", "Seeker", "External",
+    };
+
     private static bool IsFactionValidForThief(BaseModifier modifier)
     {
-        var factionName = modifier switch
+        string? factionName = null;
+        try
         {
-            TouGameModifier tgm => tgm.FactionType.ToString(),
-            UniversalGameModifier ugm => ugm.FactionType.ToString(),
-            _ => null,
-        };
-        
-        if (factionName == null) return true;
-        
-        if (factionName.Contains("Impostor", StringComparison.OrdinalIgnoreCase)) return false;
-        if (factionName.Contains("Assailant", StringComparison.OrdinalIgnoreCase)) return false;
-        if (factionName.Contains("Neutral", StringComparison.OrdinalIgnoreCase)) return false;
-        if (factionName.Contains("NonCrew", StringComparison.OrdinalIgnoreCase)) return false;
-        if (factionName.Contains("Hider", StringComparison.OrdinalIgnoreCase)) return false;
-        if (factionName.Contains("Seeker", StringComparison.OrdinalIgnoreCase)) return false;
-        if (factionName.Contains("External", StringComparison.OrdinalIgnoreCase)) return false;
-        
-        return true;
+            var prop = modifier.GetType().GetProperty("FactionType");
+            factionName = prop?.GetValue(modifier)?.ToString();
+        }
+        catch
+        {
+            factionName = null;
+        }
+
+        if (factionName != null)
+        {
+            return factionName.Equals("Alliance", StringComparison.OrdinalIgnoreCase)
+                || factionName.Equals("Universal", StringComparison.OrdinalIgnoreCase)
+                || factionName.StartsWith("Crewmate", StringComparison.OrdinalIgnoreCase)
+                || factionName.StartsWith("Universal", StringComparison.OrdinalIgnoreCase);
+        }
+
+        var ns = modifier.GetType().Namespace ?? string.Empty;
+        return !NonCrewFactionMarkers.Any(m => ns.Contains(m, StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool IsVisualModifier(BaseModifier modifier)

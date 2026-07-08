@@ -3,6 +3,7 @@ using HarmonyLib;
 using MiraAPI.Modifiers;
 using DivaniMods.Modifiers.Neutral.NeutralEvil;
 using DivaniMods.Roles.Neutral.NeutralEvil;
+using TownOfUs.Modifiers;
 using TownOfUs.Utilities;
 using UnityEngine;
 
@@ -38,7 +39,7 @@ internal static class InnocentTauntMeetingDisplay
                 continue;
             }
 
-            if (local.Data.IsDead)
+            if (DeathHandlerModifier.IsFullyDead(local))
             {
                 return true;
             }

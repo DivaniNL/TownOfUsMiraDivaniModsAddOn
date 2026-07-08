@@ -4,6 +4,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using DivaniMods.Buttons.Modifiers;
 using DivaniMods.Modifiers.Game.Universal;
+using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Options;
 using TownOfUs.Utilities;
 using UnityEngine;
@@ -22,8 +23,10 @@ public static class UAVMapRevealPatch
     public static void FixedUpdatePostfix(MapBehaviour __instance)
     {
         var local = PlayerControl.LocalPlayer;
+        var duel = local != null ? local.GetModifier<DuelModifier>() : null;
         var hasVision = local != null && !local.HasDied() &&
-                        (local.HasModifier<UAVActiveModifier>() || FriendlyUavActive(local));
+                        (local.HasModifier<UAVActiveModifier>() ||
+                         (duel == null && FriendlyUavActive(local)));
         var active = hasVision && __instance.isActiveAndEnabled && ShipStatus.Instance != null && !MeetingHud.Instance;
 
         if (!active)
@@ -52,6 +55,26 @@ public static class UAVMapRevealPatch
         {
             if (player == null || player.PlayerId == local!.PlayerId)
             {
+                continue;
+            }
+
+            if (duel != null && player.PlayerId != duel.OpponentId)
+            {
+                if (Dots.TryGetValue(player.PlayerId, out var off) && off)
+                {
+                    off.gameObject.SetActive(false);
+                }
+
+                continue;
+            }
+
+            if (duel == null && player.HasModifier<DuelModifier>())
+            {
+                if (Dots.TryGetValue(player.PlayerId, out var hiddenDuel) && hiddenDuel)
+                {
+                    hiddenDuel.gameObject.SetActive(false);
+                }
+
                 continue;
             }
 

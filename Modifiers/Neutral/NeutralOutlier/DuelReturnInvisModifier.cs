@@ -10,7 +10,7 @@ namespace DivaniMods.Modifiers.Neutral.NeutralOutlier;
 
 public sealed class DuelReturnInvisModifier : ConcealedModifier, IVisualAppearance
 {
-    public override string ModifierName => "Duel Returning";
+    public override string ModifierName => "Swooped";
     public override float Duration => 5f;
     public override bool HideOnUi => true;
     public override bool AutoStart => true;
@@ -19,7 +19,7 @@ public sealed class DuelReturnInvisModifier : ConcealedModifier, IVisualAppearan
     public VisualAppearance GetVisualAppearance()
     {
         var observer = PlayerControl.LocalPlayer;
-        var canSee = Player.AmOwner || (observer != null && observer.HasDied());
+        var canSee = Player.AmOwner || (observer != null && DeathHandlerModifier.IsFullyDead(observer));
         var playerColor = canSee ? new Color(0f, 0f, 0f, 0.1f) : Color.clear;
 
         var app = new VisualAppearance(Player.GetDefaultAppearance(), TownOfUsAppearances.PlayerNameOnly)
@@ -82,7 +82,7 @@ public sealed class DuelReturnInvisModifier : ConcealedModifier, IVisualAppearan
 
 public sealed class DuelReturnDisabledModifier : DisabledModifier
 {
-    public override string ModifierName => "Duel Returning";
+    public override string ModifierName => "Swooped";
     public override float Duration => 5f;
     public override bool AutoStart => true;
     public override bool RemoveOnComplete => false;

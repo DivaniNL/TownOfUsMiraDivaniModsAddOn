@@ -3,7 +3,10 @@ using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.GameOptions;
 using DivaniMods.Options;
 using DivaniMods.Patches;
+using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using DivaniMods.Roles.Impostor.ImpostorConcealing;
+using TownOfUs.Utilities;
+using TownOfUs.Modules;
 
 namespace DivaniMods.Events.Impostor.ImpostorConcealing;
 
@@ -30,6 +33,11 @@ public static class CunctatorEvents
         }
 
         if (MeetingHud.Instance || ExileController.Instance)
+        {
+            return;
+        }
+
+        if (@event.Target.GetRoleWhenAlive() is RetributionistRole)
         {
             return;
         }

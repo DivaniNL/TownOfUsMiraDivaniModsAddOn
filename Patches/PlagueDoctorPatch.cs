@@ -6,6 +6,7 @@ using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.GameOptions;
 using TownOfUs.Events;
+using TownOfUs.Modifiers;
 using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralEvil;
 using UnityEngine;
@@ -110,11 +111,15 @@ public static class PlagueDoctorPatch
             PlagueDoctorRole.TickImmunityTimer(Time.deltaTime);
         }
 
-        bool localIsDead = localPlayer.Data?.IsDead ?? false;
+        bool localIsFullyDead = DeathHandlerModifier.IsFullyDead(localPlayer);
 
-        if (isLocalPD || localIsDead)
+        if (isLocalPD || localIsFullyDead)
         {
             UpdateStatusText();
+        }
+        else
+        {
+            ClearStatusText();
         }
 
         PlagueDoctorRole.TryShowInfectionWarning();
@@ -129,6 +134,21 @@ public static class PlagueDoctorPatch
         var statusTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(localPlayer, 1);
         statusTask.name = "PlagueDoctorInfectionStatus";
         statusTask.Text = BuildInfectionStatusText();
+    }
+
+    private static void ClearStatusText()
+    {
+        var localPlayer = PlayerControl.LocalPlayer;
+        if (localPlayer == null || localPlayer.myTasks == null) return;
+
+        for (var i = localPlayer.myTasks.Count - 1; i >= 0; i--)
+        {
+            var task = localPlayer.myTasks[i];
+            if (task != null && task.name == "PlagueDoctorInfectionStatus")
+            {
+                localPlayer.RemoveTask(task);
+            }
+        }
     }
 
     private static string BuildInfectionStatusText()

@@ -64,7 +64,7 @@ internal static class VengefulSoulOutlinePatch
     private static bool ShouldLocalSee(PlayerControl soul)
     {
         var local = PlayerControl.LocalPlayer;
-        if (local == null || local.PlayerId == soul.PlayerId || local.HasDied())
+        if (local == null || local.PlayerId == soul.PlayerId || local.DiedOtherRound())
         {
             return true;
         }

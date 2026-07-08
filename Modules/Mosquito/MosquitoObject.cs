@@ -27,6 +27,7 @@ public sealed class MosquitoObject : MonoBehaviour
     private const float MaxLifetime = 20f;
     private const float BeanBaseSpeed = 2.5f;
     private const float SpeedMultiplier = 1f;
+    private const float BodyCenterOffset = 0.3636f;
 
     public static byte PendingStingTargetId { get; set; } = byte.MaxValue;
 
@@ -59,7 +60,7 @@ public sealed class MosquitoObject : MonoBehaviour
             _rend = gameObject.AddComponent<SpriteRenderer>();
         }
 
-        _rend.sprite = DivaniAssets.MosquitoIcon.LoadAsset();
+        _rend.sprite = DivaniAssets.MosquitoObjectSprite.LoadAsset();
         transform.localScale = new Vector3(0.5f, 0.5f, 1f);
 
         var local = PlayerControl.LocalPlayer;
@@ -115,7 +116,7 @@ public sealed class MosquitoObject : MonoBehaviour
             }
         }
 
-        var targetPos = target.GetTruePosition();
+        var targetPos = target.GetTruePosition() + (Vector2.up * BodyCenterOffset);
         var dest = Aimbot ? targetPos : Destination;
         var pos = (Vector2)transform.position;
         var delta = dest - pos;
@@ -126,7 +127,7 @@ public sealed class MosquitoObject : MonoBehaviour
 
         if (_rend != null && Mathf.Abs(delta.x) > 0.001f)
         {
-            _rend.flipX = delta.x > 0f;
+            _rend.flipX = delta.x < 0f;
         }
 
         if (!_stung && Vector2.Distance(next, targetPos) <= ContactRadius)

@@ -23,7 +23,7 @@ public sealed class CouncillorRole(IntPtr cppPtr)
     public string RoleName => "Councillor";
     public string RoleDescription => "Your vote? It's mine!";
     public string RoleLongDescription =>
-        "Each kill gives extra votes in the next meeting.";
+        "Each kill will give you extra votes to use in only the next meeting.";
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorSupport;

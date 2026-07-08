@@ -21,4 +21,7 @@ public class SentinelOptions : AbstractOptionGroup<SentinelRole>
 
     [ModdedToggleOption("Show Room Activity In Chat")]
     public bool ShowChatReport { get; set; } = true;
+
+    [ModdedToggleOption("Show Bodies Found In Beacon Rooms")]
+    public bool ShowBodyReport { get; set; } = false;
 }

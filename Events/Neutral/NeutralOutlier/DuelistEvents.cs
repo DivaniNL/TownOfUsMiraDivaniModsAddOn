@@ -6,7 +6,6 @@ using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Modules.Duelist;
-using DivaniMods.Networking.Neutral.NeutralOutlier;
 using DivaniMods.Options;
 using TownOfUs.Events;
 using TownOfUs.Events.TouEvents;
@@ -71,7 +70,7 @@ public static class DuelistEvents
 
         if (sm.IsDuelist)
         {
-            DuelistRpc.RpcAddDuelWin(src);
+            DuelManager.AddWin(src.PlayerId);
         }
         DuelManager.MarkResolved(src.PlayerId, tgt.PlayerId);
     }

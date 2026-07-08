@@ -8,13 +8,13 @@
     
     <AssemblyName>DivaniMods</AssemblyName>
     <RootNamespace>DivaniMods</RootNamespace>
-    <Version>1.3.0</Version>
+    <Version>1.3.2</Version>
     <!--
       TownOfUs + TouMiraRolesExtension live in-repo for reference only. Do not compile them here:
       this project already references TownOfUsMira.dll from BepInEx. Compiling sources duplicates
       every type (CS0436) and fails without full game/Hazel refs (CS0246).
     -->
-    <DefaultItemExcludes>$(DefaultItemExcludes);TownOfUs\**\*;TouMiraRolesExtension\**\*;TheOtherRolesGMIA-main\**\*;.specstory\**\*</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);TownOfUs\**\*;TownOfUs-1.6.3\**\*;TOU-Mira-1.6.2\**\*;TouMiraRolesExtension\**\*;TheOtherRolesGMIA-main\**\*;.specstory\**\*</DefaultItemExcludes>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -171,6 +171,17 @@
     <EmbeddedResource Include="Resources\DemolitionistDefuse.png" />
     <EmbeddedResource Include="Resources\DemolitionistVent.png" />
     <EmbeddedResource Include="Resources\ShuffleButton.png" />
+    <EmbeddedResource Include="Resources\MoleDigButton.png" />
+    <EmbeddedResource Include="Resources\MoleVentButton.png" />
+    <EmbeddedResource Include="Resources\MinerVent.png" />
+    <EmbeddedResource Include="Resources\Icons\Mole.png" />
+    <EmbeddedResource Include="Resources\Icons\Telecom.png" />
+    <EmbeddedResource Include="Resources\TelecomTransmission.png" />
+    <EmbeddedResource Include="Resources\TelecomTransmissionMeeting.png" />
+    <EmbeddedResource Include="Resources\TelecomChatIdle.png" />
+    <EmbeddedResource Include="Resources\TelecomChatHover.png" />
+    <EmbeddedResource Include="Resources\TelecomChatOpen.png" />
+    <EmbeddedResource Include="Resources\ChatTelecomBubble.png" />
     <!-- Audio clips must be WAV - loaded via MiraAPI's LoadableAudioResourceAsset,
          matching how TouMiraRolesExtension ships its sounds. -->
     <EmbeddedResource Include="Resources\FragileBreak.wav" />
@@ -207,6 +218,7 @@
     <EmbeddedResource Include="Resources\OptionBanners\SentinelBanner.png" />
     <EmbeddedResource Include="Resources\OptionBanners\SilencerBanner.png" />
     <EmbeddedResource Include="Resources\OptionBanners\SummonerBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\MageBanner.png" />
     <EmbeddedResource Include="Resources\OpportunistIntro.wav" />
     <EmbeddedResource Include="Resources\DemolitionistIntro.wav" />
     <EmbeddedResource Include="Resources\DemolitionistExplosion.wav" />
@@ -227,6 +239,7 @@
     <EmbeddedResource Include="Resources\RecruiterIntro.wav" />
     <EmbeddedResource Include="Resources\Icons\Mosquito.png" />
     <EmbeddedResource Include="Resources\MosquitoSting.png" />
+    <EmbeddedResource Include="Resources\MosquitoObject.png" />
     <EmbeddedResource Include="Resources\MosquitoIntro.wav" Condition="Exists('Resources\MosquitoIntro.wav')" />
     <EmbeddedResource Include="Resources\MosquitoSwat.wav" Condition="Exists('Resources\MosquitoSwat.wav')" />
     <EmbeddedResource Include="Resources\ObfuscatorIntro.wav" />
@@ -243,10 +256,24 @@
     <EmbeddedResource Include="Resources\VengefulSoulRevenge.png" />
     <EmbeddedResource Include="Resources\Icons\UAV.png" />
     <EmbeddedResource Include="Resources\UAVAirMap.png" />
+    <EmbeddedResource Include="Resources\Icons\TacticalInsertion.png" />
+    <EmbeddedResource Include="Resources\TacticalInsertionButton.png" />
+    <EmbeddedResource Include="Resources\TacInsertHover.wav" />
+    <EmbeddedResource Include="Resources\TacticalInsertionNonHover.png" />
+    <EmbeddedResource Include="Resources\TacInsertPlace.wav" />
     <EmbeddedResource Include="Resources\UAVFriendly.wav" />
     <EmbeddedResource Include="Resources\UAVEnemy.wav" />
     <EmbeddedResource Include="Resources\UAVEnd.wav" />
     <EmbeddedResource Include="Resources\Icons\Cupid.png" />
+    <EmbeddedResource Include="Resources\Icons\Mage.png" />
+    <EmbeddedResource Include="Resources\MageChangeSpell.png" />
+    <EmbeddedResource Include="Resources\MageShockShield.png" />
+    <EmbeddedResource Include="Resources\MageEnergize.png" />
+    <EmbeddedResource Include="Resources\MageIllusion.png" />
+    <EmbeddedResource Include="Resources\MageIntro.wav" />
+    <EmbeddedResource Include="Resources\TelecomIntro.wav" />
+    <EmbeddedResource Include="Resources\TelecomTransmiss.wav" />
+    <EmbeddedResource Include="Resources\TelecomMessageSound.wav" />
     <EmbeddedResource Include="Resources\CupidMatchmake.png" />
     <EmbeddedResource Include="Resources\CupidProtect.png" />
     <EmbeddedResource Include="Resources\CupidProtectOne.png" />
@@ -255,6 +282,18 @@
     <EmbeddedResource Include="Resources\Icons\Dreamer.png" />
     <EmbeddedResource Include="Resources\DreamerMeetingDream.png" />
     <EmbeddedResource Include="Resources\DreamerIntro.wav" />
+    <EmbeddedResource Include="Resources\Icons\Watcher.png" />
+    <EmbeddedResource Include="Resources\Icons\Locator.png" />
+    <EmbeddedResource Include="Resources\LocatorMark.png" />
+    <EmbeddedResource Include="Resources\WatcherWatch.png" />
+    <EmbeddedResource Include="Resources\WatcherKillButton.png" Condition="Exists('Resources\WatcherKillButton.png')" />
+    <EmbeddedResource Include="Resources\WatcherVentButton.png" Condition="Exists('Resources\WatcherVentButton.png')" />
+    <EmbeddedResource Include="Resources\WatcherGreenLight.png" />
+    <EmbeddedResource Include="Resources\WatcherRedLight.png" />
+    <EmbeddedResource Include="Resources\WatcherGo.wav" Condition="Exists('Resources\WatcherGo.wav')" />
+    <EmbeddedResource Include="Resources\WatcherStop.wav" Condition="Exists('Resources\WatcherStop.wav')" />
+    <EmbeddedResource Include="Resources\WatcherIntro.wav" Condition="Exists('Resources\WatcherIntro.wav')" />
+    <EmbeddedResource Include="Resources\WatcherShoot.wav" Condition="Exists('Resources\WatcherShoot.wav')" />
 
   </ItemGroup>
 

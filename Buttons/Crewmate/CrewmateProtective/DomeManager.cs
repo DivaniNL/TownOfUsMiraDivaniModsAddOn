@@ -50,6 +50,19 @@ public static class DomeManager
         if (renderer != null)
         {
             renderer.material = AuAvengersAnims.TrapMaterial.LoadAsset();
+
+            var mat = renderer.material;
+            var tint = DomesmithRole.DomesmithColor;
+            if (mat.HasProperty("_BackgroundColor"))
+            {
+                var orig = mat.GetColor("_BackgroundColor");
+                mat.SetColor("_BackgroundColor", new Color(tint.r, tint.g, tint.b, orig.a));
+            }
+            if (mat.HasProperty("_OutlineColor"))
+            {
+                var orig = mat.GetColor("_OutlineColor");
+                mat.SetColor("_OutlineColor", new Color(tint.r, tint.g, tint.b, orig.a));
+            }
         }
 
         go.transform.position = pos;

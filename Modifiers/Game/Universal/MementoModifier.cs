@@ -4,7 +4,9 @@ using MiraAPI.GameOptions;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using TownOfUs.Interfaces;
+using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Utilities;
@@ -38,6 +40,11 @@ public class MementoModifier : UniversalGameModifier, IColoredModifier, IWikiDis
 
     public override int GetAmountPerGame() =>
         (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.MementoAmount.Value;
+
+    public override bool IsModifierValidOn(RoleBehaviour role)
+    {
+        return base.IsModifierValidOn(role) && role is not RetributionistRole;
+    }
 
     public override void OnActivate()
     {

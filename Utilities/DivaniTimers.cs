@@ -168,9 +168,6 @@ public static class DivaniTimers
     {
         try
         {
-            // If the stack root was destroyed (scene change without an explicit
-            // Clear() yet), drop every reference so the next Set() rebuilds
-            // cleanly against the new HudManager.
             if (_stackRoot != null && !IsAlive(_stackRoot))
             {
                 ForgetReferences();
@@ -218,19 +215,10 @@ public static class DivaniTimers
         }
         catch (Exception ex)
         {
-            // Never let an exception escape into HudManager.Update - that's
-            // exactly what was breaking other Harmony patches and leaving
-            // custom buttons visible during meetings. Drop everything so the
-            // next frame can rebuild from scratch.
             ForgetReferences();
             DivaniPlugin.Instance?.Log.LogWarning($"DivaniTimers.Tick: {ex.Message}");
         }
     }
-
-    // --------------------------------------------------------------------
-    // Internals
-    // --------------------------------------------------------------------
-
     private static void ForgetReferences()
     {
         for (var i = 0; i < Entries.Count; i++)
@@ -328,11 +316,6 @@ public static class DivaniTimers
         {
             if (a != null) a.enabled = false;
         }
-
-        // The cloned prefab carries a LobbyNotificationMessage component whose
-        // own Update slides the row off-screen and disposes it. We only want
-        // the visuals, not the lifecycle, so disable any MonoBehaviour on the
-        // clone whose name suggests notification logic.
         foreach (var mb in go.GetComponents<MonoBehaviour>())
         {
             if (mb == null) continue;
