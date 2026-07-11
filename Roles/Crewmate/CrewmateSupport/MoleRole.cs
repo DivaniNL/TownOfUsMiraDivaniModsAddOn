@@ -38,6 +38,9 @@ public sealed class MoleRole(IntPtr cppPtr)
     // Mole vent id -> remaining rounds before it collapses (only tracked when duration > 0).
     [HideFromIl2Cpp] public static Dictionary<int, int> VentRounds { get; set; } = [];
 
+    // Local-only: seconds left before the local player gets kicked out of the mole vent network.
+    [HideFromIl2Cpp] public static float VentTimeLeft { get; set; }
+
     public string RoleName => "Mole";
     public string RoleDescription => "Dig your own tunnel network!";
     public string RoleLongDescription => "Dig vents around the map to connect a tunnel network.";
@@ -263,6 +266,7 @@ public sealed class MoleRole(IntPtr cppPtr)
     public static void ClearAll()
     {
         VentRounds.Clear();
+        VentTimeLeft = OptionGroupSingleton<MoleOptions>.Instance.VentTimeLimit.Value;
 
         foreach (var mole in CustomRoleUtils.GetActiveRolesOfType<MoleRole>())
         {

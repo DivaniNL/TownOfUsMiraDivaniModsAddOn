@@ -1,10 +1,68 @@
 using HarmonyLib;
 using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using DivaniMods.Buttons.Crewmate.CrewmateSupport;
 using DivaniMods.Options;
 using DivaniMods.Roles.Crewmate.CrewmateSupport;
 using UnityEngine;
 
 namespace DivaniMods.Patches;
+
+[HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
+public static class MoleVentTimeLimitPatch
+{
+    [HarmonyPostfix]
+    public static void Postfix()
+    {
+        var player = PlayerControl.LocalPlayer;
+        if (player == null || player.Data == null || ShipStatus.Instance == null)
+        {
+            return;
+        }
+
+        var limit = OptionGroupSingleton<MoleOptions>.Instance.VentTimeLimit.Value;
+        var button = CustomButtonSingleton<MoleVentButton>.Instance;
+        var vent = Vent.currentVent;
+
+        if (!player.inVent || vent == null || !vent.name.StartsWith("MoleVent"))
+        {
+            MoleRole.VentTimeLeft = limit;
+
+            if (button != null && button.EffectActive)
+            {
+                button.EffectActive = false;
+                button.SetTimer(button.Cooldown);
+            }
+
+            return;
+        }
+
+        MoleRole.VentTimeLeft -= Time.deltaTime;
+
+        if (button != null)
+        {
+            button.EffectActive = true;
+            button.SetTimer(Mathf.Max(MoleRole.VentTimeLeft, 0f));
+        }
+
+        if (MoleRole.VentTimeLeft > 0f)
+        {
+            return;
+        }
+
+        MoleRole.VentTimeLeft = limit;
+
+        vent.SetButtons(false);
+        player.MyPhysics.RpcExitVent(vent.Id);
+        player.MyPhysics.ExitAllVents();
+
+        if (button != null)
+        {
+            button.EffectActive = false;
+            button.SetTimer(button.Cooldown);
+        }
+    }
+}
 
 [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
 public static class MoleVentCanUsePatch

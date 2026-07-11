@@ -19,8 +19,9 @@ public sealed class MoleVentButton : TownOfUsTargetButton<Vent>
     public override string Name => TranslationController.Instance.GetStringWithDefault(StringNames.VentLabel, "Vent");
     public override BaseKeybind Keybind => Keybinds.VentAction;
     public override Color TextOutlineColor => MoleRole.MoleColor;
-    public override float Cooldown => 0.001f;
+    public override float Cooldown => OptionGroupSingleton<MoleOptions>.Instance.VentCooldown.Value;
     public override float InitialCooldown => 0.001f;
+    public override float EffectDuration => OptionGroupSingleton<MoleOptions>.Instance.VentTimeLimit.Value;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.MoleVentButton;
     public override bool ShouldPauseInVent => false;
 
@@ -176,7 +177,9 @@ public sealed class MoleVentButton : TownOfUsTargetButton<Vent>
             {
                 player.MyPhysics.RpcEnterVent(Target.Id);
                 Target.SetButtons(true);
-                Timer = 0.001f;
+                MoleRole.VentTimeLeft = EffectDuration;
+                EffectActive = true;
+                Timer = EffectDuration;
             }
 
             return;
@@ -188,6 +191,8 @@ public sealed class MoleVentButton : TownOfUsTargetButton<Vent>
             player.MyPhysics.RpcExitVent(Vent.currentVent.Id);
         }
 
+        MoleRole.VentTimeLeft = EffectDuration;
+        EffectActive = false;
         Timer = Cooldown;
     }
 }
