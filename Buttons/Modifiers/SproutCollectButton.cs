@@ -9,6 +9,7 @@ using MiraAPI.Utilities.Assets;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
+using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Modifiers.Game.Crewmate;
 using DivaniMods.Utilities;
 using TownOfUs.Buttons;
@@ -155,6 +156,7 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
                         !IsLover(m) &&
                         !IsNonUniversalVisualModifier(m) &&
                         !(m is SproutModifier) &&
+                        !(m is BetrayerModifier) &&
                         !m.GetType().Name.StartsWith("Test", StringComparison.OrdinalIgnoreCase))
             .Select(m => m.TypeId)
             .Distinct()
@@ -204,6 +206,7 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
     {
         if (!IsAllowedSource(modifier)) return true;
         if (modifier is ExcludedGameModifier) return true;
+        if (modifier is BetrayerModifier) return true;
         if (modifier.GetType().Name == "MagicMirrorModifier") return true;
         if (modifier.GetType().Name == "KnightedModifier") return true;
         if (IsShieldModifier(modifier)) return true;

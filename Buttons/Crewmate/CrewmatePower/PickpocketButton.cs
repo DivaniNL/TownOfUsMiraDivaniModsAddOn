@@ -14,6 +14,7 @@ using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Neutral.NeutralKilling;
+using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Options;
 using DivaniMods.Patches;
 using DivaniMods.Roles.Crewmate.CrewmatePower;
@@ -326,6 +327,9 @@ public class PickpocketButton : TownOfUsButton
     private static bool IsExcludedFromStealing(BaseModifier modifier)
     {
         if (modifier is ExcludedGameModifier)
+            return true;
+
+        if (modifier is BetrayerModifier)
             return true;
 
         if (modifier.GetType().Name.StartsWith("Test", StringComparison.OrdinalIgnoreCase))

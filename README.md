@@ -65,6 +65,7 @@ Join the Discord:
   <img src="./Resources/Headers/ImpMods.png" alt="Impostor modifiers"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#ruthless"><img width="10%" src="./Resources/Icons/Ruthless.png" alt="Ruthless"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#nullified"><img width="10%" src="./Resources/Icons/Nullified.png" alt="Nullified"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#betrayer"><img width="10%" src="./Resources/Icons/Betrayer.png" alt="Betrayer"/></a>
   <img src="./Resources/Headers/NeutMods.png" alt="Neutral modifiers"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#sniper"><img width="10%" src="./Resources/Icons/Sniper.png" alt="Sniper"/></a>
   <img src="./Resources/Headers/UniMods.png" alt="Universal modifiers"/>

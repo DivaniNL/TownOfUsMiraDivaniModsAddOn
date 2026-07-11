@@ -24,6 +24,10 @@ Transmit to a player to open a private chat!
 
 Click on the Watch button to make everyone play Red Light, Green Light. Earn  charges after getting some regular kills
 
+### Added Modifier: Betrayer (Alliance, Impostor only)
+
+An Impostor that turned on their own team. They win like a Neutral Killer: be the last killer standing with kill majority. They can kill fellow Impostors, have their own kill cooldown, and block the Impostor majority win while alive. Configurable venting, sabotaging and Impostor vision. Cannot be stolen by Thief or collected by Sprout.
+
 ## General changes
 
 - New icons for Sprout, Armored, Cunctator, Retributionist and the Mosquito drone
