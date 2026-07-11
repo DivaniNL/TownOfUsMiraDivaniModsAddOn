@@ -13,8 +13,28 @@ public static class RetributionistManager
 
     public static readonly HashSet<byte> UsedRevenge = new();
 
+    private static readonly HashSet<byte> PendingRevenge = new();
+
+    public static bool AnyRevengeActive => Killers.Count > 0 || PendingRevenge.Count > 0;
+
+    public static void MarkRevengePending(byte soulId)
+    {
+        PendingRevenge.Add(soulId);
+    }
+
+    public static void ClearRevengePending(byte soulId)
+    {
+        PendingRevenge.Remove(soulId);
+    }
+
+    public static void ClearAllRevengePending()
+    {
+        PendingRevenge.Clear();
+    }
+
     public static void StartRevenge(byte soulId, byte killerId, Vector2 deathPos)
     {
+        PendingRevenge.Remove(soulId);
         Killers[soulId] = killerId;
         DeathPositions[soulId] = deathPos;
         UsedRevenge.Add(soulId);
@@ -98,5 +118,6 @@ public static class RetributionistManager
         Killers.Clear();
         DeathPositions.Clear();
         UsedRevenge.Clear();
+        PendingRevenge.Clear();
     }
 }

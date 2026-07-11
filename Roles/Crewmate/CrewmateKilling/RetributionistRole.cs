@@ -1,7 +1,10 @@
 using System;
+using MiraAPI.GameOptions;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
 using DivaniMods.Assets;
+using DivaniMods.Events.Crewmate.CrewmateKilling;
+using DivaniMods.Options;
 using TownOfUs.Extensions;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
@@ -11,9 +14,24 @@ using UnityEngine;
 namespace DivaniMods.Roles.Crewmate.CrewmateKilling;
 
 public sealed class RetributionistRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), ITouCrewRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color RetributionistColor = new Color32(175, 22, 81, 255);
+
+    public bool IsPowerCrew
+    {
+        get
+        {
+            if (Player == null)
+            {
+                return false;
+            }
+
+            var opts = OptionGroupSingleton<RetributionistOptions>.Instance;
+            return opts.StallGame && (!opts.TurnIntoSoulOnce ||
+                                      !RetributionistManager.UsedRevenge.Contains(Player.PlayerId));
+        }
+    }
 
     public string RoleName => "Retributionist";
     public string RoleDescription => "Seek revenge on your killer!";
