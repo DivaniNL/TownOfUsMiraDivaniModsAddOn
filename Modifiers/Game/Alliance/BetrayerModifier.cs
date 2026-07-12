@@ -25,7 +25,7 @@ public sealed class BetrayerModifier : AllianceGameModifier, IColoredModifier, I
 
     public override string ModifierName => "Betrayer";
     public override string LocaleKey => "Betrayer";
-    public override string IntroInfo => "Betray your team.\nBe the last killer standing.";
+    public override string IntroInfo => "Ditch the knife for a wand";
     public override string Symbol => "⁉";
     public string ShortName => "Bet";
     public override bool DoesTasks => false;
