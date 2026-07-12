@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
+using MiraAPI.Modifiers;
 using MiraAPI.Roles;
 using MiraAPI.Utilities.Assets;
 using Reactor.Networking.Attributes;
@@ -12,6 +13,7 @@ using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmateSupport;
+using DivaniMods.Modifiers.Crewmate.CrewmateKilling;
 using DivaniMods.Options;
 using TownOfUs.Assets;
 using TownOfUs.Extensions;
@@ -96,6 +98,11 @@ public sealed class MoleRole(IntPtr cppPtr)
 
     public static bool CanUseMoleVents(PlayerControl player)
     {
+        if (player.HasModifier<CursedModifier>())
+        {
+            return false;
+        }
+
         if (player.Data?.Role is MoleRole)
         {
             return true;
