@@ -6,6 +6,7 @@ using MiraAPI.Utilities;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
+using DivaniMods.Networking.Neutral.NeutralOutlier;
 using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralOutlier;
 using TownOfUs.Utilities;
@@ -14,14 +15,25 @@ using Object = UnityEngine.Object;
 
 namespace DivaniMods.Modules.Duelist;
 
+public enum DuelOutcome : byte
+{
+    DuelistWon,
+    OpponentWon,
+    Tie,
+}
+
 public static class DuelManager
 {
+    public const float TieWindow = 0.15f;
+
     private static readonly Dictionary<byte, int> Wins = new();
     private static readonly Dictionary<byte, int> Losses = new();
     private static readonly HashSet<byte> ActiveDuelers = new();
     private static readonly HashSet<byte> DuelDeaths = new();
     private static readonly HashSet<byte> Resolved = new();
     private static readonly HashSet<byte> Struck = new();
+    private static readonly HashSet<byte> Resolving = new();
+    private static readonly Dictionary<byte, byte> Sanctioned = new();
 
     public static bool IsInDuel(byte playerId) => ActiveDuelers.Contains(playerId);
 
@@ -30,6 +42,8 @@ public static class DuelManager
         ActiveDuelers.Add(playerId);
         Resolved.Remove(playerId);
         Struck.Remove(playerId);
+        Resolving.Remove(playerId);
+        Sanctioned.Remove(playerId);
     }
 
     public static void ClearActiveDuelers()
@@ -37,6 +51,8 @@ public static class DuelManager
         ActiveDuelers.Clear();
         Resolved.Clear();
         Struck.Clear();
+        Resolving.Clear();
+        Sanctioned.Clear();
     }
 
     public static bool IsResolved(byte playerId) => Resolved.Contains(playerId);
@@ -48,6 +64,79 @@ public static class DuelManager
 
     public static bool HasStruck(byte playerId) => Struck.Contains(playerId);
     public static void MarkStruck(byte playerId) => Struck.Add(playerId);
+
+    public static bool IsSanctionedKill(byte killer, byte victim) =>
+        Sanctioned.TryGetValue(killer, out var v) && v == victim;
+
+    public static void SanctionKill(byte killer, byte victim) => Sanctioned[killer] = victim;
+
+    public static void HostBeginResolve(PlayerControl striker, PlayerControl opponent)
+    {
+        if (!PlayerControl.LocalPlayer.IsHost())
+        {
+            return;
+        }
+        if (Resolving.Contains(striker.PlayerId) || Resolving.Contains(opponent.PlayerId))
+        {
+            return;
+        }
+        if (IsResolved(striker.PlayerId) || IsResolved(opponent.PlayerId))
+        {
+            return;
+        }
+
+        Resolving.Add(striker.PlayerId);
+        Resolving.Add(opponent.PlayerId);
+        Coroutines.Start(CoResolveStrike(striker, opponent));
+    }
+
+    private static IEnumerator CoResolveStrike(PlayerControl a, PlayerControl b)
+    {
+        var elapsed = 0f;
+        while (elapsed < TieWindow && !(HasStruck(a.PlayerId) && HasStruck(b.PlayerId)))
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        Resolving.Remove(a.PlayerId);
+        Resolving.Remove(b.PlayerId);
+
+        if (a == null || b == null || !a.TryGetModifier<DuelModifier>(out var am) || !b.HasModifier<DuelModifier>())
+        {
+            yield break;
+        }
+        if (IsResolved(a.PlayerId) || IsResolved(b.PlayerId))
+        {
+            yield break;
+        }
+
+        var duelist = am.IsDuelist ? a : b;
+        var opponent = am.IsDuelist ? b : a;
+
+        var duelistStruck = HasStruck(duelist.PlayerId);
+        var opponentStruck = HasStruck(opponent.PlayerId);
+
+        DuelOutcome outcome;
+        if (duelistStruck && opponentStruck)
+        {
+            outcome = DuelOutcome.Tie;
+        }
+        else if (duelistStruck)
+        {
+            outcome = DuelOutcome.DuelistWon;
+        }
+        else if (opponentStruck)
+        {
+            outcome = DuelOutcome.OpponentWon;
+        }
+        else
+        {
+            yield break;
+        }
+
+        DuelistRpc.RpcResolveDuel(duelist, opponent.PlayerId, (byte)outcome);
+    }
 
     public static bool DiedInDuel(byte playerId) => DuelDeaths.Contains(playerId);
     public static void MarkDuelDeath(byte playerId) => DuelDeaths.Add(playerId);
@@ -74,6 +163,8 @@ public static class DuelManager
         DuelDeaths.Clear();
         Resolved.Clear();
         Struck.Clear();
+        Resolving.Clear();
+        Sanctioned.Clear();
     }
 
     public static bool TryGetDuelDestinations(PlayerControl duelist, PlayerControl target,
@@ -219,6 +310,17 @@ public static class DuelManager
         Coroutines.Start(CoEndDuel(winner, loser, loserDied));
     }
 
+    public static void EndDuelTie(PlayerControl duelist, PlayerControl opponent)
+    {
+        if (duelist == null || opponent == null)
+        {
+            return;
+        }
+
+        ShowTieNotifs(duelist, opponent);
+        Coroutines.Start(CoEndDuel(duelist, opponent, false));
+    }
+
     private static IEnumerator CoEndDuel(PlayerControl winner, PlayerControl loser, bool loserDied)
     {
         yield return new WaitForSeconds(0.5f);
@@ -325,6 +427,23 @@ public static class DuelManager
         }
     }
 
+    private static void ShowTieNotifs(PlayerControl duelist, PlayerControl opponent)
+    {
+        var local = PlayerControl.LocalPlayer;
+        if (local == null || (local.PlayerId != duelist.PlayerId && local.PlayerId != opponent.PlayerId))
+        {
+            return;
+        }
+
+        var hex = ColorUtility.ToHtmlStringRGB(DuelistRole.DuelistColor);
+        var icon = DivaniAssets.DuelistIcon.LoadAsset();
+
+        MiraAPI.Utilities.Helpers.CreateAndShowNotification(
+            $"<b><color=#{hex}>Clash! Both blades landed at once. The duel ends in a draw.</color></b>", Color.white,
+            new Vector3(0f, 1f, -20f), spr: icon);
+        Coroutines.Start(MiscUtils.CoFlash(Color.grey, alpha: 0.4f));
+    }
+
     private static void TeleportBack(PlayerControl player, Vector2 pos)
     {
         if (player == null || player.HasDied())
@@ -351,6 +470,8 @@ public static class DuelManager
         ActiveDuelers.Remove(player.PlayerId);
         Resolved.Remove(player.PlayerId);
         Struck.Remove(player.PlayerId);
+        Resolving.Remove(player.PlayerId);
+        Sanctioned.Remove(player.PlayerId);
         if (player.TryGetModifier<DuelModifier>(out var mod))
         {
             player.RemoveModifier(mod);

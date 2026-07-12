@@ -61,4 +61,6 @@ public enum DivaniRpcCalls : uint
     TelecomClearTransmission = 256,
     TelecomSendChat = 257,
     TelecomSetPendingMeetingTarget = 258,
+    DuelistStrike = 259,
+    DuelistResolveDuel = 260,
 }

@@ -2,11 +2,9 @@ using System.Linq;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
-using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Modules.Duelist;
-using DivaniMods.Options;
 using TownOfUs.Events;
 using TownOfUs.Events.TouEvents;
 using TownOfUs.Modifiers;
@@ -45,34 +43,10 @@ public static class DuelistEvents
             return;
         }
 
-        if (DuelManager.IsResolved(src.PlayerId) || DuelManager.IsResolved(tgt.PlayerId))
+        if (!DuelManager.IsSanctionedKill(src.PlayerId, tgt.PlayerId))
         {
             evt.Cancel();
-            return;
         }
-
-        if (tm.IsDuelist)
-        {
-            DuelManager.AddLoss(tgt.PlayerId);
-
-            var lossesToDie = (int)OptionGroupSingleton<DuelistOptions>.Instance.DuelsLostToDie.Value;
-            if (DuelManager.GetLosses(tgt.PlayerId) >= lossesToDie)
-            {
-                DuelManager.MarkResolved(src.PlayerId, tgt.PlayerId);
-                return;
-            }
-
-            DuelManager.MarkResolved(src.PlayerId, tgt.PlayerId);
-            evt.Cancel();
-            DuelManager.EndDuel(src, tgt, false);
-            return;
-        }
-
-        if (sm.IsDuelist)
-        {
-            DuelManager.AddWin(src.PlayerId);
-        }
-        DuelManager.MarkResolved(src.PlayerId, tgt.PlayerId);
     }
 
     [RegisterEvent]
