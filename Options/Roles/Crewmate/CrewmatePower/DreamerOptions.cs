@@ -15,7 +15,6 @@ public enum DreamerReimagineRestriction
 public enum DreamerOnDreamBreakMaxRoleCount
 {
     ApplyRandom,
-    DreamRedo,
     DreamFail,
 }
 
@@ -33,23 +32,20 @@ public class DreamerOptions : AbstractOptionGroup<DreamerRole>
 
     public ModdedToggleOption NotifyDreamerOnFail { get; } =
         new("Dreamer Notified On Failed Dream", false);
+    
+    public ModdedToggleOption FailDreamOnNoChange { get; } =
+        new ("Fail Dream If Target And Dream Role Are Same", true);
 
     public ModdedNumberOption InsomniaRounds { get; } = new(
         "After Reimagine, Cannot Be Reimagined Again For Rounds", 1f, 1f, 3f, 1f, MiraNumberSuffixes.None);
-    
-    public ModdedToggleOption AliveReimaginedGrantKillImmunity { get; } =
-        new ("Alive Reimagined Players Grant Kill Immunity", false);
 
     public ModdedToggleOption RespectMaxRoleCount { get; } = new(
         "Respect Max Role Count On Reimagine?", true);
-
-    public ModdedToggleOption FailDreamOnNoChange { get; } =
-        new ("Fail Dream If Target And Dream Role Are Same", true);
     
     public ModdedEnumOption OnMaxRoleCountBroken { get; } = new(
         "If Dream Breaks Max Role Count", (int)DreamerOnDreamBreakMaxRoleCount.ApplyRandom,
         typeof(DreamerOnDreamBreakMaxRoleCount),
-        ["Give Random Role", "Choose New Dream", "Dream Fails"])
+        ["Give Random Role", "Dream Fails"])
     {
         Visible = () => OptionGroupSingleton<DreamerOptions>.Instance.RespectMaxRoleCount.Value
     };

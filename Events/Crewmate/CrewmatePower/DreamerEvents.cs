@@ -47,9 +47,9 @@ public static class DreamerEvents
         {
             var dreamMod = dreaming.GetModifier<DreamerTargetDreamingModifier>();
 
-            if (dreamMod != null && (ushort)dreaming.Data.Role.Role == dreamMod.DreamRole)
+            if (dreamMod != null && (ushort)dreaming.Data.Role.Role == dreamMod.DreamRoleId)
             {
-                dreaming.RpcChangeRole(dreamMod.OriginalRole);
+                dreaming.RpcChangeRole(dreamMod.OriginalRoleId);
             }
 
             dreaming.RpcRemoveModifier<DreamerTargetDreamingModifier>();
@@ -129,68 +129,5 @@ public static class DreamerEvents
             target.RpcChangeRole(dreamer.DreamRoleId);
             target.RpcAddModifier<DreamerTargetDreamingModifier>(originalRole, dreamer.DreamRoleId);
         }
-    }
-
-    [RegisterEvent]
-    public static void MiraButtonClickEventHandler(MiraButtonClickEvent @event)
-    {
-        var button = @event.Button as CustomActionButton<PlayerControl>;
-        var target = button?.Target;
-
-        if (target == null || button == null || button is not IKillButton || !button.CanClick())
-            return;
-
-        if (CheckForMonarchImmunity(@event, target))
-        {
-            ResetButtonTimer(PlayerControl.LocalPlayer, button);
-        }
-    }
-
-    [RegisterEvent]
-    public static void BeforeMurderEventHandler(BeforeMurderEvent @event)
-    {
-        var source = @event.Source;
-        var target = @event.Target;
-
-        if (CheckForMonarchImmunity(@event, target))
-        {
-            ResetButtonTimer(source);
-        }
-    }
-
-    private static bool CheckForMonarchImmunity(MiraCancelableEvent? @event, PlayerControl target)
-    {
-        if (!OptionGroupSingleton<DreamerOptions>.Instance.AliveReimaginedGrantKillImmunity)
-            return false;
-
-        if (MeetingHud.Instance || ExileController.Instance)
-            return false;
-
-        if (target.Data?.Role is not DreamerRole)
-            return false;
-
-        var reimaginedAlive = Helpers.GetAlivePlayers()
-            .Any(p =>
-                p.HasModifier<DreamerTargetDreamingModifier>() && p.IsCrewmate()
-            );
-
-        if (!reimaginedAlive)
-            return false;
-
-        @event?.Cancel();
-        return true;
-    }
-
-    private static void ResetButtonTimer(PlayerControl source, CustomActionButton<PlayerControl>? button = null)
-    {
-        if (!source.AmOwner)
-        {
-            return;
-        }
-
-        var reset = OptionGroupSingleton<GeneralOptions>.Instance.TempSaveCdReset;
-
-        button?.SetTimer(reset);
-        source.SetKillTimer(reset);
     }
 }

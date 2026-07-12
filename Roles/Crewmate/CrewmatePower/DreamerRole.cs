@@ -52,6 +52,7 @@ public sealed class DreamerRole(IntPtr cppPtr)
     {
         Icon = DivaniAssets.DreamerIcon,
         IntroSound = DivaniAssets.DreamerIntroSound,
+        MaxRoleCount = 1
     };
 
     [HideFromIl2Cpp]
@@ -195,18 +196,6 @@ public sealed class DreamerRole(IntPtr cppPtr)
 
         if (target == null)
         {
-            return;
-        }
-
-        if (options.RespectMaxRoleCount.Value
-            && (DreamerOnDreamBreakMaxRoleCount)options.OnMaxRoleCountBroken.Value == DreamerOnDreamBreakMaxRoleCount.DreamRedo
-            && IsBreakingMaxRoleCount(role, target))
-        {
-            Helpers.CreateAndShowNotification(
-                "<b>That role is unavailable — <color=#9999FF>choose another role!</color></b>",
-                new Color32(51, 51, 153, 255), spr: DivaniAssets.DreamerIcon.LoadAsset());
-
-            dreamMenu?.Close();
             return;
         }
 
