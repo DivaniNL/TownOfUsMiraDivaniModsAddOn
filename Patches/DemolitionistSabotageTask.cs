@@ -1,7 +1,6 @@
 using Il2CppInterop.Runtime.Attributes;
 using Il2CppSystem.Text;
 using Reactor.Utilities.Attributes;
-using DivaniMods.Roles.Neutral.NeutralEvil;
 using DivaniMods.Utilities;
 using UnityEngine;
 
@@ -27,9 +26,7 @@ public sealed class DemolitionistSabotageTask(nint cppPtr) : SabotageTask(cppPtr
             return;
         }
 
-        var color = (DemolitionistSabotageState.FlashPulseIndex & 1) == 0
-            ? DemolitionistRole.DemolitionistColor
-            : DemolitionistSabotageState.SecondaryColor;
+        var color = DemolitionistSabotageState.GetCurrentPulseColor();
         var location = DemolitionistSabotageState.PlantedLocationName;
         var seconds = Mathf.CeilToInt(DemolitionistSabotageState.TimeRemaining);
         var hex = ColorUtility.ToHtmlStringRGB(color);
