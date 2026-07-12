@@ -335,11 +335,12 @@ public static class DuelManager
             TeleportBack(loser, loserMod.ReturnPos);
         }
 
+        ApplyReturnInvisibility(winner);
+        ApplyReturnInvisibility(loser);
+
         RemoveDuel(winner);
         RemoveDuel(loser);
 
-        ApplyReturnInvisibility(winner);
-        ApplyReturnInvisibility(loser);
         ShowReturnNotif(winner, loser);
     }
 
