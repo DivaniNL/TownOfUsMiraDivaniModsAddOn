@@ -176,7 +176,8 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
 
         foreach (var modifier in ModifierManager.Modifiers)
         {
-            if (modifier is not GameModifier) continue;
+            if (modifier is not GameModifier gameMod) continue;
+            if (gameMod.GetAssignmentChance() <= 0 || gameMod.GetAmountPerGame() <= 0) continue;
             if (!IsAllowedSource(modifier)) continue;
             if (modifier.HideOnUi) continue;
             if (modifier is ExcludedGameModifier) continue;

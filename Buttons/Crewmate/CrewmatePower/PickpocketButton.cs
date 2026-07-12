@@ -455,11 +455,14 @@ public class PickpocketButton : TownOfUsButton
         foreach (var modifier in ModifierManager.Modifiers)
         {
             if (modifier is not GameModifier gm) continue;
-            
+
             var modName = modifier.ModifierName;
             var modNamespace = modifier.GetType().Namespace ?? "null";
             var modTypeName = modifier.GetType().Name;
-            
+
+            if (gm.GetAssignmentChance() <= 0 || gm.GetAmountPerGame() <= 0)
+                continue;
+
             if (modifier.HideOnUi)
                 continue;
             
