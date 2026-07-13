@@ -69,9 +69,6 @@ public sealed class DuelistRole(IntPtr cppPtr)
 
     public bool HasMetWinGoal => DuelWins >= WinsNeeded;
 
-    public RoleBehaviour CrewVariant =>
-        RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<SheriffRole>());
-
     public bool IsUnlovable => true;
 
     public bool ContinuesGame => !Player.HasDied() && WinType == DuelistWinType.WinAlone && Helpers.GetAlivePlayers().Count <= 3 && (WinsNeeded - DuelWins) <= 2;
