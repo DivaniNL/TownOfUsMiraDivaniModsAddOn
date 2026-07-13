@@ -20,6 +20,32 @@ public sealed class BetrayerRevealedModifier : BaseModifier
             .Any(x => x.Player != null && !x.Player.HasDied());
     }
 
+    public static bool CanRelaxTargeting(PlayerControl? actor)
+    {
+        if (actor == null || actor.Data == null)
+        {
+            return false;
+        }
+
+        return actor.HasModifier<BetrayerModifier>() || (actor.IsImpostorAligned() && AnyRevealed());
+    }
+
+    public static bool AllowsImpostorTarget(PlayerControl? actor, PlayerControl? target)
+    {
+        if (actor == null || actor.Data == null || target == null || target.Data == null ||
+            actor.PlayerId == target.PlayerId)
+        {
+            return false;
+        }
+
+        if (actor.HasModifier<BetrayerModifier>())
+        {
+            return true;
+        }
+
+        return actor.IsImpostorAligned() && target.HasModifier<BetrayerRevealedModifier>();
+    }
+
     public override void OnActivate()
     {
         var local = PlayerControl.LocalPlayer;
@@ -36,7 +62,7 @@ public sealed class BetrayerRevealedModifier : BaseModifier
             return;
         }
 
-        if (local.IsImpostorAligned() && !local.HasModifier<BetrayerModifier>())
+        if (local.IsImpostorAligned() && !local.HasModifier<BetrayerModifier>() && !local.HasDied())
         {
             Notify($"<b>{Player.Data.PlayerName} has been betraying you all along, kill the " +
                    $"<color={ColorTag}>Betrayer</color> before your victory is stolen!</b>");

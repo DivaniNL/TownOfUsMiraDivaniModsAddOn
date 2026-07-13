@@ -3,15 +3,22 @@ using System.Linq;
 using HarmonyLib;
 using MiraAPI.GameEnd;
 using MiraAPI.GameOptions;
+using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using DivaniMods.GameOver;
 using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Options;
+using TownOfUs.Buttons.Impostor;
+using TownOfUs.Interfaces;
 using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Impostor;
+using TownOfUs.Modifiers.Impostor.Herbalist;
 using TownOfUs.Modules.Components;
 using TownOfUs.Options;
 using TownOfUs.Options.Maps;
+using TownOfUs.Options.Roles.Impostor;
 using TownOfUs.Roles.Impostor;
+using TownOfUs.Roles.Other;
 using TownOfUs.Utilities;
 using UnityEngine;
 
@@ -30,6 +37,12 @@ public static class BetrayerPatches
     {
         return player != null && player.Data != null && player.IsImpostorAligned() &&
                !player.HasModifier<BetrayerModifier>();
+    }
+
+    private static bool IsDeadOrSpectating(PlayerControl? player)
+    {
+        return player != null && player.Data != null &&
+               (player.HasDied() || player.Data.Role is SpectatorRole);
     }
 
     [HarmonyPatch(typeof(TownOfUs.Utilities.Extensions), nameof(TownOfUs.Utilities.Extensions.GetClosestLivingPlayer))]
@@ -65,6 +78,165 @@ public static class BetrayerPatches
         __result = predicate != null ? candidates.Find(predicate) : candidates.FirstOrDefault();
     }
 
+    [HarmonyPatch(typeof(ParasiteOvertakeButton), nameof(ParasiteOvertakeButton.GetTarget))]
+    [HarmonyPriority(Priority.Last)]
+    [HarmonyPostfix]
+    public static void ParasiteGetTargetPostfix(ParasiteOvertakeButton __instance, ref PlayerControl? __result)
+    {
+        var local = PlayerControl.LocalPlayer;
+
+        if (local?.Data?.Role is not ParasiteRole parasite || parasite.Controlled != null ||
+            !BetrayerRevealedModifier.CanRelaxTargeting(local))
+        {
+            return;
+        }
+
+        __result = local.GetClosestLivingPlayer(
+            true,
+            __instance.Distance,
+            predicate: plr =>
+                plr != null &&
+                !plr.AmOwner &&
+                !plr.HasDied() &&
+                (!plr.IsImpostorAligned() || BetrayerRevealedModifier.AllowsImpostorTarget(local, plr)) &&
+                !plr.IsInTargetingAnimState() &&
+                !plr.GetModifiers<BaseModifier>().Any(x => x is IUncontrollable) &&
+                !plr.HasModifier<ParasiteInfectedModifier>());
+    }
+
+    [HarmonyPatch(typeof(EclipsalBlindButton), "OnClick")]
+    [HarmonyPostfix]
+    public static void EclipsalBlindPostfix()
+    {
+        var local = PlayerControl.LocalPlayer;
+
+        if (local == null || ShipStatus.Instance == null || !BetrayerRevealedModifier.CanRelaxTargeting(local))
+        {
+            return;
+        }
+
+        var radius = OptionGroupSingleton<EclipsalOptions>.Instance.BlindRadius;
+        var nearby = MiraAPI.Utilities.Helpers.GetClosestPlayers(local, radius * ShipStatus.Instance.MaxLightRadius);
+
+        foreach (var player in nearby.Where(x => !x.HasDied() && x.IsImpostor() &&
+                                                 !x.HasModifier<EclipsalBlindModifier>() &&
+                                                 BetrayerRevealedModifier.AllowsImpostorTarget(local, x)))
+        {
+            player.RpcAddModifier<EclipsalBlindModifier>(local);
+        }
+    }
+
+    [HarmonyPatch(typeof(GrenadierFlashModifier), "ShouldPlayerBeBlinded")]
+    [HarmonyPostfix]
+    public static void GrenadierShouldBeBlindedPostfix(PlayerControl player, ref bool __result)
+    {
+        if (__result || player == null || player.HasDied() || MeetingHud.Instance ||
+            !player.TryGetModifier<GrenadierFlashModifier>(out var flash))
+        {
+            return;
+        }
+
+        __result = BetrayerRevealedModifier.AllowsImpostorTarget(flash.Grenadier, player);
+    }
+
+    [HarmonyPatch(typeof(GrenadierFlashModifier), "ShouldPlayerBeDimmed")]
+    [HarmonyPostfix]
+    public static void GrenadierShouldBeDimmedPostfix(PlayerControl player, ref bool __result)
+    {
+        if (!__result || player == null || player.HasDied() ||
+            !player.TryGetModifier<GrenadierFlashModifier>(out var flash))
+        {
+            return;
+        }
+
+        if (BetrayerRevealedModifier.AllowsImpostorTarget(flash.Grenadier, player))
+        {
+            __result = false;
+        }
+    }
+
+    [HarmonyPatch(typeof(GrenadierFlashModifier), nameof(GrenadierFlashModifier.CanUseConsoles), MethodType.Getter)]
+    [HarmonyPostfix]
+    public static void GrenadierCanUseConsolesPostfix(GrenadierFlashModifier __instance, ref bool __result)
+    {
+        if (__result && BetrayerRevealedModifier.AllowsImpostorTarget(__instance.Grenadier, __instance.Player))
+        {
+            __result = false;
+        }
+    }
+
+    [HarmonyPatch(typeof(GrenadierFlashModifier), nameof(GrenadierFlashModifier.CanOpenMap), MethodType.Getter)]
+    [HarmonyPostfix]
+    public static void GrenadierCanOpenMapPostfix(GrenadierFlashModifier __instance, ref bool __result)
+    {
+        if (__result && BetrayerRevealedModifier.AllowsImpostorTarget(__instance.Grenadier, __instance.Player))
+        {
+            __result = false;
+        }
+    }
+
+    [HarmonyPatch(typeof(PuppeteerKillButton), nameof(PuppeteerKillButton.GetTarget))]
+    [HarmonyPriority(Priority.Last)]
+    [HarmonyPostfix]
+    public static void PuppeteerGetTargetPostfix(PuppeteerKillButton __instance, ref PlayerControl? __result)
+    {
+        var local = PlayerControl.LocalPlayer;
+        var controlButton = CustomButtonSingleton<PuppeteerControlButton>.Instance;
+
+        if (local?.Data?.Role is not PuppeteerRole puppeteer || puppeteer.Controlled == null ||
+            controlButton == null || !controlButton.EffectActive ||
+            !BetrayerRevealedModifier.CanRelaxTargeting(local))
+        {
+            return;
+        }
+
+        __result = puppeteer.Controlled.GetClosestLivingPlayer(
+            true,
+            __instance.Distance,
+            predicate: plr =>
+                plr != null &&
+                !plr.AmOwner &&
+                !plr.HasDied() &&
+                !plr.IsInTargetingAnimState() &&
+                (!plr.IsImpostorAligned() || BetrayerRevealedModifier.AllowsImpostorTarget(local, plr)));
+    }
+
+    [HarmonyPatch(typeof(AmbusherAmbushButton), nameof(AmbusherAmbushButton.GetTarget))]
+    [HarmonyPriority(Priority.Last)]
+    [HarmonyPostfix]
+    public static void AmbusherGetTargetPostfix(AmbusherAmbushButton __instance, ref PlayerControl? __result)
+    {
+        var local = PlayerControl.LocalPlayer;
+
+        if (local?.Data?.Role is not AmbusherRole ambusher || ambusher.Pursued == null ||
+            !BetrayerRevealedModifier.CanRelaxTargeting(local))
+        {
+            return;
+        }
+
+        __result = ambusher.Pursued.GetClosestLivingPlayer(true, __instance.Distance, false,
+            plr => !plr.IsImpostorAligned() || BetrayerRevealedModifier.AllowsImpostorTarget(local, plr));
+    }
+
+    [HarmonyPatch(typeof(HerbalistAbilityHerbButton), nameof(HerbalistAbilityHerbButton.GetTarget))]
+    [HarmonyPriority(Priority.Last)]
+    [HarmonyPostfix]
+    public static void HerbalistGetTargetPostfix(HerbalistAbilityHerbButton __instance, ref PlayerControl? __result)
+    {
+        var local = PlayerControl.LocalPlayer;
+
+        if (__instance.CurrentAbility is not HerbAbilities.Confuse || local == null ||
+            OptionGroupSingleton<GeneralOptions>.Instance.FFAImpostorMode ||
+            !BetrayerRevealedModifier.CanRelaxTargeting(local))
+        {
+            return;
+        }
+
+        __result = local.GetClosestLivingPlayer(true, __instance.Distance, false,
+            x => (!x.IsImpostorAligned() || BetrayerRevealedModifier.AllowsImpostorTarget(local, x)) &&
+                 !x.HasModifier<HerbalistConfusedModifier>(mod => mod.Herbalist.AmOwner));
+    }
+
     [HarmonyPatch(typeof(TownOfUs.Utilities.PlayerRoleTextExtensions),
         nameof(TownOfUs.Utilities.PlayerRoleTextExtensions.UpdateAllianceSymbols),
         typeof(string), typeof(PlayerControl), typeof(TownOfUs.Utilities.DataVisibility))]
@@ -77,12 +249,12 @@ public static class BetrayerPatches
             return;
         }
 
+        var local = PlayerControl.LocalPlayer;
         var hidden = visibility == TownOfUs.Utilities.DataVisibility.Hidden;
         var reveal = visibility is TownOfUs.Utilities.DataVisibility.Show ||
-                     (PlayerControl.LocalPlayer.HasDied() &&
-                      OptionGroupSingleton<GeneralOptions>.Instance.TheDeadKnow && !hidden);
+                     (!hidden && IsDeadOrSpectating(local));
 
-        var revealedToImpostors = CanHuntBetrayer(PlayerControl.LocalPlayer) &&
+        var revealedToImpostors = !hidden && CanHuntBetrayer(local) &&
                                   player.HasModifier<BetrayerRevealedModifier>();
 
         if (player.AmOwner || reveal || revealedToImpostors)
@@ -167,13 +339,6 @@ public static class BetrayerPatches
         return false;
     }
 
-    [HarmonyPatch(typeof(VentButton), nameof(VentButton.DoClick))]
-    [HarmonyPrefix]
-    public static bool VentClickPrefix()
-    {
-        return !(IsLocalBetrayer() && !OptionGroupSingleton<BetrayerOptions>.Instance.CanVent.Value);
-    }
-
     [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.DoClick))]
     [HarmonyPrefix]
     public static bool SabotageClickPrefix()
@@ -192,11 +357,6 @@ public static class BetrayerPatches
         }
 
         var options = OptionGroupSingleton<BetrayerOptions>.Instance;
-
-        if (!options.CanVent.Value && __instance.ImpostorVentButton != null)
-        {
-            __instance.ImpostorVentButton.ToggleVisible(false);
-        }
 
         if (!options.CanSabotage.Value && __instance.SabotageButton != null)
         {

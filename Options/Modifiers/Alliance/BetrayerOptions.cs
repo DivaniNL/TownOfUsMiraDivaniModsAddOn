@@ -14,8 +14,6 @@ public sealed class BetrayerOptions : AbstractOptionGroup<BetrayerModifier>
     public override Color GroupColor => BetrayerModifier.BetrayerColor;
     public override uint GroupPriority => 13;
 
-    public ModdedToggleOption CanVent { get; } = new("Can Vent", true);
-
     public ModdedToggleOption CanSabotage { get; } = new("Can Sabotage", true);
 
     public ModdedToggleOption HasImpostorVision { get; } = new("Has Impostor Vision", false);
