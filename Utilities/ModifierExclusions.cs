@@ -10,7 +10,6 @@ public static class ModifierExclusions
     {
         ("SkilledModifier", "IncompetentModifier"),
         ("TacticalInsertionModifier", "ImmovableModifier"),
-        ("BountyModifier", "DiseasedModifier"), 
     };
 
     public static IEnumerable<string> GetConflictingNames(string modifierTypeName)

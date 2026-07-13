@@ -17,6 +17,7 @@ Join the Discord:
   <img src="./Resources/Headers/CrewPower.png" alt="Crewmate Power"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#thief"><img width="10%" src="./Resources/Icons/Thief.png" alt="Thief"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#mage"><img width="10%" src="./Resources/Icons/Mage.png" alt="Mage"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#overworked"><img width="10%" src="./Resources/Icons/Overworked.png" alt="Overworked"/></a>
   <img src="./Resources/Headers/CrewSupport.png" alt="Crewmate Support"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#clockstopper"><img width="10%" src="./Resources/Icons/Clockstopper.png" alt="Clockstopper"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#locator"><img width="10%" src="./Resources/Icons/Locator.png" alt="Locator"/></a>
@@ -58,7 +59,6 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#blindspot"><img width="10%" src="./Resources/Icons/Blindspot.png" alt="Blindspot"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#bloody"><img width="10%" src="./Resources/Icons/Bloody.png" alt="Bloody"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#bear-trap"><img width="10%" src="./Resources/Icons/Beartrap.png" alt="Bear Trap"/></a>
-<a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#bounty"><img width="10%" src="./Resources/Icons/Bounty.png" alt="Bounty"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#sprout"><img width="10%" src="./Resources/Icons/Sprout.png" alt="Sprout"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#incompetent"><img width="10%" src="./Resources/Icons/Incompetent.png" alt="Incompetent"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#skilled"><img width="10%" src="./Resources/Icons/Skilled.png" alt="Skilled"/></a>
