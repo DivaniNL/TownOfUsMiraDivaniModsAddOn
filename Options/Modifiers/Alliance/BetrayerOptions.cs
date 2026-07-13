@@ -22,4 +22,10 @@ public sealed class BetrayerOptions : AbstractOptionGroup<BetrayerModifier>
 
     public ModdedNumberOption KillCooldown { get; } =
         new("Kill Cooldown", 17f, 0f, 60f, 1f, MiraNumberSuffixes.Seconds);
+
+    public ModdedNumberOption RevealAtPlayersLeftDuoImp { get; } =
+        new("Reveal At Players Left (2 Imp-Aligned)", 5f, 3f, 15f, 1f, MiraNumberSuffixes.None);
+
+    public ModdedNumberOption RevealAtPlayersLeftMultiImp { get; } =
+        new("Reveal At Players Left (3+ Imp-Aligned)", 8f, 3f, 15f, 1f, MiraNumberSuffixes.None);
 }

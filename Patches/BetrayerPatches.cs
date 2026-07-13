@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using HarmonyLib;
 using MiraAPI.GameEnd;
 using MiraAPI.GameOptions;
@@ -5,6 +7,7 @@ using MiraAPI.Modifiers;
 using DivaniMods.GameOver;
 using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Options;
+using TownOfUs.Modifiers;
 using TownOfUs.Modules.Components;
 using TownOfUs.Options;
 using TownOfUs.Options.Maps;
@@ -23,6 +26,12 @@ public static class BetrayerPatches
         return player != null && player.Data != null && player.HasModifier<BetrayerModifier>();
     }
 
+    private static bool CanHuntBetrayer(PlayerControl? player)
+    {
+        return player != null && player.Data != null && player.IsImpostorAligned() &&
+               !player.HasModifier<BetrayerModifier>();
+    }
+
     [HarmonyPatch(typeof(TownOfUs.Utilities.Extensions), nameof(TownOfUs.Utilities.Extensions.GetClosestLivingPlayer))]
     [HarmonyPrefix]
     public static void GetClosestLivingPlayerPrefix(PlayerControl playerControl, ref bool includeImpostors)
@@ -31,6 +40,29 @@ public static class BetrayerPatches
         {
             includeImpostors = true;
         }
+    }
+
+    [HarmonyPatch(typeof(TownOfUs.Utilities.Extensions), nameof(TownOfUs.Utilities.Extensions.GetClosestLivingPlayer))]
+    [HarmonyPriority(Priority.Last)]
+    [HarmonyPostfix]
+    public static void GetClosestLivingPlayerPostfix(PlayerControl playerControl, bool includeImpostors,
+        float distance, bool ignoreColliders, Predicate<PlayerControl>? predicate, ref PlayerControl? __result)
+    {
+        if (includeImpostors || !CanHuntBetrayer(playerControl) || !BetrayerRevealedModifier.AnyRevealed())
+        {
+            return;
+        }
+
+        var candidates = MiraAPI.Utilities.Helpers.GetClosestPlayers(playerControl, distance, ignoreColliders)
+            .Where(player => !player.Data.Disconnected &&
+                             player.PlayerId != playerControl.PlayerId &&
+                             !player.Data.IsDead &&
+                             ((player.TryGetModifier<DisabledModifier>(out var disabled) &&
+                               disabled.IsConsideredAlive) || !player.HasModifier<DisabledModifier>()) &&
+                             (!player.IsImpostorAligned() || player.HasModifier<BetrayerRevealedModifier>()))
+            .ToList();
+
+        __result = predicate != null ? candidates.Find(predicate) : candidates.FirstOrDefault();
     }
 
     [HarmonyPatch(typeof(TownOfUs.Utilities.PlayerRoleTextExtensions),
@@ -50,9 +82,12 @@ public static class BetrayerPatches
                      (PlayerControl.LocalPlayer.HasDied() &&
                       OptionGroupSingleton<GeneralOptions>.Instance.TheDeadKnow && !hidden);
 
-        if (player.AmOwner || reveal)
+        var revealedToImpostors = CanHuntBetrayer(PlayerControl.LocalPlayer) &&
+                                  player.HasModifier<BetrayerRevealedModifier>();
+
+        if (player.AmOwner || reveal || revealedToImpostors)
         {
-            __result += $"<color=#FFFFFF> (<color=#BA71FF>{betrayer.ShortName}</color>)</color>";
+            __result += $"<color=#FFFFFF> (<color={BetrayerRevealedModifier.ColorTag}>{betrayer.ShortName}</color>)</color>";
         }
     }
 
@@ -90,15 +125,25 @@ public static class BetrayerPatches
     public static void ImpostorIsValidTargetPostfix(ImpostorRole __instance, [HarmonyArgument(0)] NetworkedPlayerInfo target,
         ref bool __result)
     {
-        if (__result || __instance == null || __instance.Player == null ||
-            !__instance.Player.HasModifier<BetrayerModifier>())
+        if (__result || __instance == null || __instance.Player == null)
+        {
+            return;
+        }
+
+        var killer = __instance.Player;
+
+        if (!killer.HasModifier<BetrayerModifier>() &&
+            !(CanHuntBetrayer(killer) && target?.Object != null &&
+              target.Object.HasModifier<BetrayerRevealedModifier>()))
         {
             return;
         }
 
         __result = target is { Disconnected: false, IsDead: false } &&
-                   target.PlayerId != __instance.Player.PlayerId && target.Role && target.Object &&
-                   !target.Object.inVent && !target.Object.inMovingPlat;
+                   target.PlayerId != killer.PlayerId && target.Role && target.Object &&
+                   !target.Object.inVent && !target.Object.inMovingPlat &&
+                   !(target.Object.TryGetModifier<DisabledModifier>(out var disabled) &&
+                     !disabled.CanBeInteractedWith);
     }
 
     [HarmonyPatch(typeof(GameManager), nameof(GameManager.RpcEndGame))]
