@@ -58,6 +58,7 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#blindspot"><img width="10%" src="./Resources/Icons/Blindspot.png" alt="Blindspot"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#bloody"><img width="10%" src="./Resources/Icons/Bloody.png" alt="Bloody"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#bear-trap"><img width="10%" src="./Resources/Icons/Beartrap.png" alt="Bear Trap"/></a>
+<a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#bounty"><img width="10%" src="./Resources/Icons/Bounty.png" alt="Bounty"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#sprout"><img width="10%" src="./Resources/Icons/Sprout.png" alt="Sprout"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#incompetent"><img width="10%" src="./Resources/Icons/Incompetent.png" alt="Incompetent"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#skilled"><img width="10%" src="./Resources/Icons/Skilled.png" alt="Skilled"/></a>

@@ -20,7 +20,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Impostor.ImpostorPower;
 
 public sealed class SummonerRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
     public string RoleName => "Summoner";
     public string LocaleKey => "Summoner";
@@ -33,6 +33,9 @@ public sealed class SummonerRole(IntPtr cppPtr)
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorPower;
 
     public DoomableType DoomHintType => DoomableType.Death;
+
+    public RoleBehaviour CrewVariant =>
+        RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<RetributionistRole>());
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 

@@ -38,6 +38,9 @@ public sealed class DuelistRole(IntPtr cppPtr)
 
     public DoomableType DoomHintType => DoomableType.Relentless;
 
+    public RoleBehaviour CrewVariant =>
+        RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<SheriffRole>());
+
     public bool HasImpostorVision => true;
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());

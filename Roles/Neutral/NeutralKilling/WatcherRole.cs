@@ -24,7 +24,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Neutral.NeutralKilling;
 
 public sealed class WatcherRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
     public static readonly Color WatcherColor = new Color32(0xD3, 0xA6, 0x35, 255);
     public static readonly Color GreenLightColor = new Color32(0x7C, 0xCE, 0x34, 255);
@@ -41,6 +41,9 @@ public sealed class WatcherRole(IntPtr cppPtr)
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralKilling;
 
     public DoomableType DoomHintType => DoomableType.Fearmonger;
+
+    public RoleBehaviour CrewVariant =>
+        RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<SentryRole>());
 
     public bool HasImpostorVision => true;
 

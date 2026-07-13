@@ -76,4 +76,13 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
         {
             Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.IncompetentAmount.Value > 0
         };
+
+    public ModdedNumberOption BountyAmount { get; } = new(
+        "Bounty Amount", 0f, 0f, 5f, 1f, MiraNumberSuffixes.None);
+
+    public ModdedNumberOption BountyChance { get; } =
+        new("Bounty Chance", 20f, 0, 100f, 10f, MiraNumberSuffixes.Percent)
+        {
+            Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.BountyAmount.Value > 0
+        };
 }

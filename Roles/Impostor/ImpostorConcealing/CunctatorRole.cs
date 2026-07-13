@@ -29,7 +29,7 @@ public sealed class CunctatorRole(IntPtr cppPtr)
     public DoomableType DoomHintType => DoomableType.Perception;
 
     public RoleBehaviour CrewVariant =>
-        RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<EngineerTouRole>());
+        RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<AltruistRole>());
 
     public string GetAdvancedDescription()
     {
