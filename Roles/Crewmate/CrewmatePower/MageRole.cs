@@ -6,9 +6,11 @@ using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmatePower;
+using DivaniMods.Modifiers.Crewmate.CrewmatePower;
 using DivaniMods.Modules;
 using DivaniMods.Options;
 using TownOfUs.Modifiers.Game.Alliance;
@@ -28,9 +30,15 @@ public enum MageSpell
 }
 
 public sealed class MageRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), ITouCrewRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color MageColor = new Color32(0x15, 0x86, 0xA2, 255);
+
+    public int ShockShieldUsesLeft { get; set; } = -2;
+
+    public bool IsPowerCrew =>
+        ShockShieldUsesLeft != 0 ||
+        ModifierUtils.GetActiveModifiers<ShockShieldModifier>().HasAny();
 
     public string RoleName => "Mage";
     public string RoleDescription => "Cast spells to aid your team!";
@@ -85,14 +93,16 @@ public sealed class MageRole(IntPtr cppPtr)
     {
         RoleBehaviourStubs.Initialize(this, player);
 
+        var opts = OptionGroupSingleton<MageOptions>.Instance;
+        ShockShieldUsesLeft = (int)opts.MaxShockShieldUses.Value == 0 ? -1 : (int)opts.MaxShockShieldUses.Value;
+
         if (!Player.AmOwner)
         {
             return;
         }
 
         var spells = CustomButtonSingleton<MageSpellButton>.Instance;
-        var opts = OptionGroupSingleton<MageOptions>.Instance;
-        spells.ShockShieldUsesLeft = (int)opts.MaxShockShieldUses.Value == 0 ? -1 : (int)opts.MaxShockShieldUses.Value;
+        spells.ShockShieldUsesLeft = ShockShieldUsesLeft;
         spells.EnergizeUsesLeft = (int)opts.MaxEnergizeUses.Value == 0 ? -1 : (int)opts.MaxEnergizeUses.Value;
         spells.IllusionUsesLeft = (int)opts.MaxIllusionUses.Value == 0 ? -1 : (int)opts.MaxIllusionUses.Value;
 
@@ -101,6 +111,8 @@ public sealed class MageRole(IntPtr cppPtr)
 
     public void LobbyStart()
     {
+        ShockShieldUsesLeft = -2;
+
         var spells = CustomButtonSingleton<MageSpellButton>.Instance;
         spells.CurrentSpell = MageSpell.ShockShield;
         spells.ShockShieldUsesLeft = -2;
