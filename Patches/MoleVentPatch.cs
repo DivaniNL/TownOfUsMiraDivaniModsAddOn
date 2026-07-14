@@ -20,6 +20,11 @@ public static class MoleVentTimeLimitPatch
             return;
         }
 
+        if (MoleRole.IsNativeVenter(player.Data.Role))
+        {
+            return;
+        }
+
         var limit = OptionGroupSingleton<MoleOptions>.Instance.VentTimeLimit.Value;
         var button = CustomButtonSingleton<MoleVentButton>.Instance;
         var vent = Vent.currentVent;
@@ -54,7 +59,6 @@ public static class MoleVentTimeLimitPatch
 
         vent.SetButtons(false);
         player.MyPhysics.RpcExitVent(vent.Id);
-        player.MyPhysics.ExitAllVents();
 
         if (button != null)
         {

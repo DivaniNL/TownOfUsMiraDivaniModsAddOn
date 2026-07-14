@@ -1,5 +1,5 @@
 # Divani Mods v1.3.3
-
+Added Workhorse and Betrayer + Bugfixes
 
 > [!NOTE]
 > This version is not guarenteed to work on Town of Us versions newer then 1.6.2
@@ -17,35 +17,40 @@ An Impostor alliance modifier that turns on their own team. They win like a Neut
 
 ## General changes
 
-- New icons for Sprout, Armored, Cunctator, Retributionist and the Mosquito drone
+- Ordered the modifiers in the settings better
 
 ## Bugfixes:
 
+### Armored
 
-### Rainbow Camouflaged Comms
+- Attacking Armored did not always set the short cooldown after a failed murder attempt
 
-- Fixed a bug where reaped players turned into the basic Grey with the setting on
-- Fixed a bug where Venerer camouflage also defaulted to the regular grey
+### Cupid
+
+- Fixed a bug which caused the game thinking a lover was dead when they were only provisional lovers, causing the Cupid to change roles.
 
 ### Duelist
 
-- Fixed a bug which showed the visual of the First Death Shield in duels, even though this is negated.
-- Removed the limit of a 10 minute duel (Most useless change ever, but cleaner)
+- Fixed a bug which made some skins visible when duellers return to the ship.
 
-### Thief
+### Retributionist
 
-- Fixed a bug where Thief was able to be assigned Neutral Modifiers randomly
+- Fixed a bug where Cursed killers could still hop in a vent. 
+(I tested without taking 'Max players alive when vents disable' into account)
 
-### Sprout
-
-- Fixed a bug where Sprout was able to colelct Neutral Modifiers randomly
-
-### Demolitionist
-
-- Fixed a bug where the Spellslinger was able to launch a Hex Bomb when a Demolitionist Sabotage is active
 
 
 ## Role/Modifier Changes:
+
+### Duelist
+
+- Duelist duels can now result in a tie (0.15s window). Dropped the kill protectiona fter the first successful clikc. THis was not the right way to go.
+
+### Demolitionist
+
+- Added a local setting which disables the alternating colors on the flashes and arrows.
+- Added a better description about what "Consoles" are.
+
 
 ### Mage
 - Mage continues the game if there are shock shield charges left.
@@ -67,8 +72,27 @@ Crewpostor/Egotist crewmates → buff
 Neutral Killing / Neutral Evil → buff ← only diff vs Crewpostor
 Neutral Benign → option
 
-## Mole
+### Mole
 
 - Who can enter mole vents. Defautl cvhanged to include all players
 - Enable the host to allow the mole from getting more vents after completing tasks
-- Added a cooldown for mole vent usage and a set time anyone can be in a mole vent
+- Added a cooldown for mole vent usage and a set time anyone can be in a mole vent (only for roles that normally cannot vent + Mole itself)
+
+### Thief and Sprout
+
+- Random giving will now only include modifiers set enabled by the host
+
+### Retributionist
+
+- Added option for it to continue game (Default false)
+
+
+### Portalmaker
+
+- Added better placements for the portals (Not near tasks, consoles, doors, walls)
+- Made sure the regular Use button will overrule the portal button ( No more stuck behind polus doors)
+- Made sure clicking on the portal will use the portal
+- Made the behaviour with pet button more stable
+- Added a cooldown on the use portal button.
+
+TEST MOLE NON VENTERS

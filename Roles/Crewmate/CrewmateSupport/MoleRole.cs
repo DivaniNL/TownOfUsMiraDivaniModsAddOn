@@ -22,6 +22,7 @@ using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Options;
 using TownOfUs.Roles;
+using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
 
@@ -96,6 +97,28 @@ public sealed class MoleRole(IntPtr cppPtr)
         return aliveCount <= minimum;
     }
 
+    // Roles that can vent on their own (impostors, Engineer, custom venters) keep vanilla vent rules
+    // inside mole vents: no mole vent button, no vent time limit.
+    public static bool IsNativeVenter(RoleBehaviour? role)
+    {
+        if (role == null || role is MoleRole)
+        {
+            return false;
+        }
+
+        if (role.IsImpostor || role is EngineerTouRole)
+        {
+            return true;
+        }
+
+        if (role is ICustomRole customRole && customRole.Configuration.CanUseVent)
+        {
+            return true;
+        }
+
+        return role is not PlumberRole && role.CanVent;
+    }
+
     public static bool CanUseMoleVents(PlayerControl player)
     {
         if (player.HasModifier<CursedModifier>())
@@ -146,8 +169,6 @@ public sealed class MoleRole(IntPtr cppPtr)
             vent.myAnim = null!;
         }
 
-        vent.numFramesUntilPlayerDisappearsOnEnter = 0;
-        vent.numFramesUntilPlayerReappearsOnExit = 0;
         vent.myRend.sprite = MoleVentSprite;
         vent.name = $"MoleVent-{player.PlayerId}-{ventId}";
 
