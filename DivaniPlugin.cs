@@ -24,7 +24,7 @@ namespace DivaniMods;
 public class DivaniPlugin : BasePlugin, IMiraPlugin
 {
     public const string Id = "com.divani.mods";
-    public const string Version = "1.3.2";
+    public const string Version = "1.3.3";
     
     public static DivaniPlugin Instance { get; private set; } = null!;
     public new ManualLogSource Log => base.Log;

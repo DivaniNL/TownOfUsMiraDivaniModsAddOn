@@ -100,6 +100,7 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 
 | Game Version      | Mod Version | Town Of Us: Mira | Download link |
 | ----------------- | ----------- | ---------------- | ------------- |
+| 17.3 (2026.3.31)  | 1.3.3       | 1.6.0 - 1.6.2    | [v1.3.3](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.3) |
 | 17.3 (2026.3.31)  | 1.3.2       | 1.6.0 - 1.6.2    | [v1.3.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.2) |
 | 17.3 (2026.3.31)  | 1.3.1       | 1.6.0+           | [v1.3.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.1) |
 | 17.3 (2026.3.31)  | 1.3.0       | 1.6.0 - 1.6.2    | [v1.3.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.0) |
@@ -132,23 +133,25 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 
 ## Code Contributors
 
-[Xinav](https://github.com/xinavGit) - [Alliance Modifier support on Clockstopper and Domesmith](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/17)
+[Xinav](https://github.com/xinavGit) - [Alliance Modifier support on Clockstopper and Domesmith](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/17)\
+[Espeon](https://github.com/espeon3) - [Workhorse role](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/24)
 
 ## Asset credits
 
 - [@AtonyGit](https://github.com/AtonyGit)/[Town Of Us: Mira](https://github.com/AU-Avengers/TOU-Mira) - All assets that are not specified below
 - @jaydoeswitchcraft (discord) - Bloody modifier icon and Demolitionist role icon and Button assets, Skilled, Strong and Incompetent modifier icons, Retributionist assets, Mage assets, Cunctator role icon, Locator assets
 - [Freesound](https://freesound.org/) (community) -Glass&ndash;break SFX for Fragile
-- Espeon(@mystic_haze2 on discord) - Sprout Assets, Summoner role and meeting icon, Obfuscator role icon, Mosquito assets, providing more intro sounds, Duelist assets, Cupid assets, Councillor role icon, Mole assets, Watcher assets
+- Espeon(@mystic_haze2 on discord) - Sprout Assets, Summoner role and meeting icon, Obfuscator role icon, Mosquito assets, providing more intro sounds, Duelist assets, Cupid assets, Councillor role icon, Mole assets, Watcher assets, Betrayer assets, Workhorse assets
 - @aasteriisken (discord) - Memento modifier icon, Domesmith Assets, Revenant icon, UAV Assets, Clockstopper icon, Nullified modifier icon, Telecom assets, Armored assets
 [Follow Asterisken on GitHub](https://github.com/aasteriisken)
 - @maybe_xinav (discord) - Animated Portalmaker portals and portal button icons, Frag button icons, Plague Doctor button icon, Shuffle button icon, Sentinel beacon sprite, Sentinel palce beacon button,Lockdown button sprite, Tactical Insertion assets
 
 ## Idea box Ideas (Divani Mods Discord)
 
-@jaydoeswitchcraft - Retributionist, Mage, Locator
+@jaydoeswitchcraft - Retributionist, Mage, Locator, Workhorse
 @aasteriisken - Telecom
-@mystic_haze2 - Watcher thought process, Mole
+@mystic_haze2 - Watcher thought process, Mole, Workhorse, Betrayer
+@skillrain_ (Luka) - Betrayer
 
 ## Testers
 
