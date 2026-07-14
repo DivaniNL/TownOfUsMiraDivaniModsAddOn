@@ -47,6 +47,7 @@ public sealed class OverworkedRole(IntPtr cppPtr)
     public CustomRoleConfiguration Configuration => new(this)
     {
         Icon = DivaniAssets.OverworkedIcon,
+        IntroSound = DivaniAssets.OverworkedIntroSound,
         MaxRoleCount = 1,
     };
 

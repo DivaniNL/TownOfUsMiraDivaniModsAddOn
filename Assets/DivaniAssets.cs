@@ -149,6 +149,7 @@ public static LoadableAsset<Sprite> OverworkedIcon { get; } = new LoadableResour
     public static LoadableAsset<AudioClip> TacInsertHoverSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TacInsertHover.wav");
     public static LoadableAsset<AudioClip> TacInsertPlaceSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TacInsertPlace.wav");
     public static LoadableAsset<AudioClip> TelecomIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomIntro.wav");
+    public static LoadableAsset<AudioClip> OverworkedIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.OverworkedIntro.wav");
     public static LoadableAsset<AudioClip> TelecomTransmissionSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomTransmiss.wav");
     public static LoadableAsset<AudioClip> TelecomMessageSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomMessageSound.wav");
     // Dutch Meme Soundpack door SFX - used by DutchMemeSoundpackPatch to replace
