@@ -19,18 +19,18 @@ using UnityEngine;
 
 namespace DivaniMods.Roles.Crewmate.CrewmatePower;
 
-public sealed class OverworkedRole(IntPtr cppPtr)
+public sealed class WorkhorseRole(IntPtr cppPtr)
     : CrewmateRole(cppPtr), ITouCrewRole, IWikiDiscoverable, IDoomable
 {
-    public static readonly Color OverworkedColor = new Color32(0x92, 0xD4, 0xDA, 255);
+    public static readonly Color WorkhorseColor = new Color32(0x92, 0xD4, 0xDA, 255);
 
-    public bool IsPowerCrew => OptionGroupSingleton<OverworkedOptions>.Instance.ContinuesGame;
+    public bool IsPowerCrew => OptionGroupSingleton<WorkhorseOptions>.Instance.ContinuesGame;
 
-    public string RoleName => "Overworked";
+    public string RoleName => "Workhorse";
     public string RoleDescription => "Task. Overwork. Win.";
     public string RoleLongDescription => "Gain an extra set of tasks after completing your original list.\n" +
         "Finsh these extra tasks to result in a task win.";
-    public Color RoleColor => OverworkedColor;
+    public Color RoleColor => WorkhorseColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmatePower;
 
@@ -46,14 +46,14 @@ public sealed class OverworkedRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
-        Icon = DivaniAssets.OverworkedIcon,
-        IntroSound = DivaniAssets.OverworkedIntroSound,
+        Icon = DivaniAssets.WorkhorseIcon,
+        IntroSound = DivaniAssets.WorkhorseIntroSound,
         MaxRoleCount = 1,
     };
 
     private void FixedUpdate()
     {
-        if (!Player || Player.Data.Role is not OverworkedRole)
+        if (!Player || Player.Data.Role is not WorkhorseRole)
         {
             return;
         }
@@ -90,14 +90,14 @@ public sealed class OverworkedRole(IntPtr cppPtr)
     {
         if (Player.AmOwner)
         {
-            Coroutines.Start(MiscUtils.CoFlash(OverworkedColor, alpha: 0.5f));
+            Coroutines.Start(MiscUtils.CoFlash(WorkhorseColor, alpha: 0.5f));
             ShowNotification("Your work is not done. A second task list awaits!");
         }
-        else if (OptionGroupSingleton<OverworkedOptions>.Instance.NotifyEvilsOnFirstList &&
+        else if (OptionGroupSingleton<WorkhorseOptions>.Instance.NotifyEvilsOnFirstList &&
                  IsEvilTarget(PlayerControl.LocalPlayer))
         {
-            Coroutines.Start(MiscUtils.CoFlash(OverworkedColor, alpha: 0.5f));
-            ShowNotification("The Overworked has finished their first task list!");
+            Coroutines.Start(MiscUtils.CoFlash(WorkhorseColor, alpha: 0.5f));
+            ShowNotification("The Workhorse has finished their first task list!");
         }
     }
 
@@ -109,7 +109,7 @@ public sealed class OverworkedRole(IntPtr cppPtr)
         }
 
         var remaining = SecondListTaskIds.Count(id => Player.Data?.FindTaskById(id)?.Complete != true);
-        if (remaining > (int)OptionGroupSingleton<OverworkedOptions>.Instance.ExtraTasksLeftWhenRevealed.Value)
+        if (remaining > (int)OptionGroupSingleton<WorkhorseOptions>.Instance.ExtraTasksLeftWhenRevealed.Value)
         {
             return;
         }
@@ -133,13 +133,13 @@ public sealed class OverworkedRole(IntPtr cppPtr)
             return;
         }
 
-        Player.AddModifier<OverworkedRevealModifier>();
+        Player.AddModifier<WorkhorseRevealModifier>();
         PlayerNameColor.Set(Player);
-        Coroutines.Start(MiscUtils.CoFlash(OverworkedColor, alpha: 0.5f));
+        Coroutines.Start(MiscUtils.CoFlash(WorkhorseColor, alpha: 0.5f));
 
-        RevealArrow = MiscUtils.CreateArrow(Player.transform, OverworkedColor);
+        RevealArrow = MiscUtils.CreateArrow(Player.transform, WorkhorseColor);
 
-        ShowNotification("The Overworked is almost done! You must stop him, NOW!");
+        ShowNotification("The Workhorse is almost done! You must stop him, NOW!");
     }
 
     private void CreateEvilArrows()
@@ -150,14 +150,14 @@ public sealed class OverworkedRole(IntPtr cppPtr)
         }
 
         _evilArrows = new Dictionary<byte, ArrowBehaviour>();
-        Coroutines.Start(MiscUtils.CoFlash(OverworkedColor, alpha: 0.5f));
+        Coroutines.Start(MiscUtils.CoFlash(WorkhorseColor, alpha: 0.5f));
 
         foreach (var evil in Helpers.GetAlivePlayers().Where(IsEvilTarget))
         {
             var color = evil.IsImpostor() ? TownOfUsColors.Impostor : TownOfUsColors.Neutral;
             _evilArrows.Add(evil.PlayerId, MiscUtils.CreateArrow(evil.transform, color));
             PlayerNameColor.Set(evil);
-            evil.AddModifier<OverworkedEvilRevealModifier>();
+            evil.AddModifier<WorkhorseEvilRevealModifier>();
         }
 
         ShowNotification("The evils know who you are now, but you can see them now too!");
@@ -195,12 +195,12 @@ public sealed class OverworkedRole(IntPtr cppPtr)
                 continue;
             }
 
-            foreach (var mod in player.GetModifiers<OverworkedRevealModifier>().ToList())
+            foreach (var mod in player.GetModifiers<WorkhorseRevealModifier>().ToList())
             {
                 player.GetModifierComponent()?.RemoveModifier(mod);
             }
 
-            foreach (var mod in player.GetModifiers<OverworkedEvilRevealModifier>().ToList())
+            foreach (var mod in player.GetModifiers<WorkhorseEvilRevealModifier>().ToList())
             {
                 player.GetModifierComponent()?.RemoveModifier(mod);
             }
@@ -210,10 +210,10 @@ public sealed class OverworkedRole(IntPtr cppPtr)
     private static void ShowNotification(string text)
     {
         var notif = MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b>{OverworkedColor.ToTextColor()}{text}</color></b>",
+            $"<b>{WorkhorseColor.ToTextColor()}{text}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
-            spr: DivaniAssets.OverworkedIcon.LoadAsset());
+            spr: DivaniAssets.WorkhorseIcon.LoadAsset());
         notif.AdjustNotification();
     }
 
@@ -226,7 +226,7 @@ public sealed class OverworkedRole(IntPtr cppPtr)
             return ids;
         }
 
-        var options = OptionGroupSingleton<OverworkedOptions>.Instance;
+        var options = OptionGroupSingleton<WorkhorseOptions>.Instance;
 
         var usedTypes = player.myTasks.ToArray()
             .Select(x => x.TryCast<NormalPlayerTask>())

@@ -8,18 +8,18 @@ using DivaniMods.Roles.Crewmate.CrewmatePower;
 
 namespace DivaniMods.Events.Crewmate.CrewmatePower;
 
-public static class OverworkedEvents
+public static class WorkhorseEvents
 {
     [RegisterEvent]
     public static void OnCompleteTask(CompleteTaskEvent @event)
     {
         var player = @event.Player;
-        if (player?.Data?.Role is not OverworkedRole overworked || player.Data.IsDead || player.Data.Disconnected)
+        if (player?.Data?.Role is not WorkhorseRole workhorse || player.Data.IsDead || player.Data.Disconnected)
         {
             return;
         }
 
-        overworked.CheckRevealProgress();
+        workhorse.CheckRevealProgress();
 
         if (!AmongUsClient.Instance.AmHost || !HasFinishedTasks(player))
         {
@@ -32,22 +32,22 @@ public static class OverworkedEvents
             return;
         }
 
-        var ids = OverworkedRole.GenerateSecondListTaskIds(player);
+        var ids = WorkhorseRole.GenerateSecondListTaskIds(player);
         if (ids.Count == 0)
         {
             return;
         }
 
-        OverworkedRpc.RpcGrantSecondTaskList(player, string.Join(",", ids));
+        WorkhorseRpc.RpcGrantSecondTaskList(player, string.Join(",", ids));
     }
 
     [RegisterEvent]
     public static void OnPlayerDeath(PlayerDeathEvent @event)
     {
-        var overworked = CustomRoleUtils.GetActiveRolesOfType<OverworkedRole>()
+        var workhorse = CustomRoleUtils.GetActiveRolesOfType<WorkhorseRole>()
             .FirstOrDefault(x => x.Player != null && x.Revealed);
 
-        overworked?.RemoveArrowForPlayer(@event.Player.PlayerId);
+        workhorse?.RemoveArrowForPlayer(@event.Player.PlayerId);
     }
 
     private static bool HasFinishedTasks(PlayerControl player)

@@ -9,7 +9,7 @@ using TownOfUs.Utilities;
 namespace DivaniMods.Patches;
 
 [HarmonyPatch(typeof(GameData), nameof(GameData.RecomputeTaskCounts))]
-public static class OverworkedTaskCountPatch
+public static class WorkhorseTaskCountPatch
 {
     [HarmonyPostfix]
     public static void Postfix(GameData __instance)
@@ -24,7 +24,7 @@ public static class OverworkedTaskCountPatch
                             optionsManager.currentNormalGameOptions.GhostsDoTasks;
         var removed = false;
 
-        foreach (var role in CustomRoleUtils.GetActiveRolesOfType<OverworkedRole>())
+        foreach (var role in CustomRoleUtils.GetActiveRolesOfType<WorkhorseRole>())
         {
             var player = role.Player;
             if (player == null || !player || player.Data == null || player.Data.Disconnected ||

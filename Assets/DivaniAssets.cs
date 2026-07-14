@@ -59,7 +59,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> PortalmakerIcon { get; } = new LoadableResourceAsset($"{IconPath}.PortalMaker.png", 200);
     public static LoadableAsset<Sprite> FragIcon { get; } = new LoadableResourceAsset($"{IconPath}.Frag.png", 200);
     public static LoadableAsset<Sprite> SilencerIcon { get; } = new LoadableResourceAsset($"{IconPath}.Silencer.png", 200);
-public static LoadableAsset<Sprite> OverworkedIcon { get; } = new LoadableResourceAsset($"{IconPath}.Overworked.png", 200);
+public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourceAsset($"{IconPath}.Workhorse.png", 200);
     public static LoadableAsset<Sprite> PlagueDoctorIcon { get; } = new LoadableResourceAsset($"{IconPath}.PlagueDoctor.png", 200);
     public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{IconPath}.Innocent.png", 200);
     public static LoadableAsset<Sprite> OpportunistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Opportunist.png", 200);
@@ -149,7 +149,7 @@ public static LoadableAsset<Sprite> OverworkedIcon { get; } = new LoadableResour
     public static LoadableAsset<AudioClip> TacInsertHoverSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TacInsertHover.wav");
     public static LoadableAsset<AudioClip> TacInsertPlaceSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TacInsertPlace.wav");
     public static LoadableAsset<AudioClip> TelecomIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomIntro.wav");
-    public static LoadableAsset<AudioClip> OverworkedIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.OverworkedIntro.wav");
+    public static LoadableAsset<AudioClip> WorkhorseIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WorkhorseIntro.wav");
     public static LoadableAsset<AudioClip> TelecomTransmissionSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomTransmiss.wav");
     public static LoadableAsset<AudioClip> TelecomMessageSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomMessageSound.wav");
     // Dutch Meme Soundpack door SFX - used by DutchMemeSoundpackPatch to replace

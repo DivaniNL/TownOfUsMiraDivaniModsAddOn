@@ -63,5 +63,5 @@ public enum DivaniRpcCalls : uint
     TelecomSetPendingMeetingTarget = 258,
     DuelistStrike = 259,
     DuelistResolveDuel = 260,
-    OverworkedGrantSecondList = 261,
+    WorkhorseGrantSecondList = 261,
 }

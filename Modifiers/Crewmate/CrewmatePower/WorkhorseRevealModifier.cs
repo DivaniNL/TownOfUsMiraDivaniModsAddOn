@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Crewmate.CrewmatePower;
 
-public sealed class OverworkedRevealModifier : BaseRevealModifier
+public sealed class WorkhorseRevealModifier : BaseRevealModifier
 {
-    public override string ModifierName => "Revealed Overworked";
+    public override string ModifierName => "Revealed Workhorse";
     public override bool HideOnUi => true;
 
     public override ChangeRoleResult ChangeRoleResult { get; set; } = ChangeRoleResult.Nothing;

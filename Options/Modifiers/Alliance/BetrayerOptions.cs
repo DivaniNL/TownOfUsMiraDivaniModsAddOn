@@ -16,7 +16,7 @@ public sealed class BetrayerOptions : AbstractOptionGroup<BetrayerModifier>
 
     public ModdedToggleOption CanSabotage { get; } = new("Can Sabotage", true);
 
-    public ModdedToggleOption HasImpostorVision { get; } = new("Has Impostor Vision", false);
+    public ModdedToggleOption HasImpostorVision { get; } = new("Has Impostor Vision", true);
 
     public ModdedNumberOption KillCooldown { get; } =
         new("Kill Cooldown", 17f, 0f, 60f, 1f, MiraNumberSuffixes.Seconds);

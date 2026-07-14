@@ -20,7 +20,7 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#retributionist"><img width="10%" src="./Resources/Icons/Retributionist.png" alt="Retributionist"/></a>
   <img src="./Resources/Headers/CrewPower.png" alt="Crewmate Power"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#mage"><img width="10%" src="./Resources/Icons/Mage.png" alt="Mage"/></a>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#overworked"><img width="10%" src="./Resources/Icons/Overworked.png" alt="Overworked"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#workhorse"><img width="10%" src="./Resources/Icons/Workhorse.png" alt="Workhorse"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#thief"><img width="10%" src="./Resources/Icons/Thief.png" alt="Thief"/></a>
   <img src="./Resources/Headers/CrewProtective.png" alt="Crewmate Protective"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#domesmith"><img width="10%" src="./Resources/Icons/Domesmith.png" alt="Domesmith"/></a>

@@ -1,32 +1,19 @@
-# Divani Mods v1.3.2
+# Divani Mods v1.3.3
 
-It is time to play: Red Light, Green Light.
-Also, more Crewmate roles are added + some small bugfixes
 
 > [!NOTE]
 > This version is not guarenteed to work on Town of Us versions newer then 1.6.2
 
 ## Added
 
-### Added Role: Locator (Crewmate Support)
+### Added Role: Workhorse (Crewmate Power)
 
-Mark a player to give them the Noisemaker Modifier until the next meeting.
+A crewmate that gets a set number of extra tasks after they completed their originbal list. Completing this total list can give thye crew an instant Crewmate win, but killers are alerted once you get closer to being done.
 
-### Added Role: Mole (Crewmate Support)
-
-Dig vents around the map to connect a tunnel network.
-
-### Added Role: Telecom (Crewmate Support)
-
-Transmit to a player to open a private chat!
-
-### Added Role: Watcher (Neutral Killing)
-
-Click on the Watch button to make everyone play Red Light, Green Light. Earn  charges after getting some regular kills
 
 ### Added Modifier: Betrayer (Alliance, Impostor only)
 
-An Impostor that turned on their own team. They win like a Neutral Killer: be the last killer standing with kill majority. They can kill fellow Impostors, have their own kill cooldown, and block the Impostor majority win while alive. Configurable venting, sabotaging and Impostor vision. Cannot be stolen by Thief or collected by Sprout.
+An Impostor alliance modifier that turns on their own team. They win like a Neutral Killer: be the last killer standing. Impostors will gain information about the Betrayer's identity when only a set number of people are alive or if one impostor is kileld when you have more then 2 impostor aligned people. Betrayers never win with the impostors together.
 
 ## General changes
 
@@ -60,11 +47,28 @@ An Impostor that turned on their own team. They win like a Neutral Killer: be th
 
 ## Role/Modifier Changes:
 
-### Clockstopper (Addition)
+### Mage
+- Mage continues the game if there are shock shield charges left.
+- Egotist and Crewpostor Mage are now added. Energize behaves differently when holdign one of those alliance modifiers:
+*Crewpostor Mage energizes:*
 
-- Alliance Modifiers now change who is reset ([#17](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/17))
+Crew → nerf
+Impostors → buff
+Crewpostor/Egotist crewmates → buff
+Neutral Killing / Neutral Evil → nerf
+Neutral Benign → option (EnergizeNeutralBenign: Buff / Debuff / None)
 
-### Domesmith (Addition)
 
-- Alliance Modifiers now change who is protected ([#17](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/17))
+*Egotist Mage energizes:*
 
+Crew → nerf
+Impostors → buff
+Crewpostor/Egotist crewmates → buff
+Neutral Killing / Neutral Evil → buff ← only diff vs Crewpostor
+Neutral Benign → option
+
+## Mole
+
+- Who can enter mole vents. Defautl cvhanged to include all players
+- Enable the host to allow the mole from getting more vents after completing tasks
+- Added a cooldown for mole vent usage and a set time anyone can be in a mole vent

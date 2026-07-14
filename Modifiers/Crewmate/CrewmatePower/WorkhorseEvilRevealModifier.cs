@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Crewmate.CrewmatePower;
 
-public sealed class OverworkedEvilRevealModifier : BaseRevealModifier
+public sealed class WorkhorseEvilRevealModifier : BaseRevealModifier
 {
     public override string ModifierName => "Revealed Evil";
     public override bool HideOnUi => true;

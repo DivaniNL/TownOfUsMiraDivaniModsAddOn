@@ -9,9 +9,9 @@ using Object = UnityEngine.Object;
 
 namespace DivaniMods.Networking.Crewmate.CrewmatePower;
 
-public static class OverworkedRpc
+public static class WorkhorseRpc
 {
-    [MethodRpc((uint)DivaniRpcCalls.OverworkedGrantSecondList, LocalHandling = RpcLocalHandling.Before)]
+    [MethodRpc((uint)DivaniRpcCalls.WorkhorseGrantSecondList, LocalHandling = RpcLocalHandling.Before)]
     public static void RpcGrantSecondTaskList(PlayerControl player, string taskTypeIds)
     {
         if (LobbyBehaviour.Instance)
@@ -51,7 +51,7 @@ public static class OverworkedRpc
             }
         }
 
-        var role = player.Data.Role as OverworkedRole;
+        var role = player.Data.Role as WorkhorseRole;
 
         foreach (var typeId in ids)
         {
