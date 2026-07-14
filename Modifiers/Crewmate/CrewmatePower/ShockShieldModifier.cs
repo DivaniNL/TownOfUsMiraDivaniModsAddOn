@@ -7,6 +7,7 @@ using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Options;
+using DivaniMods.Roles.Crewmate.CrewmatePower;
 using TownOfUs.Modifiers;
 using TownOfUs.Modules.Anims;
 using TownOfUs.Options;
@@ -42,6 +43,11 @@ public sealed class ShockShieldModifier(PlayerControl mage) : TimedModifier
 
     public override void OnActivate()
     {
+        if (Mage != null && Mage.Data?.Role is MageRole mageRole && mageRole.ShockShieldUsesLeft > 0)
+        {
+            mageRole.ShockShieldUsesLeft--;
+        }
+
         if (!ShouldShow())
         {
             return;

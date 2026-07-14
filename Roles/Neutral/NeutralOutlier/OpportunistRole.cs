@@ -24,7 +24,7 @@ using DivaniMods.Assets;
 namespace DivaniMods.Roles.Neutral.NeutralOutlier;
 
 public sealed class OpportunistRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IGuessable
+    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, IGuessable
 {
     public static readonly Color OpportunistColor = new Color32(216, 184, 90, 255); // gold
     public static Dictionary<byte, OpportunistRole> ActiveOpportunists { get; } = new();
@@ -44,7 +44,6 @@ public sealed class OpportunistRole(IntPtr cppPtr)
     [HideFromIl2Cpp] public PlayerVoteArea? WildcardButton { get; set; }
 
     public DoomableType DoomHintType => DoomableType.Trickster;
-    public RoleBehaviour CrewVariant => RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<EngineerTouRole>());
     public bool CanBeGuessed => true;
 
     public string RoleName => "Opportunist";

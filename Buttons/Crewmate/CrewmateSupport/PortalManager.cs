@@ -1,7 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 using Reactor.Networking.Attributes;
 using MiraAPI.Modifiers;
 using DivaniMods.Assets;
@@ -184,11 +188,42 @@ public static class PortalManager
         portal.transform.position = new Vector3(position.x, position.y, position.y / 1000f + 1f);
 
         ApplyOutline(portal, portalNumber, PortalOutlineColor);
+        SetupPortalClick(portal);
 
         if (portalNumber == 1)
             Portal1Object = portal;
         else
             Portal2Object = portal;
+    }
+
+    private static void SetupPortalClick(GameObject portal)
+    {
+        var collider = portal.AddComponent<BoxCollider2D>();
+        collider.isTrigger = true;
+
+        var sr = portal.GetComponentInChildren<SpriteRenderer>();
+        if (sr != null)
+        {
+            var bounds = sr.bounds;
+            collider.offset = (Vector2)(bounds.center - portal.transform.position);
+            collider.size = bounds.size;
+        }
+        else
+        {
+            collider.size = new Vector2(0.7f, 1f);
+        }
+
+        var passive = portal.AddComponent<PassiveButton>();
+        passive.OnClick = new Button.ButtonClickedEvent();
+        passive.OnClick.AddListener((Action)OnPortalClicked);
+        passive.OnMouseOver = new UnityEvent();
+        passive.OnMouseOut = new UnityEvent();
+        passive.Colliders = (Il2CppReferenceArray<Collider2D>)new Collider2D[] { collider };
+    }
+
+    private static void OnPortalClicked()
+    {
+        CustomButtonSingleton<UsePortalButton>.Instance?.TriggerFromUseButton();
     }
 
     private static void ApplyOutline(GameObject portal, int portalNumber, Color color)

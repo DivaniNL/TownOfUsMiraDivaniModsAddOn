@@ -10,6 +10,8 @@ using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Modules.Localization;
 using DivaniMods.Patches;
+using DivaniMods.Patches.WinConditions;
+using TownOfUs.Patches;
 
 namespace DivaniMods;
 
@@ -22,7 +24,7 @@ namespace DivaniMods;
 public class DivaniPlugin : BasePlugin, IMiraPlugin
 {
     public const string Id = "com.divani.mods";
-    public const string Version = "1.3.2";
+    public const string Version = "1.3.3";
     
     public static DivaniPlugin Instance { get; private set; } = null!;
     public new ManualLogSource Log => base.Log;
@@ -46,6 +48,7 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
         DivaniModAnnouncementPatch.EnsureLoaded();
         DivaniLocale.Register();
         DivaniWikiTermsPatch.RegisterLocale();
+        WinConditionRegistry.Register(new BetrayerWinCondition());
         Log.LogInfo($"Divani Mods v{Version} loaded successfully!");
     }
 }

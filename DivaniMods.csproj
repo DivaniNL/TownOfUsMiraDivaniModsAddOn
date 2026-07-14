@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -8,12 +8,7 @@
     
     <AssemblyName>DivaniMods</AssemblyName>
     <RootNamespace>DivaniMods</RootNamespace>
-    <Version>1.3.2</Version>
-    <!--
-      TownOfUs + TouMiraRolesExtension live in-repo for reference only. Do not compile them here:
-      this project already references TownOfUsMira.dll from BepInEx. Compiling sources duplicates
-      every type (CS0436) and fails without full game/Hazel refs (CS0246).
-    -->
+    <Version>1.3.3</Version>
     <DefaultItemExcludes>$(DefaultItemExcludes);TownOfUs\**\*;TownOfUs-1.6.3\**\*;TOU-Mira-1.6.2\**\*;TouMiraRolesExtension\**\*;TheOtherRolesGMIA-main\**\*;.specstory\**\*</DefaultItemExcludes>
   </PropertyGroup>
 
@@ -295,6 +290,7 @@
     <EmbeddedResource Include="Resources\WatcherIntro.wav" Condition="Exists('Resources\WatcherIntro.wav')" />
     <EmbeddedResource Include="Resources\WatcherShoot.wav" Condition="Exists('Resources\WatcherShoot.wav')" />
 
+    <EmbeddedResource Include="Resources\**\*" Exclude="Resources\Headers\**" />
   </ItemGroup>
 
   <Target Name="CopyToPlugins" AfterTargets="Build">

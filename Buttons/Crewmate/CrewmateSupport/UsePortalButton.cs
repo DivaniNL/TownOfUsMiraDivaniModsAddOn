@@ -60,6 +60,7 @@ public class UsePortalButton : TownOfUsButton
         if (player == null) return;
         if (!PortalsUsableNow(player)) return;
         if (PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(player)) return;
+        if (!PortalManager.CanUsePortal(player.PlayerId)) return;
 
         OnClick();
     }

@@ -12,7 +12,7 @@ public class TacticalInsertionOptions : AbstractOptionGroup<TacticalInsertionMod
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
     public override string GroupName => "Tactical Insertion";
     public override Color GroupColor => TacticalInsertionModifier.TacticalColor;
-    public override uint GroupPriority => 36;
+    public override uint GroupPriority => 38;
 
     public ModdedNumberOption Uses { get; } =
         new("Tactical Insertion Uses", 1f, 1f, 5f, 1f, MiraNumberSuffixes.None);
