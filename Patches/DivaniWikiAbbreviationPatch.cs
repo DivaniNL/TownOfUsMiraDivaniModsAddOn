@@ -1,18 +1,24 @@
 using HarmonyLib;
+using TMPro;
 using TownOfUs.Modules.Wiki;
+using UnityEngine;
 
 namespace DivaniMods.Patches;
 
-[HarmonyPatch(typeof(IngameWikiMinigame), "RemoveNonCaps")]
+[HarmonyPatch(typeof(InGameWikiEntry), nameof(InGameWikiEntry.SetData))]
 public static class DivaniWikiAbbreviationPatch
 {
     private const string Abbreviation = "DM";
 
-    private static void Postfix(ref string __result)
+    private static void Postfix(InGameWikiEntry __instance, string source)
     {
-        if (__result == Abbreviation)
+        if (source != Abbreviation || !ColorUtility.TryParseHtmlString(DivaniCreditsColorPatch.CreditsColor, out var color))
         {
-            __result = $"<color={DivaniCreditsColorPatch.CreditsColor}><b>{Abbreviation}</b></color>";
+            return;
         }
+
+        var tmp = __instance.EntrySourceTmp.Value;
+        tmp.color = color;
+        tmp.fontStyle |= FontStyles.Bold;
     }
 }
