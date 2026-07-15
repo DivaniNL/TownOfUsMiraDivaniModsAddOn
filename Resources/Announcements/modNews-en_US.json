@@ -706,7 +706,6 @@
         "\n- Added a local setting which disables the alternating colors on the flashes and arrows.",
         "\n- Added a better description about what \"Consoles\" are.",
         "\n\n<b>Mage</b>",
-        "\n- Mage continues the game if there are Shock Shield charges left.",
         "\n- Egotist and Crewpostor Mage are now supported. Energize buffs Impostors and Crewpostor/Egotist crewmates and nerfs Crew; a Crewpostor Mage nerfs Neutral Killing/Evil while an Egotist Mage buffs them. Neutral Benign stays an option.",
         "\n\n<b>Mole</b>",
         "\n- Who can enter Mole vents now defaults to all players.",
