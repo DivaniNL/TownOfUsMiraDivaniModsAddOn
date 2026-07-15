@@ -6,7 +6,7 @@ namespace DivaniMods.Patches;
 [HarmonyPatch(typeof(Reactor.Utilities.ReactorCredits), "GetText")]
 public static class DivaniCreditsColorPatch
 {
-    private const string CreditsColor = "#FF9B00";
+    public const string CreditsColor = "#FF9B00";
     private const string CreditsLabel = "Divani Mods " + DivaniPlugin.Version;
 
     private static void Postfix(ref string? __result)

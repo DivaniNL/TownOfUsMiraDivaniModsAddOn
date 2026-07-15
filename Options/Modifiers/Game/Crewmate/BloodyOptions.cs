@@ -17,7 +17,7 @@ public sealed class BloodyOptions : AbstractOptionGroup<BloodyModifier>
 
     public override Color GroupColor => BloodyModifier.ModifierUiColor;
 
-    public override uint GroupPriority => 25;
+    public override uint GroupPriority => 26;
 
     public ModdedEnumOption FootprintMode { get; set; } = new(
         "Bloody Footprint Placement",

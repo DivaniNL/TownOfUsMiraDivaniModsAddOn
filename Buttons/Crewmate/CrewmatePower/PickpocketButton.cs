@@ -14,6 +14,7 @@ using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Neutral.NeutralKilling;
+using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Options;
 using DivaniMods.Patches;
 using DivaniMods.Roles.Crewmate.CrewmatePower;
@@ -328,6 +329,9 @@ public class PickpocketButton : TownOfUsButton
         if (modifier is ExcludedGameModifier)
             return true;
 
+        if (modifier is BetrayerModifier)
+            return true;
+
         if (modifier.GetType().Name.StartsWith("Test", StringComparison.OrdinalIgnoreCase))
             return true;
 
@@ -451,11 +455,14 @@ public class PickpocketButton : TownOfUsButton
         foreach (var modifier in ModifierManager.Modifiers)
         {
             if (modifier is not GameModifier gm) continue;
-            
+
             var modName = modifier.ModifierName;
             var modNamespace = modifier.GetType().Namespace ?? "null";
             var modTypeName = modifier.GetType().Name;
-            
+
+            if (gm.GetAssignmentChance() <= 0 || gm.GetAmountPerGame() <= 0)
+                continue;
+
             if (modifier.HideOnUi)
                 continue;
             

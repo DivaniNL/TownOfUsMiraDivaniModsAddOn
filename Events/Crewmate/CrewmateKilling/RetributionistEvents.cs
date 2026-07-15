@@ -42,30 +42,48 @@ public static class RetributionistEvents
             }
         }
 
-        if (target != null && target.GetRoleWhenAlive() is RetributionistRole &&
-            killer != null && killer != target && !killer.HasDied() &&
-            killer.Data?.Role is not PestilenceRole &&
-            !MeetingHud.Instance)
+        if (target == null)
         {
-            var opts = OptionGroupSingleton<RetributionistOptions>.Instance;
-            if (opts.TurnIntoSoulOnce && RetributionistManager.UsedRevenge.Contains(target.PlayerId))
-            {
-                return;
-            }
-
-            if (!opts.RevengeOnCrewmateKill && killer.IsCrewmate())
-            {
-                return;
-            }
-
-            if (target.TryGetModifier<LoverModifier>(out var love) && love.OtherLover == killer)
-            {
-                return;
-            }
-
-            var pos = target.transform.position;
-            RetributionistRpc.RpcStartRevenge(target, killer, pos.x, pos.y);
+            return;
         }
+
+        if (!IsRevengeEligible(target, killer))
+        {
+            RetributionistManager.ClearRevengePending(target.PlayerId);
+            return;
+        }
+
+        var pos = target.transform.position;
+        RetributionistRpc.RpcStartRevenge(target, killer!, pos.x, pos.y);
+    }
+
+    public static bool IsRevengeEligible(PlayerControl? target, PlayerControl? killer)
+    {
+        if (target == null || killer == null || killer == target || killer.HasDied() ||
+            target.GetRoleWhenAlive() is not RetributionistRole ||
+            killer.Data?.Role is PestilenceRole ||
+            MeetingHud.Instance)
+        {
+            return false;
+        }
+
+        var opts = OptionGroupSingleton<RetributionistOptions>.Instance;
+        if (opts.TurnIntoSoulOnce && RetributionistManager.UsedRevenge.Contains(target.PlayerId))
+        {
+            return false;
+        }
+
+        if (!opts.RevengeOnCrewmateKill && killer.IsCrewmate())
+        {
+            return false;
+        }
+
+        if (target.TryGetModifier<LoverModifier>(out var love) && love.OtherLover == killer)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     [RegisterEvent]
@@ -100,6 +118,8 @@ public static class RetributionistEvents
     [RegisterEvent]
     public static void OnStartMeeting(StartMeetingEvent evt)
     {
+        RetributionistManager.ClearAllRevengePending();
+
         if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
         {
             return;

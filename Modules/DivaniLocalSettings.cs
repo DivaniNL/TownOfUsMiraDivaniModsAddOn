@@ -31,4 +31,8 @@ public class DivaniLocalSettings(ConfigFile config) : LocalSettingsTab(config)
     [LocalizedLocalToggleSetting("DivaniLocalSettingDisableRainbowComms")]
     public ConfigEntry<bool> DisableRainbowComms { get; private set; } =
         config.Bind("Accessibility", "DisableRainbowComms", false);
+
+    [LocalizedLocalToggleSetting("DivaniLocalSettingDisableDemoAlternatingColors")]
+    public ConfigEntry<bool> DisableDemoAlternatingColors { get; private set; } =
+        config.Bind("Accessibility", "DisableDemoAlternatingColors", false);
 }

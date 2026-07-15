@@ -6,6 +6,7 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.GameOptions;
+using MiraAPI.LocalSettings;
 using MiraAPI.Networking;
 
 using Reactor.Networking.Attributes;
@@ -16,6 +17,7 @@ using Reactor.Utilities.Extensions;
 
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Neutral.NeutralEvil;
+using DivaniMods.Modules;
 using DivaniMods.Utilities;
 
 using DivaniMods.Options;
@@ -740,8 +742,15 @@ public static class DemolitionistSabotageState
 
 
 
-    private static Color GetCurrentPulseColor() =>
-        (FlashPulseIndex & 1) == 0 ? DemolitionistRole.DemolitionistColor : SecondaryColor;
+    public static Color GetCurrentPulseColor()
+    {
+        if (LocalSettingsTabSingleton<DivaniLocalSettings>.Instance.DisableDemoAlternatingColors.Value)
+        {
+            return DemolitionistRole.DemolitionistColor;
+        }
+
+        return (FlashPulseIndex & 1) == 0 ? DemolitionistRole.DemolitionistColor : SecondaryColor;
+    }
 
     private static void ApplyArrowColor()
 

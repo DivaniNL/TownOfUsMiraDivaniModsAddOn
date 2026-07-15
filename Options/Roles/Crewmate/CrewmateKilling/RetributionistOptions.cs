@@ -54,6 +54,9 @@ public class RetributionistOptions : AbstractOptionGroup<RetributionistRole>, IW
     [ModdedToggleOption("Only Turn Into Vengeful Soul Once")]
     public bool TurnIntoSoulOnce { get; set; } = true;
 
+    [ModdedToggleOption("Continues Game In Final 3")]
+    public bool StallGame { get; set; } = false;
+
     [ModdedToggleOption("Revenge Breaks Through Shields")]
     public bool RevengeBreaksShields { get; set; } = false;
 

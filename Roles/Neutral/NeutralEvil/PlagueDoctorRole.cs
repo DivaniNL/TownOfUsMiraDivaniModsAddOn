@@ -34,7 +34,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
     public DoomableType DoomHintType => DoomableType.Fearmonger;
 
     public RoleBehaviour CrewVariant =>
-        RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<MedicRole>());
+        RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<ClericRole>());
 
     public static readonly Color PlagueDoctorColor = new Color32(255, 192, 0, 255);
 

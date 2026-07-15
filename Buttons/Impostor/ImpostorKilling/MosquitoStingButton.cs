@@ -3,6 +3,7 @@ using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
+using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Networking.Impostor.ImpostorKilling;
 using DivaniMods.Options;
 using DivaniMods.Roles.Impostor.ImpostorKilling;
@@ -62,7 +63,8 @@ public sealed class MosquitoStingButton : TownOfUsButton, IDiseaseableButton
 
     private static bool IsValidTarget(PlayerControl? plr, PlayerControl me) =>
         plr != null && plr.Data != null && !plr.Data.Disconnected && !plr.HasDied()
-        && plr.PlayerId != me.PlayerId && !plr.IsImpostorAligned();
+        && plr.PlayerId != me.PlayerId
+        && (!plr.IsImpostorAligned() || BetrayerRevealedModifier.AllowsImpostorTarget(me, plr));
 
     private static PlayerControl? GetFarthestTarget(PlayerControl player)
     {

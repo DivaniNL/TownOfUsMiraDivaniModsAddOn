@@ -113,8 +113,9 @@ public static class ArmoredEventHandler
             return;
         }
 
-        button?.ResetCooldownAndOrEffect();
-        source.SetKillTimer(source.GetKillCooldown());
+        var reset = OptionGroupSingleton<GeneralOptions>.Instance.TempSaveCdReset;
+        button?.SetTimer(reset);
+        source.SetKillTimer(reset);
     }
 
     private static bool CheckForArmoredShield(MiraCancelableEvent @event, PlayerControl source, PlayerControl target)

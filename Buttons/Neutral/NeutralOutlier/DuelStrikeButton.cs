@@ -1,10 +1,10 @@
 using MiraAPI.Modifiers;
-using MiraAPI.Networking;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Modules.Duelist;
+using DivaniMods.Networking.Neutral.NeutralOutlier;
 using DivaniMods.Roles.Neutral.NeutralOutlier;
 using TownOfUs.Assets;
 using TownOfUs.Buttons;
@@ -125,7 +125,6 @@ public sealed class DuelStrikeButton : TownOfUsTargetButton<PlayerControl>, IKil
         {
             return;
         }
-        DuelManager.MarkStruck(lp.PlayerId);
-        lp.RpcCustomMurder(Target, MeetingCheck.OutsideMeeting);
+        DuelistRpc.RpcDuelStrike(lp, Target.PlayerId);
     }
 }

@@ -4,6 +4,7 @@ using MiraAPI.Keybinds;
 using MiraAPI.Modifiers;
 using MiraAPI.Networking;
 using MiraAPI.Utilities.Assets;
+using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Roles.Impostor.ImpostorKilling;
 using TownOfUs.Assets;
 using TownOfUs.Buttons;
@@ -79,7 +80,8 @@ public sealed class MosquitoKillButton : TownOfUsKillRoleButton<MosquitoRole, Pl
             return false;
         }
 
-        if (player.IsImpostorAligned() && target.IsImpostorAligned())
+        if (player.IsImpostorAligned() && target.IsImpostorAligned() &&
+            !BetrayerRevealedModifier.AllowsImpostorTarget(player, target))
         {
             return false;
         }
