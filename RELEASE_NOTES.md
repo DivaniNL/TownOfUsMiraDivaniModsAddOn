@@ -2,18 +2,18 @@
 Added Workhorse and Betrayer + Bugfixes
 
 > [!NOTE]
-> This version is not guarenteed to work on Town of Us versions newer then 1.6.2
+> This version is not guaranteed to work on Town of Us versions newer than 1.6.2
 
 ## Added
 
 ### Added Role: Workhorse (Crewmate Power)
 
-A crewmate that gets a set number of extra tasks after they completed their originbal list. Completing this total list can give thye crew an instant Crewmate win, but killers are alerted once you get closer to being done.
+A crewmate that gets a set number of extra tasks after they completed their original list. Completing this total list can give the crew an instant Crewmate win, but killers are alerted once you get closer to being done.
 
 
 ### Added Modifier: Betrayer (Alliance, Impostor only)
 
-An Impostor alliance modifier that turns on their own team. They win like a Neutral Killer: be the last killer standing. Impostors will gain information about the Betrayer's identity when only a set number of people are alive or if one impostor is kileld when you have more then 2 impostor aligned people. Betrayers never win with the impostors together.
+An Impostor alliance modifier that turns on their own team. They win like a Neutral Killer: be the last killer standing. Impostors will gain information about the Betrayer's identity when only a set number of people are alive or if one impostor is killed when you have more than 2 impostor aligned people. Betrayers never win with the impostors together.
 
 ## General changes
 
@@ -44,7 +44,7 @@ An Impostor alliance modifier that turns on their own team. They win like a Neut
 
 ### Duelist
 
-- Duelist duels can now result in a tie (0.15s window). Dropped the kill protectiona fter the first successful clikc. THis was not the right way to go.
+- Duelist duels can now result in a tie (0.15s window). Dropped the kill protection after the first successful click. This was not the right way to go.
 
 ### Demolitionist
 
@@ -53,7 +53,7 @@ An Impostor alliance modifier that turns on their own team. They win like a Neut
 
 
 ### Mage
-- Egotist and Crewpostor Mage are now added. Energize behaves differently when holdign one of those alliance modifiers:
+- Egotist and Crewpostor Mage are now added. Energize behaves differently when holding one of those alliance modifiers:
 *Crewpostor Mage energizes:*
 
 Crew → nerf
@@ -73,7 +73,7 @@ Neutral Benign → option
 
 ### Mole
 
-- Who can enter mole vents. Defautl cvhanged to include all players
+- Who can enter mole vents. Default changed to include all players
 - Enable the host to allow the mole from getting more vents after completing tasks
 - Added a cooldown for mole vent usage and a set time anyone can be in a mole vent (only for roles that normally cannot vent + Mole itself)
 
@@ -93,5 +93,3 @@ Neutral Benign → option
 - Made sure clicking on the portal will use the portal
 - Made the behaviour with pet button more stable
 - Added a cooldown on the use portal button.
-
-TEST MOLE NON VENTERS
