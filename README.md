@@ -148,15 +148,15 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 
 ## Idea box Ideas (Divani Mods Discord)
 
-@jaydoeswitchcraft - Retributionist, Mage, Locator, Workhorse
-@aasteriisken - Telecom
-@mystic_haze2 - Watcher thought process, Mole, Workhorse, Betrayer
-@skillrain_ (Luka) - Betrayer
+- @jaydoeswitchcraft - Retributionist, Mage, Locator, Workhorse
+- @aasteriisken - Telecom
+- @mystic_haze2 - Watcher thought process, Mole, Workhorse, Betrayer
+- @skillrain_ (Luka) - Betrayer
 
 ## Testers
 
-@skillrain_ (Luka) - Testing Watcher
-@Thatchet - Testing Duelist Ties
+- @skillrain_ (Luka) - Testing Watcher
+- @Thatchet - Testing Duelist Ties
 
 # Source inspiration
 
