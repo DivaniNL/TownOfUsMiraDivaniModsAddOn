@@ -40,6 +40,7 @@ public sealed class MageSpellButton : TownOfUsRoleButton<MageRole, PlayerControl
 
     public MageSpell CurrentSpell = MageSpell.ShockShield;
 
+    // -2 means the value isn't set, -1 means it is infinite.
     public int ShockShieldUsesLeft { get; set; } = -2;
     public int EnergizeUsesLeft { get; set; } = -2;
     public int IllusionUsesLeft { get; set; } = -2;
