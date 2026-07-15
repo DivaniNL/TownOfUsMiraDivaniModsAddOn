@@ -156,6 +156,7 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 ## Testers
 
 @skillrain_ (Luka) - Testing Watcher
+@Thatchet - Testing Duelist Ties
 
 # Source inspiration
 
