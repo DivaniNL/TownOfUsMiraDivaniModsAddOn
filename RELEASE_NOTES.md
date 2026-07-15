@@ -53,7 +53,6 @@ An Impostor alliance modifier that turns on their own team. They win like a Neut
 
 
 ### Mage
-- Mage continues the game if there are shock shield charges left.
 - Egotist and Crewpostor Mage are now added. Energize behaves differently when holdign one of those alliance modifiers:
 *Crewpostor Mage energizes:*
 
