@@ -18,7 +18,7 @@ public class UAVOptions : AbstractOptionGroup<UAVModifier>
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
     public override string GroupName => "UAV";
     public override Color GroupColor => UAVModifier.UavColor;
-    public override uint GroupPriority => 35;
+    public override uint GroupPriority => 39;
 
     public ModdedNumberOption UavUses { get; } =
         new("UAV Uses", 1f, 1f, 3f, 1f, MiraNumberSuffixes.None);

@@ -31,7 +31,7 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
     public string RoleName => "Demolitionist";
     public string RoleDescription => "The bomb has been planted!";
     public string RoleLongDescription =>
-        "Plant Bombs at consoles to win!\n" +
+        "Plant Bombs at consoles (Admin, Cams, Doorlog, Vitals) to win!\n" +
         "If the crew defuses in time, it fails.";
     public Color RoleColor => DemolitionistColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
@@ -48,7 +48,7 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Plant", "Plant a bomb at a console to start a sabotage. It explodes unless the crew defuses it in time.", DivaniAssets.DemolitionistPlantButton),
+        new("Plant", "Plant a bomb at a console (Admin, Cams, Doorlog, Vitals) to start a sabotage. It explodes unless the crew defuses it in time.", DivaniAssets.DemolitionistPlantButton),
         new("Defuse", "Defuse the planted bomb before it triggers an explosion", DivaniAssets.DemolitionistDefuseButton)
     ];
 

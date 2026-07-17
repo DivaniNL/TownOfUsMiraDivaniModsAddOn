@@ -12,7 +12,7 @@ public class ArmoredOptions : AbstractOptionGroup<ArmoredModifier>
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
     public override string GroupName => "Armored";
     public override Color GroupColor => ArmoredModifier.ArmoredColor;
-    public override uint GroupPriority => 34;
+    public override uint GroupPriority => 33;
 
     public ModdedNumberOption AttacksToSurvive { get; } =
         new("Attacks to Survive", 1f, 1f, 5f, 1f, MiraNumberSuffixes.None);

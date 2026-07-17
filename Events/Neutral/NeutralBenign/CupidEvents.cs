@@ -76,11 +76,16 @@ public static class CupidEvents
             return;
         }
 
-        var isMine = !cupid.Finalized
-            ? cupid.ProvisionalTargets.Contains(victim.PlayerId)
-            : cupid.GetCurrentCouple().Any(x => x != null && x.PlayerId == victim.PlayerId);
+        if (!cupid.Finalized)
+        {
+            if (cupid.ProvisionalTargets.Remove(victim.PlayerId))
+            {
+                victim.RemoveModifier<CupidToBeLoversModifier>();
+            }
+            return;
+        }
 
-        if (!isMine)
+        if (!cupid.GetCurrentCouple().Any(x => x != null && x.PlayerId == victim.PlayerId))
         {
             return;
         }
