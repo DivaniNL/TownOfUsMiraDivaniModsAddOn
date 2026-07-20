@@ -168,7 +168,7 @@ public sealed class DreamerRole(IntPtr cppPtr)
             return false;
         }
 
-        if (role.GetRoleAlignment() is RoleAlignment.CrewmateAfterlife)
+        if (role.GetRoleAlignment() is RoleAlignment.CrewmateAfterlife || role.GetRoleAlignment() is RoleAlignment.CrewmateHider)
         {
             return false;
         }

@@ -63,7 +63,7 @@ public enum DivaniRpcCalls : uint
     TelecomSetPendingMeetingTarget = 258,
     DreamerSetReimagineTarget = 259,
     DreamerNotifyDreamFailed = 260,
-    DreamerNotifyDreamRedirected = 261
+    DreamerNotifyDreamRedirected = 261,
     DuelistStrike = 259,
     DuelistResolveDuel = 260,
     WorkhorseGrantSecondList = 261,
