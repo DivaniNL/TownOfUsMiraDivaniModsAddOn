@@ -24,7 +24,7 @@ public static class WatcherEvents
 
         if (WatcherLightSystem.IsActive)
         {
-            var manual = WatcherLightSystem.ConsumeManualKill(@event.Target.PlayerId);
+            var manual = WatcherLightSystem.IsManualKill(@event.Target.PlayerId);
             if (manual && killer.AmOwner
                 && OptionGroupSingleton<WatcherOptions>.Instance.KillsDuringLightsCount.Value)
             {

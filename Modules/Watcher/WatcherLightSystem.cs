@@ -66,9 +66,18 @@ public static class WatcherLightSystem
         ManualKills.Add(victimId);
     }
 
-    public static bool ConsumeManualKill(byte victimId)
+    public static bool IsManualKill(byte victimId)
     {
-        return ManualKills.Remove(victimId);
+        return ManualKills.Contains(victimId);
+    }
+
+    public static bool IsRedLightKill(PlayerControl? killer, PlayerControl? victim)
+    {
+        return _active
+            && killer != null
+            && victim != null
+            && killer.IsRole<WatcherRole>()
+            && !ManualKills.Contains(victim.PlayerId);
     }
 
     public static bool IsRedLightActive => _active && _phase == Phase.Red;
