@@ -28,6 +28,7 @@ public class ArmoredModifier : UniversalGameModifier, IColoredModifier, IWikiDis
     public int AttacksRemaining { get; set; }
     public int AttacksSurvived => MaxAttacks - AttacksRemaining;
     public int DisplayedAttacksSurvived { get; set; }
+    public bool NotifiedBroken { get; set; }
 
     public void RefreshDisplayedAttacks() => DisplayedAttacksSurvived = AttacksSurvived;
 
@@ -62,7 +63,5 @@ public class ArmoredModifier : UniversalGameModifier, IColoredModifier, IWikiDis
         {
             Player.RemoveModifier<ArmoredShieldModifier>();
         }
-
-        ModifierComponent?.RemoveModifier(this);
     }
 }
