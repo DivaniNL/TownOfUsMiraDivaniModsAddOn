@@ -4,7 +4,7 @@ using HarmonyLib;
 using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using DivaniMods.Options;
-using DivaniMods.Roles.Neutral.NeutralOutlier;
+using DivaniMods.Roles.Neutral.NeutralEvil;
 using TownOfUs.Options;
 using TownOfUs.Patches;
 using TownOfUs.Utilities;

@@ -1,4 +1,4 @@
-using DivaniMods.Roles.Neutral.NeutralOutlier;
+using DivaniMods.Roles.Neutral.NeutralEvil;
 using HarmonyLib;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
@@ -152,6 +152,9 @@ public static class OpportunistPatch
                 votesAdded += CountVotesOnTarget(@event.Votes, oppId, oppTarget);
                 votesAdded += CountVotesOnTarget(KnightedEvents.ExtraKnightVotes, oppId, oppTarget);
             }
+
+            var maxPerMeeting = (int)OptionGroupSingleton<OpportunistOptions>.Instance.MaxVotesPerMeeting.Value;
+            votesAdded = System.Math.Min(votesAdded, maxPerMeeting);
 
             if (votesAdded == 0)
             {
