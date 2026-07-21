@@ -36,7 +36,13 @@ public static class MageEvents
         var button = @event.Button as CustomActionButton<PlayerControl>;
         var target = button?.Target;
 
-        if (source == null || target == null || button is not IKillButton || !button.CanClick())
+        if (source == null || button == null || target == null || !button.CanClick())
+        {
+            return;
+        }
+
+        if (button is not IKillButton &&
+            !OptionGroupSingleton<MageOptions>.Instance.ShockShieldReactsToInteractions.Value)
         {
             return;
         }

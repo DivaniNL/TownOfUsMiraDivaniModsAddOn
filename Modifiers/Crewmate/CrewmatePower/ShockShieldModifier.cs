@@ -8,8 +8,10 @@ using DivaniMods.Assets;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Options;
 using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Modules.Anims;
 using TownOfUs.Options;
+using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using TownOfUs.Utilities.Appearances;
 using UnityEngine;
@@ -33,11 +35,38 @@ public sealed class ShockShieldModifier(PlayerControl mage) : TimedModifier
             return false;
         }
 
+        if (Mage != null && Mage.AmOwner)
+        {
+            return true;
+        }
+
         var genOpt = OptionGroupSingleton<GeneralOptions>.Instance;
-        var seesSelf = Player.AmOwner && OptionGroupSingleton<MageOptions>.Instance.TargetSeesShockShield.Value;
-        var seesMage = Mage != null && Mage.AmOwner;
-        var seesDead = DeathHandlerModifier.IsFullyDead(PlayerControl.LocalPlayer) && genOpt.TheDeadKnow;
-        return seesSelf || seesMage || seesDead;
+        if (DeathHandlerModifier.IsFullyDead(PlayerControl.LocalPlayer) && genOpt.TheDeadKnow)
+        {
+            return true;
+        }
+
+        var visibility = (ShockShieldVisibility)OptionGroupSingleton<MageOptions>.Instance.ShockShieldVisibleTo.Value;
+        switch (visibility)
+        {
+            case ShockShieldVisibility.MageAndTarget:
+                return Player.AmOwner;
+
+            case ShockShieldVisibility.Teammates:
+                var local = PlayerControl.LocalPlayer;
+                if (Mage != null && Mage.HasModifier<CrewpostorModifier>())
+                {
+                    return local.IsImpostor();
+                }
+                if (Mage != null && Mage.HasModifier<EgotistModifier>())
+                {
+                    return local.IsImpostor() || local.Is(RoleAlignment.NeutralKilling);
+                }
+                return local.IsCrewmate();
+
+            default:
+                return false;
+        }
     }
 
     public override void OnActivate()
