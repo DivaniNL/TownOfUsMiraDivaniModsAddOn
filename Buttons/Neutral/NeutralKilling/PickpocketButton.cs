@@ -6,6 +6,7 @@ using System.Reflection;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
+using MiraAPI.Modifiers.ModifierDisplay;
 using MiraAPI.Modifiers.Types;
 using MiraAPI.Networking;
 using MiraAPI.Utilities;
@@ -13,11 +14,10 @@ using MiraAPI.Utilities.Assets;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
-using DivaniMods.Buttons.Neutral.NeutralKilling;
 using DivaniMods.Modifiers.Game.Alliance;
+using DivaniMods.Modifiers.Game.Universal;
 using DivaniMods.Options;
 using DivaniMods.Patches;
-using DivaniMods.Roles.Crewmate.CrewmatePower;
 using DivaniMods.Roles.Neutral.NeutralKilling;
 using DivaniMods.Utilities;
 using TownOfUs;
@@ -28,13 +28,14 @@ using TownOfUs.Interfaces;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
+using TownOfUs.Modifiers.Game.Neutral;
 using TownOfUs.Modifiers.Neutral;
 using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Utilities;
 using TownOfUs.Utilities.Appearances;
 using UnityEngine;
 
-namespace DivaniMods.Buttons.Crewmate.CrewmatePower;
+namespace DivaniMods.Buttons.Neutral.NeutralKilling;
 
 public class PickpocketButton : TownOfUsButton
 {
@@ -43,10 +44,10 @@ public class PickpocketButton : TownOfUsButton
     public override float EffectDuration => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketDuration.Value;
     public override int MaxUses => (int)OptionGroupSingleton<ThiefOptions>.Instance.MaxStolenModifiers.Value;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.PickpocketButton;
-    public float Distance => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketRange.Value * 1.5f;
+    public float Distance => PlayerControl.LocalPlayer.Data.Role.GetAbilityDistance();
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
-    public override Color TextOutlineColor => new Color(0.5f, 0.3f, 0.1f);
-    public override BaseKeybind Keybind => Keybinds.PrimaryAction;
+    public override Color TextOutlineColor => ThiefRole.ThiefColor;
+    public override BaseKeybind Keybind => Keybinds.SecondaryAction;
 
     private byte _capturedTargetId;
     private bool _stealFragBomb;
@@ -56,11 +57,20 @@ public class PickpocketButton : TownOfUsButton
     {
         "TownOfUs.Modifiers.Neutral",
         "TownOfUs.Modifiers.Impostor",
-        "TownOfUs.Modifiers.Game.Neutral",
-        "TownOfUs.Modifiers.Game.Impostor",
         "TownOfUs.Modifiers.HnsCrewmate",
         "TownOfUs.Modifiers.HnsImpostor",
         "TownOfUs.Modifiers.HnsGame"
+    };
+
+    private static readonly HashSet<string> BlockedModifierTypeNames = new(StringComparer.Ordinal)
+    {
+        "MagicMirrorModifier",
+        "KnightedModifier",
+        "SaboteurModifier",
+        "TelepathModifier",
+        "UnderdogModifier",
+        "EgotistModifier",
+        "CrewpostorModifier",
     };
 
     private static readonly string[] AllowedNamespacePrefixes =
@@ -260,7 +270,7 @@ public class PickpocketButton : TownOfUsButton
         if (targetModifiers.Count > 0)
         {
             var thiefHasButtonModifier = HasButtonModifier(thief);
-            var stolen = PickTargetModifier(targetModifiers, random, preferNonButtonModifier: thiefHasButtonModifier, thief: thief);
+            var stolen = PickTargetModifier(targetModifiers, random, thief);
             var canUseModifier = CanThiefUseModifier(stolen, thief);
 
             uint fallbackRandomId = 0;
@@ -281,24 +291,12 @@ public class PickpocketButton : TownOfUsButton
     private static BaseModifier PickTargetModifier(
         List<BaseModifier> targetModifiers,
         System.Random random,
-        bool preferNonButtonModifier,
         PlayerControl thief)
     {
-        var thiefModifierIds = thief.GetModifiers<BaseModifier>()
-            .Select(m => m.TypeId)
-            .ToHashSet();
-        var nonDuplicateModifiers = targetModifiers
-            .Where(m => !thiefModifierIds.Contains(m.TypeId))
+        var usableModifiers = targetModifiers
+            .Where(m => CanThiefUseModifier(m, thief))
             .ToList();
-        var baseCandidates = nonDuplicateModifiers.Count > 0 ? nonDuplicateModifiers : targetModifiers;
-
-        if (!preferNonButtonModifier)
-        {
-            return baseCandidates[random.Next(baseCandidates.Count)];
-        }
-
-        var nonButtonModifiers = baseCandidates.Where(x => !IsButtonModifier(x)).ToList();
-        var candidates = nonButtonModifiers.Count > 0 ? nonButtonModifiers : baseCandidates;
+        var candidates = usableModifiers.Count > 0 ? usableModifiers : targetModifiers;
         return candidates[random.Next(candidates.Count)];
     }
 
@@ -335,19 +333,139 @@ public class PickpocketButton : TownOfUsButton
         if (modifier.GetType().Name.StartsWith("Test", StringComparison.OrdinalIgnoreCase))
             return true;
 
-        if (modifier.GetType().Name == "MagicMirrorModifier")
+        if (BlockedModifierTypeNames.Contains(modifier.GetType().Name))
             return true;
 
-        if (modifier.GetType().Name == "KnightedModifier")
+        if (modifier is ArmoredShieldModifier)
             return true;
 
         if (IsShieldModifier(modifier))
+            return !CanReconstructShield(modifier);
+
+        // Assassin/Double Shot set HideOnUi from local settings, so the check below
+        // would make them stealable on some clients only.
+        if (IsAssassinFamily(modifier))
             return false;
-        
+
+        if (modifier is not GameModifier)
+            return true;
+
         if (modifier.HideOnUi)
             return true;
-        
+
         return false;
+    }
+
+    private static bool IsAssassinFamily(BaseModifier modifier)
+    {
+        return modifier is AssassinModifier or DoubleShotModifier;
+    }
+
+    private static uint GetRegisteredId(Type modifierType)
+    {
+        return ModifierManager.GetModifierTypeId(modifierType) ?? 0;
+    }
+
+    private static uint ResolveGrantedModifierId(BaseModifier modifier)
+    {
+        return modifier switch
+        {
+            AssassinModifier => GetRegisteredId(typeof(NeutralKillerAssassinModifier)),
+            DoubleShotModifier => GetRegisteredId(typeof(NeutralKillerDoubleShotModifier)),
+            _ => modifier.TypeId,
+        };
+    }
+
+    private static uint ResolveGrantedModifierId(uint typeId)
+    {
+        var type = ModifierManager.GetModifierType(typeId);
+        if (type == null)
+            return typeId;
+
+        if (typeof(AssassinModifier).IsAssignableFrom(type))
+            return GetRegisteredId(typeof(NeutralKillerAssassinModifier));
+
+        if (typeof(DoubleShotModifier).IsAssignableFrom(type))
+            return GetRegisteredId(typeof(NeutralKillerDoubleShotModifier));
+
+        return typeId;
+    }
+
+    private static string GetDisplayName(BaseModifier modifier)
+    {
+        var typeName = modifier.GetType().Name;
+        var name = modifier.ModifierName;
+        return string.IsNullOrEmpty(name) || name == typeName
+            ? typeName.Replace("Modifier", "")
+            : name;
+    }
+
+    private static BaseModifier? GetBundledAssassinPartner(PlayerControl thief, PlayerControl target, BaseModifier stolen)
+    {
+        if (stolen is not AssassinModifier)
+            return null;
+
+        var partner = target.GetModifiers<BaseModifier>().FirstOrDefault(m => m is DoubleShotModifier);
+
+        if (partner == null)
+            return null;
+
+        var partnerGrantedId = ResolveGrantedModifierId(partner);
+        if (partnerGrantedId == 0)
+            return null;
+
+        if (thief.GetModifiers<BaseModifier>().Any(m => m.TypeId == partner.TypeId || m.TypeId == partnerGrantedId))
+            return null;
+
+        return partner;
+    }
+
+    private static List<uint> BuildGrantList(PlayerControl thief, uint grantedTypeId, uint bundledTypeId)
+    {
+        var ids = new List<uint>();
+
+        var grantedType = ModifierManager.GetModifierType(grantedTypeId);
+        if (grantedType != null && typeof(DoubleShotModifier).IsAssignableFrom(grantedType) &&
+            !thief.GetModifiers<BaseModifier>().Any(m => m is AssassinModifier))
+        {
+            var assassinId = GetRegisteredId(typeof(NeutralKillerAssassinModifier));
+            if (assassinId != 0)
+            {
+                ids.Add(assassinId);
+            }
+        }
+
+        ids.Add(grantedTypeId);
+
+        if (bundledTypeId != 0)
+        {
+            var bundledGrantedId = ResolveGrantedModifierId(bundledTypeId);
+            if (bundledGrantedId != 0)
+            {
+                ids.Add(bundledGrantedId);
+            }
+        }
+
+        return ids
+            .Distinct()
+            .Where(id => id == grantedTypeId || !thief.GetModifiers<BaseModifier>().Any(m => m.TypeId == id))
+            .ToList();
+    }
+
+    private static void EnsureAssassinForDoubleShot(PlayerControl thief, uint grantedId)
+    {
+        var type = ModifierManager.GetModifierType(grantedId);
+        if (type == null || !typeof(DoubleShotModifier).IsAssignableFrom(type))
+            return;
+
+        if (thief.GetModifiers<BaseModifier>().Any(m => m is AssassinModifier))
+            return;
+
+        var assassinId = GetRegisteredId(typeof(NeutralKillerAssassinModifier));
+        if (assassinId != 0)
+        {
+            thief.AddModifier(assassinId);
+        }
     }
     
     private static bool IsShieldModifier(BaseModifier modifier)
@@ -376,7 +494,11 @@ public class PickpocketButton : TownOfUsButton
     
     private static bool CanThiefUseModifier(BaseModifier modifier, PlayerControl thief)
     {
-        if (thief.GetModifiers<BaseModifier>().Any(m => m.TypeId == modifier.TypeId))
+        var grantedId = ResolveGrantedModifierId(modifier);
+        if (grantedId == 0)
+            return false;
+
+        if (thief.GetModifiers<BaseModifier>().Any(m => m.TypeId == modifier.TypeId || m.TypeId == grantedId))
             return false;
 
         if (!IsAllowedSource(modifier))
@@ -412,9 +534,8 @@ public class PickpocketButton : TownOfUsButton
         return modifier is IButtonModifier;
     }
    
-    private static readonly string[] NonCrewFactionMarkers =
+    private static readonly string[] BlockedFactionMarkers =
     {
-        "Neutral", "Impostor", "Assailant", "NonCrew", "NonImp", "NonNeut",
         "Hns", "Hider", "Seeker", "External",
     };
 
@@ -431,16 +552,8 @@ public class PickpocketButton : TownOfUsButton
             factionName = null;
         }
 
-        if (factionName != null)
-        {
-            return factionName.Equals("Alliance", StringComparison.OrdinalIgnoreCase)
-                || factionName.Equals("Universal", StringComparison.OrdinalIgnoreCase)
-                || factionName.StartsWith("Crewmate", StringComparison.OrdinalIgnoreCase)
-                || factionName.StartsWith("Universal", StringComparison.OrdinalIgnoreCase);
-        }
-
-        var ns = modifier.GetType().Namespace ?? string.Empty;
-        return !NonCrewFactionMarkers.Any(m => ns.Contains(m, StringComparison.OrdinalIgnoreCase));
+        var haystack = factionName ?? modifier.GetType().Namespace ?? string.Empty;
+        return !BlockedFactionMarkers.Any(m => haystack.Contains(m, StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool IsVisualModifier(BaseModifier modifier)
@@ -463,12 +576,15 @@ public class PickpocketButton : TownOfUsButton
             if (gm.GetAssignmentChance() <= 0 || gm.GetAmountPerGame() <= 0)
                 continue;
 
+            if (IsAssassinFamily(modifier))
+                continue;
+
             if (modifier.HideOnUi)
                 continue;
-            
+
             if (modifier is ExcludedGameModifier)
                 continue;
-            
+
             if (IsShieldModifier(modifier))
                 continue;
 
@@ -477,7 +593,10 @@ public class PickpocketButton : TownOfUsButton
 
             if (modTypeName.StartsWith("Test", StringComparison.OrdinalIgnoreCase))
                 continue;
-            
+
+            if (BlockedModifierTypeNames.Contains(modTypeName))
+                continue;
+
             if (!IsAllowedSource(modifier))
                 continue;
 
@@ -504,12 +623,18 @@ public class PickpocketButton : TownOfUsButton
         return result;
     }
 
+    private static bool CanReconstructShield(BaseModifier modifier)
+    {
+        return GetShieldSourcePlayer(modifier) != null ||
+               modifier.GetType().GetConstructor(Type.EmptyTypes) != null;
+    }
+
     private static PlayerControl? GetShieldSourcePlayer(BaseModifier modifier)
     {
         var modType = modifier.GetType();
-        
-        var propertyNames = new[] { "Medic", "Cleric", "Mirrorcaster" };
-        
+
+        var propertyNames = new[] { "Medic", "Cleric", "Mirrorcaster", "Warden", "Guardian", "Herbalist", "Cupid" };
+
         foreach (var propName in propertyNames)
         {
             var prop = modType.GetProperty(propName);
@@ -554,18 +679,16 @@ public class PickpocketButton : TownOfUsButton
             return;
         }
         
-        var modifierName = modifier.ModifierName;
-        var modifierTypeName = modifier.GetType().Name;
-        
-        var displayName = modifierName;
-        if (string.IsNullOrEmpty(displayName) || displayName == modifierTypeName)
-        {
-            displayName = modifierTypeName.Replace("Modifier", "");
-        }
-        
+        var displayName = GetDisplayName(modifier);
+
         var shieldSourcePlayer = GetShieldSourcePlayer(modifier);
         var wasMedicShield = IsMedicShieldModifierIl2Cpp(modifier);
-        
+        var grantedTypeId = ResolveGrantedModifierId(modifier);
+
+        var bundledPartner = canUseModifier ? GetBundledAssassinPartner(thief, target, modifier) : null;
+        var bundledTypeId = bundledPartner?.TypeId ?? 0;
+        var bundledDisplayName = bundledPartner != null ? GetDisplayName(bundledPartner) : null;
+
         PlayerControl? loverPartner = null;
         bool isStealingLover = false;
         if (target.TryGetModifier<LoverModifier>(out var existingLover) && existingLover.TypeId == modifierTypeId)
@@ -575,11 +698,17 @@ public class PickpocketButton : TownOfUsButton
         }
         
         target.RemoveModifier(modifierTypeId, null);
-        
+
+        if (bundledTypeId != 0)
+        {
+            target.RemoveModifier(bundledTypeId, null);
+            displayName = $"{displayName} & {bundledDisplayName}";
+        }
+
         if (target == PlayerControl.LocalPlayer)
         {
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#804D1A>Your {displayName} modifier was stolen!</color></b>",
+                $"<b><color=#804D1A>Your {displayName} {(bundledTypeId != 0 ? "modifiers were" : "modifier was")} stolen!</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.ThiefIcon.LoadAsset());
@@ -619,24 +748,27 @@ public class PickpocketButton : TownOfUsButton
             }
             else
             {
-                if (shieldSourcePlayer != null)
+                foreach (var id in BuildGrantList(thief, grantedTypeId, bundledTypeId))
                 {
-                    thief.AddModifier(modifierTypeId, shieldSourcePlayer);
+                    if (id == grantedTypeId && shieldSourcePlayer != null)
+                    {
+                        thief.AddModifier(id, shieldSourcePlayer);
+                    }
+                    else
+                    {
+                        thief.AddModifier(id);
+                    }
                 }
-                else
-                {
-                    thief.AddModifier(modifierTypeId);
-                }
-                
+
                 if (wasMedicShield)
                 {
                     MedicShieldStolenPatch.ApplyStolenMedicShield(shieldSourcePlayer, thief);
                 }
             }
-            
+
             if (thief.Data.Role is ThiefRole thiefRole)
             {
-                thiefRole.StolenModifierIds.Add(modifierTypeId);
+                thiefRole.StolenModifierIds.Add(grantedTypeId);
             }
             
             if (thief == PlayerControl.LocalPlayer)
@@ -673,8 +805,30 @@ public class PickpocketButton : TownOfUsButton
             
             ApplyGivenModifier(thief, fallbackRandomId, prefix: "Stole/Gained");
         }
+
+        ScheduleModifierDisplayRefresh(thief, target);
     }
-    
+
+    private static void ScheduleModifierDisplayRefresh(params PlayerControl?[] players)
+    {
+        if (!players.Any(p => p != null && p == PlayerControl.LocalPlayer))
+        {
+            return;
+        }
+
+        Coroutines.Start(RefreshModifierDisplayCoroutine());
+    }
+
+    private static IEnumerator RefreshModifierDisplayCoroutine()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        if (ModifierDisplayComponent.Instance != null)
+        {
+            ModifierDisplayComponent.Instance.RefreshModifiers();
+        }
+    }
+
     private static IEnumerator HeartbreakOldLoverCoroutine(PlayerControl victim)
     {
         yield return new WaitForSeconds(0.25f);
@@ -746,10 +900,13 @@ public class PickpocketButton : TownOfUsButton
     public static void RpcGiveRandomModifier(PlayerControl thief, uint chosenId)
     {
         ApplyGivenModifier(thief, chosenId, prefix: "Stole/Gained");
+        ScheduleModifierDisplayRefresh(thief);
     }
     
-    private static void ApplyGivenModifier(PlayerControl thief, uint chosenId, string prefix)
+    private static void ApplyGivenModifier(PlayerControl thief, uint rolledId, string prefix)
     {
+        var chosenId = ResolveGrantedModifierId(rolledId);
+
         if (chosenId == 0)
         {
             DivaniPlugin.Instance.Log.LogWarning("Thief: No new modifiers available!");
@@ -763,9 +920,11 @@ public class PickpocketButton : TownOfUsButton
             }
             return;
         }
-        
+
+        EnsureAssassinForDoubleShot(thief, chosenId);
+
         thief.AddModifier(chosenId);
-        
+
         if (thief.Data.Role is ThiefRole thiefRole)
         {
             thiefRole.StolenModifierIds.Add(chosenId);

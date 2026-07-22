@@ -4,8 +4,8 @@ using MiraAPI.Modifiers;
 using MiraAPI.Networking;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
-using DivaniMods.Modules.Watcher;
 using DivaniMods.Options;
+using DivaniMods.Patches;
 using DivaniMods.Roles.Neutral.NeutralKilling;
 using TownOfUs.Buttons;
 using TownOfUs.Modifiers;
@@ -15,30 +15,19 @@ using UnityEngine;
 
 namespace DivaniMods.Buttons.Neutral.NeutralKilling;
 
-public sealed class WatcherKillButton : TownOfUsKillRoleButton<WatcherRole, PlayerControl>, IDiseaseableButton, IKillButton
+public sealed class ThiefKillButton : TownOfUsKillRoleButton<ThiefRole, PlayerControl>, IDiseaseableButton, IKillButton
 {
     public override string Name => TranslationController.Instance.GetStringWithDefault(StringNames.KillLabel, "Kill");
     public override BaseKeybind Keybind => Keybinds.PrimaryAction;
-    public override Color TextOutlineColor => WatcherRole.WatcherColor;
-    public override float Cooldown => OptionGroupSingleton<WatcherOptions>.Instance.KillCooldown.Value;
-    public override LoadableAsset<Sprite> Sprite => DivaniAssets.WatcherKillButton;
+    public override Color TextOutlineColor => ThiefRole.ThiefColor;
+    public override float Cooldown => OptionGroupSingleton<ThiefOptions>.Instance.KillCooldown.Value;
+    public override LoadableAsset<Sprite> Sprite => DivaniAssets.ThiefKillButton;
 
     public override bool ZeroIsInfinite { get; set; } = true;
 
     public void SetDiseasedTimer(float multiplier)
     {
         SetTimer(Cooldown * multiplier);
-    }
-
-    public override bool CanUse()
-    {
-        if (OptionGroupSingleton<WatcherOptions>.Instance.LinkWatchKillCooldown.Value
-            && WatcherLightSystem.IsActive)
-        {
-            return false;
-        }
-
-        return base.CanUse();
     }
 
     public override PlayerControl? GetTarget()
@@ -75,17 +64,11 @@ public sealed class WatcherKillButton : TownOfUsKillRoleButton<WatcherRole, Play
             return;
         }
 
-        if (WatcherLightSystem.IsActive)
+        if (!SniperNoTeleportKill.TryMurderWithoutTeleport(Target))
         {
-            WatcherLightSystem.RegisterManualKill(Target.PlayerId);
+            return;
         }
 
         player.RpcCustomMurder(Target);
-
-        if (OptionGroupSingleton<WatcherOptions>.Instance.LinkWatchKillCooldown.Value)
-        {
-            var watch = CustomButtonSingleton<WatcherWatchButton>.Instance;
-            watch?.SetTimer(watch.Cooldown);
-        }
     }
 }

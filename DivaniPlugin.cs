@@ -49,6 +49,7 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
         DivaniLocale.Register();
         DivaniWikiTermsPatch.RegisterLocale();
         WinConditionRegistry.Register(new BetrayerWinCondition());
+        WinConditionRegistry.Register(new ThiefQuotaDrawWinCondition());
         Log.LogInfo($"Divani Mods v{Version} loaded successfully!");
     }
 }
