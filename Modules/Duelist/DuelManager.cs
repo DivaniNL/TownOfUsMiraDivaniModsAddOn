@@ -24,7 +24,7 @@ public enum DuelOutcome : byte
 
 public static class DuelManager
 {
-    public const float TieWindow = 0.15f;
+    public const float TieWindow = 0.10f;
 
     private static readonly Dictionary<byte, int> Wins = new();
     private static readonly Dictionary<byte, int> Losses = new();
