@@ -214,6 +214,7 @@ public static class WatcherLightSystem
         _phaseEndTime = Time.time + _redDuration;
         _refCaptured = false;
         _localReported = false;
+        _batchGunshotPlayed = false;
         Flash(WatcherRole.RedLightColor, _redDuration + 0.25f);
         PlaySound(DivaniAssets.WatcherStopSound.LoadAsset());
         AddLocalWatched();
@@ -395,7 +396,23 @@ public static class WatcherLightSystem
             ghostRole.Caught = true;
         }
 
-        PlayKillFeedback(ghost);
+        PlayGhostCatchFeedback(ghost);
+    }
+
+    private static void PlayGhostCatchFeedback(PlayerControl ghost)
+    {
+        if (!ghost.AmOwner)
+        {
+            return;
+        }
+
+        PlayGunshot();
+
+        MiraAPI.Utilities.Helpers.CreateAndShowNotification(
+            $"<b>{WatcherRole.RedLightColor.ToTextColor()}Movement Detected!</color></b>",
+            Color.white,
+            new Vector3(0f, 1f, -20f),
+            spr: DivaniAssets.WatcherRedLight.LoadAsset());
     }
 
     private static void PlayKillFeedback(PlayerControl victim)
@@ -486,7 +503,7 @@ public static class WatcherLightSystem
             return true;
         }
 
-        return Options.GhostwalkersMustFreeze.Value && player.Data?.Role is IGhostRole;
+        return Options.GhostwalkersMustFreeze.Value && player.Data?.Role is IGhostRole { Caught: false };
     }
 
     private const string SwoopModifierName = "Swooped";
