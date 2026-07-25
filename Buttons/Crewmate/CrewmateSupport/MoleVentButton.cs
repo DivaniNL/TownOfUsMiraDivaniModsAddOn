@@ -25,6 +25,12 @@ public sealed class MoleVentButton : TownOfUsTargetButton<Vent>
 
     public override bool Enabled(RoleBehaviour? role)
     {
+        var local = PlayerControl.LocalPlayer;
+        if (local == null || local.Data == null || local.HasDied())
+        {
+            return false;
+        }
+
         if (role is MoleRole)
         {
             return true;
