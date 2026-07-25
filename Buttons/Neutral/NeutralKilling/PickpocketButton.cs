@@ -66,6 +66,10 @@ public class PickpocketButton : TownOfUsButton
     {
         "MagicMirrorModifier",
         "KnightedModifier",
+    };
+
+    private static readonly HashSet<string> DestroyOnStealTypeNames = new(StringComparer.Ordinal)
+    {
         "SaboteurModifier",
         "TelepathModifier",
         "UnderdogModifier",
@@ -495,6 +499,9 @@ public class PickpocketButton : TownOfUsButton
     
     private static bool CanThiefUseModifier(BaseModifier modifier, PlayerControl thief)
     {
+        if (DestroyOnStealTypeNames.Contains(modifier.GetType().Name))
+            return false;
+
         var grantedId = ResolveGrantedModifierId(modifier);
         if (grantedId == 0)
             return false;
@@ -595,7 +602,7 @@ public class PickpocketButton : TownOfUsButton
             if (modTypeName.StartsWith("Test", StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            if (BlockedModifierTypeNames.Contains(modTypeName))
+            if (BlockedModifierTypeNames.Contains(modTypeName) || DestroyOnStealTypeNames.Contains(modTypeName))
                 continue;
 
             if (!IsAllowedSource(modifier))
