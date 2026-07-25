@@ -103,6 +103,18 @@ public sealed class InnocentRole(IntPtr cppPtr)
         return console == null || console.AllowImpostor;
     }
 
+    public static bool TauntPiercesShields(PlayerControl? source, PlayerControl? target)
+    {
+        if (source == null || target == null ||
+            !OptionGroupSingleton<InnocentOptions>.Instance.TauntBreaksShields)
+        {
+            return false;
+        }
+
+        return ActiveInnocents.TryGetValue(target.PlayerId, out var innocent) &&
+               innocent.PendingTauntKillerId == source.PlayerId;
+    }
+
     public bool WinConditionMet()
     {
         return TargetVoted || AboutToWin;
