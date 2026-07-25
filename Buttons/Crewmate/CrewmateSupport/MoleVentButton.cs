@@ -71,7 +71,7 @@ public sealed class MoleVentButton : TownOfUsTargetButton<Vent>
         foreach (var vent in ShipStatus.Instance.AllVents)
         {
             if (!vent.name.StartsWith("MoleVent") || !vent.gameObject.activeSelf ||
-                (!isMole && !vent.myRend.enabled))
+                (!isMole && !vent.myRend.enabled) || MoleRole.IsBlockedByPlumber(vent))
             {
                 continue;
             }
