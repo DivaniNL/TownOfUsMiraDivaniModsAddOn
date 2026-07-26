@@ -3,16 +3,19 @@ using MiraAPI.Events.Mira;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.GameOptions;
+using DivaniMods.Assets;
 using DivaniMods.Networking.Crewmate.CrewmateKilling;
 using DivaniMods.Options;
 using DivaniMods.Roles.Crewmate.CrewmateAfterlife;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using TownOfUs.Events.TouEvents;
+using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Modules;
 using TownOfUs.Utilities;
 using TownOfUs.Roles.Neutral;
 using MiraAPI.Modifiers;
+using UnityEngine;
 
 namespace DivaniMods.Events.Crewmate.CrewmateKilling;
 
@@ -21,13 +24,15 @@ public static class RetributionistEvents
     [RegisterEvent]
     public static void OnAfterMurder(AfterMurderEvent evt)
     {
+        var target = evt.Target;
+        var killer = evt.Source;
+
+        NotifyFirstDeathShieldBlockedRevenge(target, killer);
+
         if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
         {
             return;
         }
-
-        var target = evt.Target;
-        var killer = evt.Source;
 
         if (target != null && RetributionistManager.IsCursed(target.PlayerId))
         {
@@ -58,6 +63,38 @@ public static class RetributionistEvents
     }
 
     public static bool IsRevengeEligible(PlayerControl? target, PlayerControl? killer)
+    {
+        return CanSeekRevengeOn(target, killer) && !HasFirstDeathShield(killer);
+    }
+
+    public static bool IsRevengeBlockedByFirstDeathShield(PlayerControl? target, PlayerControl? killer)
+    {
+        return CanSeekRevengeOn(target, killer) && HasFirstDeathShield(killer);
+    }
+
+    private static bool HasFirstDeathShield(PlayerControl? killer)
+    {
+        return killer != null && killer.HasModifier<FirstDeadShield>();
+    }
+
+    private static void NotifyFirstDeathShieldBlockedRevenge(PlayerControl? target, PlayerControl? killer)
+    {
+        if (target == null || killer == null || !target.AmOwner ||
+            !IsRevengeBlockedByFirstDeathShield(target, killer))
+        {
+            return;
+        }
+
+        var hex = ColorUtility.ToHtmlStringRGB(RetributionistRole.RetributionistColor);
+
+        MiraAPI.Utilities.Helpers.CreateAndShowNotification(
+            $"<b><color=#{hex}>{killer.Data.PlayerName} is protected by the first death shield so you won't be able to seek revenge this time. Feelsbadman</color></b>",
+            Color.white,
+            new Vector3(0f, 1f, -20f),
+            spr: DivaniAssets.RetributionistIcon.LoadAsset());
+    }
+
+    private static bool CanSeekRevengeOn(PlayerControl? target, PlayerControl? killer)
     {
         if (target == null || killer == null || killer == target || killer.HasDied() ||
             target.GetRoleWhenAlive() is not RetributionistRole ||
