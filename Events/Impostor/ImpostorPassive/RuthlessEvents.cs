@@ -1,11 +1,9 @@
 using MiraAPI.Events;
 using MiraAPI.Events.Mira;
 using MiraAPI.Events.Vanilla.Gameplay;
-using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using DivaniMods.Modifiers.Game.Impostor.ImpostorPassive;
-using DivaniMods.Options;
 using TownOfUs.Buttons;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Neutral;
@@ -66,8 +64,7 @@ public static class RuthlessEvents
             return false;
         }
 
-        if (!OptionGroupSingleton<RuthlessOptions>.Instance.BypassFirstDeathShield &&
-            target.HasModifier<FirstDeadShield>())
+        if (target.HasModifier<FirstDeadShield>())
         {
             return false;
         }
