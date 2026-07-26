@@ -23,6 +23,8 @@ namespace DivaniMods;
 [ReactorModFlags(ModFlags.RequireOnAllClients)]
 public class DivaniPlugin : BasePlugin, IMiraPlugin
 {
+    public string GetAbbreviatedModName() => "DM";
+
     public const string Id = "com.divani.mods";
     public const string Version = "1.3.3";
     

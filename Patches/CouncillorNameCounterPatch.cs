@@ -4,13 +4,14 @@ using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using DivaniMods.Events.Impostor.ImpostorSupport;
 using DivaniMods.Roles.Impostor.ImpostorSupport;
+using TownOfUs.Modules.Components;
 using TownOfUs.Options;
 using TownOfUs.Patches;
 using TownOfUs.Utilities;
 
 namespace DivaniMods.Patches;
 
-[HarmonyPatch(typeof(HudManagerPatches), nameof(HudManagerPatches.UpdateRoleNameText))]
+[HarmonyPatch(typeof(HudManagerHelper), nameof(HudManagerHelper.UpdateRoleNameText))]
 public static class CouncillorNameCounterPatch
 {
     [HarmonyPostfix]

@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.OptionTypes;
 using MiraAPI.Utilities;
+using TownOfUs;
 using TownOfUs.Options;
 using UnityEngine;
 
@@ -10,8 +11,8 @@ public sealed class NeutralModifierOptions : AbstractOptionGroup
 {
     public override string GroupName => "Neutral Modifiers";
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
-    public override Color GroupColor => Color.gray;
-    public override bool ShowInModifiersMenu => true;
+    public override Color GroupColor => TownOfUsColors.Neutral;
+    public override MenuCategory ParentMenu => MenuCategory.Modifiers;
     public override uint GroupPriority => 4;
 
     public ModdedNumberOption SniperAmount { get; } = new(

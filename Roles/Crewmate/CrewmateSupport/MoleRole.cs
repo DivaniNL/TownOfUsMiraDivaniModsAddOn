@@ -127,8 +127,7 @@ public sealed class MoleRole(IntPtr cppPtr)
         }
 
         var ventId = vent.Id;
-        return PlumberRole.VentBlockList.Contains(ventId) ||
-               PlumberRole.VentFlushList.Contains(ventId) ||
+        return PlumberRole.VentFlushSet.Contains(ventId) ||
                PlumberRole.VentsBlocked.Any(x => x.Key == ventId);
     }
 

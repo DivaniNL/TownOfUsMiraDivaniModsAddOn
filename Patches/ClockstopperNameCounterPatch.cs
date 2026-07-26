@@ -4,13 +4,14 @@ using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using DivaniMods.Events.Crewmate.CrewmateSupport;
 using DivaniMods.Roles.Crewmate.CrewmateSupport;
+using TownOfUs.Modules.Components;
 using TownOfUs.Options;
 using TownOfUs.Patches;
 using TownOfUs.Utilities;
 
 namespace DivaniMods.Patches;
 
-[HarmonyPatch(typeof(HudManagerPatches), nameof(HudManagerPatches.UpdateRoleNameText))]
+[HarmonyPatch(typeof(HudManagerHelper), nameof(HudManagerHelper.UpdateRoleNameText))]
 public static class ClockstopperNameCounterPatch
 {
     [HarmonyPostfix]
