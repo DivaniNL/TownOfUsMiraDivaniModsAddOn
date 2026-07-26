@@ -6,7 +6,7 @@ using DivaniMods.Roles.Impostor.ImpostorKilling;
 
 namespace DivaniMods.Options;
 
-public class SilencerOptions : AbstractOptionGroup<SilencerRole>
+public class SilencerOptions : AbstractRoleOptionGroup<SilencerRole>
 {
     public override string GroupName => "Silencer";
 

@@ -5,7 +5,7 @@ using DivaniMods.Roles.Impostor.ImpostorSupport;
 
 namespace DivaniMods.Options;
 
-public class DeadlockOptions : AbstractOptionGroup<DeadlockRole>
+public class DeadlockOptions : AbstractRoleOptionGroup<DeadlockRole>
 {
     public override string GroupName => "Deadlock";
 

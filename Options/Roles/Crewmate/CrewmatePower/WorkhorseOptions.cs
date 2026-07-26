@@ -6,7 +6,7 @@ using DivaniMods.Roles.Crewmate.CrewmatePower;
 
 namespace DivaniMods.Options;
 
-public class WorkhorseOptions : AbstractOptionGroup<WorkhorseRole>
+public class WorkhorseOptions : AbstractRoleOptionGroup<WorkhorseRole>
 {
     public override string GroupName => "Workhorse";
 

@@ -4,7 +4,7 @@ using DivaniMods.Roles.Impostor.ImpostorSupport;
 
 namespace DivaniMods.Options;
 
-public class CouncillorOptions : AbstractOptionGroup<CouncillorRole>
+public class CouncillorOptions : AbstractRoleOptionGroup<CouncillorRole>
 {
     public override string GroupName => "Councillor";
 

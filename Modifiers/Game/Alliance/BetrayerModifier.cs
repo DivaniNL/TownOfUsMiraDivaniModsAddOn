@@ -19,9 +19,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Alliance;
 
-public sealed class BetrayerModifier : AllianceGameModifier, IColoredModifier, IWikiDiscoverable, IContinuesGame
+public sealed class BetrayerModifier : AllianceGameModifier, IWikiDiscoverable, IContinuesGame
 {
     public static readonly Color BetrayerColor = new Color32(186, 113, 255, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        BetrayerColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.BetrayerIcon.LoadAsset(),
+            "DivaniMod.Modifier.Alliance.Betrayer", 1.45f));
 
     public override string ModifierName => "Betrayer";
     public override string LocaleKey => "Betrayer";

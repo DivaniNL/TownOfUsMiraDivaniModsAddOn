@@ -5,7 +5,7 @@ using DivaniMods.Roles.Crewmate.CrewmateSupport;
 
 namespace DivaniMods.Options;
 
-public class LocatorOptions : AbstractOptionGroup<LocatorRole>
+public class LocatorOptions : AbstractRoleOptionGroup<LocatorRole>
 {
     public override string GroupName => "Locator";
 

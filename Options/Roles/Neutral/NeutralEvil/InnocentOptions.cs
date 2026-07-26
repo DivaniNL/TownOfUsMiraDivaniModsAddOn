@@ -6,7 +6,7 @@ using DivaniMods.Roles.Neutral.NeutralEvil;
 
 namespace DivaniMods.Options;
 
-public class InnocentOptions : AbstractOptionGroup<InnocentRole>
+public class InnocentOptions : AbstractRoleOptionGroup<InnocentRole>
 {
     public override string GroupName => "Innocent";
 

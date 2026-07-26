@@ -14,9 +14,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Universal;
 
-public class MementoModifier : UniversalGameModifier, IColoredModifier, IWikiDiscoverable
+public class MementoModifier : UniversalGameModifier, IWikiDiscoverable
 {
     public static readonly Color MementoColor = new Color32(0x61, 0x78, 0xED, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        MementoColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.MementoIcon.LoadAsset(),
+            "DivaniMod.Modifier.Universal.Memento", 1.45f));
 
     public static readonly Dictionary<byte, RoleTypes> RoleBeforeDeath = new();
 

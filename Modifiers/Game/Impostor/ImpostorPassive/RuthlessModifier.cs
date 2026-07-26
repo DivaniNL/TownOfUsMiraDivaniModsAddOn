@@ -11,9 +11,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Impostor.ImpostorPassive;
 
-public class RuthlessModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
+public class RuthlessModifier : TouGameModifier, IWikiDiscoverable
 {
     public static readonly Color RuthlessColor = Palette.ImpostorRoleHeaderRed;
+    public override ModifierUiConfiguration Configuration => new(
+        RuthlessColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.RuthlessIcon.LoadAsset(),
+            "DivaniMod.Modifier.Impostor.Ruthless", 1.45f));
     public override string ModifierName => "Ruthless";
     public override string LocaleKey => "Ruthless";
     public override string IntroInfo => "Your kills bypass shields.";

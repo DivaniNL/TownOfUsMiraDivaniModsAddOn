@@ -11,7 +11,7 @@ public enum MosquitoTargetMode
     PlayerSelection,
 }
 
-public class MosquitoOptions : AbstractOptionGroup<MosquitoRole>
+public class MosquitoOptions : AbstractRoleOptionGroup<MosquitoRole>
 {
     public override string GroupName => "Mosquito";
 

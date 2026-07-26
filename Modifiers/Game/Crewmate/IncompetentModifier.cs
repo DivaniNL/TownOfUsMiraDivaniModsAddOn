@@ -12,9 +12,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Crewmate;
 
-public class IncompetentModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
+public class IncompetentModifier : TouGameModifier, IWikiDiscoverable
 {
     public static readonly Color IncompetentColor = new Color32(119, 90, 112, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        IncompetentColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.IncompetentIcon.LoadAsset(),
+            "DivaniMod.Modifier.Crewmate.Incompetent", 1.45f));
 
     public override string ModifierName => "Incompetent";
     public override string LocaleKey => "Incompetent";
