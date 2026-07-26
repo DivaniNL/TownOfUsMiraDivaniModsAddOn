@@ -41,7 +41,7 @@ internal static class PerfectCommsVoiceIntegration
         });
 
         PerfectCommsApi.RegisterVoicePairRule(Mod, ctx =>
-            ctx.Listener.Data?.Role is VengefulSoulRole
+            ctx.SpeakerIsDead && ctx.Listener.Data?.Role is VengefulSoulRole
                 ? VoicePairResult.Mute("Vengeful Soul")
                 : VoicePairResult.Pass);
     }
