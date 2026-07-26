@@ -26,7 +26,7 @@ public sealed class RecruiterRole(IntPtr cppPtr)
     public string LocaleKey => "Recruiter";
     public string RoleDescription => "Pick your partner!";
     public string RoleLongDescription =>
-        "In any meeting, recruit a non-Impostor to become an Impostor once.";
+        "In any meeting, recruit a non-Impostor to become a Recruit once. The Recruit joins the Impostors and picks a new Impostor role.";
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorPower;
@@ -40,7 +40,7 @@ public sealed class RecruiterRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Recruit", "During the first meeting, mark one non-Impostor to convert them into an vanilla Impostor.", DivaniAssets.RecruitMeetingImpostor)
+        new("Recruit", "During a meeting, mark one non-Impostor to convert them into a Recruit.", DivaniAssets.RecruitMeetingImpostor)
     ];
 
     public CustomRoleConfiguration Configuration => new(this)

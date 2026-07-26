@@ -13,6 +13,7 @@ using MiraAPI.Roles;
 using Reactor.Networking.Attributes;
 using DivaniMods.Options;
 using DivaniMods.Roles.Impostor.ImpostorPower;
+using TownOfUs.Utilities;
 
 namespace DivaniMods.Patches;
 
@@ -78,8 +79,8 @@ public static class RecruiterPatch
 
             if (isHost)
             {
-                target!.RpcSetRole(RoleTypes.Impostor, true);
-                PendingRecruitFollowUpIds.Add(target.PlayerId);
+                target!.RpcChangeRole(RoleId.Get<RecruitRole>());
+                PendingRecruitFollowUpIds.Add(target!.PlayerId);
                 if (PlayerControl.LocalPlayer != null)
                 {
                     RpcRecruitImpostorFollowUp(PlayerControl.LocalPlayer, target.PlayerId);
