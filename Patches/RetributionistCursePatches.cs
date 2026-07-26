@@ -65,8 +65,6 @@ internal static class RetributionistCursePatches
         }
     }
 
-    // A cursed killer cannot use ability buttons that would let it slip the hunt: every
-    // Impostor Concealing ability, plus the Glitch's mimic. The kill button is always allowed.
     internal static bool ShouldCurseDisable(CustomActionButton button)
     {
         if (button is IKillButton)

@@ -101,7 +101,6 @@ public static class OpportunistPatch
             return;
         }
 
-        // Only the first vote per meeting counts as the Opportunist's chosen target.
         if (opp.VotedThisMeeting)
         {
             return;

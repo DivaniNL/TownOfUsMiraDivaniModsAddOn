@@ -111,6 +111,7 @@ public static class RetributionistRpc
 
     private static IEnumerator CoRevenge(PlayerControl soul, PlayerControl killer)
     {
+        var soulId = soul.PlayerId;
         var cause = "Retaliated";
 
         DeathHandlerModifier.UpdateDeathHandlerImmediate(
@@ -136,7 +137,8 @@ public static class RetributionistRpc
 
         var revivePos = (Vector2)soul.transform.position;
         var roleWhenAlive = RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<RetributionistRole>());
-        RetributionistManager.EndRevenge(soul.PlayerId);
+        RetributionistManager.MarkReviveInProgress(soulId);
+        RetributionistManager.EndRevenge(soulId);
 
         if (killer.Data != null && !killer.Data.IsDead &&
             AmongUsClient.Instance && AmongUsClient.Instance.AmHost)
@@ -157,6 +159,17 @@ public static class RetributionistRpc
             notificationIcon: DivaniAssets.RetributionistIcon.LoadAsset());
 
         ReviveHeartbrokenLover(soul, revivePos);
+
+        var waited = 0f;
+        while (waited < 5f && soul != null && soul.Data != null && soul.HasDied())
+        {
+            waited += Time.deltaTime;
+            yield return null;
+        }
+
+        yield return null;
+
+        RetributionistManager.ClearReviveInProgress(soulId);
     }
 
     private static void ReviveHeartbrokenLover(PlayerControl soul, Vector2 revivePos)

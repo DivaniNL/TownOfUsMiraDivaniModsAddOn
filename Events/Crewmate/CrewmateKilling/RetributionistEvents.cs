@@ -124,6 +124,7 @@ public static class RetributionistEvents
     public static void OnStartMeeting(StartMeetingEvent evt)
     {
         RetributionistManager.ClearAllRevengePending();
+        RetributionistManager.PurgeDisconnected();
 
         if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
         {
