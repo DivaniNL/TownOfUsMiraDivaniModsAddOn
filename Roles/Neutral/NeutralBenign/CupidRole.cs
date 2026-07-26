@@ -62,6 +62,7 @@ public sealed class CupidRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.CupidIcon.LoadAsset(), "DivaniMod.Role.Neutral.Cupid", 1.45f),
         OptionsScreenshot = DivaniAssets.CupidBanner,
         Icon = DivaniAssets.CupidIcon,
         IntroSound = DivaniAssets.CupidIntroSound,

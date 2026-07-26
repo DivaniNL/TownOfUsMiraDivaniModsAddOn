@@ -57,6 +57,7 @@ public sealed class VengefulSoulRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.RetributionistIcon.LoadAsset(), "DivaniMod.Role.Crewmate.Retributionist", 1.45f),
         Icon = DivaniAssets.RetributionistIcon,
         HideSettings = true,
         CanModifyChance = false,

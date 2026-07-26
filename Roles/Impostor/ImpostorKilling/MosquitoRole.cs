@@ -36,6 +36,7 @@ public sealed class MosquitoRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.MosquitoIcon.LoadAsset(), "DivaniMod.Role.Impostor.Mosquito", 1.45f),
         OptionsScreenshot = DivaniAssets.MosquitoBanner,
         UseVanillaKillButton = false,
         Icon = DivaniAssets.MosquitoIcon,

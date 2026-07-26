@@ -39,6 +39,7 @@ public sealed class CouncillorRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.CouncillorIcon.LoadAsset(), "DivaniMod.Role.Impostor.Councillor", 1.45f),
         Icon = DivaniAssets.CouncillorIcon,
         IntroSound = DivaniAssets.CouncillorIntroSound,
         MaxRoleCount = 1,

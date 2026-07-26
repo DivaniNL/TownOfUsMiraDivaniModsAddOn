@@ -52,6 +52,7 @@ public sealed class TelecomRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.TelecomIcon.LoadAsset(), "DivaniMod.Role.Crewmate.Telecom", 1.45f),
         Icon = DivaniAssets.TelecomIcon,
         IntroSound = DivaniAssets.TelecomIntroSound,
         MaxRoleCount = 1,

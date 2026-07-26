@@ -34,6 +34,7 @@ public sealed class PortalmakerRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.PortalmakerIcon.LoadAsset(), "DivaniMod.Role.Crewmate.Portalmaker", 1.45f),
         OptionsScreenshot = DivaniAssets.PortalmakerBanner,
         Icon = DivaniAssets.PortalmakerIcon,
         IntroSound = DivaniAssets.PortalMakerIntroSound,

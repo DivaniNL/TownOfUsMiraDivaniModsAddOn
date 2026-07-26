@@ -71,6 +71,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.PlagueDoctorIcon.LoadAsset(), "DivaniMod.Role.Neutral.PlagueDoctor", 1.45f),
         CanUseVent = OptionGroupSingleton<PlagueDoctorOptions>.Instance.CanVent,
         Icon = DivaniAssets.PlagueDoctorIcon,
         IntroSound = DivaniAssets.PlagueDoctorIntroSound,

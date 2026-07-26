@@ -38,6 +38,7 @@ public sealed class DeadlockRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.DeadlockIcon.LoadAsset(), "DivaniMod.Role.Impostor.Deadlock", 1.45f),
         OptionsScreenshot = DivaniAssets.DeadlockBanner,
         Icon = DivaniAssets.DeadlockIcon,
         IntroSound = DivaniAssets.DeadlockIntroSound,

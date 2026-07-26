@@ -54,6 +54,7 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.DemolitionistIcon.LoadAsset(), "DivaniMod.Role.Neutral.Demolitionist", 1.45f),
         OptionsScreenshot = DivaniAssets.DemolitionistBanner,
         Icon = DivaniAssets.DemolitionistIcon,
         IntroSound = DivaniAssets.DemolitionistIntroSound,

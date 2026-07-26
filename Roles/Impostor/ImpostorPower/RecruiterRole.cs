@@ -45,6 +45,7 @@ public sealed class RecruiterRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.RecruiterIcon.LoadAsset(), "DivaniMod.Role.Impostor.Recruiter", 1.45f),
         Icon = DivaniAssets.RecruiterIcon,
         IntroSound = DivaniAssets.RecruiterIntroSound,
         MaxRoleCount = 1,
