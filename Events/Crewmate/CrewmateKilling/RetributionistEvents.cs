@@ -67,6 +67,11 @@ public static class RetributionistEvents
             return false;
         }
 
+        if (ExileController.Instance)
+        {
+            return false;
+        }
+
         var opts = OptionGroupSingleton<RetributionistOptions>.Instance;
         if (opts.TurnIntoSoulOnce && RetributionistManager.UsedRevenge.Contains(target.PlayerId))
         {
