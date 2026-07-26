@@ -15,11 +15,6 @@ internal static class PerfectCommsVoiceIntegration
     {
         PerfectCommsApi.RegisterVoicePairRule(Mod, ctx =>
         {
-            if (ctx.ListenerIsDead)
-            {
-                return VoicePairResult.Pass;
-            }
-
             var speakerDueling = ctx.Speaker.TryGetModifier<DuelModifier>(out var speakerDuel);
             var listenerDueling = ctx.Listener.TryGetModifier<DuelModifier>(out var listenerDuel);
 
@@ -30,12 +25,19 @@ internal static class PerfectCommsVoiceIntegration
                 return VoicePairResult.Route(VoicePairRouteShape.Radio, reason: "Duel");
             }
 
-            if (speakerDueling || listenerDueling)
+            if (!speakerDueling && !listenerDueling)
             {
-                return VoicePairResult.Mute("Duel");
+                return VoicePairResult.Pass;
             }
 
-            return VoicePairResult.Pass;
+            if (ctx.ListenerIsDead)
+            {
+                return speakerDueling
+                    ? VoicePairResult.Route(VoicePairRouteShape.Radio, reason: "Duel")
+                    : VoicePairResult.Pass;
+            }
+
+            return VoicePairResult.Mute("Duel");
         });
 
         PerfectCommsApi.RegisterVoicePairRule(Mod, ctx =>
