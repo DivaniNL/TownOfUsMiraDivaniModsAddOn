@@ -1,15 +1,28 @@
 using MiraAPI.Events;
+using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Player;
+using MiraAPI.GameEnd;
 using MiraAPI.Modifiers;
 using MiraAPI.Roles;
+using DivaniMods.GameOver;
 using DivaniMods.Modifiers.Crewmate.CrewmatePower;
 using DivaniMods.Networking.Crewmate.CrewmatePower;
 using DivaniMods.Roles.Crewmate.CrewmatePower;
+using TownOfUs.Modifiers.Game.Alliance;
 
 namespace DivaniMods.Events.Crewmate.CrewmatePower;
 
 public static class WorkhorseEvents
 {
+    [RegisterEvent]
+    public static void OnRoundStart(RoundStartEvent @event)
+    {
+        if (@event.TriggeredByIntro)
+        {
+            WorkhorseRole.CrewpostorTaskWin = false;
+        }
+    }
+
     [RegisterEvent]
     public static void OnCompleteTask(CompleteTaskEvent @event)
     {
@@ -21,14 +34,25 @@ public static class WorkhorseEvents
 
         workhorse.CheckRevealProgress();
 
-        if (!AmongUsClient.Instance.AmHost || !HasFinishedTasks(player))
+        if (!HasFinishedTasks(player))
         {
             return;
         }
 
         if (player.HasModifier<TasklisttwoModifier>())
         {
-            GameManager.Instance.RpcEndGame(GameOverReason.CrewmatesByTask, false);
+            WorkhorseRole.CrewpostorTaskWin = player.HasModifier<CrewpostorModifier>();
+
+            if (AmongUsClient.Instance.AmHost)
+            {
+                TriggerTaskWin(player);
+            }
+
+            return;
+        }
+
+        if (!AmongUsClient.Instance.AmHost)
+        {
             return;
         }
 
@@ -48,6 +72,21 @@ public static class WorkhorseEvents
             .FirstOrDefault(x => x.Player != null && x.Revealed);
 
         workhorse?.RemoveArrowForPlayer(@event.Player.PlayerId);
+    }
+
+    private static void TriggerTaskWin(PlayerControl player)
+    {
+        if (player.HasModifier<EgotistModifier>())
+        {
+            CustomGameOver.Trigger<WorkhorseGameOver>([player.Data]);
+            return;
+        }
+
+        var reason = player.HasModifier<CrewpostorModifier>()
+            ? GameOverReason.ImpostorsBySabotage
+            : GameOverReason.CrewmatesByTask;
+
+        GameManager.Instance.RpcEndGame(reason, false);
     }
 
     private static bool HasFinishedTasks(PlayerControl player)

@@ -12,6 +12,7 @@ using DivaniMods.Modifiers.Crewmate.CrewmatePower;
 using DivaniMods.Options;
 using TownOfUs;
 using TownOfUs.Extensions;
+using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
@@ -23,6 +24,8 @@ public sealed class WorkhorseRole(IntPtr cppPtr)
     : CrewmateRole(cppPtr), ITouCrewRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color WorkhorseColor = new Color32(0x92, 0xD4, 0xDA, 255);
+
+    private static string ColoredName => $"{WorkhorseColor.ToTextColor()}Workhorse</color>";
 
     public bool IsPowerCrew => OptionGroupSingleton<WorkhorseOptions>.Instance.ContinuesGame;
 
@@ -38,6 +41,9 @@ public sealed class WorkhorseRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<uint> SecondListTaskIds { get; } = [];
     public bool Revealed { get; private set; }
+
+    // Set on every client when a Crewpostor Workhorse finishes their second list, consumed at game end.
+    public static bool CrewpostorTaskWin { get; set; }
 
     private Dictionary<byte, ArrowBehaviour>? _evilArrows;
     [HideFromIl2Cpp] public ArrowBehaviour? RevealArrow { get; private set; }
@@ -95,12 +101,15 @@ public sealed class WorkhorseRole(IntPtr cppPtr)
             ShowNotification("Your work is not done. A second task list awaits!");
         }
         else if (OptionGroupSingleton<WorkhorseOptions>.Instance.NotifyEvilsOnFirstList &&
-                 IsEvilTarget(PlayerControl.LocalPlayer))
+                 IsRevealTarget(PlayerControl.LocalPlayer))
         {
             Coroutines.Start(MiscUtils.CoFlash(WorkhorseColor, alpha: 0.5f));
-            ShowNotification("The Workhorse has finished their first task list!");
+            ShowNotification($"The {ColoredName} has finished their first task list!");
         }
     }
+
+    public bool IsAlliedWithEvils =>
+        Player && (Player.HasModifier<EgotistModifier>() || Player.HasModifier<CrewpostorModifier>());
 
     public void CheckRevealProgress()
     {
@@ -119,28 +128,59 @@ public sealed class WorkhorseRole(IntPtr cppPtr)
 
         if (Player.AmOwner)
         {
-            CreateEvilArrows();
+            RevealOpponents();
         }
-        else if (IsEvilTarget(PlayerControl.LocalPlayer))
+        else if (IsRevealTarget(PlayerControl.LocalPlayer))
         {
-            CreateRevealingArrow();
+            RevealToOpponent();
         }
     }
 
-    private void CreateRevealingArrow()
+    // Who gets warned that the Workhorse is nearly done: everyone the Workhorse would beat.
+    public bool IsRevealTarget(PlayerControl player)
     {
-        if (RevealArrow != null)
+        if (player == null || player.Data == null || player.Data.Role == null)
         {
-            return;
+            return false;
         }
 
+        if (Player.HasModifier<CrewpostorModifier>())
+        {
+            return !player.IsImpostorAligned();
+        }
+
+        return Player.HasModifier<EgotistModifier>() ? !IsEvilTarget(player) : IsEvilTarget(player);
+    }
+
+    private void RevealToOpponent()
+    {
         Player.AddModifier<WorkhorseRevealModifier>();
         PlayerNameColor.Set(Player);
         Coroutines.Start(MiscUtils.CoFlash(WorkhorseColor, alpha: 0.5f));
 
-        RevealArrow = MiscUtils.CreateArrow(Player.transform, WorkhorseColor);
+        if (!IsAlliedWithEvils)
+        {
+            RevealArrow = MiscUtils.CreateArrow(Player.transform, WorkhorseColor);
+        }
 
-        ShowNotification("The Workhorse is almost done! You must stop him, NOW!");
+        ShowNotification(IsEvilTarget(PlayerControl.LocalPlayer)
+            ? $"The {ColoredName} is almost done! You must stop him, NOW!"
+            : $"The {ColoredName} is almost done! Your job is to vote them out, NOW!");
+    }
+
+    private void RevealOpponents()
+    {
+        Coroutines.Start(MiscUtils.CoFlash(WorkhorseColor, alpha: 0.5f));
+
+        if (IsAlliedWithEvils)
+        {
+            ShowNotification("You've been exposed! Everyone who loses to you knows who you are now!");
+            return;
+        }
+
+        CreateEvilArrows();
+
+        ShowNotification("The evils know who you are now, but you can see them now too!");
     }
 
     private void CreateEvilArrows()
@@ -151,7 +191,6 @@ public sealed class WorkhorseRole(IntPtr cppPtr)
         }
 
         _evilArrows = new Dictionary<byte, ArrowBehaviour>();
-        Coroutines.Start(MiscUtils.CoFlash(WorkhorseColor, alpha: 0.5f));
 
         foreach (var evil in Helpers.GetAlivePlayers().Where(IsEvilTarget))
         {
@@ -160,8 +199,6 @@ public sealed class WorkhorseRole(IntPtr cppPtr)
             PlayerNameColor.Set(evil);
             evil.AddModifier<WorkhorseEvilRevealModifier>();
         }
-
-        ShowNotification("The evils know who you are now, but you can see them now too!");
     }
 
     public void RemoveArrowForPlayer(byte playerId)
@@ -211,7 +248,7 @@ public sealed class WorkhorseRole(IntPtr cppPtr)
     private static void ShowNotification(string text)
     {
         var notif = MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b>{WorkhorseColor.ToTextColor()}{text}</color></b>",
+            $"<b>{text}</b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.WorkhorseIcon.LoadAsset());

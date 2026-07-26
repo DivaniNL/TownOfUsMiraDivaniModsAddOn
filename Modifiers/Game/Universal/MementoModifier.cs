@@ -5,6 +5,7 @@ using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
+using DivaniMods.Roles.Neutral.NeutralEvil;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
@@ -47,7 +48,7 @@ public class MementoModifier : UniversalGameModifier, IWikiDiscoverable
 
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        return base.IsModifierValidOn(role) && role is not RetributionistRole;
+        return base.IsModifierValidOn(role) && role is not RetributionistRole && role is not InnocentRole;
     }
 
     public override void OnActivate()

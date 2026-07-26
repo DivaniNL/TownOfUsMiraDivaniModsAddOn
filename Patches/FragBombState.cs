@@ -9,6 +9,7 @@ using MiraAPI.Networking;
 using MiraAPI.Utilities;
 using Reactor.Utilities;
 using DivaniMods.Assets;
+using DivaniMods.Events.Misc;
 using DivaniMods.Options;
 using DivaniMods.Buttons.Neutral.NeutralKilling;
 using DivaniMods.Roles.Neutral.NeutralKilling;
@@ -274,6 +275,7 @@ public static class FragBombState
     private static bool TryBlockExplosionIfBeforeMurderCancelled(PlayerControl frag, PlayerControl holder)
     {
         if (holder.PlayerId == frag.PlayerId) return false;
+        if (VeteranAlertPierceEvents.CanPierceVeteranAlert(frag, holder)) return false;
 
         _beforeMurderShieldProbeDepth++;
         try

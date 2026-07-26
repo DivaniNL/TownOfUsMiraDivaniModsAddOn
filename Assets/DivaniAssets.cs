@@ -66,6 +66,7 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{IconPath}.Innocent.png", 200);
     public static LoadableAsset<Sprite> OpportunistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Opportunist.png", 200);
     public static LoadableAsset<Sprite> RecruiterIcon { get; } = new LoadableResourceAsset($"{IconPath}.Recruiter.png");
+    public static LoadableAsset<Sprite> RecruitIcon { get; } = new LoadableResourceAsset($"{IconPath}.Recruit.png", 200);
     public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{IconPath}.Sentinel.png", 200);
     public static LoadableAsset<Sprite> DemolitionistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Demolitionist.png", 200);
     public static LoadableAsset<Sprite> DomesmithIcon { get; } = new LoadableResourceAsset($"{IconPath}.Domesmith.png", 200);

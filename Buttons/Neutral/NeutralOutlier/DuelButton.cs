@@ -9,6 +9,7 @@ using DivaniMods.Networking.Neutral.NeutralOutlier;
 using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralOutlier;
 using TownOfUs.Buttons;
+using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Modifiers.Neutral;
 using TownOfUs.Utilities;
@@ -33,6 +34,7 @@ public sealed class DuelButton : TownOfUsRoleButton<DuelistRole>, IDiseaseableBu
     private static bool IsValidTarget(PlayerControl? plr, PlayerControl me) =>
         plr != null && plr.Data != null && !plr.Data.Disconnected && !plr.HasDied()
         && plr.PlayerId != me.PlayerId && !plr.HasModifier<DuelModifier>()
+        && !plr.HasModifier<FirstDeadShield>()
         && plr.PlayerId != me.GetModifier<LoverModifier>()?.OtherLover?.PlayerId;
 
     public override bool CanUse()
