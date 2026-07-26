@@ -25,7 +25,7 @@ namespace DivaniMods.Roles.Neutral.NeutralOutlier;
 public sealed class DuelistRole(IntPtr cppPtr)
     : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IContinuesGame, IUnlovable
 {
-    public static readonly Color DuelistColor = new Color32(125, 112, 95, 255);
+    public static readonly Color DuelistColor = new Color32(244, 237, 90, 255);
 
     public string RoleName => "Duelist";
     public string RoleDescription => "ITS TIME TO D-D-D-DUEL";
