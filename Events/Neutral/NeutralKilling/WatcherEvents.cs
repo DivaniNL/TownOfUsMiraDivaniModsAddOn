@@ -14,6 +14,15 @@ namespace DivaniMods.Events.Neutral.NeutralKilling;
 public static class WatcherEvents
 {
     [RegisterEvent]
+    public static void RoundStartHandler(RoundStartEvent @event)
+    {
+        if (@event.TriggeredByIntro)
+        {
+            CustomButtonSingleton<WatcherWatchButton>.Instance?.ResetCharges();
+        }
+    }
+
+    [RegisterEvent]
     public static void AfterMurderHandler(AfterMurderEvent @event)
     {
         var killer = @event.Source;

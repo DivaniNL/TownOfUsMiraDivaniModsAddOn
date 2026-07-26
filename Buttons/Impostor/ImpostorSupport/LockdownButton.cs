@@ -29,23 +29,19 @@ public class LockdownButton : TownOfUsButton
     
     public static int ChargesPerKill => (int)OptionGroupSingleton<DeadlockOptions>.Instance.ChargesPerKill.Value;
     
-    private int _currentCharges = -1;
-    
-    public int CurrentCharges
+    public int CurrentCharges => UsesLeft;
+
+    private void ApplyUses(int amount)
     {
-        get
+        if (Button == null)
         {
-            if (_currentCharges < 0)
-            {
-                _currentCharges = MaxUses;
-            }
-            return _currentCharges;
+            UsesLeft = Mathf.Max(0, amount);
+            return;
         }
-        set
-        {
-            _currentCharges = value;
-            SetUses(value);
-        }
+
+        SetUses(amount);
+        Button.usesRemainingText.gameObject.SetActive(true);
+        Button.usesRemainingSprite.gameObject.SetActive(true);
     }
 
     public override bool Enabled(RoleBehaviour? role)
@@ -61,10 +57,7 @@ public class LockdownButton : TownOfUsButton
 
         if (!base.CanUse()) return false;
 
-        SetUses(CurrentCharges);
-
-        bool hasCharges = CurrentCharges > 0 || MaxUses == 0;
-        return hasCharges && ((Timer <= 0 && !EffectActive) || (EffectActive && Timer <= EffectDuration - 2f));
+        return (Timer <= 0 && !EffectActive) || (EffectActive && Timer <= EffectDuration - 2f);
     }
     
     public override bool IsEffectCancellable() => Timer <= EffectDuration - 2f;
@@ -102,11 +95,11 @@ public class LockdownButton : TownOfUsButton
         
         if (!EffectActive)
         {
-            if (MaxUses > 0)
+            if (UsesLeft > 0)
             {
-                CurrentCharges--;
+                ApplyUses(UsesLeft - 1);
             }
-            
+
             var duration = OptionGroupSingleton<DeadlockOptions>.Instance.LockdownDuration.Value;
             RpcStartLockdown(player, duration);
         }
@@ -210,13 +203,14 @@ public class LockdownButton : TownOfUsButton
     
     public void AddCharges(int amount)
     {
-        if (amount <= 0) return;
-        
-        CurrentCharges += amount;
+        if (amount != 0)
+        {
+            ApplyUses(UsesLeft + amount);
+        }
     }
-    
+
     public void ResetCharges()
     {
-        _currentCharges = -1;
+        ApplyUses(MaxUses);
     }
 }

@@ -24,26 +24,23 @@ public sealed class WatcherWatchButton : TownOfUsButton, IDiseaseableButton
     public override Color TextOutlineColor => WatcherRole.WatcherColor;
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
 
-    private int _currentCharges = -1;
     private int _killsTowardCharge;
 
     public int KillsTowardCharge => _killsTowardCharge;
 
-    public int CurrentCharges
+    public int CurrentCharges => UsesLeft;
+
+    private void ApplyUses(int amount)
     {
-        get
+        if (Button == null)
         {
-            if (_currentCharges < 0)
-            {
-                _currentCharges = MaxUses;
-            }
-            return _currentCharges;
+            UsesLeft = Mathf.Max(0, amount);
+            return;
         }
-        set
-        {
-            _currentCharges = value;
-            SetUses(value);
-        }
+
+        SetUses(amount);
+        Button.usesRemainingText.gameObject.SetActive(true);
+        Button.usesRemainingSprite.gameObject.SetActive(true);
     }
 
     public override bool Enabled(RoleBehaviour? role)
@@ -59,16 +56,16 @@ public sealed class WatcherWatchButton : TownOfUsButton, IDiseaseableButton
 
     public void AddCharges(int amount)
     {
-        if (amount > 0)
+        if (amount != 0)
         {
-            CurrentCharges += amount;
+            ApplyUses(UsesLeft + amount);
         }
     }
 
     public void ResetCharges()
     {
-        _currentCharges = -1;
         _killsTowardCharge = 0;
+        ApplyUses(MaxUses);
     }
 
     public void AccrueKill()
@@ -115,8 +112,7 @@ public sealed class WatcherWatchButton : TownOfUsButton, IDiseaseableButton
             return false;
         }
 
-        SetUses(CurrentCharges);
-        return CurrentCharges > 0 && Timer <= 0;
+        return Timer <= 0;
     }
 
     public override void ClickHandler()
@@ -128,9 +124,9 @@ public sealed class WatcherWatchButton : TownOfUsButton, IDiseaseableButton
 
         OnClick();
 
-        if (CurrentCharges > 0)
+        if (UsesLeft > 0)
         {
-            CurrentCharges--;
+            ApplyUses(UsesLeft - 1);
         }
     }
 
