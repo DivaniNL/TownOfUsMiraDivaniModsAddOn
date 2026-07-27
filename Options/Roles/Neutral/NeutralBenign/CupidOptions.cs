@@ -23,7 +23,7 @@ public enum CupidBecomeOptions
     CupidDies
 }
 
-public class CupidOptions : AbstractOptionGroup<CupidRole>
+public class CupidOptions : AbstractRoleOptionGroup<CupidRole>
 {
     public override string GroupName => "Cupid";
 

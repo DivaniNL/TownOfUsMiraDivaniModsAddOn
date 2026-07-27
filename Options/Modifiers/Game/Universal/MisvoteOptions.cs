@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace DivaniMods.Options;
 
-public class MisvoteOptions : AbstractOptionGroup<MisvoteModifier>
+public class MisvoteOptions : AbstractTouModifierOptionGroup<MisvoteModifier>
 {
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
     public override string GroupName => "Misvote";

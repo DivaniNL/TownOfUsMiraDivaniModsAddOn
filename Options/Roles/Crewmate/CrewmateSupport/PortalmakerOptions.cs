@@ -6,7 +6,7 @@ using DivaniMods.Roles.Crewmate.CrewmateSupport;
 
 namespace DivaniMods.Options;
 
-public class PortalmakerOptions : AbstractOptionGroup<PortalmakerRole>
+public class PortalmakerOptions : AbstractRoleOptionGroup<PortalmakerRole>
 {
     public override string GroupName => "Portalmaker";
 

@@ -13,9 +13,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Neutral.NeutralPassive;
 
-public sealed class SniperModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
+public sealed class SniperModifier : TouGameModifier, IWikiDiscoverable
 {
     public static readonly Color SniperColor = new Color32(155, 165, 160, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        SniperColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.SniperIcon.LoadAsset(),
+            "DivaniMod.Modifier.Neutral.Sniper", 1.45f));
     public const float MaxSniperDistance = 2.5f;
 
     public override string ModifierName => "Sniper";

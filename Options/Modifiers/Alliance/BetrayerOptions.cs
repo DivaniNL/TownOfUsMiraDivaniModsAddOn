@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DivaniMods.Options;
 
-public sealed class BetrayerOptions : AbstractOptionGroup<BetrayerModifier>
+public sealed class BetrayerOptions : AbstractTouModifierOptionGroup<BetrayerModifier>
 {
     public override string GroupName => "Betrayer";
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;

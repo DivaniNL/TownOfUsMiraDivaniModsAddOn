@@ -11,9 +11,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Crewmate;
 
-public sealed class BearTrapModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
+public sealed class BearTrapModifier : TouGameModifier, IWikiDiscoverable
 {
     public static readonly Color BearTrapColor = new Color32(210, 125, 45, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        BearTrapColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.BearTrapIcon.LoadAsset(),
+            "DivaniMod.Modifier.Crewmate.BearTrap", 1.45f));
 
     public override string ModifierName => "Bear Trap";
     public override string IntroInfo => "Trap your killer upon death.";

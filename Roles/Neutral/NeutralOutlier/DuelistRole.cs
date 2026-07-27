@@ -53,6 +53,7 @@ public sealed class DuelistRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.DuelistIcon.LoadAsset(), "DivaniMod.Role.Neutral.Duelist", 1.45f),
         OptionsScreenshot = DivaniAssets.DuelistBanner,
         Icon = DivaniAssets.DuelistIcon,
         IntroSound = DivaniAssets.DuelistIntroSound,

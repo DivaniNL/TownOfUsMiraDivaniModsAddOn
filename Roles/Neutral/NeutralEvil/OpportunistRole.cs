@@ -70,6 +70,7 @@ public sealed class OpportunistRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.OpportunistIcon.LoadAsset(), "DivaniMod.Role.Neutral.Opportunist", 1.45f),
         Icon = DivaniAssets.OpportunistIcon,
         IntroSound = DivaniAssets.OpportunistIntroSound,
         GhostRole = (RoleTypes)RoleId.Get<NeutralGhostRole>(),

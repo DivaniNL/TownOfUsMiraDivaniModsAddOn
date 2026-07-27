@@ -11,9 +11,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Impostor.ImpostorPassive;
 
-public class NullifiedModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
+public class NullifiedModifier : TouGameModifier, IWikiDiscoverable
 {
     public static readonly Color NullifiedColor = Palette.ImpostorRoleHeaderRed;
+    public override ModifierUiConfiguration Configuration => new(
+        NullifiedColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.NullifiedIcon.LoadAsset(),
+            "DivaniMod.Modifier.Impostor.Nullified", 1.45f));
     public override string ModifierName => "Nullified";
     public override string LocaleKey => "Nullified";
     public override string IntroInfo => "You are immune to kill debuffs.";

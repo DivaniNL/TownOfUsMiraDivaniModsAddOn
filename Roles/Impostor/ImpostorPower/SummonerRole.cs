@@ -70,6 +70,7 @@ public sealed class SummonerRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.SummonerIcon.LoadAsset(), "DivaniMod.Role.Impostor.Summoner", 1.45f),
         OptionsScreenshot = DivaniAssets.SummonerBanner,
         Icon = DivaniAssets.SummonerIcon,
         IntroSound = DivaniAssets.SummonerIntroSound,

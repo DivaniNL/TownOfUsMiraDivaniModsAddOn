@@ -5,7 +5,7 @@ using DivaniMods.Roles.Neutral.NeutralKilling;
 
 namespace DivaniMods.Options;
 
-public class WatcherOptions : AbstractOptionGroup<WatcherRole>
+public class WatcherOptions : AbstractRoleOptionGroup<WatcherRole>
 {
     public override string GroupName => "Watcher";
 

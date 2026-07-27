@@ -6,7 +6,7 @@ using TownOfUs.Extensions;
 
 namespace DivaniMods.Options;
 
-public class RecruiterOptions : AbstractOptionGroup<RecruiterRole>
+public class RecruiterOptions : AbstractRoleOptionGroup<RecruiterRole>
 {
     public override string GroupName => "Recruiter";
 

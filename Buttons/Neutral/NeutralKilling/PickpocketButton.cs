@@ -1,8 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
@@ -28,9 +25,9 @@ using TownOfUs.Interfaces;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
-using TownOfUs.Modifiers.Game.Neutral;
 using TownOfUs.Modifiers.Neutral;
 using TownOfUs.Modifiers.Game.Alliance;
+using TownOfUs.Modifiers.Game.Assailant;
 using TownOfUs.Utilities;
 using TownOfUs.Utilities.Appearances;
 using UnityEngine;
@@ -375,8 +372,8 @@ public class PickpocketButton : TownOfUsButton
     {
         return modifier switch
         {
-            AssassinModifier => GetRegisteredId(typeof(NeutralKillerAssassinModifier)),
-            DoubleShotModifier => GetRegisteredId(typeof(NeutralKillerDoubleShotModifier)),
+            AssassinModifier => GetRegisteredId(typeof(AssassinModifier)),
+            DoubleShotModifier => GetRegisteredId(typeof(DoubleShotModifier)),
             _ => modifier.TypeId,
         };
     }
@@ -388,10 +385,10 @@ public class PickpocketButton : TownOfUsButton
             return typeId;
 
         if (typeof(AssassinModifier).IsAssignableFrom(type))
-            return GetRegisteredId(typeof(NeutralKillerAssassinModifier));
+            return GetRegisteredId(typeof(AssassinModifier));
 
         if (typeof(DoubleShotModifier).IsAssignableFrom(type))
-            return GetRegisteredId(typeof(NeutralKillerDoubleShotModifier));
+            return GetRegisteredId(typeof(DoubleShotModifier));
 
         return typeId;
     }
@@ -433,7 +430,7 @@ public class PickpocketButton : TownOfUsButton
         if (grantedType != null && typeof(DoubleShotModifier).IsAssignableFrom(grantedType) &&
             !thief.GetModifiers<BaseModifier>().Any(m => m is AssassinModifier))
         {
-            var assassinId = GetRegisteredId(typeof(NeutralKillerAssassinModifier));
+            var assassinId = GetRegisteredId(typeof(AssassinModifier));
             if (assassinId != 0)
             {
                 ids.Add(assassinId);
@@ -466,7 +463,7 @@ public class PickpocketButton : TownOfUsButton
         if (thief.GetModifiers<BaseModifier>().Any(m => m is AssassinModifier))
             return;
 
-        var assassinId = GetRegisteredId(typeof(NeutralKillerAssassinModifier));
+        var assassinId = GetRegisteredId(typeof(AssassinModifier));
         if (assassinId != 0)
         {
             thief.AddModifier(assassinId);

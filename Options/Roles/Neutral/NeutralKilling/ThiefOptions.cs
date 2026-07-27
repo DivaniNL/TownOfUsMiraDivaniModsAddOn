@@ -6,7 +6,7 @@ using DivaniMods.Roles.Neutral.NeutralKilling;
 
 namespace DivaniMods.Options;
 
-public class ThiefOptions : AbstractOptionGroup<ThiefRole>
+public class ThiefOptions : AbstractRoleOptionGroup<ThiefRole>
 {
     public override string GroupName => "Thief";
 

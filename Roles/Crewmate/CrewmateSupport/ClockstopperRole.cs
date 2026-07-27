@@ -36,6 +36,7 @@ public sealed class ClockstopperRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.ClockstopperIcon.LoadAsset(), "DivaniMod.Role.Crewmate.Clockstopper", 1.45f),
         OptionsScreenshot = DivaniAssets.ClockstopperBanner,
         Icon = DivaniAssets.ClockstopperIcon,
         IntroSound = DivaniAssets.ClockstopperIntroSound,

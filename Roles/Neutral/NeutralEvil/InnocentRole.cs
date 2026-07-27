@@ -55,6 +55,7 @@ public sealed class InnocentRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.InnocentIcon.LoadAsset(), "DivaniMod.Role.Neutral.Innocent", 1.45f),
         OptionsScreenshot = DivaniAssets.InnocentBanner,
         Icon = DivaniAssets.InnocentIcon,
         IntroSound = DivaniAssets.InnocentIntroSound,

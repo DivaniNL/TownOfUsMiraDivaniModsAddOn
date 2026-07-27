@@ -5,6 +5,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralOutlier;
+using TownOfUs.Modules.Components;
 using TownOfUs.Options;
 using TownOfUs.Patches;
 using TownOfUs.Utilities;
@@ -12,7 +13,7 @@ using UnityEngine;
 
 namespace DivaniMods.Patches;
 
-[HarmonyPatch(typeof(HudManagerPatches), nameof(HudManagerPatches.UpdateRoleNameText))]
+[HarmonyPatch(typeof(HudManagerHelper), nameof(HudManagerHelper.UpdateRoleNameText))]
 public static class DuelistNameCounterPatch
 {
     [HarmonyPostfix]

@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DivaniMods.Options;
 
-public sealed class BloodyOptions : AbstractOptionGroup<BloodyModifier>
+public sealed class BloodyOptions : AbstractTouModifierOptionGroup<BloodyModifier>
 {
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
 

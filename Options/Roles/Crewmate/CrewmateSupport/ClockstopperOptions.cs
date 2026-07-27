@@ -6,7 +6,7 @@ using DivaniMods.Roles.Crewmate.CrewmateSupport;
 
 namespace DivaniMods.Options;
 
-public class ClockstopperOptions : AbstractOptionGroup<ClockstopperRole>
+public class ClockstopperOptions : AbstractRoleOptionGroup<ClockstopperRole>
 {
     public override string GroupName => "Clockstopper";
 

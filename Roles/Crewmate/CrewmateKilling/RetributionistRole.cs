@@ -51,6 +51,7 @@ public sealed class RetributionistRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.RetributionistIcon.LoadAsset(), "DivaniMod.Role.Crewmate.Retributionist", 1.45f),
         OptionsScreenshot = DivaniAssets.RetributionistBanner,
         Icon = DivaniAssets.RetributionistIcon,
         IntroSound = DivaniAssets.RetributionistIntroSound,
