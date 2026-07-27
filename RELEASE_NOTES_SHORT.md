@@ -3,8 +3,8 @@
 > [!NOTE]
 > Not guaranteed to work on Town Of Us versions newer than 1.6.2.
 
-★ [Download v1.3.4](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.4)
-★ [Wiki](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki)
+[Download v1.3.4](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.4)
+[Wiki](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki)
 
 ## Reworks
 
