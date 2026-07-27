@@ -1,3 +1,5 @@
+using DivaniMods.Assets;
+using DivaniMods.Modifiers.Game.Alliance;
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.OptionTypes;
 using MiraAPI.Utilities;
@@ -14,12 +16,35 @@ public sealed class AllianceModifierOptions : AbstractOptionGroup
     public override MenuCategory ParentMenu => MenuCategory.Modifiers;
     public override uint GroupPriority => 0;
 
-    public ModdedNumberOption BetrayerAmount { get; } = new(
-        "Betrayer Amount", 1f, 0f, 3f, 1f, MiraNumberSuffixes.None);
+    public AmountChanceOption BetrayerAmount { get; } = new(
+        "Betrayer Amount", 1f, 0f, 3f, 1f,
+        color: BetrayerModifier.BetrayerColor, asset: DivaniAssets.BetrayerIcon,
+        assetName: "DivaniMod.Modifier.Alliance.Betrayer", assetScale: 1.45f)
+    {
+        ChangedEvent = _betrayerNotif,
+    };
 
-    public ModdedNumberOption BetrayerChance { get; } =
-        new("Betrayer Chance", 0f, 0f, 100f, 10f, MiraNumberSuffixes.Percent)
+    public AmountChanceOption BetrayerChance { get; } =
+        new("Betrayer Chance", 0f, 0f, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
+            color: BetrayerModifier.BetrayerColor, asset: DivaniAssets.BetrayerIcon,
+            assetName: "DivaniMod.Modifier.Alliance.Betrayer", assetScale: 1.45f)
         {
+            ChangedEvent = _betrayerNotif,
             Visible = () => OptionGroupSingleton<AllianceModifierOptions>.Instance.BetrayerAmount.Value > 0
         };
+    
+    private static Action<float> _betrayerNotif = x =>
+    {
+        var optAmount = OptionGroupSingleton<AllianceModifierOptions>.Instance.BetrayerAmount;
+        var opt = OptionGroupSingleton<AllianceModifierOptions>.Instance.BetrayerChance;
+        RunNotif(opt, optAmount, "Betrayer");
+    };
+    private static void RunNotif(AmountChanceOption opt, AmountChanceOption optAmount, string title)
+    {
+        opt.AddSettingsChangeMessage(HudManager.Instance.Notifier,
+            opt.StringName,
+            title,
+            optAmount.Data.GetValueString(optAmount.Value),
+            opt.Data.GetValueString(opt.Value));
+    }
 }
