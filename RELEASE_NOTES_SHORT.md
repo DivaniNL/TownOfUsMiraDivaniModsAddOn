@@ -41,7 +41,7 @@ You were right, Thief was too evil as a Crewmate. Now has a kill button and an o
 
 ## Coming in 1.3.5
 - Support for Town of Us Mira 1.7.0
-
+- A setting to have a max amount of total modifiers
 ---
 
 This is the short version. For the full release notes, with every option and detail per role, check the [v1.3.4 release page](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.4) or the [wiki](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki).
