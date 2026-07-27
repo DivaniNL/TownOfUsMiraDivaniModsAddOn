@@ -119,6 +119,19 @@ public sealed class MoleRole(IntPtr cppPtr)
         return role is not PlumberRole && role.CanVent;
     }
 
+    public static bool IsBlockedByPlumber(Vent? vent)
+    {
+        if (vent == null)
+        {
+            return false;
+        }
+
+        var ventId = vent.Id;
+        return PlumberRole.VentBlockList.Contains(ventId) ||
+               PlumberRole.VentFlushList.Contains(ventId) ||
+               PlumberRole.VentsBlocked.Any(x => x.Key == ventId);
+    }
+
     public static bool CanUseMoleVents(PlayerControl player)
     {
         if (player.HasModifier<CursedModifier>())
@@ -178,7 +191,7 @@ public sealed class MoleRole(IntPtr cppPtr)
         }
 
         vent.Id = ventId;
-        vent.transform.position = new Vector3(position.x, position.y, zAxis + 0.001f);
+        vent.transform.position = new Vector3(position.x, position.y, zAxis + 0.003f);
 
         if (mole.Vents.Count > 0)
         {

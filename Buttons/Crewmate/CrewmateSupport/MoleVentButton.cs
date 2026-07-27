@@ -25,6 +25,12 @@ public sealed class MoleVentButton : TownOfUsTargetButton<Vent>
 
     public override bool Enabled(RoleBehaviour? role)
     {
+        var local = PlayerControl.LocalPlayer;
+        if (local == null || local.Data == null || local.HasDied())
+        {
+            return false;
+        }
+
         if (role is MoleRole)
         {
             return true;
@@ -71,7 +77,7 @@ public sealed class MoleVentButton : TownOfUsTargetButton<Vent>
         foreach (var vent in ShipStatus.Instance.AllVents)
         {
             if (!vent.name.StartsWith("MoleVent") || !vent.gameObject.activeSelf ||
-                (!isMole && !vent.myRend.enabled))
+                (!isMole && !vent.myRend.enabled) || MoleRole.IsBlockedByPlumber(vent))
             {
                 continue;
             }

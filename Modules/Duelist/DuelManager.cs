@@ -24,7 +24,7 @@ public enum DuelOutcome : byte
 
 public static class DuelManager
 {
-    public const float TieWindow = 0.15f;
+    public const float TieWindow = 0.10f;
 
     private static readonly Dictionary<byte, int> Wins = new();
     private static readonly Dictionary<byte, int> Losses = new();
@@ -70,6 +70,8 @@ public static class DuelManager
 
     public static void SanctionKill(byte killer, byte victim) => Sanctioned[killer] = victim;
 
+    public static bool IsDuelUnresolved => ActiveDuelers.Count > 0 || Sanctioned.Count > 0;
+
     public static void HostBeginResolve(PlayerControl striker, PlayerControl opponent)
     {
         if (!PlayerControl.LocalPlayer.IsHost())
@@ -102,7 +104,9 @@ public static class DuelManager
         Resolving.Remove(a.PlayerId);
         Resolving.Remove(b.PlayerId);
 
-        if (a == null || b == null || !a.TryGetModifier<DuelModifier>(out var am) || !b.HasModifier<DuelModifier>())
+        if (a == null || b == null || !a.TryGetComponent<ModifierComponent>(out _) ||
+            !b.TryGetComponent<ModifierComponent>(out _) ||
+            !a.TryGetModifier<DuelModifier>(out var am) || !b.HasModifier<DuelModifier>())
         {
             yield break;
         }
@@ -325,12 +329,19 @@ public static class DuelManager
     {
         yield return new WaitForSeconds(0.5f);
 
-        if (winner.TryGetModifier<DuelModifier>(out var winnerMod))
+        if (winner == null || loser == null || AmongUsClient.Instance == null ||
+            AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started)
+        {
+            yield break;
+        }
+
+        if (winner.TryGetComponent<ModifierComponent>(out _) && winner.TryGetModifier<DuelModifier>(out var winnerMod))
         {
             TeleportBack(winner, winnerMod.ReturnPos);
         }
 
-        if (!loserDied && loser.TryGetModifier<DuelModifier>(out var loserMod))
+        if (!loserDied && loser.TryGetComponent<ModifierComponent>(out _) &&
+            loser.TryGetModifier<DuelModifier>(out var loserMod))
         {
             TeleportBack(loser, loserMod.ReturnPos);
         }
@@ -387,7 +398,8 @@ public static class DuelManager
 
     public static void AbortDuel(PlayerControl player)
     {
-        if (player == null || !player.TryGetModifier<DuelModifier>(out var mod))
+        if (player == null || !player.TryGetComponent<ModifierComponent>(out _) ||
+            !player.TryGetModifier<DuelModifier>(out var mod))
         {
             return;
         }
@@ -473,7 +485,7 @@ public static class DuelManager
         Struck.Remove(player.PlayerId);
         Resolving.Remove(player.PlayerId);
         Sanctioned.Remove(player.PlayerId);
-        if (player.TryGetModifier<DuelModifier>(out var mod))
+        if (player.TryGetComponent<ModifierComponent>(out _) && player.TryGetModifier<DuelModifier>(out var mod))
         {
             player.RemoveModifier(mod);
         }

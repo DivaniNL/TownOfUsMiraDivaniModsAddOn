@@ -14,7 +14,7 @@ public class DemolitionistOptions : AbstractOptionGroup<DemolitionistRole>, IWik
     public override string GroupName => "Demolitionist";
 
     public ModdedNumberOption SabotagesToWin { get; } = new(
-        "Successful Sabotages To Win", 2f, 1f, 4f, 1f, MiraNumberSuffixes.None);
+        "Successful Sabotages To Win", 1f, 1f, 4f, 1f, MiraNumberSuffixes.None);
 
     public ModdedNumberOption PlantCooldown { get; } = new(
         "Plant Cooldown", 30f, 10f, 60f, 5f, MiraNumberSuffixes.Seconds);
@@ -23,25 +23,25 @@ public class DemolitionistOptions : AbstractOptionGroup<DemolitionistRole>, IWik
         "Plant To Sabotage Delay", 3f, 1f, 10f, 1f, MiraNumberSuffixes.Seconds);
 
     public ModdedNumberOption SabotageDurationSkeld { get; } =
-        new("Sabotage Duration (Skeld)", 30f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
+        new("Sabotage Duration (Skeld)", 20f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.Skeld),
         };
 
     public ModdedNumberOption SabotageDurationMiraHQ { get; } =
-        new("Sabotage Duration (MIRA HQ)", 45f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
+        new("Sabotage Duration (MIRA HQ)", 30f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.MiraHq),
         };
 
     public ModdedNumberOption SabotageDurationPolus { get; } =
-        new("Sabotage Duration (Polus)", 60f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
+        new("Sabotage Duration (Polus)", 30f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.Polus),
         };
 
     public ModdedNumberOption SabotageDurationFungle { get; } =
-        new("Sabotage Duration (Fungle)", 60f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
+        new("Sabotage Duration (Fungle)", 45f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.Fungle),
         };

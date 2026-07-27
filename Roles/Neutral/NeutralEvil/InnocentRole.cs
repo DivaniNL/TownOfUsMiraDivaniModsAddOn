@@ -103,19 +103,21 @@ public sealed class InnocentRole(IntPtr cppPtr)
         return console == null || console.AllowImpostor;
     }
 
+    public static bool TauntPiercesShields(PlayerControl? source, PlayerControl? target)
+    {
+        if (source == null || target == null ||
+            !OptionGroupSingleton<InnocentOptions>.Instance.TauntBreaksShields)
+        {
+            return false;
+        }
+
+        return ActiveInnocents.TryGetValue(target.PlayerId, out var innocent) &&
+               innocent.PendingTauntKillerId == source.PlayerId;
+    }
+
     public bool WinConditionMet()
     {
-        if (!TargetVoted && !AboutToWin)
-        {
-            return false;
-        }
-
-        if (WouldImpostorsWin())
-        {
-            return false;
-        }
-
-        return true;
+        return TargetVoted || AboutToWin;
     }
 
     public override bool DidWin(GameOverReason gameOverReason)
@@ -126,35 +128,6 @@ public sealed class InnocentRole(IntPtr cppPtr)
         }
 
         return true;
-    }
-
-    private static bool WouldImpostorsWin()
-    {
-        if (MiscUtils.NKillersAliveCount > 0)
-        {
-            return false;
-        }
-
-        if (MiscUtils.ImpAliveCount > 0 && MiscUtils.CrewKillersAliveCount > 0)
-        {
-            return false;
-        }
-
-        var aliveCount = PlayerControl.AllPlayerControls.ToArray()
-            .Count(p => p != null && p.Data != null && !p.Data.IsDead && !p.Data.Disconnected);
-
-        if (MiscUtils.GameHaltersAliveCount > 0 && aliveCount > 1)
-        {
-            return false;
-        }
-
-        if (MiscUtils.ImpAliveCount <= 0)
-        {
-            return false;
-        }
-
-        var aliveNonImpostors = aliveCount - MiscUtils.ImpAliveCount;
-        return MiscUtils.ImpAliveCount >= aliveNonImpostors;
     }
 
     public static void ClearAndReload()

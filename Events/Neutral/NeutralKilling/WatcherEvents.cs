@@ -14,6 +14,15 @@ namespace DivaniMods.Events.Neutral.NeutralKilling;
 public static class WatcherEvents
 {
     [RegisterEvent]
+    public static void RoundStartHandler(RoundStartEvent @event)
+    {
+        if (@event.TriggeredByIntro)
+        {
+            CustomButtonSingleton<WatcherWatchButton>.Instance?.ResetCharges();
+        }
+    }
+
+    [RegisterEvent]
     public static void AfterMurderHandler(AfterMurderEvent @event)
     {
         var killer = @event.Source;
@@ -24,7 +33,7 @@ public static class WatcherEvents
 
         if (WatcherLightSystem.IsActive)
         {
-            var manual = WatcherLightSystem.ConsumeManualKill(@event.Target.PlayerId);
+            var manual = WatcherLightSystem.IsManualKill(@event.Target.PlayerId);
             if (manual && killer.AmOwner
                 && OptionGroupSingleton<WatcherOptions>.Instance.KillsDuringLightsCount.Value)
             {

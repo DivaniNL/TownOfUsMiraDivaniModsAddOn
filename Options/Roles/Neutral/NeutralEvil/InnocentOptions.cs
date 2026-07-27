@@ -18,4 +18,7 @@ public class InnocentOptions : AbstractOptionGroup<InnocentRole>
 
     [ModdedToggleOption("Taunted Player Can Report Body")]
     public bool TauntedPlayerCanReportBody { get; set; } = false;
+
+    [ModdedToggleOption("Taunts Break Shields")]
+    public bool TauntBreaksShields { get; set; } = true;
 }

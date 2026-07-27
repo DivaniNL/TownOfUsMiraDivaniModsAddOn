@@ -1,11 +1,9 @@
 using MiraAPI.Events;
 using MiraAPI.Events.Mira;
 using MiraAPI.Events.Vanilla.Gameplay;
-using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using DivaniMods.Modifiers.Game.Impostor.ImpostorPassive;
-using DivaniMods.Options;
 using TownOfUs.Buttons;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Neutral;
@@ -40,30 +38,45 @@ public static class RuthlessEvents
             return;
         }
 
-        TryPierceShield(@event, source, target);
+        if (!TryPierceShield(@event, source, target))
+        {
+            return;
+        }
+
+        button?.SetTimer(0f);
+        source.SetKillTimer(0f);
     }
 
-    private static void TryPierceShield(MiraCancelableEvent @event, PlayerControl source, PlayerControl target)
+    public static bool CanPierceShields(PlayerControl source, PlayerControl target)
     {
         if (source == null || target == null || source.PlayerId == target.PlayerId)
         {
-            return;
+            return false;
         }
 
         if (!source.HasModifier<RuthlessModifier>())
         {
-            return;
+            return false;
         }
 
         if (target.HasModifier<InvulnerabilityModifier>())
         {
-            return;
+            return false;
         }
 
-        if (!OptionGroupSingleton<RuthlessOptions>.Instance.BypassFirstDeathShield &&
-            target.HasModifier<FirstDeadShield>())
+        if (target.HasModifier<FirstDeadShield>())
         {
-            return;
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool TryPierceShield(MiraCancelableEvent @event, PlayerControl source, PlayerControl target)
+    {
+        if (!CanPierceShields(source, target))
+        {
+            return false;
         }
 
         if (target.HasModifier<GuardianAngelProtectModifier>())
@@ -72,5 +85,6 @@ public static class RuthlessEvents
         }
 
         @event.UnCancel();
+        return true;
     }
 }

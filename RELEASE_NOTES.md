@@ -1,98 +1,123 @@
-# Divani Mods v1.3.3
-Added Workhorse and Betrayer + Bugfixes
+# Divani Mods v1.3.4
+Reworked roles, balance changes, bug fixes and more
 
 > [!NOTE]
-> This version is not guarenteed to work on Town of Us versions newer then 1.6.2
+> This version is not guaranteed to work on Town of Us versions newer than 1.6.2
 
-## Added
+## Reworks
 
-### Added Role: Workhorse (Crewmate Power)
+### Reworked Role: Opportunist (Neutral Outlier -> Neutral Evil)
 
-A crewmate that gets a set number of extra tasks after they completed their originbal list. Completing this total list can give thye crew an instant Crewmate win, but killers are alerted once you get closer to being done.
+As it ends games, it fits more as a Neutral Evil.
+Also added some balancing changes to it:
 
+- Wildcard option default value is now false
+- New option: "Max Votes Collected Per Meeting". Default set to 5 votes. With big lobbies this will not make the Opportunist win that early anymore. For example, if the votes needed are set to 20 and max votes to 5, the earliest the Opportunist can win now is meeting 4 (if the stars align)
 
-### Added Modifier: Betrayer (Alliance, Impostor only)
+### Reworked Role: Recruiter (Added the hidden role: Recruit)
 
-An Impostor alliance modifier that turns on their own team. They win like a Neutral Killer: be the last killer standing. Impostors will gain information about the Betrayer's identity when only a set number of people are alive or if one impostor is kileld when you have more then 2 impostor aligned people. Betrayers never win with the impostors together.
+- Now changes the role of the recruited shipmate to a specific role (Vanilla imp -> Recruit)
+This role is an Impostor Power
+- This Recruit behaves the same as Traitor. Pick a role from 3 non-Imp Power roles.
+
+### Reworked Role: Thief (Crewmate Power -> Neutral Killing)
+
+Yeah okay, you guys were right. Thief is too evil as a Crewmate.
+
+- Now has a kill button and an optional vent button.
+- Can steal some Impostor modifiers and neutral modifiers (only Sniper at the moment)
+- Won't be able to steal Crewpostor or Egotist anymore
+- Removed the Pickpocket range setting
 
 ## General changes
 
-- Ordered the modifiers in the settings better
+- Fixed a bug where multiple Divani Mods Impostor modifiers could be assigned to one impostor (only 1 imp modifier in total is the standard in TOU)
+- Fixed a bug where the Terminology Divani Mods symbols explanation could not be seen when used with other extension mods
+- Added a tab to the settings part of the wiki which shows the state of the general settings of Divani Mods
 
 ## Bugfixes:
 
 ### Armored
 
-- Attacking Armored did not always set the short cooldown after a failed murder attempt
+- Fixed a bug where the Armored modifier was removed after the shield breaks and was not visible in the end game summary. Now only the hidden modifier is removed.
 
 ### Cupid
 
-- Fixed a bug which caused the game thinking a lover was dead when they were only provisional lovers, causing the Cupid to change roles.
+- Fixed a bug where a lover disconnecting caused the Cupid to change role or die.
 
 ### Duelist
 
-- Fixed a bug which made some skins visible when duellers return to the ship.
-
-### Retributionist
-
-- Fixed a bug where Cursed killers could still hop in a vent. 
-(I tested without taking 'Max players alive when vents disable' into account)
-
-
-
-## Role/Modifier Changes:
-
-### Duelist
-
-- Duelist duels can now result in a tie (0.15s window). Dropped the kill protectiona fter the first successful clikc. THis was not the right way to go.
-
-### Demolitionist
-
-- Added a local setting which disables the alternating colors on the flashes and arrows.
-- Added a better description about what "Consoles" are.
-
-
-### Mage
-- Mage continues the game if there are shock shield charges left.
-- Egotist and Crewpostor Mage are now added. Energize behaves differently when holdign one of those alliance modifiers:
-*Crewpostor Mage energizes:*
-
-Crew → nerf
-Impostors → buff
-Crewpostor/Egotist crewmates → buff
-Neutral Killing / Neutral Evil → nerf
-Neutral Benign → option (EnergizeNeutralBenign: Buff / Debuff / None)
-
-
-*Egotist Mage energizes:*
-
-Crew → nerf
-Impostors → buff
-Crewpostor/Egotist crewmates → buff
-Neutral Killing / Neutral Evil → buff ← only diff vs Crewpostor
-Neutral Benign → option
+- Fixed a bug which made Duelist not leave victorious correctly like Inquisitor
 
 ### Mole
 
-- Who can enter mole vents. Defautl cvhanged to include all players
-- Enable the host to allow the mole from getting more vents after completing tasks
-- Added a cooldown for mole vent usage and a set time anyone can be in a mole vent (only for roles that normally cannot vent + Mole itself)
-
-### Thief and Sprout
-
-- Random giving will now only include modifiers set enabled by the host
+- Fixed a bug where the Mole vents ignored actions done by the Plumber (Block, Flush)
+- Fixed a bug where dead people could see the Mole Vent Button
 
 ### Retributionist
 
-- Added option for it to continue game (Default false)
+- Fixed a bug where a Vengeful Soul could see the game chat
+- Fixed a bug where ambushing a Retributionist made the Ambusher invisible for the remainder of the round.
+- Fixed a bug causing the Retributionist to start a revenge after being killed by the Hunter
+- Fixed a bug which made Visual modifiers (Mini, Giant) not being re-applied after a revive (Successful revenge)
+- Fixed a bug where winning the 1v1 as the Vengeful Soul would result in a Draw
 
+### Watcher
 
-### Portalmaker
+- Fixed a bug where the initial charges were not applied correctly (no use at start). If I have to believe the code this could also happen to Mosquito and Deadlock. Now not anymore.
+- Fixed a bug where Watcher plays gunshots on ghosts moving if "Ghostwalkers Must Freeze" is set to false
 
-- Added better placements for the portals (Not near tasks, consoles, doors, walls)
-- Made sure the regular Use button will overrule the portal button ( No more stuck behind polus doors)
-- Made sure clicking on the portal will use the portal
-- Made the behaviour with pet button more stable
-- Added a cooldown on the use portal button.
+## Role/Modifier Changes:
 
-TEST MOLE NON VENTERS
+### Armored
+
+- Armored now resets the killer's buttons to the full timer instead of the short one.
+
+### Duelist
+
+- Duelist tie window reduced (0.15 -> 0.10)
+- Duelers are excluded from others in PerfectComms (also Duelers can hear each other on the entire map)
+- Duelist has a changed icon and role color
+- Duelist can no longer Duel players holding the first death shield
+
+### Frag
+
+- Made Veterans on alert die to Frag now, as this can be abused
+- Added a setting to make Cleric defuse arming and active Frags
+
+### Innocent
+
+- Innocent now always solo wins, no longer together with imps in the top 4. (rewarding to stay alive long)
+- Innocent now makes their lover partner win after winning. (Do you want to take the risk??)
+- Innocent now has a setting to make a killer go through your shield (Ruthless like)
+- Innocent can no longer be assigned Armored and Memento modifiers
+- Innocent target symbol is now also shown to people who die in the same round as the Innocent (QoL for the lovers case)
+I know this could affect the game if a ghost sees this and gets revived, but that is fine. Let me know if you people want this reverted.
+
+### Mage
+
+- If killed by a Shock Shield, it will now display as "Zapped"
+- Added "Crewmates" to the option for who can see the Shock Shield
+- Added option to make interactions also be killed by the Shock Shield (like Veteran)
+
+### Retributionist
+
+- Vengeful Souls no longer hear dead players via PerfectComms
+- Moved the revenge button to the left side of the screen (otherwise while spamming you could instantly report as these buttons sit at the same spot most of the time)
+- The speed for the Vengeful Soul can now be set to a lower minimum speed (1.0 -> 0.9)
+- The default setting for the Vengeful Soul speed is also lowered (1.05 -> 1.00)
+- If a killer with a first death shield kills you, you will no longer be able to revenge on that person.
+
+### Ruthless
+
+- Removed the option to break through first death shield (this will no longer happen)
+
+### Watcher
+
+- Watcher Red Light kills no longer trigger Bait reports
+- Watcher Red Light now only makes an alerted Veteran protect itself, not strike back
+
+### Workhorse
+
+- Crewpostor Workhorse now makes the Impostors win
+- Egotist Workhorse generates a "Workhorse Win" containing the Ego Workhorse, all Impostors and Neutral Killers

@@ -67,4 +67,5 @@ public enum DivaniRpcCalls : uint
     DuelistStrike = 259,
     DuelistResolveDuel = 260,
     WorkhorseGrantSecondList = 261,
+    FragDefused = 262,
 }

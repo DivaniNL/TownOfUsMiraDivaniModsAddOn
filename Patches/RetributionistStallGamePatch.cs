@@ -1,5 +1,6 @@
 using HarmonyLib;
 using MiraAPI.GameOptions;
+using MiraAPI.Networking;
 using DivaniMods.Events.Crewmate.CrewmateKilling;
 using DivaniMods.Options;
 using TownOfUs.Patches;
@@ -10,10 +11,10 @@ namespace DivaniMods.Patches;
 internal static class RetributionistStallGamePatch
 {
     private static bool ShouldStall =>
-        OptionGroupSingleton<RetributionistOptions>.Instance.StallGame &&
-        RetributionistManager.AnyRevengeActive;
+        RetributionistManager.AnyReviveInProgress ||
+        (OptionGroupSingleton<RetributionistOptions>.Instance.StallGame &&
+         RetributionistManager.AnyRevengeActive);
 
-    // Blocks the vanilla end-game logic (impostor majority, crew by tasks, ...).
     [HarmonyPatch(typeof(LogicGameFlowNormal), nameof(LogicGameFlowNormal.CheckEndCriteria))]
     [HarmonyPriority(Priority.First)]
     [HarmonyPrefix]
@@ -22,8 +23,20 @@ internal static class RetributionistStallGamePatch
         return !ShouldStall;
     }
 
-    // Returning false above only skips the original method, not TownOfUs' own prefix, which is
-    // where custom win conditions (Betrayer, neutrals, lovers) are evaluated and triggered.
+    [HarmonyPatch(typeof(LogicGameFlowPatches), nameof(LogicGameFlowPatches.CheckEndCriteriaPatch))]
+    [HarmonyPriority(Priority.First)]
+    [HarmonyPrefix]
+    public static bool TouCheckEndCriteriaPrefix(ref bool __result)
+    {
+        if (!ShouldStall)
+        {
+            return true;
+        }
+
+        __result = false;
+        return false;
+    }
+
     [HarmonyPatch(typeof(WinConditionRegistry), nameof(WinConditionRegistry.TryEvaluate))]
     [HarmonyPriority(Priority.First)]
     [HarmonyPrefix]
@@ -38,11 +51,18 @@ internal static class RetributionistStallGamePatch
         return false;
     }
 
-    // Same reason: TownOfUs' prefix can still call RpcEndGame directly before ours takes effect.
     [HarmonyPatch(typeof(GameManager), nameof(GameManager.RpcEndGame))]
     [HarmonyPriority(Priority.First)]
     [HarmonyPrefix]
     public static bool RpcEndGamePrefix()
+    {
+        return !ShouldStall;
+    }
+
+    [HarmonyPatch(typeof(CustomGameOverRpc), nameof(CustomGameOverRpc.Handle))]
+    [HarmonyPriority(Priority.First)]
+    [HarmonyPrefix]
+    public static bool CustomGameOverHandlePrefix()
     {
         return !ShouldStall;
     }

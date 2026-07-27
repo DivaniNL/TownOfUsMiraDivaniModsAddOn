@@ -25,7 +25,7 @@ namespace DivaniMods.Roles.Neutral.NeutralOutlier;
 public sealed class DuelistRole(IntPtr cppPtr)
     : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IContinuesGame, IUnlovable
 {
-    public static readonly Color DuelistColor = new Color32(125, 112, 95, 255);
+    public static readonly Color DuelistColor = new Color32(244, 237, 90, 255);
 
     public string RoleName => "Duelist";
     public string RoleDescription => "ITS TIME TO D-D-D-DUEL";
@@ -69,9 +69,12 @@ public sealed class DuelistRole(IntPtr cppPtr)
 
     public bool HasMetWinGoal => DuelWins >= WinsNeeded;
 
+    public bool VictoryPending => WinType == DuelistWinType.LeaveInVictory && HasMetWinGoal;
+
     public bool IsUnlovable => true;
 
-    public bool ContinuesGame => !Player.HasDied() && WinType == DuelistWinType.WinAlone && Helpers.GetAlivePlayers().Count <= 3 && (WinsNeeded - DuelWins) <= 2;
+    public bool ContinuesGame => !Player.HasDied() && Helpers.GetAlivePlayers().Count <= 3 &&
+        (WinsNeeded - DuelWins) <= 2 && (!VictoryPending || DuelManager.IsDuelUnresolved);
 
     public override void SpawnTaskHeader(PlayerControl playerControl)
     {
@@ -110,11 +113,8 @@ public sealed class DuelistRole(IntPtr cppPtr)
         {
             return false;
         }
-        if (WinType == DuelistWinType.WinAlone)
-        {
-            return true;
-        }
-        return MiscUtils.RealKillersAliveCount == 0;
+
+        return WinType == DuelistWinType.WinAlone || Helpers.GetAlivePlayers().Count <= 1;
     }
     public override bool CanUse(IUsable usable)
     {

@@ -86,6 +86,14 @@ public static class MoleVentCanUsePatch
             return;
         }
 
+        if (MoleRole.IsBlockedByPlumber(__instance))
+        {
+            canUse = false;
+            couldUse = false;
+            __result = float.MaxValue;
+            return;
+        }
+
         var hiddenFromPlayer = OptionGroupSingleton<MoleOptions>.Instance.VentVisibility == MoleVentVisibility.AfterUse &&
                                player.Data.Role is not MoleRole && !__instance.myRend.enabled;
 
@@ -119,6 +127,28 @@ public static class MoleVentCanUsePatch
             canUse &= distance <= __instance.UsableDistance &&
                       !PhysicsHelpers.AnythingBetween(player.Collider, center, position, Constants.ShipOnlyMask,
                           false);
+        }
+    }
+}
+
+[HarmonyPatch(typeof(Vent), nameof(Vent.SetButtons))]
+public static class MoleVentBlockedButtonsPatch
+{
+    [HarmonyPostfix]
+    public static void Postfix(Vent __instance, [HarmonyArgument(0)] bool enabled)
+    {
+        if (!enabled || !__instance.name.StartsWith("MoleVent"))
+        {
+            return;
+        }
+
+        var nearbyVents = __instance.NearbyVents;
+        for (var i = 0; i < __instance.Buttons.Length; i++)
+        {
+            if (MoleRole.IsBlockedByPlumber(nearbyVents[i]))
+            {
+                __instance.Buttons[i].gameObject.SetActive(false);
+            }
         }
     }
 }

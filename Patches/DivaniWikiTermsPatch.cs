@@ -10,21 +10,45 @@ using TownOfUs.Modules.Wiki;
 
 namespace DivaniMods.Patches;
 
-[HarmonyPatch(typeof(IngameWikiMinigame), nameof(IngameWikiMinigame.AddNewTerms))]
+[HarmonyPatch(typeof(IngameWikiMinigame))]
 public static class DivaniWikiTermsPatch
 {
     private const string TitleKey = "DivaniTermsTitle";
     private const string DescKey = "DivaniTermsDesc";
 
-    public static void Postfix(IngameWikiMinigame instance)
+    [HarmonyPatch("Awake")]
+    [HarmonyPostfix]
+    public static void AwakePostfix(IngameWikiMinigame __instance)
     {
+        RegisterLocale();
+        AddTerm(__instance);
+    }
+
+    private static void AddTerm(IngameWikiMinigame instance)
+    {
+        if (instance == null || instance._activeTerms == null)
+        {
+            return;
+        }
+
+        if (instance._activeTerms.Any(x => x.Title == TitleKey))
+        {
+            return;
+        }
+
         instance._activeTerms.Add(new TermWikiInfo(TitleKey, DescKey, DivaniAssets.ModNewsLogo));
     }
 
     public static void RegisterLocale()
     {
-        TouLocale.TouLocalization[SupportedLangs.English].TryAdd(TitleKey, "DivaniMods Symbols");
-        TouLocale.TouLocalization[SupportedLangs.English].TryAdd(DescKey,
+        if (!TouLocale.TouLocalization.TryGetValue(SupportedLangs.English, out var english))
+        {
+            english = new Dictionary<string, string>();
+            TouLocale.TouLocalization[SupportedLangs.English] = english;
+        }
+
+        english.TryAdd(TitleKey, "DivaniMods Symbols");
+        english.TryAdd(DescKey,
             "These symbols are the custom symbols from DivaniMods. " +
             $"\n• Infected players (Plague Doctor) are marked with <b>{PlagueDoctorRole.PlagueDoctorColor.ToTextColor()}µ</color></b> " +
             $"\n• Taunted killers (Innocent) are marked with <b>{InnocentRole.InnocentColor.ToTextColor()}⊕</color></b>" +
