@@ -18,7 +18,7 @@ internal static class PerfectCommsVoiceIntegration
             var speakerDueling = ctx.Speaker.TryGetModifier<DuelModifier>(out var speakerDuel);
             var listenerDueling = ctx.Listener.TryGetModifier<DuelModifier>(out var listenerDuel);
 
-            if (speakerDueling && listenerDueling
+            if (speakerDuel != null && listenerDuel != null
                 && speakerDuel.OpponentId == ctx.Listener.PlayerId
                 && listenerDuel.OpponentId == ctx.Speaker.PlayerId)
             {
