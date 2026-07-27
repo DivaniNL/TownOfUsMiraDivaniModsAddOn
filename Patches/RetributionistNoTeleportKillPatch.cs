@@ -5,9 +5,6 @@ using TownOfUs.Modules;
 
 namespace DivaniMods.Patches;
 
-// Any kill landed on a Retributionist never teleports the killer onto the victim. The killer
-// stays where it struck from, avoiding the jarring lunge-onto-the-body that the revenge spawn
-// would otherwise produce. Runs on every client (the confirm RPC handler) so it stays in sync.
 [HarmonyPatch(typeof(CustomMurderRpc), nameof(CustomMurderRpc.RpcConfirmCustomMurder),
     typeof(PlayerControl), typeof(PlayerControl), typeof(PlayerControl), typeof(MurderResultFlags),
     typeof(bool), typeof(bool), typeof(bool), typeof(bool), typeof(bool))]

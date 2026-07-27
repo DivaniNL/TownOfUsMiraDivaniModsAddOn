@@ -35,7 +35,7 @@ public class RuthlessModifier : TouGameModifier, IColoredModifier, IWikiDiscover
     
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        return role.TeamType == RoleTeamTypes.Impostor;
+        return base.IsModifierValidOn(role) && role.TeamType == RoleTeamTypes.Impostor;
     }
     
     public override void OnActivate()

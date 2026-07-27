@@ -11,6 +11,7 @@ using DivaniMods.Modules;
 using DivaniMods.Options;
 using DivaniMods.Roles.Crewmate.CrewmatePower;
 using TownOfUs.Buttons;
+using TownOfUs.Events;
 using TownOfUs.Modifiers;
 
 namespace DivaniMods.Events.Crewmate.CrewmatePower;
@@ -35,7 +36,13 @@ public static class MageEvents
         var button = @event.Button as CustomActionButton<PlayerControl>;
         var target = button?.Target;
 
-        if (source == null || target == null || button is not IKillButton || !button.CanClick())
+        if (source == null || button == null || target == null || !button.CanClick())
+        {
+            return;
+        }
+
+        if (button is not IKillButton &&
+            !OptionGroupSingleton<MageOptions>.Instance.ShockShieldReactsToInteractions.Value)
         {
             return;
         }
@@ -79,6 +86,9 @@ public static class MageEvents
 
         if ((TutorialManager.InstanceExists || source.AmOwner) && !preventAttack)
         {
+            DeathHandlerModifier.UpdateDeathHandlerImmediate(source, "Zapped",
+                DeathEventHandlers.CurrentRound, DeathHandlerOverride.SetTrue,
+                lockInfo: DeathHandlerOverride.SetTrue);
             target.RpcCustomMurder(source, MeetingCheck.OutsideMeeting);
 
             var shield = target.GetModifier<ShockShieldModifier>();

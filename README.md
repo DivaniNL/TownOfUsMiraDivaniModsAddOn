@@ -21,7 +21,6 @@ Join the Discord:
   <img src="./Resources/Headers/CrewPower.png" alt="Crewmate Power"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#mage"><img width="10%" src="./Resources/Icons/Mage.png" alt="Mage"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#workhorse"><img width="10%" src="./Resources/Icons/Workhorse.png" alt="Workhorse"/></a>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#thief"><img width="10%" src="./Resources/Icons/Thief.png" alt="Thief"/></a>
   <img src="./Resources/Headers/CrewProtective.png" alt="Crewmate Protective"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#domesmith"><img width="10%" src="./Resources/Icons/Domesmith.png" alt="Domesmith"/></a>
   <img src="./Resources/Headers/CrewSupport.png" alt="Crewmate Support"/>
@@ -48,13 +47,14 @@ Join the Discord:
   <img src="./Resources/Headers/NeutEvil.png" alt="Neutral Evil"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#demolitionist"><img width="10%" src="./Resources/Icons/Demolitionist.png" alt="Demolitionist"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#innocent"><img width="10%" src="./Resources/Icons/Innocent.png" alt="Innocent"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#opportunist"><img width="10%" src="./Resources/Icons/Opportunist.png" alt="Opportunist"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#plague-doctor"><img width="10%" src="./Resources/Icons/PlagueDoctor.png" alt="Plague Doctor"/></a>
   <img src="./Resources/Headers/NeutKilling.png" alt="Neutral Killing"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#frag"><img width="10%" src="./Resources/Icons/Frag.png" alt="Frag"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#thief"><img width="10%" src="./Resources/Icons/Thief.png" alt="Thief"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#watcher"><img width="10%" src="./Resources/Icons/Watcher.png" alt="Watcher"/></a>
   <img src="./Resources/Headers/NeutOutlier.png" alt="Neutral Outlier"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#duelist"><img width="10%" src="./Resources/Icons/Duellist.png" alt="Duelist"/></a>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#opportunist"><img width="10%" src="./Resources/Icons/Opportunist.png" alt="Opportunist"/></a>
   <img src="./Resources/Headers/AllianceMods.png" alt="Alliance modifiers"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#betrayer"><img width="10%" src="./Resources/Icons/Betrayer.png" alt="Betrayer"/></a>
   <img src="./Resources/Headers/CrewMods.png" alt="Crewmate modifiers"/>
@@ -100,6 +100,7 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 
 | Game Version      | Mod Version | Town Of Us: Mira | Download link |
 | ----------------- | ----------- | ---------------- | ------------- |
+| 17.3 (2026.3.31)  | 1.3.4       | 1.6.0 - 1.6.2    | [v1.3.4](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.4) |
 | 17.3 (2026.3.31)  | 1.3.3       | 1.6.0 - 1.6.2    | [v1.3.3](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.3) |
 | 17.3 (2026.3.31)  | 1.3.2       | 1.6.0 - 1.6.2    | [v1.3.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.2) |
 | 17.3 (2026.3.31)  | 1.3.1       | 1.6.0+           | [v1.3.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.1) |
@@ -134,7 +135,8 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 ## Code Contributors
 
 [Xinav](https://github.com/xinavGit) - [Alliance Modifier support on Clockstopper and Domesmith](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/17)\
-[Espeon](https://github.com/espeon3) - [Workhorse role](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/24)
+[Espeon](https://github.com/espeon3) - [Workhorse role](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/24)\
+[idkimneil](https://github.com/idkimneil) - [PerfectComms fix for Retributionist and Duelist](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/29)
 
 ## Asset credits
 
@@ -152,6 +154,8 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 - @aasteriisken - Telecom
 - @mystic_haze2 - Watcher thought process, Mole, Workhorse, Betrayer
 - @skillrain_ (Luka) - Betrayer
+- @%$#@!&@$! [TOU] - Armored resetting the killer's full cooldown
+- @mcrib - Frag going through Veteran shields
 
 ## Testers
 

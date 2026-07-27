@@ -21,7 +21,7 @@ using TownOfUs.Utilities;
 using UnityEngine;
 using DivaniMods.Assets;
 
-namespace DivaniMods.Roles.Neutral.NeutralOutlier;
+namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class OpportunistRole(IntPtr cppPtr)
     : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, IGuessable
@@ -54,10 +54,14 @@ public sealed class OpportunistRole(IntPtr cppPtr)
         "If enabled by host, use wildcard to make skip votes count towards your tally once.";
     public Color RoleColor => OpportunistColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
-    public RoleAlignment RoleAlignment => RoleAlignment.NeutralOutlier;
+    public RoleAlignment RoleAlignment => RoleAlignment.NeutralEvil;
     public bool HasImpostorVision => false;
 
-    public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
+    public string GetAdvancedDescription() =>
+        $"After you vote a target, every other vote cast on that same target during the meeting counts toward your goal (max: {(int)OptionGroupSingleton<OpportunistOptions>.Instance.MaxVotesPerMeeting.Value}).\n" +
+        "Reach the required number of collected votes to win alone.\n" +
+        "If enabled by host, use wildcard to make skip votes count towards your tally once." +
+        MiscUtils.AppendOptionsText(GetType());
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
@@ -80,7 +84,7 @@ public sealed class OpportunistRole(IntPtr cppPtr)
         }
 
         var task = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
-        task.Text = $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralOutlierTaskHeader")}</color>";
+        task.Text = $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralEvilTaskHeader")}</color>";
         task.name = "NeutralRoleText";
     }
 
@@ -89,8 +93,10 @@ public sealed class OpportunistRole(IntPtr cppPtr)
     {
         var stringB = ITownOfUsRole.SetNewTabText(this);
         var needed = (int)OptionGroupSingleton<OpportunistOptions>.Instance.VotesNeeded.Value;
+        var maxPerMeeting = (int)OptionGroupSingleton<OpportunistOptions>.Instance.MaxVotesPerMeeting.Value;
         var capped = Math.Min(VotesCollected, needed);
         stringB.AppendLine(TownOfUsPlugin.Culture, $"<b>Votes collected: {capped}/{needed}</b>");
+        stringB.AppendLine(TownOfUsPlugin.Culture, $"<b>Max votes per meeting: {maxPerMeeting}</b>");
 
         if (OptionGroupSingleton<OpportunistOptions>.Instance.CanUseWildcard.Value)
         {

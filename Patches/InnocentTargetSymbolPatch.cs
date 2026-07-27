@@ -39,7 +39,7 @@ internal static class InnocentTauntMeetingDisplay
                 continue;
             }
 
-            if (DeathHandlerModifier.IsFullyDead(local))
+            if (MeetingHud.Instance != null ? local.HasDied() : DeathHandlerModifier.IsFullyDead(local))
             {
                 return true;
             }

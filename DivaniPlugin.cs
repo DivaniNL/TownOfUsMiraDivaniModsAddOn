@@ -12,6 +12,7 @@ using DivaniMods.Modules.Localization;
 using DivaniMods.Patches;
 using DivaniMods.Patches.WinConditions;
 using TownOfUs.Patches;
+using DivaniMods.Utilities;
 
 namespace DivaniMods;
 
@@ -20,11 +21,14 @@ namespace DivaniMods;
 [BepInDependency(ReactorPlugin.Id)]
 [BepInDependency("mira.api")]
 [BepInDependency("auavengers.tou.mira", BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency(
+    "com.edgetel.perfectcomms",
+    BepInDependency.DependencyFlags.SoftDependency)]
 [ReactorModFlags(ModFlags.RequireOnAllClients)]
 public class DivaniPlugin : BasePlugin, IMiraPlugin
 {
     public const string Id = "com.divani.mods";
-    public const string Version = "1.3.3";
+    public const string Version = "1.3.4";
     
     public static DivaniPlugin Instance { get; private set; } = null!;
     public new ManualLogSource Log => base.Log;
@@ -49,6 +53,13 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
         DivaniLocale.Register();
         DivaniWikiTermsPatch.RegisterLocale();
         WinConditionRegistry.Register(new BetrayerWinCondition());
+        WinConditionRegistry.Register(new ThiefQuotaDrawWinCondition());
+        WinConditionRegistry.Register(new InnocentLoverWinCondition());
         Log.LogInfo($"Divani Mods v{Version} loaded successfully!");
+        if (!IL2CPPChainloader.Instance.Plugins.ContainsKey(
+                "com.edgetel.perfectcomms"))
+            return;
+
+        PerfectCommsVoiceIntegration.Register();
     }
 }

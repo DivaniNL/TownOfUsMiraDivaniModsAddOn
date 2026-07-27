@@ -13,6 +13,8 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> PlacePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalUse.png", 100);
     public static LoadableAsset<Sprite> UsePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalUse.png", 100);
     public static LoadableAsset<Sprite> PickpocketButton { get; } = new LoadableResourceAsset($"{ShortPath}.PickPocketButton.png");
+    public static LoadableAsset<Sprite> ThiefKillButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefKillButton.png");
+    public static LoadableAsset<Sprite> ThiefVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefVentButton.png");
     public static LoadableAsset<Sprite> PlagueDoctorVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.PDVent.png");
     public static LoadableAsset<Sprite> DemolitionistVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.DemolitionistVent.png");
     public static LoadableAsset<Sprite> FragVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.FragVentButton.png");
@@ -64,6 +66,7 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{IconPath}.Innocent.png", 200);
     public static LoadableAsset<Sprite> OpportunistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Opportunist.png", 200);
     public static LoadableAsset<Sprite> RecruiterIcon { get; } = new LoadableResourceAsset($"{IconPath}.Recruiter.png");
+    public static LoadableAsset<Sprite> RecruitIcon { get; } = new LoadableResourceAsset($"{IconPath}.Recruit.png", 200);
     public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{IconPath}.Sentinel.png", 200);
     public static LoadableAsset<Sprite> DemolitionistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Demolitionist.png", 200);
     public static LoadableAsset<Sprite> DomesmithIcon { get; } = new LoadableResourceAsset($"{IconPath}.Domesmith.png", 200);

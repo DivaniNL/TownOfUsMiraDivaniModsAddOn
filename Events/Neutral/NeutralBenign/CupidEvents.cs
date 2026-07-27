@@ -65,11 +65,11 @@ public static class CupidEvents
 
         foreach (var cupid in CustomRoleUtils.GetActiveRolesOfType<CupidRole>().ToList())
         {
-            CheckLoverDeath(cupid, @event.Player);
+            CheckLoverDeath(cupid, @event.Player, @event.DeathReason);
         }
     }
 
-    private static void CheckLoverDeath(CupidRole cupid, PlayerControl victim)
+    private static void CheckLoverDeath(CupidRole cupid, PlayerControl victim, DeathReason reason)
     {
         if (cupid.Player == null || cupid.Player.HasDied())
         {
@@ -82,6 +82,11 @@ public static class CupidEvents
             {
                 victim.RemoveModifier<CupidToBeLoversModifier>();
             }
+            return;
+        }
+
+        if (reason is not (DeathReason.Exile or DeathReason.Kill))
+        {
             return;
         }
 

@@ -14,6 +14,7 @@ using DivaniMods.Networking.Crewmate.CrewmateProtective;
 using DivaniMods.Options;
 using DivaniMods.Patches;
 using DivaniMods.Roles.Crewmate.CrewmateProtective;
+using DivaniMods.Roles.Neutral.NeutralEvil;
 using TownOfUs.Buttons;
 using TownOfUs.Options;
 using TownOfUs.Utilities;
@@ -158,6 +159,11 @@ public static class DomesmithEvents
         }
 
         if (source.HasModifier<RuthlessModifier>())
+        {
+            return false;
+        }
+
+        if (InnocentRole.TauntPiercesShields(source, target))
         {
             return false;
         }

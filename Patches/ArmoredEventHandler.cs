@@ -35,10 +35,11 @@ public static class ArmoredEventHandler
                     player.RemoveModifier<ArmoredShieldModifier>();
                 }
 
-                player?.RemoveModifier<ArmoredModifier>();
+                mod.RefreshDisplayedAttacks();
 
-                if (player != null && player.AmOwner)
+                if (player != null && player.AmOwner && !mod.NotifiedBroken)
                 {
+                    mod.NotifiedBroken = true;
                     var colorHex = ColorUtility.ToHtmlStringRGB(ArmoredModifier.ArmoredColor);
                     MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                         $"<b><color=#{colorHex}>Your armor is broken</color></b>",
@@ -113,9 +114,8 @@ public static class ArmoredEventHandler
             return;
         }
 
-        var reset = OptionGroupSingleton<GeneralOptions>.Instance.TempSaveCdReset;
-        button?.SetTimer(reset);
-        source.SetKillTimer(reset);
+        button?.ResetCooldownAndOrEffect();
+        source.SetKillTimer(source.GetKillCooldown());
     }
 
     private static bool CheckForArmoredShield(MiraCancelableEvent @event, PlayerControl source, PlayerControl target)

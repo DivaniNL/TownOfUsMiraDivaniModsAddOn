@@ -168,7 +168,7 @@ public sealed class VengefulSoulRole(IntPtr cppPtr)
 
         if (targetPlayer != null)
         {
-            targetPlayer.ResetAppearance(fullReset: true);
+            targetPlayer.ResetAppearance();
             targetPlayer.cosmetics?.ToggleNameVisible(true);
 
             var body = targetPlayer.cosmetics?.currentBodySprite?.BodySprite;

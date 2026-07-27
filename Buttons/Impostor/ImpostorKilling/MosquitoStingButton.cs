@@ -28,23 +28,19 @@ public sealed class MosquitoStingButton : TownOfUsButton, IDiseaseableButton
     public static MosquitoStingButton? Instance { get; private set; }
     public static int ChargesPerKill => (int)OptionGroupSingleton<MosquitoOptions>.Instance.ChargesPerKill.Value;
 
-    private int _currentCharges = -1;
+    public int CurrentCharges => UsesLeft;
 
-    public int CurrentCharges
+    private void ApplyUses(int amount)
     {
-        get
+        if (Button == null)
         {
-            if (_currentCharges < 0)
-            {
-                _currentCharges = MaxUses;
-            }
-            return _currentCharges;
+            UsesLeft = Mathf.Max(0, amount);
+            return;
         }
-        set
-        {
-            _currentCharges = value;
-            SetUses(value);
-        }
+
+        SetUses(amount);
+        Button.usesRemainingText.gameObject.SetActive(true);
+        Button.usesRemainingSprite.gameObject.SetActive(true);
     }
 
     public override bool Enabled(RoleBehaviour? role)
@@ -91,12 +87,10 @@ public sealed class MosquitoStingButton : TownOfUsButton, IDiseaseableButton
     {
         var player = PlayerControl.LocalPlayer;
         if (player == null || player.Data == null || player.Data.IsDead) return false;
+
         if (!base.CanUse()) return false;
 
-        SetUses(CurrentCharges);
-
-        var hasCharges = CurrentCharges > 0 || MaxUses == 0;
-        return hasCharges && GetFarthestTarget(player) != null && Timer <= 0;
+        return GetFarthestTarget(player) != null && Timer <= 0;
     }
 
     public override void ClickHandler()
@@ -141,24 +135,24 @@ public sealed class MosquitoStingButton : TownOfUsButton, IDiseaseableButton
 
     public void AddCharges(int amount)
     {
-        if (amount > 0)
+        if (amount != 0)
         {
-            CurrentCharges += amount;
+            ApplyUses(UsesLeft + amount);
         }
     }
 
     public void ResetCharges()
     {
-        _currentCharges = -1;
+        ApplyUses(MaxUses);
     }
 
     private void FireAndConsume(PlayerControl shooter, PlayerControl target)
     {
         Fire(shooter, target);
 
-        if (MaxUses > 0)
+        if (UsesLeft > 0)
         {
-            CurrentCharges--;
+            ApplyUses(UsesLeft - 1);
         }
     }
 
