@@ -38,9 +38,9 @@
     <EmbeddedResource Include="Resources\**\*" Exclude="Resources\Headers\**" />
   </ItemGroup>
 
-  <!--<Target Name="CopyToPlugins" AfterTargets="Build">
+<Target Name="CopyToPlugins" AfterTargets="Build">
     <Copy SourceFiles="$(OutputPath)DivaniMods.dll" DestinationFolder="$(BepInExPath)\plugins\" />
     <Message Text="Copied $(AssemblyName).dll to BepInEx plugins folder!" Importance="High" />
-  </Target>-->
+  </Target>
 
 </Project>
