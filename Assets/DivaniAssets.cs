@@ -159,6 +159,8 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<AudioClip> WorkhorseIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WorkhorseIntro.wav");
     public static LoadableAsset<AudioClip> TelecomTransmissionSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomTransmiss.wav");
     public static LoadableAsset<AudioClip> TelecomMessageSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomMessageSound.wav");
+    public static LoadableAsset<AudioClip> MonsterDevourSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.MonsterSwallowSound.wav");
+
     // Dutch Meme Soundpack door SFX - used by DutchMemeSoundpackPatch to replace
     // the vanilla door open/close audio clips when the matching lobby toggle is on.
     public static LoadableAsset<AudioClip> DutchDoorOpen { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DoorOpen.wav");
@@ -189,11 +191,7 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableBundleAsset<GameObject> PortalPrefab { get; } = new("Portal.prefab", Bundle);
     public static LoadableBundleAsset<GameObject> ShockShieldPrefab { get; } = new("shockshieldprefab.prefab", Bundle);
     public static LoadableBundleAsset<AnimationClip> FlareHover { get; } = new("FlareHover.anim", Bundle);
-
-    // Monster eat animation bundle - contains the real .anim clip for the eat animation.
-    public static readonly AssetBundle EatBundle = AssetBundleManager.Load("divanimods-eat-bundle");
-    public static LoadableBundleAsset<AnimationClip> MonsterDevourAnim { get; } = new("MonsterEat.anim", EatBundle);
-    public static LoadableAsset<AudioClip> MonsterDevourSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.MonsterSwallowSound.wav");
+    public static LoadableBundleAsset<AnimationClip> MonsterDevourAnim { get; } = new("MonsterEat.anim", Bundle);
     // Announcement badge
     public static LoadableAsset<Sprite> ModNewsLogo { get; } =
         new LoadableResourceAsset($"{ShortPath}.Banners.DivaniModNewsLogo.png", 220f);
