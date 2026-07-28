@@ -29,6 +29,8 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#Mole"><img width="10%" src="./Resources/Icons/Mole.png" alt="Mole"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#portalmaker"><img width="10%" src="./Resources/Icons/PortalMaker.png" alt="Portalmaker"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#telecom"><img width="10%" src="./Resources/Icons/Telecom.png" alt="Telecom"/></a>
+  <img src="./Resources/Headers/ImpAfterlife.png" alt="Impostor Afterlife"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#revenant"><img width="10%" src="./Resources/Icons/Revenant.png" alt="Revenant"/></a>
   <img src="./Resources/Headers/ImpConcealing.png" alt="Impostor Concealing"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#cunctator"><img width="10%" src="./Resources/Icons/Cunctator.png" alt="Cunctator"/></a>
   <img src="./Resources/Headers/ImpKilling.png" alt="Impostor Killing"/>
@@ -37,7 +39,6 @@ Join the Discord:
   <img src="./Resources/Headers/ImpPower.png" alt="Impostor Power"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#obfuscator"><img width="10%" src="./Resources/Icons/Obfuscator.png" alt="Obfuscator"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#recruiter"><img width="10%" src="./Resources/Icons/Recruiter.png" alt="Recruiter"/></a>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#revenant"><img width="10%" src="./Resources/Icons/Revenant.png" alt="Revenant"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#summoner"><img width="10%" src="./Resources/Icons/Summoner.png" alt="Summoner"/></a>
   <img src="./Resources/Headers/ImpSupport.png" alt="Impostor Support"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#councillor"><img width="10%" src="./Resources/Icons/Councillor.png" alt="Councillor"/></a>
