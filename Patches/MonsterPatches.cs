@@ -1,6 +1,9 @@
+using DivaniMods.Buttons.Neutral.NeutralKilling;
 using DivaniMods.Modules.Monster;
+using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralKilling;
 using HarmonyLib;
+using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using TownOfUs.Buttons;
 using TownOfUs.Modifiers.Crewmate;
@@ -49,6 +52,8 @@ public static class MonsterPatches
         {
             if (player != null && player.Data?.Role is MonsterRole && MonsterState.CountHeldBy(player.PlayerId) > 0)
                 MonsterRole.RpcDigest(player);
+                var button = CustomButtonSingleton<MonsterDevourButton>.Instance;
+                button.SetUses((int)OptionGroupSingleton<MonsterOptions>.Instance.MaxDevouredPerRound);
         }
     }
 
