@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
+using DivaniMods.Modules.Monster;
 using DivaniMods.Roles.Crewmate.CrewmateAfterlife;
 using MiraAPI.Modifiers;
 using PerfectComms.Api;
@@ -44,6 +45,27 @@ internal static class PerfectCommsVoiceIntegration
             ctx.SpeakerIsDead && ctx.Listener.Data?.Role is VengefulSoulRole
                 ? VoicePairResult.Mute("Vengeful Soul")
                 : VoicePairResult.Pass);
+
+        PerfectCommsApi.RegisterVoicePairRule(Mod, ctx =>
+        {
+            if (!MonsterState.IsEaten(ctx.Speaker.PlayerId)) return VoicePairResult.Pass;
+
+            var monsterId = MonsterState.MonsterOf(ctx.Speaker.PlayerId);
+            if (ctx.ListenerIsDead || ctx.Listener.PlayerId == monsterId) return VoicePairResult.Pass;
+
+            return VoicePairResult.Mute("Inside the Monster's belly");
+        });
+
+        PerfectCommsApi.RegisterVoiceChannel(Mod, ctx =>
+        {
+            if (MonsterState.CountHeldBy(ctx.Player.PlayerId) > 0)
+                return new VoiceChannelResult($"belly:{ctx.Player.PlayerId}", TwoWay: true, Shape: VoiceAudioShape.Radio);
+
+            var owner = MonsterState.MonsterOf(ctx.Player.PlayerId);
+            return owner != null
+                ? new VoiceChannelResult($"belly:{owner}", TwoWay: true, Shape: VoiceAudioShape.Radio)
+                : null;
+        });
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
