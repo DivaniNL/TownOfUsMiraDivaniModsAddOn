@@ -10,7 +10,7 @@
     <RootNamespace>DivaniMods</RootNamespace>
     <Version>1.3.4</Version>
     <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);MSB3277</MSBuildWarningsAsMessages>
-    <DefaultItemExcludes>$(DefaultItemExcludes);TownOfUs\**\*;TownOfUs-1.6.3\**\*;TOU-Mira-1.6.2\**\*;TouMiraRolesExtension\**\*;TheOtherRolesGMIA-main\**\*;.specstory\**\*</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);TownOfUs\**\*;TouMiraRolesExtension\**\*;TheOtherRolesGMIA-main\**\*;.specstory\**\*</DefaultItemExcludes>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -38,9 +38,9 @@
     <EmbeddedResource Include="Resources\**\*" Exclude="Resources\Headers\**" />
   </ItemGroup>
 
-  <!--<Target Name="CopyToPlugins" AfterTargets="Build">
+  <Target Name="CopyToPlugins" AfterTargets="Build">
     <Copy SourceFiles="$(OutputPath)DivaniMods.dll" DestinationFolder="$(BepInExPath)\plugins\" />
     <Message Text="Copied $(AssemblyName).dll to BepInEx plugins folder!" Importance="High" />
-  </Target>-->
+  </Target>
 
 </Project>

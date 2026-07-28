@@ -12,6 +12,7 @@ using DivaniMods.Options;
 using TownOfUs;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
+using TownOfUs.Options;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
@@ -23,7 +24,8 @@ using TownOfUs.Interfaces;
 namespace DivaniMods.Roles.Neutral.NeutralOutlier;
 
 public sealed class DuelistRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IContinuesGame, IUnlovable
+    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IContinuesGame, IUnlovable,
+        IProgressTally
 {
     public static readonly Color DuelistColor = new Color32(244, 237, 90, 255);
 
@@ -88,6 +90,32 @@ public sealed class DuelistRole(IntPtr cppPtr)
             $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralOutlierTaskHeader")}</color>";
         orCreateTask.name = "NeutralRoleText";
     }
+
+    public string GetDuelTally()
+    {
+        var wins = Math.Min(DuelWins, WinsNeeded);
+        var losses = Math.Min(DuelLosses, LossesToDie);
+        return
+            $"{Color.green.ToTextColor()}({wins}/{WinsNeeded})</color> {Color.red.ToTextColor()}({losses}/{LossesToDie})</color>";
+    }
+
+    public bool ProgressOnName(bool localDead, bool inMeeting, bool amOwner, out string progress)
+    {
+        if (amOwner || (localDead && PlayerControl.LocalPlayer.DiedOtherRound() &&
+                        OptionGroupSingleton<GeneralOptions>.Instance.TheDeadKnow))
+        {
+            progress = GetDuelTally();
+            return true;
+        }
+
+        progress = string.Empty;
+        return false;
+    }
+
+    public string ProgressOnSummaryNormal => GetDuelTally();
+
+    public string ProgressOnSummaryDetailed =>
+        $"Duels won: {Math.Min(DuelWins, WinsNeeded)}/{WinsNeeded} | Duels lost: {Math.Min(DuelLosses, LossesToDie)}/{LossesToDie}";
 
     [HideFromIl2Cpp]
     public StringBuilder SetTabText()

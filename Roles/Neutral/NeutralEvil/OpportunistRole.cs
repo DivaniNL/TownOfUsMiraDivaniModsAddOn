@@ -14,6 +14,7 @@ using TownOfUs.Extensions;
 using TownOfUs.Interfaces;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
+using TownOfUs.Options;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Roles.Neutral;
@@ -24,7 +25,7 @@ using DivaniMods.Assets;
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class OpportunistRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, IGuessable
+    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, IGuessable, IProgressTally
 {
     public static readonly Color OpportunistColor = new Color32(216, 184, 90, 255); // gold
     public static Dictionary<byte, OpportunistRole> ActiveOpportunists { get; } = new();
@@ -88,6 +89,31 @@ public sealed class OpportunistRole(IntPtr cppPtr)
         task.Text = $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralEvilTaskHeader")}</color>";
         task.name = "NeutralRoleText";
     }
+
+    public string GetVoteTally()
+    {
+        var needed = (int)OptionGroupSingleton<OpportunistOptions>.Instance.VotesNeeded.Value;
+        var capped = Math.Min(VotesCollected, needed);
+        return $"{RoleColor.ToTextColor()}({capped}/{needed})</color>";
+    }
+
+    public bool ProgressOnName(bool localDead, bool inMeeting, bool amOwner, out string progress)
+    {
+        if (amOwner || (localDead && PlayerControl.LocalPlayer.DiedOtherRound() &&
+                        OptionGroupSingleton<GeneralOptions>.Instance.TheDeadKnow))
+        {
+            progress = GetVoteTally();
+            return true;
+        }
+
+        progress = string.Empty;
+        return false;
+    }
+
+    public string ProgressOnSummaryNormal => GetVoteTally();
+
+    public string ProgressOnSummaryDetailed =>
+        $"Votes collected: {Math.Min(VotesCollected, (int)OptionGroupSingleton<OpportunistOptions>.Instance.VotesNeeded.Value)}/{(int)OptionGroupSingleton<OpportunistOptions>.Instance.VotesNeeded.Value}";
 
     [HideFromIl2Cpp]
     public StringBuilder SetTabText()

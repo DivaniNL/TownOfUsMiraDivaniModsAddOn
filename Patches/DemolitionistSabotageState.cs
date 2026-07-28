@@ -105,13 +105,16 @@ public static class DemolitionistSabotageState
 
 
 
-    public static void ResetAll()
+    public static void ResetAll(bool clearProgress = true)
 
     {
 
         ClearActiveSabotage();
 
-        SuccessfulSabotages = 0;
+        if (clearProgress)
+        {
+            SuccessfulSabotages = 0;
+        }
 
         DemolitionistId = NoPlayer;
 
