@@ -5,6 +5,11 @@ using DivaniMods.Assets;
 using TownOfUs.Buttons;
 using UnityEngine;
 using TownOfUs.Utilities;
+using MiraAPI.GameOptions;
+using DivaniMods.Options;
+using TownOfUs.Assets;
+using TownOfUs;
+using MiraAPI.LocalSettings;
 
 namespace DivaniMods.Buttons.Neutral.NeutralKilling;
 
@@ -13,7 +18,9 @@ public sealed class MonsterDevourButton : TownOfUsRoleButton<MonsterRole, Player
     public override string Name => "Devour";
     public override float EffectDuration => 0f;
     public override bool HasEffect => false;
+    public override int MaxUses => (int)OptionGroupSingleton<MonsterOptions>.Instance.MaxDevouredPerRound;
     public override Color TextOutlineColor => MonsterRole.MonsterColor;
+    public override bool ShouldPauseInVent => true;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.MonsterDevourButton;
 
     public override float Cooldown
@@ -50,6 +57,25 @@ public sealed class MonsterDevourButton : TownOfUsRoleButton<MonsterRole, Player
         return closest;
     }
 
+    public override void CreateButton(Transform parent)
+    {
+        base.CreateButton(parent);
+
+        Button.usesRemainingSprite.sprite =TouAssets.AbilityCounterPlayerSprite.LoadAsset();
+
+        TownOfUsColors.UseBasic = false;
+        if (TextOutlineColor != Color.clear)
+        {
+            SetTextOutline(TextOutlineColor);
+            Button.usesRemainingSprite.color = TextOutlineColor;
+        }
+
+        TownOfUsColors.UseBasic =
+            LocalSettingsTabSingleton<TownOfUsLocalRoleSettings>.Instance.UseCrewmateTeamColorToggle.Value;
+
+        PassiveComp = Button.GetComponent<PassiveButton>();
+    }
+
     public override bool IsTargetValid(PlayerControl? target)
     {
         if (target == null || target.HasDied() || target.Data == null) return false;
@@ -72,5 +98,9 @@ public sealed class MonsterDevourButton : TownOfUsRoleButton<MonsterRole, Player
         if (player == null || Target == null) return;
 
         MonsterRole.RpcEat(player, Target.PlayerId);
+        if (LimitedUses)
+            {
+                Button?.SetUsesRemaining(UsesLeft);
+            }
     }
 }
