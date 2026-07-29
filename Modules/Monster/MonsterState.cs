@@ -9,6 +9,7 @@ using Reactor.Utilities;
 using System.Collections;
 using TownOfUs.Modules;
 using TownOfUs.Modules.ControlSystem;
+using TownOfUs.Networking;
 using TownOfUs.Roles.Impostor;
 using TownOfUs.Utilities;
 using UnityEngine;
@@ -19,6 +20,7 @@ public static class MonsterState
 {
     private static readonly Dictionary<byte, List<byte>> stomachs = [];
     private static readonly Dictionary<byte, byte> eatenBy = [];
+    private static readonly HashSet<byte> pendingDigestSort = [];
     private static IEnumerator? spectateRoutine;
 
     public static bool IsEaten(byte playerId) => eatenBy.ContainsKey(playerId);
@@ -111,6 +113,10 @@ public static class MonsterState
         }
     }
 
+    public static List<byte> PendingDigestSortIds() => pendingDigestSort.ToList();
+
+    public static void ClearPendingDigestSort(byte victimId) => pendingDigestSort.Remove(victimId);
+
     public static void DigestAll(byte MonsterId)
     {
         if (!stomachs.TryGetValue(MonsterId, out var victims)) return;
@@ -134,9 +140,8 @@ public static class MonsterState
                 var collider = victim.GetComponent<Collider2D>();
                 if (collider != null) collider.enabled = true;
 
-                victim.Die(DeathReason.Kill, false);
-                if (Monster != null)
-                    MiraEventManager.InvokeEvent(new AfterMurderEvent(Monster, victim, null));
+                Monster.RpcSpecialMurder(victim,true,true,true,false,false,false,false,true,"Monster");
+                pendingDigestSort.Add(victimId);
 
                 if (victim.AmOwner) EndSpectating();
             }
@@ -210,8 +215,21 @@ public static class MonsterState
     public static void ResetAll()
     {
         EndSpectating();
+
+        foreach (var victimId in eatenBy.Keys.ToList())
+        {
+            var victim = MiscUtils.PlayerById(victimId);
+            if (victim == null) continue;
+
+            victim.Visible = true;
+            victim.moveable = true;
+            var collider = victim.GetComponent<Collider2D>();
+            if (collider != null) collider.enabled = true;
+        }
+
         stomachs.Clear();
         eatenBy.Clear();
+        pendingDigestSort.Clear();
     }
 
     private static void BreakControllingEffects(PlayerControl victim)

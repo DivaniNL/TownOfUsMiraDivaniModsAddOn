@@ -5,6 +5,8 @@ using DivaniMods.Roles.Neutral.NeutralKilling;
 using HarmonyLib;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
+using Reactor.Utilities;
+using System.Collections;
 using TownOfUs.Buttons;
 using TownOfUs.Modifiers.Crewmate;
 using TownOfUs.Roles.Impostor;
@@ -28,31 +30,56 @@ public static class MonsterPatches
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.ReportDeadBody))]
     [HarmonyPrefix]
+    [HarmonyPriority(Priority.First)]
     public static bool ReportDeadBodyPrefix(PlayerControl __instance)
         => !MonsterState.IsEaten(__instance.PlayerId);
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CmdReportDeadBody))]
     [HarmonyPrefix]
+    [HarmonyPriority(Priority.First)]
     public static bool CmdReportDeadBodyPrefix(PlayerControl __instance)
         => !MonsterState.IsEaten(__instance.PlayerId);
 
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.StartMeeting))]
-    [HarmonyPrefix]
-    [HarmonyPriority(Priority.First)]
-    public static void StartMeetingPrefix() => DigestEveryone();
-
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
-    [HarmonyPrefix]
+    [HarmonyPostfix]
     [HarmonyPriority(Priority.First)]
-    public static void MeetingHudStartPrefix() => DigestEveryone();
+    public static void MeetingHudStartPostfix(MeetingHud __instance)
+    {
+        DigestEveryone();
+        SortDigestedVictims(__instance);
+    }
+
+    private static void SortDigestedVictims(MeetingHud meetingHud)
+    {
+        var pendingIds = MonsterState.PendingDigestSortIds();
+        if (pendingIds.Count == 0 || meetingHud == null) return;
+
+        foreach (var id in pendingIds) MonsterState.ClearPendingDigestSort(id);
+
+        var areas = meetingHud.playerStates.ToArray();
+        var positions = areas.Select(a => a.transform.localPosition).ToArray();
+        var sorted = areas
+            .Select((area, idx) => (area, idx))
+            .OrderBy(x => x.area.AmDead ? 1 : 0)
+            .ThenBy(x => x.idx)
+            .Select(x => x.area)
+            .ToArray();
+
+        for (var i = 0; i < sorted.Length; i++)
+            sorted[i].transform.localPosition = positions[i];
+    }
 
     private static void DigestEveryone()
     {
         foreach (var player in PlayerControl.AllPlayerControls)
         {
-            if (player != null && player.Data?.Role is MonsterRole && MonsterState.CountHeldBy(player.PlayerId) > 0)
-                MonsterRole.RpcDigest(player);
-                var button = CustomButtonSingleton<MonsterDevourButton>.Instance;
+            if (player == null || player.Data?.Role is not MonsterRole || MonsterState.CountHeldBy(player.PlayerId) <= 0)
+                continue;
+
+            MonsterRole.RpcDigest(player);
+
+            var button = CustomButtonSingleton<MonsterDevourButton>.Instance;
+            if (button != null)
                 button.SetUses((int)OptionGroupSingleton<MonsterOptions>.Instance.MaxDevouredPerRound);
         }
     }

@@ -25,6 +25,6 @@ public sealed class MonsterOptions : AbstractOptionGroup<MonsterRole>
     public float DevourCooldownIncreasePerDevour { get; set; } = 5f;
 
     // 0 = Infinite
-    [ModdedNumberOption("Max Num of Players in Stomach", 0f, 15f, 1f, MiraNumberSuffixes.None)]
+    [ModdedNumberOption("Max Num of Players in Stomach", 0f, 15f, 1f, MiraNumberSuffixes.None, "0", true)]
     public float MaxDevouredPerRound { get; set; } = 0f;
 }
