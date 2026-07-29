@@ -8,6 +8,7 @@ using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
+using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Neutral;
@@ -55,12 +56,30 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
 
         return true;
     }
+    public override void Initialize(PlayerControl targetPlayer)
+    {
+        RoleBehaviourStubs.Initialize(this, targetPlayer);
+
+        if (Player.AmOwner && OptionGroupSingleton<MonsterOptions>.Instance.CanVent.Value)
+        {
+            HudManager.Instance.ImpostorVentButton.graphic.sprite = DivaniAssets.MonsterVentButton.LoadAsset();
+            HudManager.Instance.ImpostorVentButton.buttonLabelText.SetOutlineColor(MonsterColor);
+        }
+    }
 
     public override void Deinitialize(PlayerControl targetPlayer)
     {
         MonsterState.ReleaseAll(targetPlayer.PlayerId, targetPlayer.GetTruePosition());
         MonsterState.ForgetMonster(targetPlayer.PlayerId);
         RoleBehaviourStubs.Deinitialize(this, targetPlayer);
+        RoleBehaviourStubs.Deinitialize(this, targetPlayer);
+        TouRoleUtils.ClearTaskHeader(Player);
+
+        if (Player.AmOwner && OptionGroupSingleton<MonsterOptions>.Instance.CanVent.Value)
+        {
+            HudManager.Instance.ImpostorVentButton.graphic.sprite = TouAssets.VentSprite.LoadAsset();
+            HudManager.Instance.ImpostorVentButton.buttonLabelText.SetOutlineColor(TownOfUsColors.Impostor);
+        }
     }
 
     public override void OnDeath(DeathReason reason)

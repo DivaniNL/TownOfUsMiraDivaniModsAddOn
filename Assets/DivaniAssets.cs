@@ -17,6 +17,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> PickpocketButton { get; } = new LoadableResourceAsset($"{ShortPath}.PickPocketButton.png");
     public static LoadableAsset<Sprite> ThiefKillButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefKillButton.png");
     public static LoadableAsset<Sprite> ThiefVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefVentButton.png");
+    public static LoadableAsset<Sprite> MonsterVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.MonsterVentButton.png");
     public static LoadableAsset<Sprite> PlagueDoctorVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.PDVent.png");
     public static LoadableAsset<Sprite> DemolitionistVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.DemolitionistVent.png");
     public static LoadableAsset<Sprite> FragVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.FragVentButton.png");
