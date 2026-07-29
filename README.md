@@ -147,7 +147,7 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 - @aasteriisken (discord) - Memento modifier icon, Domesmith Assets, Revenant icon, UAV Assets, Clockstopper icon, Nullified modifier icon, Telecom assets, Armored assets
 [Follow Asterisken on GitHub](https://github.com/aasteriisken)
 - @maybe_xinav (discord) - Animated Portalmaker portals and portal button icons, Frag button icons, Plague Doctor button icon, Shuffle button icon, Sentinel beacon sprite, Sentinel palce beacon button,Lockdown button sprite, Tactical Insertion assets
-- marzecoo(from TownOfUsMegaChujoweExtension) - Monster Devour Animation
+- Hecker(dc hecker0) - Monster Devour Animation
 
 ## Idea box Ideas (Divani Mods Discord)
 
