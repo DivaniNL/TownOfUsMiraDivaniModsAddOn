@@ -73,6 +73,7 @@ public class PickpocketButton : TownOfUsButton
         "EgotistModifier",
         "CrewpostorModifier",
         "TaskmasterModifier",
+        "ShyModifier",
     };
 
     private static readonly string[] AllowedNamespacePrefixes =
