@@ -10,16 +10,20 @@ using DivaniMods.Options;
 using TownOfUs.Assets;
 using TownOfUs;
 using MiraAPI.LocalSettings;
+using MiraAPI.Modifiers;
+using TownOfUs.Modifiers;
 
 namespace DivaniMods.Buttons.Neutral.NeutralKilling;
 
 public sealed class MonsterDevourButton : TownOfUsRoleButton<MonsterRole, PlayerControl>
 {
     public override string Name => "Devour";
-    public override float EffectDuration => 0f;
-    public override bool HasEffect => false;
+    public override float EffectDuration => 2f;
+    public override bool HasEffect => true;
     public override int MaxUses => (int)OptionGroupSingleton<MonsterOptions>.Instance.MaxDevouredPerRound;
     public override Color TextOutlineColor => MonsterRole.MonsterColor;
+    public override bool ZeroIsInfinite => true;
+    public override BaseKeybind Keybind => Keybinds.PrimaryAction;
     public override bool ShouldPauseInVent => true;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.MonsterDevourButton;
 
@@ -96,6 +100,16 @@ public sealed class MonsterDevourButton : TownOfUsRoleButton<MonsterRole, Player
     {
         var player = PlayerControl.LocalPlayer;
         if (player == null || Target == null) return;
+        
+        if (Target.HasModifier<FirstDeadShield>())
+        {
+            return;
+        }
+
+        if (Target.HasModifier<BaseShieldModifier>())
+        {
+            return;
+        }
 
         MonsterRole.RpcEat(player, Target.PlayerId);
         if (LimitedUses)
