@@ -1,3 +1,5 @@
+using System;
+using DivaniMods;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities;
 using UnityEngine;
@@ -15,6 +17,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> PickpocketButton { get; } = new LoadableResourceAsset($"{ShortPath}.PickPocketButton.png");
     public static LoadableAsset<Sprite> ThiefKillButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefKillButton.png");
     public static LoadableAsset<Sprite> ThiefVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefVentButton.png");
+    public static LoadableAsset<Sprite> MonsterVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.MonsterVentButton.png");
     public static LoadableAsset<Sprite> PlagueDoctorVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.PDVent.png");
     public static LoadableAsset<Sprite> DemolitionistVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.DemolitionistVent.png");
     public static LoadableAsset<Sprite> FragVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.FragVentButton.png");
@@ -79,9 +82,11 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<Sprite> CupidIcon { get; } = new LoadableResourceAsset($"{IconPath}.Cupid.png", 200);
     public static LoadableAsset<Sprite> MageIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mage.png", 200);
     public static LoadableAsset<Sprite> WatcherIcon { get; } = new LoadableResourceAsset($"{IconPath}.Watcher.png", 200);
+    public static LoadableAsset<Sprite> MonsterIcon { get; } = new LoadableResourceAsset($"{IconPath}.Monster.png", 200);
     public static LoadableAsset<Sprite> LocatorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Locator.png", 200);
     public static LoadableAsset<Sprite> MoleIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mole.png", 200);
     public static LoadableAsset<Sprite> TelecomIcon { get; } = new LoadableResourceAsset($"{IconPath}.Telecom.png", 200);
+    public static LoadableAsset<Sprite> MonsterDevourButton { get; } = new LoadableResourceAsset($"{ShortPath}.MonsterDevour.png");
 
     // Watcher (Squid Game red/green light) sprites
     public static LoadableAsset<Sprite> WatcherWatchButton { get; } = new LoadableResourceAsset($"{ShortPath}.WatcherWatch.png");
@@ -155,6 +160,8 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<AudioClip> WorkhorseIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WorkhorseIntro.wav");
     public static LoadableAsset<AudioClip> TelecomTransmissionSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomTransmiss.wav");
     public static LoadableAsset<AudioClip> TelecomMessageSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomMessageSound.wav");
+    public static LoadableAsset<AudioClip> MonsterDevourSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.MonsterSwallowSound.wav");
+
     // Dutch Meme Soundpack door SFX - used by DutchMemeSoundpackPatch to replace
     // the vanilla door open/close audio clips when the matching lobby toggle is on.
     public static LoadableAsset<AudioClip> DutchDoorOpen { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DoorOpen.wav");
@@ -185,6 +192,7 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableBundleAsset<GameObject> PortalPrefab { get; } = new("Portal.prefab", Bundle);
     public static LoadableBundleAsset<GameObject> ShockShieldPrefab { get; } = new("shockshieldprefab.prefab", Bundle);
     public static LoadableBundleAsset<AnimationClip> FlareHover { get; } = new("FlareHover.anim", Bundle);
+    public static LoadableBundleAsset<AnimationClip> MonsterDevourAnim { get; } = new("MonsterEat.anim", Bundle);
     // Announcement badge
     public static LoadableAsset<Sprite> ModNewsLogo { get; } =
         new LoadableResourceAsset($"{ShortPath}.Banners.DivaniModNewsLogo.png", 220f);

@@ -31,6 +31,7 @@ public static class DivaniLocale
         en.TryAdd("DiedToFragile", "Shattered");
         en.TryAdd("DiedToTalkedTrash", "Provoked");
         en.TryAdd("DiedToDemolitionist", "Sabotaged");
+        en.TryAdd("DiedToMonster","Devoured");
         en.TryAdd("DiedToSummoner", "Killed");
         en.TryAdd("DiedToRevenant", "Clawed");
         en.TryAdd("DiedToMosquito", "Stung");
