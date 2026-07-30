@@ -32,7 +32,7 @@ public static class PlagueDoctorPatch
     public static void OnRoundStart(RoundStartEvent evt)
     {
         TryClearStalePlagueDoctorStateIfNeeded();
-        PlagueDoctorRole.OnRoundStart();
+        PlagueDoctorRole.OnRoundStart(evt.TriggeredByIntro);
     }
 
     internal static void TryClearStalePlagueDoctorStateIfNeeded()

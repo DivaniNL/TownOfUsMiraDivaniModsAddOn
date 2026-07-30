@@ -326,12 +326,16 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
         return false;
     }
 
-    public static void OnRoundStart()
+    public static void OnRoundStart(bool triggeredByIntro)
     {
         var immunityTime = OptionGroupSingleton<PlagueDoctorOptions>.Instance.ImmunityTime.Value;
         ImmunityTimer = immunityTime;
         MeetingFlag = false;
 
+        if (!triggeredByIntro)
+        {
+            TryTurnIntoAmnesiacWhenCannotWin();
+        }
     }
 
     public static void TickImmunityTimer(float deltaTime)
