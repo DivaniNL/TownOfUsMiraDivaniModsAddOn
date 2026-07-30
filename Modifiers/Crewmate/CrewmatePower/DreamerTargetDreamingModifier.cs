@@ -13,7 +13,6 @@ public sealed class DreamerTargetDreamingModifier(ushort originalRoleId, ushort 
     public static readonly Color DreamerColor = new Color32(51, 51, 153, 255);
     public override string ModifierName => "Dreaming";
     public override bool HideOnUi => true;
-    public override Color FreeplayFileColor => DreamerColor;
     public Color ModifierColor => DreamerColor;
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.DreamerIcon;
     public ushort OriginalRoleId { get; set; } = originalRoleId;

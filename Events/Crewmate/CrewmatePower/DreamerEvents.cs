@@ -88,23 +88,17 @@ public static class DreamerEvents
                 continue;
             }
 
-            if (!target!.IsCrewmate())
-            {
-                DreamerRole.RpcNotifyDreamFailed(dreamer.Player, target);
-                continue;
-            }
-
             if (target.HasModifier<DreamerTargetDreamingModifier>())
             {
                 continue;
             }
 
+            var onBreak = (DreamerOnDreamBreakMaxRoleCount)options.OnMaxRoleCountBroken.Value;
+
             if (options.RespectMaxRoleCount.Value)
             {
                 if (chosenRole != null && DreamerRole.IsBreakingMaxRoleCount(chosenRole, target))
                 {
-                    var onBreak = (DreamerOnDreamBreakMaxRoleCount)options.OnMaxRoleCountBroken.Value;
-
                     if (onBreak == DreamerOnDreamBreakMaxRoleCount.ApplyRandom)
                     {
                         var randomRole = DreamerRole.GetRandomValidRole(target);
@@ -123,6 +117,27 @@ public static class DreamerEvents
                         continue;
                     }
                 }
+            }
+
+            if (!target.IsCrewmate())
+            {
+                var randomRole = DreamerRole.GetRandomValidRole(target);
+                if (randomRole == null)
+                {
+                    DreamerRole.RpcNotifyDreamFailed(dreamer.Player, target);
+                    continue;
+                }
+
+                dreamer.DreamRoleId = (ushort)randomRole.Role;
+                if (onBreak == DreamerOnDreamBreakMaxRoleCount.ApplyRandom)
+                {
+                    DreamerRole.RpcNotifyDreamRedirected(dreamer.Player, dreamer.DreamRoleId);
+                }
+                else
+                {
+                    DreamerRole.RpcNotifyDreamFailed(dreamer.Player, target);
+                }
+                continue;
             }
 
             var originalRole = (ushort)target.Data.Role.Role;
