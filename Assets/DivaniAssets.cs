@@ -161,6 +161,7 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<AudioClip> TelecomTransmissionSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomTransmiss.wav");
     public static LoadableAsset<AudioClip> TelecomMessageSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomMessageSound.wav");
     public static LoadableAsset<AudioClip> MonsterDevourSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.MonsterSwallowSound.wav");
+    public static LoadableAsset<AudioClip> MonsterIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.MonsterIntro.wav");
 
     // Dutch Meme Soundpack door SFX - used by DutchMemeSoundpackPatch to replace
     // the vanilla door open/close audio clips when the matching lobby toggle is on.

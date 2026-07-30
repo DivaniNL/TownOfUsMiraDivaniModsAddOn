@@ -46,27 +46,56 @@ public static class MonsterPatches
     public static void MeetingHudStartPostfix(MeetingHud __instance)
     {
         DigestEveryone();
-        SortDigestedVictims(__instance);
+        Coroutines.Start(CoSortDigestedVictims(__instance));
     }
 
-    private static void SortDigestedVictims(MeetingHud meetingHud)
+    private static IEnumerator CoSortDigestedVictims(MeetingHud meetingHud)
     {
         var pendingIds = MonsterState.PendingDigestSortIds();
-        if (pendingIds.Count == 0 || meetingHud == null) return;
+        if (pendingIds.Count == 0) yield break;
 
         foreach (var id in pendingIds) MonsterState.ClearPendingDigestSort(id);
 
+        var timeout = 2f;
+        while (timeout > 0f && pendingIds.Exists(IsStillAlive))
+        {
+            timeout -= Time.deltaTime;
+            yield return null;
+        }
+
+        if (meetingHud == null) yield break;
+
         var areas = meetingHud.playerStates.ToArray();
-        var positions = areas.Select(a => a.transform.localPosition).ToArray();
+
+        foreach (var area in areas)
+        {
+            if (area != null && !area.AmDead && pendingIds.Contains(area.TargetPlayerId))
+            {
+                area.SetDead(area.DidReport, true);
+            }
+        }
+
+        var slots = areas
+            .Select(x => x.transform.localPosition)
+            .OrderByDescending(x => x.y)
+            .ThenBy(x => x.x)
+            .ToArray();
+
         var sorted = areas
-            .Select((area, idx) => (area, idx))
+            .Select(x => (area: x, slot: Array.IndexOf(slots, x.transform.localPosition)))
             .OrderBy(x => x.area.AmDead ? 1 : 0)
-            .ThenBy(x => x.idx)
+            .ThenBy(x => x.slot)
             .Select(x => x.area)
             .ToArray();
 
         for (var i = 0; i < sorted.Length; i++)
-            sorted[i].transform.localPosition = positions[i];
+            sorted[i].transform.localPosition = slots[i];
+    }
+
+    private static bool IsStillAlive(byte playerId)
+    {
+        var player = MiscUtils.PlayerById(playerId);
+        return player != null && !player.HasDied();
     }
 
     private static void DigestEveryone()

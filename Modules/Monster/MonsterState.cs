@@ -140,7 +140,11 @@ public static class MonsterState
                 var collider = victim.GetComponent<Collider2D>();
                 if (collider != null) collider.enabled = true;
 
-                Monster.RpcSpecialMurder(victim,true,true,true,false,false,false,false,true,"Monster");
+                if (Monster != null)
+                    Monster.RpcSpecialMurder(victim,true,true,true,false,false,false,false,true,"Monster");
+                else
+                    victim.Die(DeathReason.Kill, false);
+
                 pendingDigestSort.Add(victimId);
 
                 if (victim.AmOwner) EndSpectating();

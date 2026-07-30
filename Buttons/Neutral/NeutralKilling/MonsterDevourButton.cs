@@ -65,7 +65,9 @@ public sealed class MonsterDevourButton : TownOfUsRoleButton<MonsterRole, Player
     {
         base.CreateButton(parent);
 
-        Button.usesRemainingSprite.sprite =TouAssets.AbilityCounterPlayerSprite.LoadAsset();
+        if (Button == null) return;
+
+        Button.usesRemainingSprite.sprite = TouAssets.AbilityCounterPlayerSprite.LoadAsset();
 
         TownOfUsColors.UseBasic = false;
         if (TextOutlineColor != Color.clear)

@@ -35,7 +35,7 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
     {
         IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.MonsterIcon.LoadAsset(), "DivaniMod.Role.Neutral.Monster", 1.45f),
         Icon = DivaniAssets.MonsterIcon,
-        IntroSound = TouAudio.TimeLordIntroSound,
+        IntroSound = DivaniAssets.MonsterIntroSound,
         MaxRoleCount = 1,
         CanUseVent = OptionGroupSingleton<MonsterOptions>.Instance.CanVent.Value,
         GhostRole = (RoleTypes)RoleId.Get<NeutralGhostRole>(),

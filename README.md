@@ -52,6 +52,7 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#plague-doctor"><img width="10%" src="./Resources/Icons/PlagueDoctor.png" alt="Plague Doctor"/></a>
   <img src="./Resources/Headers/NeutKilling.png" alt="Neutral Killing"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#frag"><img width="10%" src="./Resources/Icons/Frag.png" alt="Frag"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#monster"><img width="10%" src="./Resources/Icons/Monster.png" alt="Monster"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#thief"><img width="10%" src="./Resources/Icons/Thief.png" alt="Thief"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#watcher"><img width="10%" src="./Resources/Icons/Watcher.png" alt="Watcher"/></a>
   <img src="./Resources/Headers/NeutOutlier.png" alt="Neutral Outlier"/>
@@ -137,7 +138,9 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 
 [Xinav](https://github.com/xinavGit) - [Alliance Modifier support on Clockstopper and Domesmith](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/17)\
 [Espeon](https://github.com/espeon3) - [Workhorse role](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/24)\
-[idkimneil](https://github.com/idkimneil) - [PerfectComms fix for Retributionist and Duelist](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/29)
+[idkimneil](https://github.com/idkimneil):
+[PerfectComms fix for Retributionist and Duelist](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/29)
+[Monster Role](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/31)
 
 ## Asset credits
 
