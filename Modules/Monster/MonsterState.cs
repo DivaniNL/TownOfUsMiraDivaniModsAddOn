@@ -329,6 +329,12 @@ public static class MonsterState
 
     private static void Notify(PlayerControl player, string message)
     {
-        Helpers.CreateAndShowNotification(message, MonsterRole.MonsterColor, spr : DivaniAssets.MonsterIcon.LoadAsset()); 
+        var hex = ColorUtility.ToHtmlStringRGB(MonsterRole.MonsterColor);
+        var notification = Helpers.CreateAndShowNotification(
+            $"<b><color=#{hex}>{message}</color></b>",
+            Color.white,
+            new Vector3(0f, 1f, -20f),
+            spr: DivaniAssets.MonsterIcon.LoadAsset());
+        notification.AdjustNotification();
     }
 }
