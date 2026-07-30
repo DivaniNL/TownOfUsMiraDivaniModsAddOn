@@ -29,7 +29,7 @@ public static class PlagueDoctorMeetingPatch
 
         if (player == null || player.Data == null) return;
 
-        if (PlagueDoctorRole.IsInfected(player))
+        if (PlagueDoctorRole.GetDisplayedInfectionState(player, out _))
         {
             var colorHex = ColorUtility.ToHtmlStringRGBA(PlagueDoctorRole.PlagueDoctorColor);
             __result += $"<color=#{colorHex}> {InfectedSymbol}</color>";
