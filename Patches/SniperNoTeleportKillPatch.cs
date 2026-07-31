@@ -5,6 +5,7 @@ using MiraAPI.Networking;
 using DivaniMods.Modifiers.Game.Neutral.NeutralPassive;
 using TownOfUs.Buttons.Classic.Neutral.NeutralKilling;
 using TownOfUs.Buttons.Neutral;
+using TownOfUs.Networking;
 
 namespace DivaniMods.Patches;
 
@@ -25,7 +26,7 @@ public static class SniperNoTeleportKill
             return true;
         }
 
-        PlayerControl.LocalPlayer.RpcCustomMurder(
+        PlayerControl.LocalPlayer.RpcSpecialMurder(
             target,
             MeetingCheck.OutsideMeeting,
             teleportMurderer: false,
@@ -40,7 +41,7 @@ public static class SniperNoTeleportKill
             return true;
         }
 
-        PlayerControl.LocalPlayer.RpcCustomMurder(
+        PlayerControl.LocalPlayer.RpcSpecialMurder(
             target,
             MeetingCheck.OutsideMeeting,
             teleportMurderer: false);
