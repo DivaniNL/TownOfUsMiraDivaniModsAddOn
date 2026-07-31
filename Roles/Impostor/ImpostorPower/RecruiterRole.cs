@@ -7,7 +7,9 @@ using MiraAPI.Roles;
 using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
+using DivaniMods.Modifiers.Impostor;
 using DivaniMods.Patches;
+using TownOfUs.Assets;
 using TownOfUs.Extensions;
 using TownOfUs.Modifiers.Crewmate;
 using TownOfUs.Modules;
@@ -40,7 +42,8 @@ public sealed class RecruiterRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Recruit", "During a meeting, mark one non-Impostor to convert them into a Recruit.", DivaniAssets.RecruitMeetingImpostor)
+        new("Recruit", "During a meeting, mark one non-Impostor to convert them into a Recruit.", DivaniAssets.RecruitMeetingImpostor),
+        new("Change Role", "If enabled, pick a new Impostor role for yourself after a successful recruit.", TouImpAssets.TraitorSelect)
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -52,6 +55,11 @@ public sealed class RecruiterRole(IntPtr cppPtr)
     };
 
     public byte PendingRecruitTargetId { get; set; } = 255;
+    public bool HasRecruited { get; set; }
+
+    [HideFromIl2Cpp] public List<RoleBehaviour> ChosenRoles { get; } = [];
+    [HideFromIl2Cpp] public RoleBehaviour? RandomRole { get; set; }
+    [HideFromIl2Cpp] public RoleBehaviour? SelectedRole { get; set; }
 
     private MeetingMenu? _meetingMenu;
     private byte _localSelectedId = 255;
@@ -60,7 +68,10 @@ public sealed class RecruiterRole(IntPtr cppPtr)
     {
         RoleBehaviourStubs.Initialize(this, player);
         PendingRecruitTargetId = 255;
+        HasRecruited = false;
         _localSelectedId = 255;
+        ChosenRoles.Clear();
+        SelectedRole = null;
 
         if (Player.AmOwner)
         {
@@ -173,6 +184,23 @@ public sealed class RecruiterRole(IntPtr cppPtr)
         }
 
         role.PendingRecruitTargetId = targetPlayerId;
+    }
+
+    public void UpdateRole()
+    {
+        if (!SelectedRole)
+        {
+            return;
+        }
+
+        var currentTime = Player.killTimer;
+
+        var roleType = RoleId.Get(SelectedRole!.GetType());
+        Player.RpcChangeRole(roleType, false);
+        Player.RpcAddModifier<RecruiterCacheModifier>();
+        SelectedRole = null;
+
+        Player.SetKillTimer(currentTime);
     }
 
     internal static bool IsValidRecruitTarget(PlayerControl? target, PlayerControl recruiter)

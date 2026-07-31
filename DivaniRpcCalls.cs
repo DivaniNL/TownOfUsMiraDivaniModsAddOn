@@ -67,4 +67,5 @@ public enum DivaniRpcCalls : uint
     FragDefused = 262,
     MonsterDevour = 263,
     MonsterDigest = 264,
+    RecruiterSetRecruited = 265,
 }

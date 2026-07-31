@@ -20,7 +20,7 @@ using UnityEngine;
 
 namespace DivaniMods.Buttons.Impostor.ImpostorPower;
 
-public sealed class RecruitChangeButton : TownOfUsRoleButton<RecruitRole>
+public sealed class RecruiterChangeButton : TownOfUsRoleButton<RecruiterRole>
 {
     public override string Name => "Change Role";
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
@@ -30,6 +30,13 @@ public sealed class RecruitChangeButton : TownOfUsRoleButton<RecruitRole>
     public override LoadableAsset<Sprite> Sprite => TouImpAssets.TraitorSelect;
 
     public override bool ZeroIsInfinite { get; set; } = true;
+
+    public override bool Enabled(RoleBehaviour? role)
+    {
+        return base.Enabled(role) &&
+               OptionGroupSingleton<RecruiterOptions>.Instance.RecruiterCanChangeRole &&
+               Role.HasRecruited;
+    }
 
     public override void ClickHandler()
     {
@@ -64,14 +71,14 @@ public sealed class RecruitChangeButton : TownOfUsRoleButton<RecruitRole>
 
         if (!Minigame.Instance)
         {
-            var recruitMenu = TraitorSelectionMinigame.Create();
-            recruitMenu.Open(
+            var recruiterMenu = TraitorSelectionMinigame.Create();
+            recruiterMenu.Open(
                 Role.ChosenRoles,
                 role =>
                 {
                     Role.SelectedRole = role;
                     Role.UpdateRole();
-                    recruitMenu.Close();
+                    recruiterMenu.Close();
                 },
                 Role.RandomRole?.Role
             );
@@ -91,7 +98,7 @@ public sealed class RecruitChangeButton : TownOfUsRoleButton<RecruitRole>
         var roleList = MiscUtils.GetPotentialRoles()
             .Where(role => role is not ITraitorIgnore ignore || !ignore.IsIgnored)
             .Where(role => impRoles.Contains((ushort)role.Role))
-            .Where(role => role is not TraitorRole and not RecruitRole)
+            .Where(role => role is not TraitorRole and not RecruitRole and not RecruiterRole)
             .ToList();
 
         if (TutorialManager.InstanceExists)
@@ -103,7 +110,7 @@ public sealed class RecruitChangeButton : TownOfUsRoleButton<RecruitRole>
             roleList = MiscUtils.AllRegisteredRoles
                 .Where(role => role is not ITraitorIgnore ignore || !ignore.IsIgnored)
                 .Where(role => impRoles.Contains((ushort)role.Role))
-                .Where(role => role is not TraitorRole and not RecruitRole)
+                .Where(role => role is not TraitorRole and not RecruitRole and not RecruiterRole)
                 .ToList();
         }
 
@@ -179,7 +186,7 @@ public sealed class RecruitChangeButton : TownOfUsRoleButton<RecruitRole>
             "<b>No Impostor roles are available to change into.</b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
-            spr: DivaniAssets.RecruitIcon.LoadAsset());
+            spr: DivaniAssets.RecruiterIcon.LoadAsset());
         notif.AdjustNotification();
     }
 }
