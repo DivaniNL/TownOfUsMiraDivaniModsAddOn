@@ -99,7 +99,7 @@ public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>, IDiseasea
         var duration = OptionGroupSingleton<FragOptions>.Instance.BombTimer.Value;
 
         FragBombState.PlayGivePassSoundLocal();
-        FragBombButton.RpcPassBomb(localPlayer, Target.PlayerId, byte.MaxValue, duration, delay);
+        FragBombButton.RpcPassBomb(localPlayer, Target.PlayerId, localPlayer.PlayerId, duration, delay);
         ResetTarget();
     }
 
