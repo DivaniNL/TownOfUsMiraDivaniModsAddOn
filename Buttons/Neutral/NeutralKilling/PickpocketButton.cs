@@ -333,6 +333,9 @@ public class PickpocketButton : TownOfUsButton
         if (modifier is BetrayerModifier)
             return true;
 
+        if (modifier is YinYangModifier or YinMarkedModifier or YangMarkedModifier)
+            return true;
+
         if (modifier.GetType().Name.StartsWith("Test", StringComparison.OrdinalIgnoreCase))
             return true;
 

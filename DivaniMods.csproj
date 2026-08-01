@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TownOfUsMira" Version="1.7.0-ci.1238" />
+    <PackageReference Include="TownOfUsMira" Version="1.7.0-ci.1242" />
     <PackageReference Include="AllOfUs.MiraAPI" Version="0.4.1-ci.1038"/>
     <PackageReference Include="Reactor" Version="2.5.0-ci.371"/>
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" Private="false" ExcludeAssets="runtime;native"/>

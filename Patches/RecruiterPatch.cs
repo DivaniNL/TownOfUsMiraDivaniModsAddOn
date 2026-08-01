@@ -11,6 +11,7 @@ using MiraAPI.Roles;
 using Reactor.Networking.Attributes;
 using MiraAPI.Hud;
 using DivaniMods.Buttons.Impostor.ImpostorPower;
+using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Options;
 using DivaniMods.Roles.Impostor.ImpostorPower;
 using TownOfUs.Utilities;
@@ -94,6 +95,8 @@ public static class RecruiterPatch
         }
 
         recruiter.HasRecruited = true;
+
+        YinYangModifier.CheckAlliedPair();
 
         if (recruiterPlayer.AmOwner)
         {

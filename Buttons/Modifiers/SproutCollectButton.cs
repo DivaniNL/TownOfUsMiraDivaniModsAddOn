@@ -157,6 +157,7 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
                         !IsNonUniversalVisualModifier(m) &&
                         !(m is SproutModifier) &&
                         !(m is BetrayerModifier) &&
+                        !(m is YinYangModifier) &&
                         !m.GetType().Name.StartsWith("Test", StringComparison.OrdinalIgnoreCase))
             .Select(m => m.TypeId)
             .Distinct()
@@ -208,6 +209,7 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
         if (!IsAllowedSource(modifier)) return true;
         if (modifier is ExcludedGameModifier) return true;
         if (modifier is BetrayerModifier) return true;
+        if (modifier is YinYangModifier or YinMarkedModifier or YangMarkedModifier) return true;
         if (modifier.GetType().Name == "MagicMirrorModifier") return true;
         if (modifier.GetType().Name == "KnightedModifier") return true;
         if (IsShieldModifier(modifier)) return true;

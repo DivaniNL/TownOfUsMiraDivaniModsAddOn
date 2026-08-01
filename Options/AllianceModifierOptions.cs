@@ -33,6 +33,18 @@ public sealed class AllianceModifierOptions : AbstractOptionGroup
             Visible = () => OptionGroupSingleton<AllianceModifierOptions>.Instance.BetrayerAmount.Value > 0
         };
     
+    public AmountChanceOption YinYangChance { get; } =
+        new("Yin-Yang Chance", 0f, 0f, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
+            color: YinYangModifier.YinColor, asset: DivaniAssets.YinYangIcon,
+            assetName: "DivaniMod.Modifier.Alliance.YinYang", assetScale: 1.45f)
+        {
+            ChangedEvent = x =>
+            {
+                var opt = OptionGroupSingleton<AllianceModifierOptions>.Instance.YinYangChance;
+                RunNotif(opt, x > 0f ? "2" : "0", "Yin-Yang");
+            },
+        };
+
     private static Action<float> _betrayerNotif = x =>
     {
         var optAmount = OptionGroupSingleton<AllianceModifierOptions>.Instance.BetrayerAmount;
@@ -45,6 +57,15 @@ public sealed class AllianceModifierOptions : AbstractOptionGroup
             opt.StringName,
             title,
             optAmount.Data.GetValueString(optAmount.Value),
+            opt.Data.GetValueString(opt.Value));
+    }
+
+    private static void RunNotif(AmountChanceOption opt, string count, string title)
+    {
+        opt.AddSettingsChangeMessage(HudManager.Instance.Notifier,
+            opt.StringName,
+            title,
+            count,
             opt.Data.GetValueString(opt.Value));
     }
 }

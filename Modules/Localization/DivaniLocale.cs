@@ -40,5 +40,6 @@ public static class DivaniLocale
         en.TryAdd("DiedToDuelist", "Defeated");
         en.TryAdd("DiedToWatcher", "Watched");
         en.TryAdd("DiedToThief", "Robbed");
+        en.TryAdd("DiedToShame", "Ashamed");
     }
 }

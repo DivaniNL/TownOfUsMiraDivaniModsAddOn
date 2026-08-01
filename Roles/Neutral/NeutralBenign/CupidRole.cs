@@ -13,6 +13,7 @@ using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Events.Neutral.NeutralBenign;
+using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Modifiers.Neutral.NeutralBenign;
 using DivaniMods.Options;
 using TownOfUs;
@@ -361,6 +362,8 @@ public sealed class CupidRole(IntPtr cppPtr)
         role.ProvisionalTargets.Clear();
         role._lastKnownCoupleKey = CoupleKey([loverOne, loverTwo]);
         CupidLoverReviveEvents.FinalizedCouples[cupid.PlayerId] = (loverOneId, loverTwoId);
+
+        YinYangModifier.CheckAlliedPair();
 
         if (cupid.AmOwner)
         {

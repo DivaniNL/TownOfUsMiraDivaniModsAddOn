@@ -48,6 +48,8 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> MageEnergizeButton { get; } = new LoadableResourceAsset($"{ShortPath}.MageEnergize.png");
     public static LoadableAsset<Sprite> MageIllusionButton { get; } = new LoadableResourceAsset($"{ShortPath}.MageIllusion.png");
     public static LoadableAsset<Sprite> LocatorMarkButton { get; } = new LoadableResourceAsset($"{ShortPath}.LocatorMark.png");
+    public static LoadableAsset<Sprite> YinMarkButton { get; } = new LoadableResourceAsset($"{ShortPath}.YinMark.png");
+    public static LoadableAsset<Sprite> YangMarkButton { get; } = new LoadableResourceAsset($"{ShortPath}.YangMark.png");
     public static LoadableAsset<Sprite> MoleDigButton { get; } = new LoadableResourceAsset($"{ShortPath}.MoleDigButton.png");
     public static LoadableAsset<Sprite> MoleVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.MoleVentButton.png");
     public static LoadableAsset<Sprite> MinerVentSprite { get; } = new LoadableResourceAsset($"{ShortPath}.MinerVent.png", 100);
@@ -116,6 +118,7 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<Sprite> ArmoredIcon { get; } = new LoadableResourceAsset($"{IconPath}.Armored.png", 200);
     public static LoadableAsset<Sprite> UavIcon { get; } = new LoadableResourceAsset($"{IconPath}.UAV.png", 200);
     public static LoadableAsset<Sprite> TacticalInsertionIcon { get; } = new LoadableResourceAsset($"{IconPath}.TacticalInsertion.png", 200);
+    public static LoadableAsset<Sprite> YinYangIcon { get; } = new LoadableResourceAsset($"{IconPath}.YingYang.png", 200);
     // Audio clips (16000hz)
     public static LoadableAsset<AudioClip> FragileBreak { get; } = new LoadableAudioResourceAsset($"{ShortPath}.FragileBreak.wav");
     public static LoadableAsset<AudioClip> PlagueDoctorIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.PlagueDoctorIntro.wav");
