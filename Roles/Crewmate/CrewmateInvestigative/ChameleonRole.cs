@@ -32,7 +32,7 @@ public sealed class ChameleonRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOf
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Canouflage", "Turn invisible for a short period of time.", DivaniAssets.MageIllusionButton)
+        new("Camouflage", "Turn invisible for a short period of time.", DivaniAssets.MageIllusionButton)
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
