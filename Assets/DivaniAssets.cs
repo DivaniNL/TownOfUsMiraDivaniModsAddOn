@@ -82,6 +82,7 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<Sprite> LocatorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Locator.png", 200);
     public static LoadableAsset<Sprite> MoleIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mole.png", 200);
     public static LoadableAsset<Sprite> TelecomIcon { get; } = new LoadableResourceAsset($"{IconPath}.Telecom.png", 200);
+    public static LoadableAsset<Sprite> ChameleonIcon { get; } = new LoadableResourceAsset($"{IconPath}.Chameleon.png", 200);
 
     // Watcher (Squid Game red/green light) sprites
     public static LoadableAsset<Sprite> WatcherWatchButton { get; } = new LoadableResourceAsset($"{ShortPath}.WatcherWatch.png");
