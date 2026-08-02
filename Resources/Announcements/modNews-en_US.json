@@ -808,6 +808,43 @@
         "\n- Crewpostor Workhorse now makes the Impostors win.",
         "\n- Egotist Workhorse generates a \"Workhorse Win\" containing the Ego Workhorse, all Impostors and Neutral Killers."
       ]
+    },
+    {
+      "Date": "2026-08-03T12:00:00Z",
+      "Number": "10021",
+      "ShortTitle": "Divani Mods v1.3.5",
+      "Title": "Among Us 17.4, Town Of Us 1.7.0 and Monster",
+      "SubTitle": "Support for the new game and mod versions, a new Neutral Killing role, and small fixes",
+      "Text": [
+        "\r<size=110%><b>Divani Mods v1.3.5</b></size>",
+        "\n\nSupport for Among Us 17.4 and Town Of Us - Mira 1.7.0 + Monster + Small fixes.",
+        "\n\n<i>This version does not work with Town Of Us versions lower than 1.7.0.</i>",
+        "\n\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.5>Download v1.3.5</link>",
+        "\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases>All releases</link>",
+        "\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki>Wiki</link>",
+        "\n\n\r<size=108%><b>Added Role: Monster</b> (Neutral Killing)</size>",
+        "\n\nEat nearby players to trap them in your belly. If you make it to the next meeting, everyone you've eaten is killed for real. If you die first, they're released instead. <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/31>#31</link>",
+        "\n\n\r<size=108%><b>General changes</b></size>",
+        "\n\n- Added support for Among Us 17.4 and Town Of Us - Mira 1.7.0. <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/28>#28</link>",
+        "\n\n\r<size=108%><b>Bugfixes</b></size>",
+        "\n\n<b>Frag</b>",
+        "\n- Fixed a bug where the first receiver of the Frag could pass it back to the origin.",
+        "\n\n<b>Sniper</b>",
+        "\n- Fixed a visual bug where the cause of death was always \"Killed\", even when killed by a Neutral Killing.",
+        "\n\n<b>Retributionist</b>",
+        "\n- Fixed a visual bug where the cause of death was sometimes \"Killed\" after being killed.",
+        "\n\n<b>Plague Doctor</b>",
+        "\n- Fixed a bug where the \"can win\" check only happened at meeting start, not at round start as well.",
+        "\n\n\r<size=108%><b>Role/Modifier Changes</b></size>",
+        "\n\n<b>Thief</b>",
+        "\n- Made the maximum amount of stealable modifiers 15, default 5.",
+        "\n- Made Shy non-stealable.",
+        "\n\n<b>Plague Doctor</b>",
+        "\n- Fallen crewmates during the round are no longer removed from the list, but their infection state is frozen instead.",
+        "\n\n<b>Recruiter</b>",
+        "\n- If the Recruiter's target dies during the meeting it was chosen, the charge is refunded now.",
+        "\n- Added a button for the Recruiter to also change roles after a successful recruit attempt."
+      ]
     }
   ]
 }
