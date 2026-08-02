@@ -136,24 +136,61 @@ public sealed class YinYangModifier(byte side)
 
     public PlayerControl? Rival => GetSide(IsYin ? YinYangSide.Yang : YinYangSide.Yin)?.Player;
 
+    private static ModifierComponent? ComponentOf(PlayerControl? player)
+    {
+        if (player == null)
+        {
+            return null;
+        }
+
+        var component = player.GetComponent<ModifierComponent>();
+
+        return component == null ? null : component;
+    }
+
+    private static void RemoveIfPresent<T>(ModifierComponent? component) where T : BaseModifier
+    {
+        if (component != null && component.HasModifier<T>())
+        {
+            component.RemoveModifier<T>();
+        }
+    }
+
+    public static List<YinYangModifier> AllSides()
+    {
+        var sides = new List<YinYangModifier>();
+
+        foreach (var player in PlayerControl.AllPlayerControls.ToArray())
+        {
+            var side = ComponentOf(player)?.GetModifier<YinYangModifier>();
+            if (side != null)
+            {
+                sides.Add(side);
+            }
+        }
+
+        return sides;
+    }
+
     public static YinYangModifier? GetSide(YinYangSide side)
     {
-        return ModifierUtils.GetActiveModifiers<YinYangModifier>().FirstOrDefault(x => x.Side == side);
+        return AllSides().FirstOrDefault(x => x.Side == side);
     }
 
     public static YinYangModifier? GetSideOf(PlayerControl? player)
     {
-        return player == null ? null : player.GetModifier<YinYangModifier>();
+        return ComponentOf(player)?.GetModifier<YinYangModifier>();
     }
 
     public static bool IsMarkedBy(PlayerControl? player, bool yin)
     {
-        if (player == null)
+        var component = ComponentOf(player);
+        if (component == null)
         {
             return false;
         }
 
-        return yin ? player.HasModifier<YinMarkedModifier>() : player.HasModifier<YangMarkedModifier>();
+        return yin ? component.HasModifier<YinMarkedModifier>() : component.HasModifier<YangMarkedModifier>();
     }
 
     public bool IsMarkedByMe(PlayerControl? player) => IsMarkedBy(player, IsYin);
@@ -202,7 +239,7 @@ public sealed class YinYangModifier(byte side)
 
     public static List<YinYangModifier> ActiveSides()
     {
-        return ModifierUtils.GetActiveModifiers<YinYangModifier>()
+        return AllSides()
             .Where(x => x.Side != YinYangSide.Unassigned)
             .ToList();
     }
@@ -219,22 +256,23 @@ public sealed class YinYangModifier(byte side)
             return;
         }
 
-        foreach (var holder in PlayerControl.AllPlayerControls.ToArray()
-                     .Where(x => x != null && x.HasModifier<YinYangModifier>()))
-        {
-            holder.RpcRemoveModifier<YinYangModifier>();
-        }
-
         var chance = (int)OptionGroupSingleton<AllianceModifierOptions>.Instance.YinYangChance.Value;
         if (chance <= 0 || new Random().Next(1, 101) > chance)
         {
             return;
         }
 
+        foreach (var holder in PlayerControl.AllPlayerControls.ToArray()
+                     .Where(x => ComponentOf(x)?.HasModifier<YinYangModifier>() == true))
+        {
+            holder.RpcRemoveModifier<YinYangModifier>();
+        }
+
         var candidates = PlayerControl.AllPlayerControls.ToArray()
             .Where(x => x != null && x.Data != null && !x.HasDied() && !x.Data.Disconnected &&
-                        !x.HasModifier<ExecutionerTargetModifier>() &&
-                        !x.HasModifier<AllianceGameModifier>() &&
+                        ComponentOf(x) is { } component &&
+                        !component.HasModifier<ExecutionerTargetModifier>() &&
+                        !component.HasModifier<AllianceGameModifier>() &&
                         !SpectatorRole.TrackedSpectators.Contains(x.Data.PlayerName) &&
                         IsEligibleRole(x.Data.Role))
             .ToList();
@@ -308,8 +346,8 @@ public sealed class YinYangModifier(byte side)
             return false;
         }
 
-        if (a.TryGetModifier<LoverModifier>(out var lover) && lover.OtherLover != null &&
-            lover.OtherLover.PlayerId == b.PlayerId)
+        var lover = ComponentOf(a)?.GetModifier<LoverModifier>();
+        if (lover?.OtherLover != null && lover.OtherLover.PlayerId == b.PlayerId)
         {
             return true;
         }
@@ -336,13 +374,19 @@ public sealed class YinYangModifier(byte side)
     public static void RpcDissolveYinYang()
     {
         var local = PlayerControl.LocalPlayer;
-        var wasYinYanger = local != null && local.HasModifier<YinYangModifier>();
+        var wasYinYanger = ComponentOf(local)?.HasModifier<YinYangModifier>() == true;
 
-        foreach (var player in PlayerControl.AllPlayerControls.ToArray().Where(x => x != null))
+        foreach (var player in PlayerControl.AllPlayerControls.ToArray())
         {
-            player.RemoveModifier<YinYangModifier>();
-            player.RemoveModifier<YinMarkedModifier>();
-            player.RemoveModifier<YangMarkedModifier>();
+            var component = ComponentOf(player);
+            if (component == null)
+            {
+                continue;
+            }
+
+            RemoveIfPresent<YinYangModifier>(component);
+            RemoveIfPresent<YinMarkedModifier>(component);
+            RemoveIfPresent<YangMarkedModifier>(component);
         }
 
         HideMarkButtons();
@@ -362,10 +406,9 @@ public sealed class YinYangModifier(byte side)
             return;
         }
 
-        foreach (var player in PlayerControl.AllPlayerControls.ToArray()
-                     .Where(x => x != null && x.HasModifier<YinYangModifier>()))
+        foreach (var player in PlayerControl.AllPlayerControls.ToArray())
         {
-            player.RemoveModifier<YinYangModifier>();
+            RemoveIfPresent<YinYangModifier>(ComponentOf(player));
         }
 
         yin.AddModifier<YinYangModifier>((byte)YinYangSide.Yin);
@@ -386,23 +429,22 @@ public sealed class YinYangModifier(byte side)
             return;
         }
 
-        if (target.HasModifier<YinMarkedModifier>())
+        var targetComponent = ComponentOf(target);
+        if (targetComponent == null)
         {
-            target.RemoveModifier<YinMarkedModifier>();
+            return;
         }
 
-        if (target.HasModifier<YangMarkedModifier>())
-        {
-            target.RemoveModifier<YangMarkedModifier>();
-        }
+        RemoveIfPresent<YinMarkedModifier>(targetComponent);
+        RemoveIfPresent<YangMarkedModifier>(targetComponent);
 
         if (side.IsYin)
         {
-            target.AddModifier<YinMarkedModifier>();
+            targetComponent.AddModifier<YinMarkedModifier>();
         }
         else
         {
-            target.AddModifier<YangMarkedModifier>();
+            targetComponent.AddModifier<YangMarkedModifier>();
         }
     }
 

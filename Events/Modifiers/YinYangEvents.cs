@@ -50,7 +50,15 @@ public static class YinYangEvents
     [RegisterEvent]
     public static void OnChangeRole(ChangeRoleEvent evt)
     {
+        Coroutines.Start(CoCheckAlliedPair());
+    }
+
+    private static IEnumerator CoCheckAlliedPair()
+    {
+        yield return null;
+
         YinYangModifier.CheckAlliedPair();
+        YinYangModifier.CheckForCompletion();
     }
 
     private static void ApplyShame()

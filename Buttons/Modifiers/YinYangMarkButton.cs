@@ -30,14 +30,9 @@ public sealed class YinYangMarkButton : TownOfUsTargetButton<PlayerControl>
     {
         get
         {
-            var player = PlayerControl.LocalPlayer;
-            if (player == null || !player.TryGetModifier<YinYangModifier>(out var side) ||
-                side.Side == YinYangSide.Unassigned)
-            {
-                return null;
-            }
+            var side = YinYangModifier.GetSideOf(PlayerControl.LocalPlayer);
 
-            return side;
+            return side == null || side.Side == YinYangSide.Unassigned ? null : side;
         }
     }
 

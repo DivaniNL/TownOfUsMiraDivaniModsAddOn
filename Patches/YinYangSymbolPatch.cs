@@ -15,8 +15,8 @@ public static class YinYangSymbolPatch
     public static void UpdateAllianceSymbolsPostfix(ref string __result, PlayerControl player,
         DataVisibility visibility)
     {
-        if (player == null || !player.TryGetModifier<YinYangModifier>(out var side) ||
-            side.Side == YinYangSide.Unassigned)
+        var side = YinYangModifier.GetSideOf(player);
+        if (side == null || side.Side == YinYangSide.Unassigned)
         {
             return;
         }
