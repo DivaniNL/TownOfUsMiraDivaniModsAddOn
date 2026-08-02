@@ -31,6 +31,9 @@ public static class MonsterState
     public static int CountHeldBy(byte MonsterId) =>
         stomachs.TryGetValue(MonsterId, out var list) ? list.Count : 0;
 
+    public static List<byte> GetHeld(byte MonsterId) =>
+        stomachs.TryGetValue(MonsterId, out var list) ? list.ToList() : [];
+
     public static float CooldownFor(byte MonsterId)
     {
         var options = OptionGroupSingleton<MonsterOptions>.Instance;

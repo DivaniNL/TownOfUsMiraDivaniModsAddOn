@@ -6,10 +6,16 @@ using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Utilities.Assets;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
+using Reactor.Utilities.Extensions;
+using System.Text;
+using TMPro;
 using TownOfUs;
 using TownOfUs.Assets;
+using TownOfUs.Interfaces;
+using TownOfUs.Modules.RainbowMod;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
@@ -17,7 +23,7 @@ using UnityEngine;
 
 namespace DivaniMods.Roles.Neutral.NeutralKilling;
 
-public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole
+public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole, IProgressTally
 {
     public static readonly Color MonsterColor = new Color32(107, 179, 48, 255);
     public string RoleName => "Monster";
@@ -30,6 +36,72 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralKilling;
     public bool HasImpostorVision => true;
+
+    private static TMP_SpriteAsset[] UxIcons =>
+    [
+        TmpSpriteUtils.CreateSpriteAsset(TouAssets.ChefProgressFedUncolored.LoadAsset(),
+            "DivaniMod.Role.Neutral.Monster.Ui.PlayerUncolored", 1.45f),
+        TmpSpriteUtils.CreateSpriteAsset(TouAssets.ChefProgressFedRainbow.LoadAsset(),
+            "DivaniMod.Role.Neutral.Monster.Ui.PlayerRainbow", 1.45f),
+    ];
+
+    private static string GetIcon(TMP_SpriteAsset asset) => $"<sprite name=\"{asset.name}\">";
+
+    private static string GetIconColored(TMP_SpriteAsset asset, string color) =>
+        $"<sprite name=\"{asset.name}\" color=#{color}>";
+
+    public string GetBodyTally()
+    {
+        var held = MonsterState.GetHeld(Player.PlayerId);
+        if (held.Count == 0)
+        {
+            return string.Empty;
+        }
+
+        var tally = new StringBuilder();
+        foreach (var victimId in held)
+        {
+            var victim = MiscUtils.PlayerById(victimId);
+            if (victim?.Data == null)
+            {
+                continue;
+            }
+
+            if (RainbowUtils.IsRainbow(victim.Data.DefaultOutfit.ColorId))
+            {
+                tally.Append(GetIcon(UxIcons[1]));
+            }
+            else
+            {
+                tally.Append(GetIconColored(UxIcons[0],
+                    Palette.TextColors[victim.Data.DefaultOutfit.ColorId].ToHtmlStringRGBA()));
+            }
+        }
+
+        return $"({tally})";
+    }
+
+    public bool ProgressOnName(bool localDead, bool inMeeting, bool amOwner, out string progress)
+    {
+        if (!inMeeting && (amOwner || localDead))
+        {
+            var tally = GetBodyTally();
+            if (!string.IsNullOrEmpty(tally))
+            {
+                progress = tally;
+                return true;
+            }
+        }
+
+        progress = string.Empty;
+        return false;
+    }
+
+    public string ProgressOnSummaryNormal => string.Empty;
+
+    public string ProgressOnSummaryDetailed => string.Empty;
+
+    public TallyLocation TallyPlacement(bool inMeeting) => TallyLocation.AboveName;
 
     public CustomRoleConfiguration Configuration => new(this)
     {
