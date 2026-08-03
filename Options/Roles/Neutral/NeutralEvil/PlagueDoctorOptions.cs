@@ -6,7 +6,7 @@ using DivaniMods.Roles.Neutral.NeutralEvil;
 
 namespace DivaniMods.Options;
 
-public class PlagueDoctorOptions : AbstractOptionGroup<PlagueDoctorRole>
+public class PlagueDoctorOptions : AbstractRoleOptionGroup<PlagueDoctorRole>
 {
     public override string GroupName => "Plague Doctor";
 

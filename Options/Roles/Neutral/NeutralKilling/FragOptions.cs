@@ -11,7 +11,7 @@ public enum FragRewindBehavior
     Rewind
 }
 
-public class FragOptions : AbstractOptionGroup<FragRole>
+public class FragOptions : AbstractRoleOptionGroup<FragRole>
 {
     public override string GroupName => "Frag";
 

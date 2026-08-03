@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DivaniMods.Options;
 
-public class BearTrapOptions : AbstractOptionGroup<BearTrapModifier>
+public class BearTrapOptions : AbstractTouModifierOptionGroup<BearTrapModifier>
 {
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
     public override string GroupName => "Bear Trap";

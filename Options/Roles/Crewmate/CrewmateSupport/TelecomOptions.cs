@@ -11,7 +11,7 @@ public enum TelecomTargetSelectionOptions
     Meeting
 }
 
-public class TelecomOptions : AbstractOptionGroup<TelecomRole>
+public class TelecomOptions : AbstractRoleOptionGroup<TelecomRole>
 {
     public override string GroupName => "Telecom";
 

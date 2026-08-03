@@ -44,6 +44,7 @@ public sealed class ObfuscatorRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.ObfuscatorIcon.LoadAsset(), "DivaniMod.Role.Impostor.Obfuscator", 1.45f),
         Icon = DivaniAssets.ObfuscatorIcon,
         IntroSound = DivaniAssets.ObfuscatorIntro,
         MaxRoleCount = 1,

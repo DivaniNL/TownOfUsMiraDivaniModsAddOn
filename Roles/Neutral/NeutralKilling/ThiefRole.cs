@@ -61,6 +61,7 @@ public sealed class ThiefRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.ThiefIcon.LoadAsset(), "DivaniMod.Role.Neutral.Thief", 1.45f),
         Icon = DivaniAssets.ThiefIcon,
         OptionsScreenshot = DivaniAssets.ThiefBanner,
         IntroSound = DivaniAssets.ThiefIntroSound,

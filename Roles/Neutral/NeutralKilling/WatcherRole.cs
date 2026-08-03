@@ -86,6 +86,7 @@ public sealed class WatcherRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.WatcherIcon.LoadAsset(), "DivaniMod.Role.Neutral.Watcher", 1.45f),
         Icon = DivaniAssets.WatcherIcon,
         IntroSound = DivaniAssets.WatcherIntroSound,
         MaxRoleCount = 1,

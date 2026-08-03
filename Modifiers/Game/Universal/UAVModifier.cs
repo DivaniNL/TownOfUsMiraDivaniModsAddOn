@@ -14,9 +14,13 @@ using MiraAPI.Modifiers.Types;
 
 namespace DivaniMods.Modifiers.Game.Universal;
 
-public class UAVModifier : UniversalGameModifier, IColoredModifier, IWikiDiscoverable, IButtonModifier
+public class UAVModifier : UniversalGameModifier, IWikiDiscoverable, IButtonModifier
 {
     public static readonly Color UavColor = new Color32(179, 117, 117, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        UavColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.UavIcon.LoadAsset(),
+            "DivaniMod.Modifier.Universal.UAV", 1.45f));
 
     public override string ModifierName => "UAV";
     public override string LocaleKey => "UAV";

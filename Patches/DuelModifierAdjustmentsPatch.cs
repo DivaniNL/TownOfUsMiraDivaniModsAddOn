@@ -55,7 +55,7 @@ public static class SonarDuelArrowHidePatch
 {
     public static void Postfix(ArrowTargetModifier __instance)
     {
-        if (__instance is not TrackerArrowTargetModifier)
+        if (__instance is not SonarArrowTargetModifier)
         {
             return;
         }

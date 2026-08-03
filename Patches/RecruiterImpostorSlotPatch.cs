@@ -72,7 +72,7 @@ public static class RecruiterImpostorSlotPatch
         var pool = new List<ushort>();
         foreach (var alignment in CrewAlignments)
         {
-            foreach (var (roleType, chance) in MiscUtils.GetRolesToAssign(alignment))
+            foreach (var (id, roleType, chance) in MiscUtils.GetRolesToAssign(alignment))
             {
                 if (chance > 0 && !assigned.Contains(roleType) && !pool.Contains(roleType))
                 {

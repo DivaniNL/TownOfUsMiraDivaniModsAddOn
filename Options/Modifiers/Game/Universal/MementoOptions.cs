@@ -13,7 +13,7 @@ public enum MementoRevealMode
     Faction,
 }
 
-public class MementoOptions : AbstractOptionGroup<MementoModifier>
+public class MementoOptions : AbstractTouModifierOptionGroup<MementoModifier>
 {
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
     public override string GroupName => "Memento";

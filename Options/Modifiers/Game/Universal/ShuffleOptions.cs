@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DivaniMods.Options;
 
-public class ShuffleOptions : AbstractOptionGroup<ShuffleModifier>
+public class ShuffleOptions : AbstractTouModifierOptionGroup<ShuffleModifier>
 {
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
     public override string GroupName => "Shuffle";

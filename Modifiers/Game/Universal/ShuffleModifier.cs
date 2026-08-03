@@ -14,8 +14,12 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Universal;
 
-public class ShuffleModifier : UniversalGameModifier, IColoredModifier, IWikiDiscoverable, IButtonModifier
+public class ShuffleModifier : UniversalGameModifier, IWikiDiscoverable, IButtonModifier
 {
+    public override ModifierUiConfiguration Configuration => new(
+        ShuffleColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.ShuffleIcon.LoadAsset(),
+            "DivaniMod.Modifier.Universal.Shuffle", 1.45f));
     public static readonly Color ShuffleColor = new Color32(0, 255, 30, 255);
 
     public override string ModifierName => "Shuffle";

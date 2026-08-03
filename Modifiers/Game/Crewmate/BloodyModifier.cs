@@ -14,9 +14,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Crewmate;
 
-public sealed class BloodyModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
+public sealed class BloodyModifier : TouGameModifier, IWikiDiscoverable
 {
     public static readonly Color ModifierUiColor = Palette.ImpostorRed;
+    public override ModifierUiConfiguration Configuration => new(
+        ModifierUiColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.BloodyIcon.LoadAsset(),
+            "DivaniMod.Modifier.Crewmate.Bloody", 1.45f));
 
     public override string ModifierName => "Bloody";
     public override string LocaleKey => "Bloody";

@@ -5,7 +5,7 @@ using DivaniMods.Roles.Impostor.ImpostorPower;
 
 namespace DivaniMods.Options;
 
-public class SummonerOptions : AbstractOptionGroup<SummonerRole>
+public class SummonerOptions : AbstractRoleOptionGroup<SummonerRole>
 {
     public override string GroupName => "Summoner";
 

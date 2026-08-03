@@ -6,7 +6,7 @@ using TownOfUs.Options;
 
 namespace DivaniMods.Options;
 
-public class NullifiedOptions : AbstractOptionGroup<NullifiedModifier>
+public class NullifiedOptions : AbstractTouModifierOptionGroup<NullifiedModifier>
 {
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
     public override string GroupName => "Nullified";

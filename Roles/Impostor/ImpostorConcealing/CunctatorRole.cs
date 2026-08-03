@@ -42,6 +42,7 @@ public sealed class CunctatorRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.CunctatorIcon.LoadAsset(), "DivaniMod.Role.Impostor.Cunctator", 1.45f),
         OptionsScreenshot = DivaniAssets.CunctatorBanner,
         Icon = DivaniAssets.CunctatorIcon,
         IntroSound = DivaniAssets.CunctatorIntroSound,

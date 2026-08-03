@@ -13,9 +13,13 @@ using MiraAPI.Modifiers;
 
 namespace DivaniMods.Modifiers.Game.Universal;
 
-public class ArmoredModifier : UniversalGameModifier, IColoredModifier, IWikiDiscoverable
+public class ArmoredModifier : UniversalGameModifier, IWikiDiscoverable
 {
     public static readonly Color ArmoredColor = new Color32(0xdf, 0xce, 0x52, 0xff);
+    public override ModifierUiConfiguration Configuration => new(
+        ArmoredColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.ArmoredIcon.LoadAsset(),
+            "DivaniMod.Modifier.Universal.Armored", 1.45f));
 
     public override string ModifierName => "Armored";
     public override string LocaleKey => "Armored";

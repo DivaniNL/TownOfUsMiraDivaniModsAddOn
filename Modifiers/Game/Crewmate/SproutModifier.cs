@@ -14,9 +14,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Crewmate;
 
-public class SproutModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable, IButtonModifier
+public class SproutModifier : TouGameModifier, IWikiDiscoverable, IButtonModifier
 {
     public static readonly Color SproutColor = new Color32(124, 200, 90, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        SproutColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.SproutIcon.LoadAsset(),
+            "DivaniMod.Modifier.Crewmate.Sprout", 1.45f));
 
     public override string ModifierName => "Sprout";
     public override string LocaleKey => "Sprout";

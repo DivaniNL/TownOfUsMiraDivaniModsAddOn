@@ -3,7 +3,9 @@ using System.Reflection;
 using HarmonyLib;
 using MiraAPI.Networking;
 using DivaniMods.Modifiers.Game.Neutral.NeutralPassive;
+using TownOfUs.Buttons.Classic.Neutral.NeutralKilling;
 using TownOfUs.Buttons.Neutral;
+using TownOfUs.Networking;
 
 namespace DivaniMods.Patches;
 
@@ -24,7 +26,7 @@ public static class SniperNoTeleportKill
             return true;
         }
 
-        PlayerControl.LocalPlayer.RpcCustomMurder(
+        PlayerControl.LocalPlayer.RpcSpecialMurder(
             target,
             MeetingCheck.OutsideMeeting,
             teleportMurderer: false,
@@ -39,7 +41,7 @@ public static class SniperNoTeleportKill
             return true;
         }
 
-        PlayerControl.LocalPlayer.RpcCustomMurder(
+        PlayerControl.LocalPlayer.RpcSpecialMurder(
             target,
             MeetingCheck.OutsideMeeting,
             teleportMurderer: false);
@@ -68,10 +70,10 @@ public static class SniperPestilenceKillNoTeleportPatch
         SniperNoTeleportKill.TryMurderWithoutTeleport(__instance.Target);
 }
 
-[HarmonyPatch(typeof(SoulCollectorReapButton), "OnClick")]
-public static class SniperSoulCollectorReapNoTeleportPatch
+[HarmonyPatch(typeof(MedusaPetrifyButton), "OnClick")]
+public static class SniperMedusaPetrifyNoTeleportPatch
 {
-    public static bool Prefix(SoulCollectorReapButton __instance) =>
+    public static bool Prefix(MedusaPetrifyButton __instance) =>
         SniperNoTeleportKill.TryMurderWithoutTeleport(__instance.Target, createDeadBody: false);
 }
 
