@@ -1,0 +1,30 @@
+name: Build and Release Mod
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers the build whenever you create a tag starting with 'v' (e.g., v1.0.0)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '6.0.x' # Adjust to match the .NET framework of the repo if needed
+
+    - name: Build with dotnet
+      run: dotnet build -c Release
+
+    - name: Create Release and Upload DLL
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          **/bin/Release/**/*.dll
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
