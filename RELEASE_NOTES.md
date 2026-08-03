@@ -42,6 +42,10 @@ Eat nearby players to trap them in your belly. If you make it to the next meetin
 - Made the maximum amount of stealable modifiers 15, default 5
 - Made shy non-stealable
 
+### Shuffle
+
+- Shuffle now works better with players that cannot be interacted with
+- Shuffle now shuffles Medusa stoned bodies if they are not fully stoned yet, after that they won't be moved.
 
 ### Plague Doctor
 
