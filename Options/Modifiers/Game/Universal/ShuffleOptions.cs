@@ -12,7 +12,7 @@ public class ShuffleOptions : AbstractOptionGroup<ShuffleModifier>
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
     public override string GroupName => "Shuffle";
     public override Color GroupColor => ShuffleModifier.ShuffleColor;
-    public override uint GroupPriority => 34;
+    public override uint GroupPriority => 37;
 
     public ModdedNumberOption ShuffleUses { get; } =
         new("Shuffle Uses", 1f, 0, 5f, 1f, MiraNumberSuffixes.None);

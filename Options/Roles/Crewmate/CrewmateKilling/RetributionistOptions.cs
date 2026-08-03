@@ -46,13 +46,16 @@ public class RetributionistOptions : AbstractOptionGroup<RetributionistRole>, IW
     public float RevengeTimer => GetRevengeTimerOptionForMap(MiscUtils.GetCurrentMap).Value;
 
     public ModdedNumberOption VengefulSoulSpeed { get; } = new(
-        "Vengeful Soul Speed", 1.05f, 1.0f, 1.25f, 0.05f, MiraNumberSuffixes.Multiplier, "0.00");
+        "Vengeful Soul Speed", 1.00f, 0.90f, 1.25f, 0.05f, MiraNumberSuffixes.Multiplier, "0.00");
 
     [ModdedEnumOption("Vengeful Soul Visible To", typeof(VengefulSoulVisibility))]
     public VengefulSoulVisibility SoulVisibleTo { get; set; } = VengefulSoulVisibility.All;
 
     [ModdedToggleOption("Only Turn Into Vengeful Soul Once")]
     public bool TurnIntoSoulOnce { get; set; } = true;
+
+    [ModdedToggleOption("Continues Game In Final 3")]
+    public bool StallGame { get; set; } = false;
 
     [ModdedToggleOption("Revenge Breaks Through Shields")]
     public bool RevengeBreaksShields { get; set; } = false;

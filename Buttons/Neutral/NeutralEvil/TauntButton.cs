@@ -108,9 +108,13 @@ public sealed class TauntButton : TownOfUsTargetButton<PlayerControl>
 
         if (AmongUsClient.Instance.AmHost)
         {
+            var breakShields = OptionGroupSingleton<InnocentOptions>.Instance.TauntBreaksShields;
+
             killer.RpcSpecialMurder(
                 innocent,
                 MeetingCheck.OutsideMeeting,
+                isIndirect: breakShields,
+                ignoreShield: breakShields,
                 resetKillTimer: false,
                 causeOfDeath: "TalkedTrash");
         }

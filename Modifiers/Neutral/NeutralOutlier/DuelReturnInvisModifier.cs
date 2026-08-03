@@ -16,18 +16,34 @@ public sealed class DuelReturnInvisModifier : ConcealedModifier, IVisualAppearan
     public override bool AutoStart => true;
     public bool VisualPriority => true;
 
-    public VisualAppearance GetVisualAppearance()
+    private bool CanSee()
     {
         var observer = PlayerControl.LocalPlayer;
-        var canSee = Player.AmOwner || (observer != null && DeathHandlerModifier.IsFullyDead(observer));
-        var playerColor = canSee ? new Color(0f, 0f, 0f, 0.1f) : Color.clear;
+        return Player.AmOwner || (observer != null && DeathHandlerModifier.IsFullyDead(observer));
+    }
+
+    private void HideSkinLayer()
+    {
+        if (Player == null || Player.cosmetics == null || Player.cosmetics.skin == null ||
+            Player.cosmetics.skin.layer == null)
+        {
+            return;
+        }
+
+        var alpha = CanSee() ? 0.1f : 0f;
+        Player.cosmetics.skin.layer.color = Player.cosmetics.skin.layer.color.SetAlpha(alpha);
+    }
+
+    public VisualAppearance GetVisualAppearance()
+    {
+        var playerColor = CanSee() ? new Color(0f, 0f, 0f, 0.1f) : Color.clear;
 
         var app = new VisualAppearance(Player.GetDefaultAppearance(), TownOfUsAppearances.PlayerNameOnly)
         {
-            HatId = string.Empty,
-            SkinId = string.Empty,
-            VisorId = string.Empty,
-            PetId = string.Empty,
+            HatId = "hat_NoHat",
+            SkinId = "skin_None",
+            VisorId = "visor_EmptyVisor",
+            PetId = "pet_EmptyPet",
             PlayerName = string.Empty,
             NameVisible = false,
             RendererColor = playerColor,
@@ -41,6 +57,7 @@ public sealed class DuelReturnInvisModifier : ConcealedModifier, IVisualAppearan
     {
         Player.RawSetAppearance(this);
         Player.cosmetics.ToggleNameVisible(false);
+        HideSkinLayer();
         if (!Player.HasModifier<DuelReturnDisabledModifier>())
         {
             Player.AddModifier<DuelReturnDisabledModifier>();
@@ -57,6 +74,8 @@ public sealed class DuelReturnInvisModifier : ConcealedModifier, IVisualAppearan
             Player.RawSetAppearance(this);
             Player.cosmetics.ToggleNameVisible(false);
         }
+
+        HideSkinLayer();
     }
 
     public override void OnDeath(DeathReason reason)

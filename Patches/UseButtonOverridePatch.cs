@@ -1,8 +1,10 @@
 using HarmonyLib;
+using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmateSupport;
 using DivaniMods.Buttons.Neutral.NeutralEvil;
+using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralEvil;
 using UnityEngine;
 
@@ -26,14 +28,6 @@ public static class UseButtonOverridePatch
     private static string? _savedLabel;
     private static bool _savedLabelActive;
     private static bool _savedLabelValid;
-
-    // The use button and pet button share the bottom-right slot. When a pet is owned
-    // and nothing is usable, vanilla deactivates the use button and shows the pet
-    // button instead. We force the use button to keep the slot and disable the pet
-    // button's click component so it can never swallow the tap.
-    private static PassiveButton? _petPassive;
-    private static bool _petPassiveSaved;
-    private static bool _petPassiveWasEnabled;
 
     // FixedUpdate runs before Unity polls mouse/collider input, so forcing the use
     // button active here (on an always-active object) guarantees it owns the slot at
@@ -78,6 +72,52 @@ public static class UseButtonOverridePatch
         ApplyOverride();
     }
 
+    [HarmonyPatch(typeof(PetButton), nameof(PetButton.SetTarget))]
+    [HarmonyPriority(Priority.Last)]
+    [HarmonyPostfix]
+    public static void PetButtonSetTargetPostfix(PetButton __instance)
+    {
+        if (__instance == null || ComputeKind() == Kind.None)
+        {
+            return;
+        }
+
+        if (__instance.gameObject.activeSelf)
+        {
+            __instance.gameObject.SetActive(false);
+        }
+
+        ApplyOverride();
+    }
+
+    [HarmonyPatch(typeof(HudManager), nameof(HudManager.SetHudActive), typeof(PlayerControl), typeof(RoleBehaviour),
+        typeof(bool))]
+    [HarmonyPriority(Priority.Last)]
+    [HarmonyPostfix]
+    public static void SetHudActivePostfix()
+    {
+        ApplyOverride();
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CanPet))]
+    [HarmonyPriority(Priority.First)]
+    [HarmonyPrefix]
+    public static bool CanPetPrefix(PlayerControl __instance, ref bool __result)
+    {
+        if (__instance == null || !__instance.AmOwner)
+        {
+            return true;
+        }
+
+        if (ComputeKind() == Kind.None)
+        {
+            return true;
+        }
+
+        __result = false;
+        return false;
+    }
+
     [HarmonyPatch(typeof(ActionButton), nameof(ActionButton.SetDisabled))]
     [HarmonyPriority(Priority.First)]
     [HarmonyPrefix]
@@ -99,10 +139,24 @@ public static class UseButtonOverridePatch
             case Kind.Defuse:
                 return !DemolitionistDefuseButton.IsLocalDefusing;
             case Kind.Portal:
-                return true;
+                return PortalCooldownRemaining() <= 0f;
             default:
                 return false;
         }
+    }
+
+    private static float PortalCooldownRemaining()
+    {
+        var player = PlayerControl.LocalPlayer;
+        return player == null ? 0f : PortalManager.GetRemainingCooldown(player.PlayerId);
+    }
+
+    [HarmonyPatch(typeof(PetButton), nameof(PetButton.DoClick))]
+    [HarmonyPriority(Priority.First)]
+    [HarmonyPrefix]
+    public static bool PetButtonDoClickPrefix()
+    {
+        return UseButtonDoClickPrefix();
     }
 
     [HarmonyPatch(typeof(UseButton), nameof(UseButton.DoClick))]
@@ -161,7 +215,11 @@ public static class UseButtonOverridePatch
         var label = kind == Kind.Defuse ? "DEFUSE" : "USE PORTAL";
         var labelColor = kind == Kind.Defuse ? DemolitionistRole.DemolitionistColor : PortalLabelColor;
 
-        var enabled = kind != Kind.Defuse || !DemolitionistDefuseButton.IsLocalDefusing;
+        var portalCooldown = kind == Kind.Portal ? PortalCooldownRemaining() : 0f;
+
+        var enabled = kind == Kind.Defuse
+            ? !DemolitionistDefuseButton.IsLocalDefusing
+            : portalCooldown <= 0f;
 
         if (enabled)
         {
@@ -173,7 +231,15 @@ public static class UseButtonOverridePatch
             useButton.SetDisabled();
         }
 
-        useButton.SetCoolDown(0f, 1f);
+        if (kind == Kind.Portal && portalCooldown > 0f)
+        {
+            var maxCooldown = OptionGroupSingleton<PortalmakerOptions>.Instance.UsePortalCooldown.Value;
+            useButton.SetCoolDown(portalCooldown, maxCooldown);
+        }
+        else
+        {
+            useButton.SetCoolDown(0f, 1f);
+        }
 
         if (useButton.graphic != null && sprite != null)
         {
@@ -198,44 +264,10 @@ public static class UseButtonOverridePatch
         }
 
         var pet = hud.PetButton;
-        if (pet == null)
-        {
-            return;
-        }
-
-        var passive = pet.GetComponent<PassiveButton>();
-        if (passive != null)
-        {
-            if (!_petPassiveSaved)
-            {
-                _petPassive = passive;
-                _petPassiveWasEnabled = passive.enabled;
-                _petPassiveSaved = true;
-            }
-
-            passive.enabled = false;
-        }
-
-        if (pet.gameObject.activeSelf)
+        if (pet != null && pet.gameObject.activeSelf)
         {
             pet.gameObject.SetActive(false);
         }
-    }
-
-    private static void RestorePet()
-    {
-        if (!_petPassiveSaved)
-        {
-            return;
-        }
-
-        if (_petPassive != null)
-        {
-            _petPassive.enabled = _petPassiveWasEnabled;
-        }
-
-        _petPassive = null;
-        _petPassiveSaved = false;
     }
 
     private static void ForceVisualEnabled(UseButton useButton)
@@ -291,9 +323,10 @@ public static class UseButtonOverridePatch
             useButton.buttonLabelText.gameObject.SetActive(_savedLabelActive);
         }
 
-        useButton.SetDisabled();
-
-        RestorePet();
+        if (useButton.currentTarget == null)
+        {
+            useButton.SetDisabled();
+        }
 
         _savedSprite = null;
         _savedSpriteValid = false;
@@ -314,11 +347,36 @@ public static class UseButtonOverridePatch
             return Kind.Defuse;
         }
 
-        if (UsePortalButton.ShouldDriveUseButton())
+        if (UsePortalButton.ShouldDriveUseButton() && !HasVanillaUseTarget())
         {
             return Kind.Portal;
         }
 
         return Kind.None;
+    }
+
+    private static bool HasVanillaUseTarget()
+    {
+        var player = PlayerControl.LocalPlayer;
+        if (player == null || player.Data == null || player.itemsInRange == null)
+        {
+            return false;
+        }
+
+        foreach (var usable in player.itemsInRange)
+        {
+            if (usable == null)
+            {
+                continue;
+            }
+
+            usable.CanUse(player.Data, out var canUse, out _);
+            if (canUse)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

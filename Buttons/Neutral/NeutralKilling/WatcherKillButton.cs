@@ -64,11 +64,6 @@ public sealed class WatcherKillButton : TownOfUsKillRoleButton<WatcherRole, Play
             return false;
         }
 
-        if (target.HasModifier<BaseShieldModifier>() || target.HasModifier<FirstDeadShield>())
-        {
-            return false;
-        }
-
         return base.IsTargetValid(target);
     }
 

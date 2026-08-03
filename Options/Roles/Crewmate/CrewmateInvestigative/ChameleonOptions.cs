@@ -3,6 +3,7 @@ using MiraAPI.GameOptions.Attributes;
 using MiraAPI.GameOptions.OptionTypes;
 using MiraAPI.Utilities;
 using DivaniMods.Roles.Crewmate.CrewmateInvestigative;
+using TownOfUs.Roles.Crewmate;
 
 namespace DivaniMods.Options;
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
+using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
 using Reactor.Networking.Attributes;
@@ -10,6 +11,7 @@ using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmatePower;
 using DivaniMods.Modules;
 using DivaniMods.Options;
+using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
@@ -32,8 +34,28 @@ public sealed class MageRole(IntPtr cppPtr)
 
     public string RoleName => "Mage";
     public string RoleDescription => "Cast spells to aid your team!";
-    public string RoleLongDescription =>
-        "Use your knowledge of magic to help the crew and weaken the impostors";
+    public string RoleLongDescription
+    {
+        get
+        {
+            if (Player == null)
+            {
+                return "Use your knowledge of magic to help the crew and weaken the impostors";
+            }
+
+            if (Player.HasModifier<CrewpostorModifier>())
+            {
+                return "Use your knowledge of magic to help the impostors and weaken the crew";
+            }
+
+            if (Player.HasModifier<EgotistModifier>())
+            {
+                return "Use your knowledge of magic to help the killers and weaken the crew";
+            }
+
+            return "Use your knowledge of magic to help the crew and weaken the impostors";
+        }
+    }
     public Color RoleColor => MageColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmatePower;
@@ -110,10 +132,17 @@ public sealed class MageRole(IntPtr cppPtr)
         if (target.AmOwner)
         {
             var opts = OptionGroupSingleton<MageOptions>.Instance;
+            var mageIsEgotist = mage.HasModifier<EgotistModifier>();
+            var mageWantsCrewDead = mage.HasModifier<CrewpostorModifier>() || mageIsEgotist;
+            var targetWantsCrewDead = target.HasModifier<CrewpostorModifier>() || target.HasModifier<EgotistModifier>();
             bool isBuff;
-            if (target.IsCrewmate())
+            if (target.IsCrewmate() && !targetWantsCrewDead)
             {
-                isBuff = true;
+                isBuff = !mageWantsCrewDead;
+            }
+            else if (target.IsImpostor() || targetWantsCrewDead)
+            {
+                isBuff = mageWantsCrewDead;
             }
             else if ((target.Data?.Role as ITownOfUsRole)?.RoleAlignment == RoleAlignment.NeutralBenign)
             {
@@ -126,7 +155,7 @@ public sealed class MageRole(IntPtr cppPtr)
             }
             else
             {
-                isBuff = false;
+                isBuff = mageIsEgotist;
             }
 
             if ((EnergizeTiming)opts.EnergizeApplyTiming.Value == EnergizeTiming.AfterDelay)

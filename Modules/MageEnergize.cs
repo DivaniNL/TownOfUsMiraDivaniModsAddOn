@@ -120,7 +120,7 @@ public static class MageEnergize
                 {
                     return null;
                 }
-                btn.CurrentCharges += isBuff ? 1 : -1;
+                btn.AddCharges(isBuff ? 1 : -1);
                 return ButtonName(btn, "Sting");
             }
 
@@ -131,7 +131,7 @@ public static class MageEnergize
                 {
                     return null;
                 }
-                btn.CurrentCharges += isBuff ? 1 : -1;
+                btn.AddCharges(isBuff ? 1 : -1);
                 return ButtonName(btn, "Lockdown");
             }
 

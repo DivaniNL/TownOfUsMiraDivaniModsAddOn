@@ -18,6 +18,13 @@ public enum EnergizeNeutralBenignMode
     None,
 }
 
+public enum ShockShieldVisibility
+{
+    Mage,
+    MageAndTarget,
+    Teammates,
+}
+
 public class MageOptions : AbstractOptionGroup<MageRole>
 {
     public override string GroupName => "Mage";
@@ -37,11 +44,15 @@ public class MageOptions : AbstractOptionGroup<MageRole>
     public ModdedNumberOption ShockShieldDuration { get; } =
         new("Shock Shield Duration", 12.5f, 5f, 30f, 2.5f, MiraNumberSuffixes.Seconds);
 
-    public ModdedToggleOption TargetSeesShockShield { get; } =
-        new("Target Sees Shock Shield", true);
+    public ModdedEnumOption ShockShieldVisibleTo { get; } =
+        new("Who Sees The Shock Shield", (int)ShockShieldVisibility.MageAndTarget, typeof(ShockShieldVisibility),
+            ["Mage", "Mage And Target", "Teammates"]);
 
     public ModdedToggleOption MageNotifiedOnAttack { get; } =
         new("Notify Mage When Target Attacked", true);
+
+    public ModdedToggleOption ShockShieldReactsToInteractions { get; } =
+        new("Shock Shield Reacts To Interactions", true);
 
     public ModdedEnumOption EnergizeApplyTiming { get; } =
         new("Energize Applies", (int)EnergizeTiming.AfterMeeting, typeof(EnergizeTiming), ["After Delay", "After Meeting"]);

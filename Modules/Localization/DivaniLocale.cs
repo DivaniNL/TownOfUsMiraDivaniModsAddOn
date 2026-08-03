@@ -19,6 +19,7 @@ public static class DivaniLocale
     private static void RegisterLocalSettings(Dictionary<string, string> en)
     {
         en.TryAdd("DivaniLocalSettingDisableRainbowComms", "Disable Rainbow Comms");
+        en.TryAdd("DivaniLocalSettingDisableDemoAlternatingColors", "Disable Demolitionist Alternating Colors");
     }
 
     private static void RegisterDeathCauses(Dictionary<string, string> en)
@@ -37,5 +38,6 @@ public static class DivaniLocale
         en.TryAdd("DiedToObfuscator", "Obfuscated");
         en.TryAdd("DiedToDuelist", "Defeated");
         en.TryAdd("DiedToWatcher", "Watched");
+        en.TryAdd("DiedToThief", "Robbed");
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
+using MiraAPI.Modifiers;
 using MiraAPI.Roles;
 using MiraAPI.Utilities.Assets;
 using Reactor.Networking.Attributes;
@@ -12,6 +13,7 @@ using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmateSupport;
+using DivaniMods.Modifiers.Crewmate.CrewmateKilling;
 using DivaniMods.Options;
 using TownOfUs.Assets;
 using TownOfUs.Extensions;
@@ -20,6 +22,7 @@ using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Options;
 using TownOfUs.Roles;
+using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
 
@@ -37,6 +40,9 @@ public sealed class MoleRole(IntPtr cppPtr)
 
     // Mole vent id -> remaining rounds before it collapses (only tracked when duration > 0).
     [HideFromIl2Cpp] public static Dictionary<int, int> VentRounds { get; set; } = [];
+
+    // Local-only: seconds left before the local player gets kicked out of the mole vent network.
+    [HideFromIl2Cpp] public static float VentTimeLeft { get; set; }
 
     public string RoleName => "Mole";
     public string RoleDescription => "Dig your own tunnel network!";
@@ -91,8 +97,48 @@ public sealed class MoleRole(IntPtr cppPtr)
         return aliveCount <= minimum;
     }
 
+    // Roles that can vent on their own (impostors, Engineer, custom venters) keep vanilla vent rules
+    // inside mole vents: no mole vent button, no vent time limit.
+    public static bool IsNativeVenter(RoleBehaviour? role)
+    {
+        if (role == null || role is MoleRole)
+        {
+            return false;
+        }
+
+        if (role.IsImpostor || role is EngineerTouRole)
+        {
+            return true;
+        }
+
+        if (role is ICustomRole customRole && customRole.Configuration.CanUseVent)
+        {
+            return true;
+        }
+
+        return role is not PlumberRole && role.CanVent;
+    }
+
+    public static bool IsBlockedByPlumber(Vent? vent)
+    {
+        if (vent == null)
+        {
+            return false;
+        }
+
+        var ventId = vent.Id;
+        return PlumberRole.VentBlockList.Contains(ventId) ||
+               PlumberRole.VentFlushList.Contains(ventId) ||
+               PlumberRole.VentsBlocked.Any(x => x.Key == ventId);
+    }
+
     public static bool CanUseMoleVents(PlayerControl player)
     {
+        if (player.HasModifier<CursedModifier>())
+        {
+            return false;
+        }
+
         if (player.Data?.Role is MoleRole)
         {
             return true;
@@ -136,8 +182,6 @@ public sealed class MoleRole(IntPtr cppPtr)
             vent.myAnim = null!;
         }
 
-        vent.numFramesUntilPlayerDisappearsOnEnter = 0;
-        vent.numFramesUntilPlayerReappearsOnExit = 0;
         vent.myRend.sprite = MoleVentSprite;
         vent.name = $"MoleVent-{player.PlayerId}-{ventId}";
 
@@ -147,7 +191,7 @@ public sealed class MoleRole(IntPtr cppPtr)
         }
 
         vent.Id = ventId;
-        vent.transform.position = new Vector3(position.x, position.y, zAxis + 0.001f);
+        vent.transform.position = new Vector3(position.x, position.y, zAxis + 0.003f);
 
         if (mole.Vents.Count > 0)
         {
@@ -263,6 +307,7 @@ public sealed class MoleRole(IntPtr cppPtr)
     public static void ClearAll()
     {
         VentRounds.Clear();
+        VentTimeLeft = OptionGroupSingleton<MoleOptions>.Instance.VentTimeLimit.Value;
 
         foreach (var mole in CustomRoleUtils.GetActiveRolesOfType<MoleRole>())
         {

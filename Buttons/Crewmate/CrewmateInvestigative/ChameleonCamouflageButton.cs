@@ -1,25 +1,29 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
-using DivaniMods.Assets;
 using DivaniMods.Options;
-using DivaniMods.Roles.Crewmate.CrewmateInvestigative;
-using DivaniMods.Modifiers.Crewmate.CrewmateInvestigative
-using System.Collections;
 using TownOfUs.Buttons;
 using UnityEngine;
+using TownOfUs;
+using TownOfUs.Roles.Crewmate;
+using DivaniMods.Modifiers.Crewmate.CrewmateInvestigative;
+using TownOfUs.Modifiers.Neutral;
+using TownOfUs.Modifiers;
+using TownOfUs.Assets;
+using DivaniMods.Roles.Crewmate.CrewmateInvestigative;
+using DivaniMods.Assets;
 
 namespace DivaniMods.Buttons.Crewmate.CrewmateInvestigative;
 
-public sealed class ChameleonCamouflageButton : IAftermathableButton,
+public sealed class ChameleonCamouflageButton : TownOfUsRoleButton<ChameleonRole>, IAftermathableButton
 {
     public override Color TextOutlineColor => TownOfUsColors.Crewmate;
     public override string Name => "Camouflage";
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
-    public override float Cooldown => Math.Clamp(OptionGroupSingleton<ChameleonOptions>.Instance.CamouflageCooldown + MapCooldown, 5f, 120f);
-    public override float EffectDuration => OptionGroupSingleton<ChameleonOptions>.Instance.CamouflageDuration;
+    public override float Cooldown => Math.Clamp(OptionGroupSingleton<ChameleonOptions>.Instance.CamouflageCooldown.Value + MapCooldown, 5f, 120f);
+    public override float EffectDuration => OptionGroupSingleton<ChameleonOptions>.Instance.CamouflageDuration.Value;
     public override int MaxUses => (int)OptionGroupSingleton<ChameleonOptions>.Instance.MaxCamouflages;
-    public override LoadableAsset<Sprite> Sprite => LegacyAssets.IsLegacy ? LegacyImpAssets.SwoopSprite : TouImpAssets.SwoopSprite;
+    public override LoadableAsset<Sprite> Sprite => DivaniAssets.MageIllusionButton;
 
     public override bool ZeroIsInfinite { get; set; } = true;
 
@@ -106,6 +110,6 @@ public sealed class ChameleonCamouflageButton : IAftermathableButton,
             return;
         }
 
-        PlayerControl.LocalPlayer.RpcRemoveModifier<CamiuflageModifier>();
+        PlayerControl.LocalPlayer.RpcRemoveModifier<CamouflageModifier>();
     }
 }

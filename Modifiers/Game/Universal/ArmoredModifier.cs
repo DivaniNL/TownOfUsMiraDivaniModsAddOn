@@ -2,6 +2,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using DivaniMods.Roles.Neutral.NeutralEvil;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
@@ -28,6 +29,7 @@ public class ArmoredModifier : UniversalGameModifier, IColoredModifier, IWikiDis
     public int AttacksRemaining { get; set; }
     public int AttacksSurvived => MaxAttacks - AttacksRemaining;
     public int DisplayedAttacksSurvived { get; set; }
+    public bool NotifiedBroken { get; set; }
 
     public void RefreshDisplayedAttacks() => DisplayedAttacksSurvived = AttacksSurvived;
 
@@ -44,6 +46,11 @@ public class ArmoredModifier : UniversalGameModifier, IColoredModifier, IWikiDis
 
     public override int GetAmountPerGame() =>
         (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.ArmoredAmount.Value;
+
+    public override bool IsModifierValidOn(RoleBehaviour role)
+    {
+        return base.IsModifierValidOn(role) && role is not InnocentRole;
+    }
 
     public override void OnActivate()
     {
@@ -62,7 +69,5 @@ public class ArmoredModifier : UniversalGameModifier, IColoredModifier, IWikiDis
         {
             Player.RemoveModifier<ArmoredShieldModifier>();
         }
-
-        ModifierComponent?.RemoveModifier(this);
     }
 }

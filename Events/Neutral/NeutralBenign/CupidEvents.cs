@@ -65,22 +65,32 @@ public static class CupidEvents
 
         foreach (var cupid in CustomRoleUtils.GetActiveRolesOfType<CupidRole>().ToList())
         {
-            CheckLoverDeath(cupid, @event.Player);
+            CheckLoverDeath(cupid, @event.Player, @event.DeathReason);
         }
     }
 
-    private static void CheckLoverDeath(CupidRole cupid, PlayerControl victim)
+    private static void CheckLoverDeath(CupidRole cupid, PlayerControl victim, DeathReason reason)
     {
         if (cupid.Player == null || cupid.Player.HasDied())
         {
             return;
         }
 
-        var isMine = !cupid.Finalized
-            ? cupid.ProvisionalTargets.Contains(victim.PlayerId)
-            : cupid.GetCurrentCouple().Any(x => x != null && x.PlayerId == victim.PlayerId);
+        if (!cupid.Finalized)
+        {
+            if (cupid.ProvisionalTargets.Remove(victim.PlayerId))
+            {
+                victim.RemoveModifier<CupidToBeLoversModifier>();
+            }
+            return;
+        }
 
-        if (!isMine)
+        if (reason is not (DeathReason.Exile or DeathReason.Kill))
+        {
+            return;
+        }
+
+        if (!cupid.GetCurrentCouple().Any(x => x != null && x.PlayerId == victim.PlayerId))
         {
             return;
         }

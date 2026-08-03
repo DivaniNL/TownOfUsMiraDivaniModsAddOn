@@ -1,15 +1,22 @@
+using DivaniMods.Assets;
+using DivaniMods.Options;
 using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
+using TownOfUs.Assets;
+using TownOfUs.Extensions;
+using TownOfUs.Modules.Wiki;
 using TownOfUs.Options.Roles.Crewmate;
+using TownOfUs.Roles;
+using TownOfUs.Utilities;
 using UnityEngine;
 
-namespace TownOfUs.Roles.Crewmate;
+namespace DivaniMods.Roles.Crewmate.CrewmateInvestigative;
 
 public sealed class ChameleonRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
-
-    public static readonly Color ChameleonColor = new Color32(244, 169, 60, 255);
 {
+    public static readonly Color ChameleonColor = new Color32(122, 220, 193, 255);
+
     public DoomableType DoomHintType => DoomableType.Hunter;
     public string LocaleKey => "Chameleon";
     public string RoleName => "Chameleon";
@@ -25,15 +32,14 @@ public sealed class ChameleonRole(IntPtr cppPtr) : CrewmateRole(cppPtr), ITownOf
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Canouflage", "Turn invisible for a short period of time.", DivaniAssets.ChameleonCamouflageButton)
+        new("Camouflage", "Turn invisible for a short period of time.", DivaniAssets.MageIllusionButton)
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
     {
-        CanUseVent = (ChameleonVent)OptionGroupSingleton<ChameleonOptions>.Instance.CanVent.Value,
-        Icon = TouRoleIcons.Swooper,
+        CanUseVent = OptionGroupSingleton<ChameleonOptions>.Instance.CanVent,
+        Icon = DivaniAssets.ChameleonIcon,
         IntroSound = TouAudio.PhantomIntroSound
-            };
-        }
-    }
+    };
+        
 }

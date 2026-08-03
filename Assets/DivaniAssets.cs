@@ -13,6 +13,8 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> PlacePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalUse.png", 100);
     public static LoadableAsset<Sprite> UsePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalUse.png", 100);
     public static LoadableAsset<Sprite> PickpocketButton { get; } = new LoadableResourceAsset($"{ShortPath}.PickPocketButton.png");
+    public static LoadableAsset<Sprite> ThiefKillButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefKillButton.png");
+    public static LoadableAsset<Sprite> ThiefVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefVentButton.png");
     public static LoadableAsset<Sprite> PlagueDoctorVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.PDVent.png");
     public static LoadableAsset<Sprite> DemolitionistVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.DemolitionistVent.png");
     public static LoadableAsset<Sprite> FragVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.FragVentButton.png");
@@ -59,10 +61,12 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> PortalmakerIcon { get; } = new LoadableResourceAsset($"{IconPath}.PortalMaker.png", 200);
     public static LoadableAsset<Sprite> FragIcon { get; } = new LoadableResourceAsset($"{IconPath}.Frag.png", 200);
     public static LoadableAsset<Sprite> SilencerIcon { get; } = new LoadableResourceAsset($"{IconPath}.Silencer.png", 200);
+public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourceAsset($"{IconPath}.Workhorse.png", 200);
     public static LoadableAsset<Sprite> PlagueDoctorIcon { get; } = new LoadableResourceAsset($"{IconPath}.PlagueDoctor.png", 200);
     public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{IconPath}.Innocent.png", 200);
     public static LoadableAsset<Sprite> OpportunistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Opportunist.png", 200);
     public static LoadableAsset<Sprite> RecruiterIcon { get; } = new LoadableResourceAsset($"{IconPath}.Recruiter.png");
+    public static LoadableAsset<Sprite> RecruitIcon { get; } = new LoadableResourceAsset($"{IconPath}.Recruit.png", 200);
     public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{IconPath}.Sentinel.png", 200);
     public static LoadableAsset<Sprite> DemolitionistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Demolitionist.png", 200);
     public static LoadableAsset<Sprite> DomesmithIcon { get; } = new LoadableResourceAsset($"{IconPath}.Domesmith.png", 200);
@@ -78,6 +82,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> LocatorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Locator.png", 200);
     public static LoadableAsset<Sprite> MoleIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mole.png", 200);
     public static LoadableAsset<Sprite> TelecomIcon { get; } = new LoadableResourceAsset($"{IconPath}.Telecom.png", 200);
+    public static LoadableAsset<Sprite> ChameleonIcon { get; } = new LoadableResourceAsset($"{IconPath}.Chameleon.png", 200);
 
     // Watcher (Squid Game red/green light) sprites
     public static LoadableAsset<Sprite> WatcherWatchButton { get; } = new LoadableResourceAsset($"{ShortPath}.WatcherWatch.png");
@@ -100,13 +105,13 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> RuthlessIcon { get; } = new LoadableResourceAsset($"{IconPath}.Ruthless.png", 200);
     public static LoadableAsset<Sprite> NullifiedIcon { get; } = new LoadableResourceAsset($"{IconPath}.Nullified.png", 200);
     public static LoadableAsset<Sprite> SproutIcon { get; } = new LoadableResourceAsset($"{IconPath}.Sprout.png", 200);
+    public static LoadableAsset<Sprite> BetrayerIcon { get; } = new LoadableResourceAsset($"{IconPath}.Betrayer.png", 200);
     public static LoadableAsset<Sprite> ObfuscatorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Obfuscator.png", 200);
     public static LoadableAsset<Sprite> CunctatorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Cunctator.png", 200);
     public static LoadableAsset<Sprite> IncompetentIcon { get; } = new LoadableResourceAsset($"{IconPath}.Incompetent.png", 200);
     public static LoadableAsset<Sprite> ArmoredIcon { get; } = new LoadableResourceAsset($"{IconPath}.Armored.png", 200);
     public static LoadableAsset<Sprite> UavIcon { get; } = new LoadableResourceAsset($"{IconPath}.UAV.png", 200);
     public static LoadableAsset<Sprite> TacticalInsertionIcon { get; } = new LoadableResourceAsset($"{IconPath}.TacticalInsertion.png", 200);
-public static LoadableAsset<Sprite> BountyIcon { get; } = new LoadableResourceAsset($"{IconPath}.Bounty.png", 200);
     // Audio clips (16000hz)
     public static LoadableAsset<AudioClip> FragileBreak { get; } = new LoadableAudioResourceAsset($"{ShortPath}.FragileBreak.wav");
     public static LoadableAsset<AudioClip> PlagueDoctorIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.PlagueDoctorIntro.wav");
@@ -148,6 +153,7 @@ public static LoadableAsset<Sprite> BountyIcon { get; } = new LoadableResourceAs
     public static LoadableAsset<AudioClip> TacInsertHoverSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TacInsertHover.wav");
     public static LoadableAsset<AudioClip> TacInsertPlaceSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TacInsertPlace.wav");
     public static LoadableAsset<AudioClip> TelecomIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomIntro.wav");
+    public static LoadableAsset<AudioClip> WorkhorseIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WorkhorseIntro.wav");
     public static LoadableAsset<AudioClip> TelecomTransmissionSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomTransmiss.wav");
     public static LoadableAsset<AudioClip> TelecomMessageSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.TelecomMessageSound.wav");
     // Dutch Meme Soundpack door SFX - used by DutchMemeSoundpackPatch to replace

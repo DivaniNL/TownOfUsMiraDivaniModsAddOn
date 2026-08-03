@@ -1,16 +1,22 @@
+using System.Collections;
 using System.Linq;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
-using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using MiraAPI.Roles;
+using MiraAPI.Utilities;
+using Reactor.Utilities;
+using DivaniMods.Assets;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Modules.Duelist;
-using DivaniMods.Options;
+using DivaniMods.Roles.Neutral.NeutralOutlier;
 using TownOfUs.Events;
 using TownOfUs.Events.TouEvents;
 using TownOfUs.Modifiers;
 using TownOfUs.Modules.Localization;
+using TownOfUs.Utilities;
+using UnityEngine;
 
 namespace DivaniMods.Events.Neutral.NeutralOutlier;
 
@@ -45,34 +51,10 @@ public static class DuelistEvents
             return;
         }
 
-        if (DuelManager.IsResolved(src.PlayerId) || DuelManager.IsResolved(tgt.PlayerId))
+        if (!DuelManager.IsSanctionedKill(src.PlayerId, tgt.PlayerId))
         {
             evt.Cancel();
-            return;
         }
-
-        if (tm.IsDuelist)
-        {
-            DuelManager.AddLoss(tgt.PlayerId);
-
-            var lossesToDie = (int)OptionGroupSingleton<DuelistOptions>.Instance.DuelsLostToDie.Value;
-            if (DuelManager.GetLosses(tgt.PlayerId) >= lossesToDie)
-            {
-                DuelManager.MarkResolved(src.PlayerId, tgt.PlayerId);
-                return;
-            }
-
-            DuelManager.MarkResolved(src.PlayerId, tgt.PlayerId);
-            evt.Cancel();
-            DuelManager.EndDuel(src, tgt, false);
-            return;
-        }
-
-        if (sm.IsDuelist)
-        {
-            DuelManager.AddWin(src.PlayerId);
-        }
-        DuelManager.MarkResolved(src.PlayerId, tgt.PlayerId);
     }
 
     [RegisterEvent]
@@ -133,11 +115,65 @@ public static class DuelistEvents
     }
 
     [RegisterEvent]
+    public static void OnEjection(EjectionEvent evt)
+    {
+        var duelist = CustomRoleUtils.GetActiveRolesOfType<DuelistRole>().FirstOrDefault();
+        if (duelist is { VictoryPending: true } && !duelist.Player.HasDied() &&
+            Helpers.GetAlivePlayers().Count > 3)
+        {
+            Coroutines.Start(CoShowLeaveNotification(duelist.Player));
+
+            DeathHandlerModifier.UpdateDeathHandlerImmediate(duelist.Player, TouLocale.Get("DiedToWinning"),
+                DeathEventHandlers.CurrentRound, DeathHandlerOverride.SetFalse,
+                lockInfo: DeathHandlerOverride.SetTrue);
+
+            duelist.Player.Exiled();
+        }
+    }
+
+    [RegisterEvent]
     public static void OnRoundStart(RoundStartEvent evt)
     {
         if (evt.TriggeredByIntro)
         {
             DuelManager.ResetAll();
+            return;
         }
+
+        var duelist = CustomRoleUtils.GetActiveRolesOfType<DuelistRole>().FirstOrDefault();
+        if (duelist is { VictoryPending: true } && !duelist.Player.HasDied() &&
+            Helpers.GetAlivePlayers().Count > 3)
+        {
+            Coroutines.Start(CoShowLeaveNotification(duelist.Player));
+
+            DeathHandlerModifier.UpdateDeathHandlerImmediate(duelist.Player, TouLocale.Get("DiedToWinning"),
+                DeathEventHandlers.CurrentRound, DeathHandlerOverride.SetFalse,
+                lockInfo: DeathHandlerOverride.SetTrue);
+
+            duelist.Player.Exiled();
+        }
+    }
+
+    private static IEnumerator CoShowLeaveNotification(PlayerControl duelist)
+    {
+        while (ExileController.Instance != null || MeetingHud.Instance != null)
+        {
+            yield return null;
+        }
+
+        if (duelist == null || duelist.Data == null)
+        {
+            yield break;
+        }
+
+        var hex = ColorUtility.ToHtmlStringRGB(DuelistRole.DuelistColor);
+        var text = duelist.AmOwner
+            ? $"<b><color=#{hex}>You have successfully won as the Duelist, as you have won enough duels!</color></b>"
+            : $"<b><color=#{hex}>The Duelist, {duelist.Data.PlayerName}, has successfully won, as they have won enough duels!</color></b>";
+
+        var notif = Helpers.CreateAndShowNotification(
+            text, Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.DuelistIcon.LoadAsset());
+
+        notif.AdjustNotification();
     }
 }

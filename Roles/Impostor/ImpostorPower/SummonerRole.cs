@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using AmongUs.GameOptions;
 using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
@@ -16,6 +17,7 @@ using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using UnityEngine;
+using DivaniMods.Roles.Crewmate.CrewmateKilling;
 
 namespace DivaniMods.Roles.Impostor.ImpostorPower;
 

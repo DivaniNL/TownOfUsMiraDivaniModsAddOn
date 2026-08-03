@@ -35,10 +35,11 @@ public static class ArmoredEventHandler
                     player.RemoveModifier<ArmoredShieldModifier>();
                 }
 
-                player?.RemoveModifier<ArmoredModifier>();
+                mod.RefreshDisplayedAttacks();
 
-                if (player != null && player.AmOwner)
+                if (player != null && player.AmOwner && !mod.NotifiedBroken)
                 {
+                    mod.NotifiedBroken = true;
                     var colorHex = ColorUtility.ToHtmlStringRGB(ArmoredModifier.ArmoredColor);
                     MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                         $"<b><color=#{colorHex}>Your armor is broken</color></b>",

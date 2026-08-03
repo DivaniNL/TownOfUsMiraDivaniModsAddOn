@@ -16,11 +16,25 @@ public sealed class MoleOptions : AbstractOptionGroup<MoleRole>
     [ModdedNumberOption("Max Number Of Mole Vents Per Game", 1f, 6f, 1f, MiraNumberSuffixes.None)]
     public float MaxVents { get; set; } = 4f;
 
+    public ModdedToggleOption EarnMoreVents { get; } = new("Earn More Vents After Tasks", false);
+
+    public ModdedNumberOption TasksPerVent { get; } =
+        new("Tasks Required For Additional Vent", 3f, 1f, 5f, 1f, MiraNumberSuffixes.None)
+        {
+            Visible = () => OptionGroupSingleton<MoleOptions>.Instance.EarnMoreVents
+        };
+
+    public ModdedNumberOption VentTimeLimit { get; } =
+        new("Time In Mole Vents Before Kick Out", 10f, 1f, 15f, 1f, MiraNumberSuffixes.Seconds);
+
+    public ModdedNumberOption VentCooldown { get; } =
+        new("Mole Vent Cooldown", 10f, 1f, 15f, 1f, MiraNumberSuffixes.Seconds);
+
     [ModdedNumberOption("Rounds Mole Vents Last", 0f, 15f, 1f, MiraNumberSuffixes.None, "0", true)]
     public float VentRoundDuration { get; set; } = 2f;
 
     [ModdedEnumOption("Who Can Use Mole Vents", typeof(MoleVentUsage), ["Crewmates", "Anyone", "Mole"])]
-    public MoleVentUsage VentUsage { get; set; } = MoleVentUsage.Crewmates;
+    public MoleVentUsage VentUsage { get; set; } = MoleVentUsage.Anyone;
 
     [ModdedEnumOption("Vent Visibility", typeof(MoleVentVisibility), ["Immediate", "After Use", "After Next Meeting"])]
     public MoleVentVisibility VentVisibility { get; set; } = MoleVentVisibility.Immediate;

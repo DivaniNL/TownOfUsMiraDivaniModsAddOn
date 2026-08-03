@@ -21,7 +21,7 @@ public sealed class RevengeButton : TownOfUsKillRoleButton<VengefulSoulRole, Pla
     public override bool ZeroIsInfinite { get; set; } = true;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.VengefulSoulRevengeButton;
     public override float Distance => 1.5f;
-    public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
+    public override ButtonLocation Location { get; set; } = ButtonLocation.BottomLeft;
     public override Color TextOutlineColor => RetributionistRole.RetributionistColor;
     public override BaseKeybind Keybind => Keybinds.PrimaryAction;
     public override bool UsableInDeath => true;

@@ -13,8 +13,42 @@ public static class RetributionistManager
 
     public static readonly HashSet<byte> UsedRevenge = new();
 
+    private static readonly HashSet<byte> PendingRevenge = new();
+
+    private static readonly HashSet<byte> ReviveInProgress = new();
+
+    public static bool AnyRevengeActive => Killers.Count > 0 || PendingRevenge.Count > 0;
+
+    public static bool AnyReviveInProgress => ReviveInProgress.Count > 0;
+
+    public static void MarkReviveInProgress(byte soulId)
+    {
+        ReviveInProgress.Add(soulId);
+    }
+
+    public static void ClearReviveInProgress(byte soulId)
+    {
+        ReviveInProgress.Remove(soulId);
+    }
+
+    public static void MarkRevengePending(byte soulId)
+    {
+        PendingRevenge.Add(soulId);
+    }
+
+    public static void ClearRevengePending(byte soulId)
+    {
+        PendingRevenge.Remove(soulId);
+    }
+
+    public static void ClearAllRevengePending()
+    {
+        PendingRevenge.Clear();
+    }
+
     public static void StartRevenge(byte soulId, byte killerId, Vector2 deathPos)
     {
+        PendingRevenge.Remove(soulId);
         Killers[soulId] = killerId;
         DeathPositions[soulId] = deathPos;
         UsedRevenge.Add(soulId);
@@ -93,10 +127,45 @@ public static class RetributionistManager
         }
     }
 
+    public static void PurgeDisconnected()
+    {
+        foreach (var soulId in new List<byte>(Killers.Keys))
+        {
+            if (IsGone(soulId))
+            {
+                EndRevenge(soulId);
+            }
+        }
+
+        foreach (var soulId in new List<byte>(PendingRevenge))
+        {
+            if (IsGone(soulId))
+            {
+                PendingRevenge.Remove(soulId);
+            }
+        }
+
+        foreach (var soulId in new List<byte>(ReviveInProgress))
+        {
+            if (IsGone(soulId))
+            {
+                ReviveInProgress.Remove(soulId);
+            }
+        }
+    }
+
+    private static bool IsGone(byte playerId)
+    {
+        var data = GameData.Instance?.GetPlayerById(playerId);
+        return data == null || data.Disconnected || data.Object == null;
+    }
+
     public static void Reset()
     {
         Killers.Clear();
         DeathPositions.Clear();
         UsedRevenge.Clear();
+        PendingRevenge.Clear();
+        ReviveInProgress.Clear();
     }
 }

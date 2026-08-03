@@ -14,15 +14,6 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
     public override bool ShowInModifiersMenu => true;
     public override uint GroupPriority => 2;
 
-    public ModdedNumberOption BlindspotAmount { get; } = new(
-        "Blindspot Amount", 1f, 0f, 5f, 1f, MiraNumberSuffixes.None);
-
-    public ModdedNumberOption BlindspotChance { get; } =
-        new("Blindspot Chance", 50f, 0, 100f, 10f, MiraNumberSuffixes.Percent)
-        {
-            Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.BlindspotAmount.Value > 0
-        };
-
     public ModdedNumberOption BearTrapAmount { get; } = new(
         "Bear Trap Amount", 0f, 0f, 5f, 1f, MiraNumberSuffixes.None);
 
@@ -30,6 +21,15 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
         new("Bear Trap Chance", 20f, 0, 100f, 10f, MiraNumberSuffixes.Percent)
         {
             Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.BearTrapAmount.Value > 0
+        };
+
+    public ModdedNumberOption BlindspotAmount { get; } = new(
+        "Blindspot Amount", 1f, 0f, 5f, 1f, MiraNumberSuffixes.None);
+
+    public ModdedNumberOption BlindspotChance { get; } =
+        new("Blindspot Chance", 50f, 0, 100f, 10f, MiraNumberSuffixes.Percent)
+        {
+            Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.BlindspotAmount.Value > 0
         };
 
     public ModdedNumberOption BloodyAmount { get; } = new(
@@ -41,13 +41,13 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
             Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.BloodyAmount.Value > 0
         };
 
-    public ModdedNumberOption SproutAmount { get; } = new(
-        "Sprout Amount", 0f, 0f, 5f, 1f, MiraNumberSuffixes.None);
+    public ModdedNumberOption IncompetentAmount { get; } = new(
+        "Incompetent Amount", 0f, 0f, 5f, 1f, MiraNumberSuffixes.None);
 
-    public ModdedNumberOption SproutChance { get; } =
-        new("Sprout Chance", 50f, 0, 100f, 10f, MiraNumberSuffixes.Percent)
+    public ModdedNumberOption IncompetentChance { get; } =
+        new("Incompetent Chance", 20f, 0, 100f, 10f, MiraNumberSuffixes.Percent)
         {
-            Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.SproutAmount.Value > 0
+            Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.IncompetentAmount.Value > 0
         };
 
     public ModdedNumberOption SkilledAmount { get; } = new(
@@ -59,6 +59,15 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
             Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.SkilledAmount.Value > 0
         };
 
+    public ModdedNumberOption SproutAmount { get; } = new(
+        "Sprout Amount", 0f, 0f, 5f, 1f, MiraNumberSuffixes.None);
+
+    public ModdedNumberOption SproutChance { get; } =
+        new("Sprout Chance", 50f, 0, 100f, 10f, MiraNumberSuffixes.Percent)
+        {
+            Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.SproutAmount.Value > 0
+        };
+
     public ModdedNumberOption StrongAmount { get; } = new(
         "Strong Amount", 0f, 0f, 5f, 1f, MiraNumberSuffixes.None);
 
@@ -67,13 +76,4 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
         {
             Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.StrongAmount.Value > 0
         };
-
-    public ModdedNumberOption IncompetentAmount { get; } = new(
-        "Incompetent Amount", 0f, 0f, 5f, 1f, MiraNumberSuffixes.None);
-
-    public ModdedNumberOption IncompetentChance { get; } =
-        new("Incompetent Chance", 20f, 0, 100f, 10f, MiraNumberSuffixes.Percent)
-        {
-            Visible = () => OptionGroupSingleton<CrewmateModifierOptions>.Instance.IncompetentAmount.Value > 0
-};
 }

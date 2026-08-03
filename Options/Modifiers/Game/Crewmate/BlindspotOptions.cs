@@ -7,4 +7,5 @@ public class BlindspotOptions : AbstractOptionGroup<BlindspotModifier>
 {
     public override Func<bool> GroupVisible => () => false;
     public override string GroupName => "Blindspot";
+    public override uint GroupPriority => 25;
 }

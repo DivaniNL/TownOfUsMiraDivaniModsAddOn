@@ -23,6 +23,10 @@ public class FragOptions : AbstractOptionGroup<FragRole>
 
     public ModdedToggleOption CanVent { get; } = new("Frag Can Vent", false);
 
+    public ModdedToggleOption ClericCanDefuse { get; } = new("Cleric Cleanse Defuses Frag", true);
+
+    public ModdedToggleOption NegatesVeteranAlert { get; } = new("Frag Negates Veteran Alerts", true);
+
     public ModdedEnumOption OnTimelordRewind { get; } = new(
         "On Timelord Rewind", (int)FragRewindBehavior.Pause, typeof(FragRewindBehavior),
         ["Pause Timer", "Rewind Timer"]);
