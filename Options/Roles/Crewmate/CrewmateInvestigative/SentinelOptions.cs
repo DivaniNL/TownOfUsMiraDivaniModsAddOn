@@ -6,7 +6,7 @@ using DivaniMods.Roles.Crewmate.CrewmateInvestigative;
 
 namespace DivaniMods.Options;
 
-public class SentinelOptions : AbstractOptionGroup<SentinelRole>
+public class SentinelOptions : AbstractRoleOptionGroup<SentinelRole>
 {
     public override string GroupName => "Sentinel";
 

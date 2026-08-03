@@ -6,7 +6,10 @@ using DivaniMods.Assets;
 using DivaniMods.Events.Crewmate.CrewmateKilling;
 using DivaniMods.Options;
 using TownOfUs.Extensions;
+using TownOfUs.Interfaces;
+using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
+using TownOfUs.Options;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using UnityEngine;
@@ -14,7 +17,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Crewmate.CrewmateKilling;
 
 public sealed class RetributionistRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITouCrewRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), ITouCrewRole, IWikiDiscoverable, IDoomable, IProgressTally
 {
     public static readonly Color RetributionistColor = new Color32(175, 22, 81, 255);
 
@@ -51,9 +54,38 @@ public sealed class RetributionistRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.RetributionistIcon.LoadAsset(), "DivaniMod.Role.Crewmate.Retributionist", 1.45f),
         OptionsScreenshot = DivaniAssets.RetributionistBanner,
         Icon = DivaniAssets.RetributionistIcon,
         IntroSound = DivaniAssets.RetributionistIntroSound,
         MaxRoleCount = 1,
     };
+
+    private static bool RevengeIsLimited => OptionGroupSingleton<RetributionistOptions>.Instance.TurnIntoSoulOnce;
+
+    public string GetRevengeTally()
+    {
+        var available = Player != null && !RetributionistManager.UsedRevenge.Contains(Player.PlayerId);
+        return $"{RoleColor.ToTextColor()}({(available ? "☐" : "✓")})</color>";
+    }
+
+    public bool ProgressOnName(bool localDead, bool inMeeting, bool amOwner, out string progress)
+    {
+        if (!RevengeIsLimited || !(amOwner || (localDead && PlayerControl.LocalPlayer.DiedOtherRound() &&
+                                               OptionGroupSingleton<GeneralOptions>.Instance.TheDeadKnow)))
+        {
+            progress = string.Empty;
+            return false;
+        }
+
+        var showTasks = amOwner || (localDead && OptionGroupSingleton<PostmortemOptions>.Instance.ShowTaskDead);
+        progress = showTasks ? $"{GetRevengeTally()} {Player.TaskInfo()}" : GetRevengeTally();
+        return true;
+    }
+
+    public string ProgressOnSummaryNormal => Player.TaskInfo();
+
+    public string ProgressOnSummaryDetailed =>
+        TouLocale.GetParsed("StatsTaskCount")
+            .Replace("<count>", Player.TaskInfo().Replace("(", "").Replace(")", ""));
 }

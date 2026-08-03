@@ -57,6 +57,7 @@ public sealed class FragRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.FragIcon.LoadAsset(), "DivaniMod.Role.Neutral.Frag", 1.45f),
         OptionsScreenshot = DivaniAssets.FragBanner,
         Icon = DivaniAssets.FragIcon,
         IntroSound = DivaniAssets.FragIntroSound,

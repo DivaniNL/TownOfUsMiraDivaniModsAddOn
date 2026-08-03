@@ -1,67 +1,57 @@
-# Divani Mods v1.3.4 (Short release notes)
+# Divani Mods v1.3.5 (Short release notes)
 
-## Reworks
+Support for Among Us:17.4 and Town of Us Mira:1.7.0 + Monster + Small fixes
 
-### Reworked Role: Opportunist (Neutral Outlier -> Neutral Evil)
+> [!NOTE]
+> This version does not work with Town of Us Mira versions lower than 1.7.0
 
-- New option: "Max Votes Collected Per Meeting". Default set to 5 votes. 
+## Added
 
-### Reworked Role: Recruiter (Added the hidden role: Recruit)
+### Added Role: Monster (Neutral Killing)
 
-- Now changes the role of the recruited shipmate to a specific role (Vanilla imp -> Recruit)
-- This Recruit behaves the same as Traitor. Pick a role from 3 non-Imp Power roles.
-
-### Reworked Role: Thief (Crewmate Power -> Neutral Killing)
-
-Yeah okay, you guys were right. Thief is too evil as a Crewmate.
+Eat nearby players to trap them in your belly. If you make it to the next meeting, everyone you've eaten is killed for real. If you die first, they're released instead.
 
 ## General changes
 
-- Fixed a bug where multiple Divani Mods Impostor modifiers could be assigned to one impostor (only 1 imp modifier in total is the standard in TOU)
+- Added Support for Among Us:17.4 and Town of Us Mira:1.7.0
 
 ## Bugfixes:
 
-### Duelist
+### Frag
 
-- Fixed a bug which made Duelist not leave victorious correctly like Inquisitor
+- Fixed a bug where the first receiver of the Frag could pass it back to the origin.
+
+### Sniper
+
+- Fixed a visual bug where the cause of dead was always "Killed", even when killed by a Neutral Killing
 
 ### Retributionist
 
-- Fixed a bug where a Vengeful Soul could see the game chat
-- Fixed a bug where ambushing a Retributionist made the Ambusher invisible for the remainder of the round.
+- Fixed a visual bug where the cause of dead was sometimes "Killed" after being killed.
 
+### Plague Doctor
 
-### Watcher
-
-- Fixed a bug where the initial charges were not applied correctly (no use at start).
-- Fixed a bug where Watcher plays gunshots on ghosts moving if "Ghostwalkers Must Freeze" is set to false
+- Fixed a bug where the "can win" check only happened at meeting start, not at round start aswell.
 
 ## Role/Modifier Changes:
 
+### Thief
 
-### Duelist
+- Made the maximum amount of stealable modifiers 15, default 5
+- Made shy non-stealable
 
-- Duelist tie window reduced (0.15 -> 0.10)
+### Shuffle
 
-### Frag
+- Shuffle now works better with players that cannot be interacted with
+- Shuffle now shuffles Medusa stoned bodies if they are not fully stoned yet, after that they won't be moved.
 
-- Made Veterans on alert die to Frag now, as this can be abused
-- Added a setting to make Cleric defuse arming and active Frags
+### Plague Doctor
 
+- Fallen crewmates during the round are no longer removed from the list, but their infection state is frozen now instead.
 
-### Watcher
+### Recruiter
 
-- Watcher Red Light kills no longer trigger Bait reports
-- Watcher Red Light now only makes an alerted Veteran protect itself, not strike back
+- If Recruiter's target dies during the meeting it was chosen, the charge is refunded now.
+- Added a button for the Recruiter to also change roles after a succesful recruit attempt
 
-### Workhorse
-
-- Crewpostor Workhorse now makes the Impostors win
-- Egotist Workhorse generates a "Workhorse Win" containing the Ego Workhorse, all Impostors and Neutral Killers
-
-
-## Coming in 1.3.5
-- Support for Town of Us Mira 1.7.0
-- A setting for a max amount of total modifiers
-
-Full notes: <https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.4>
+Full notes: <https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.5>

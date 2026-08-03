@@ -56,6 +56,7 @@ public sealed class RevenantRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.RevenantIcon.LoadAsset(), "DivaniMod.Role.Impostor.Revenant", 1.45f),
         Icon = DivaniAssets.RevenantIcon,
         HideSettings = true,
         CanModifyChance = false,

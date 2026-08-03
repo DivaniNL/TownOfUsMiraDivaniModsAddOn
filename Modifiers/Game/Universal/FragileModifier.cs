@@ -11,9 +11,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Universal;
 
-public class FragileModifier : UniversalGameModifier, IColoredModifier, IWikiDiscoverable
+public class FragileModifier : UniversalGameModifier, IWikiDiscoverable
 {
     public static readonly Color FragileColor = new Color32(251, 252, 225, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        FragileColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.FragileIcon.LoadAsset(),
+            "DivaniMod.Modifier.Universal.Fragile", 1.45f));
 
     public override string ModifierName => "Fragile";
     public override string LocaleKey => "Fragile";

@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
-using AmongUs.GameOptions;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
-using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Modifiers.Types;
 using MiraAPI.Roles;
 using Reactor.Networking.Attributes;
+using MiraAPI.Hud;
+using DivaniMods.Buttons.Impostor.ImpostorPower;
 using DivaniMods.Options;
 using DivaniMods.Roles.Impostor.ImpostorPower;
 using TownOfUs.Utilities;
@@ -20,28 +20,19 @@ namespace DivaniMods.Patches;
 [HarmonyPatch]
 public static class RecruiterPatch
 {
-    internal static int MeetingsEnded { get; private set; }
-
-    // Recruiting is a one-time pick allowed only on the 2nd or 3rd meeting. Once used, it's locked off.
     internal static bool RecruitingDisabled { get; private set; }
-
-    private static readonly HashSet<byte> PendingRecruitFollowUpIds = new();
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGame))]
     [HarmonyPostfix]
     public static void ResetOnGameStart()
     {
-        MeetingsEnded = 0;
         RecruitingDisabled = false;
-        PendingRecruitFollowUpIds.Clear();
     }
 
     [RegisterEvent]
-    public static void OnEndMeeting(EndMeetingEvent _)
+    public static void OnRoundStartResolveRecruit(RoundStartEvent @event)
     {
-        MeetingsEnded++;
-
-        if (RecruitingDisabled)
+        if (@event.TriggeredByIntro || RecruitingDisabled)
         {
             return;
         }
@@ -80,46 +71,54 @@ public static class RecruiterPatch
             if (isHost)
             {
                 target!.RpcChangeRole(RoleId.Get<RecruitRole>());
-                PendingRecruitFollowUpIds.Add(target!.PlayerId);
+                RpcSetRecruiterRecruited(recruiter.Player);
                 if (PlayerControl.LocalPlayer != null)
                 {
-                    RpcRecruitImpostorFollowUp(PlayerControl.LocalPlayer, target.PlayerId);
+                    RpcRecruitImpostorFollowUp(PlayerControl.LocalPlayer, target!.PlayerId);
                 }
             }
         }
 
-        // Lock recruiting once a valid pick is made (runs on every client so the menu hides for the recruiter).
         if (recruitedSomeone)
         {
             RecruitingDisabled = true;
         }
     }
 
-    [RegisterEvent]
-    public static void OnRoundStartRecruitFollowUp(RoundStartEvent _)
+    [MethodRpc((uint)DivaniRpcCalls.RecruiterSetRecruited)]
+    public static void RpcSetRecruiterRecruited(PlayerControl recruiterPlayer)
     {
-        if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
+        if (recruiterPlayer?.Data?.Role is not RecruiterRole recruiter)
         {
             return;
         }
 
-        if (PendingRecruitFollowUpIds.Count == 0)
-        {
-            return;
-        }
+        recruiter.HasRecruited = true;
 
-        var local = PlayerControl.LocalPlayer;
-        if (local == null)
+        if (recruiterPlayer.AmOwner)
         {
-            return;
+            ShowRecruiterChangeButton(recruiter);
         }
+    }
 
-        foreach (var playerId in PendingRecruitFollowUpIds.ToArray())
+    [RegisterEvent]
+    public static void OnRoundStartShowRecruiterButton(RoundStartEvent _)
+    {
+        if (PlayerControl.LocalPlayer?.Data?.Role is RecruiterRole { HasRecruited: true } recruiter)
         {
-            RpcRecruitImpostorFollowUp(local, playerId);
+            ShowRecruiterChangeButton(recruiter);
         }
+    }
 
-        PendingRecruitFollowUpIds.Clear();
+    private static void ShowRecruiterChangeButton(RecruiterRole recruiter)
+    {
+        CustomButtonSingleton<RecruiterChangeButton>.Instance.SetActive(true, recruiter);
+
+        if (HudManager.InstanceExists)
+        {
+            HudManager.Instance.SetHudActive(false);
+            HudManager.Instance.SetHudActive(true);
+        }
     }
 
     private static bool RecruitedShouldBecomeAssassin() =>

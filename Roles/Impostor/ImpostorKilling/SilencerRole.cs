@@ -34,6 +34,7 @@ public sealed class SilencerRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.SilencerIcon.LoadAsset(), "DivaniMod.Role.Impostor.Silencer", 1.45f),
         OptionsScreenshot = DivaniAssets.SilencerBanner,
         Icon = DivaniAssets.SilencerIcon,
         IntroSound = DivaniAssets.SilencerIntroSound,

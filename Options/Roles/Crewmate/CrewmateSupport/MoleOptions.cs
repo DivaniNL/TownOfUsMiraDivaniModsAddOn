@@ -6,7 +6,7 @@ using DivaniMods.Roles.Crewmate.CrewmateSupport;
 
 namespace DivaniMods.Options;
 
-public sealed class MoleOptions : AbstractOptionGroup<MoleRole>
+public sealed class MoleOptions : AbstractRoleOptionGroup<MoleRole>
 {
     public override string GroupName => "Mole";
 

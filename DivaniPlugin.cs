@@ -27,8 +27,11 @@ namespace DivaniMods;
 [ReactorModFlags(ModFlags.RequireOnAllClients)]
 public class DivaniPlugin : BasePlugin, IMiraPlugin
 {
+    public string GetAbbreviatedModName() =>
+        $"<b><color={DivaniCreditsColorPatch.CreditsColor}>DM</color></b>";
+
     public const string Id = "com.divani.mods";
-    public const string Version = "1.3.4";
+    public const string Version = "1.3.5";
     
     public static DivaniPlugin Instance { get; private set; } = null!;
     public new ManualLogSource Log => base.Log;

@@ -98,7 +98,7 @@ public static class LocatorEvents
             return;
         }
 
-        var suppressed = @event.Source.IsRole<SoulCollectorRole>()
+        var suppressed = @event.Source.IsRole<MedusaRole>()
                          || @event.Target.GetRoleWhenAlive() is RetributionistRole
                          || @event.Target.HasModifier<NoisemakerModifier>();
 

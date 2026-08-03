@@ -40,6 +40,8 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
 
     public static Dictionary<byte, float> InfectionProgress { get; } = new();
     public static Dictionary<byte, bool> DeadPlayers { get; } = new();
+    public static Dictionary<byte, float> FrozenProgress { get; } = new();
+    public static Dictionary<byte, bool> FrozenInfected { get; } = new();
     public static PlayerControl? PlagueDoctorPlayer { get; internal set; }
 
     private static readonly Dictionary<byte, float> LastAccrueFrame = new();
@@ -71,6 +73,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.PlagueDoctorIcon.LoadAsset(), "DivaniMod.Role.Neutral.PlagueDoctor", 1.45f),
         CanUseVent = OptionGroupSingleton<PlagueDoctorOptions>.Instance.CanVent,
         Icon = DivaniAssets.PlagueDoctorIcon,
         IntroSound = DivaniAssets.PlagueDoctorIntroSound,
@@ -124,6 +127,8 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
         InfectionProgress.Clear();
         LastAccrueFrame.Clear();
         DeadPlayers.Clear();
+        FrozenProgress.Clear();
+        FrozenInfected.Clear();
         PlagueDoctorPlayer = null;
         NumInfectionsRemaining = (int)OptionGroupSingleton<PlagueDoctorOptions>.Instance.MaxInfections.Value;
         MeetingFlag = false;
@@ -281,11 +286,6 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
         TryTurnIntoAmnesiacWhenCannotWin();
     }
 
-    public static void OnMeetingEnd()
-    {
-        UpdateDeadPlayers();
-    }
-
     private static void TryTurnIntoAmnesiacWhenCannotWin()
     {
         if (!OptionGroupSingleton<PlagueDoctorOptions>.Instance.TurnIntoAmne)
@@ -325,12 +325,18 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
         return false;
     }
 
-    public static void OnRoundStart()
+    public static void OnRoundStart(bool triggeredByIntro)
     {
         var immunityTime = OptionGroupSingleton<PlagueDoctorOptions>.Instance.ImmunityTime.Value;
         ImmunityTimer = immunityTime;
         MeetingFlag = false;
 
+        UpdateDeadPlayers();
+
+        if (!triggeredByIntro)
+        {
+            TryTurnIntoAmnesiacWhenCannotWin();
+        }
     }
 
     public static void TickImmunityTimer(float deltaTime)
@@ -346,11 +352,59 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
     {
         foreach (var pc in PlayerControl.AllPlayerControls)
         {
-            if (pc?.Data != null)
+            if (pc?.Data == null)
             {
-                DeadPlayers[pc.PlayerId] = pc.Data.IsDead;
+                continue;
+            }
+
+            DeadPlayers[pc.PlayerId] = pc.Data.IsDead;
+
+            if (pc.Data.IsDead)
+            {
+                FrozenProgress.Remove(pc.PlayerId);
+                FrozenInfected.Remove(pc.PlayerId);
             }
         }
+    }
+
+    public static bool IsKnownDead(PlayerControl? player)
+    {
+        if (player == null || player.Data == null)
+        {
+            return true;
+        }
+
+        if (player.Data.Disconnected)
+        {
+            return true;
+        }
+
+        return DeadPlayers.TryGetValue(player.PlayerId, out var dead) && dead;
+    }
+
+    public static void FreezeInfectionStates()
+    {
+        foreach (var p in PlayerControl.AllPlayerControls)
+        {
+            if (p == null || p.Data == null || p.Data.IsDead) continue;
+            if (!p.TryGetComponent<ModifierComponent>(out _)) continue;
+            if (p == PlagueDoctorPlayer || IsPlagueDoctor(p)) continue;
+
+            FrozenProgress[p.PlayerId] = InfectionProgress.GetValueOrDefault(p.PlayerId, 0f);
+            FrozenInfected[p.PlayerId] = IsInfected(p);
+        }
+    }
+
+    public static bool GetDisplayedInfectionState(PlayerControl player, out float progress)
+    {
+        if (player.Data != null && !player.Data.IsDead && player.TryGetComponent<ModifierComponent>(out _))
+        {
+            progress = InfectionProgress.GetValueOrDefault(player.PlayerId, 0f);
+            return IsInfected(player);
+        }
+
+        progress = FrozenProgress.GetValueOrDefault(player.PlayerId, 0f);
+        return FrozenInfected.GetValueOrDefault(player.PlayerId, false);
     }
 
     public static void OnPlagueDoctorDeath(PlayerControl? killer)
@@ -433,9 +487,10 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
         var uninfectedLeft = PlayerControl.AllPlayerControls.ToArray()
             .Count(p => p != null &&
                         p.Data != null &&
-                        !p.HasDied() &&
+                        !IsKnownDead(p) &&
+                        p != PlagueDoctorPlayer &&
                         !IsPlagueDoctor(p) &&
-                        !IsInfected(p));
+                        !GetDisplayedInfectionState(p, out _));
 
         if (uninfectedLeft <= 0 || uninfectedLeft > options.NotifyWhenUninfectedLeft.Value)
         {

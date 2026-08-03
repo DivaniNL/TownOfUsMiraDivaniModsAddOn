@@ -23,7 +23,7 @@ internal static class RetributionistNotHereticPatch
         }
 
         var retribTargets = __instance.Targets
-            .Where(t => t != null && t.GetRoleWhenAlive() is RetributionistRole)
+            .Where(t => t.Key != null && t.Key.GetRoleWhenAlive() is RetributionistRole)
             .ToList();
 
         if (retribTargets.Count == 0)
@@ -31,21 +31,14 @@ internal static class RetributionistNotHereticPatch
             return;
         }
 
-        var taken = new HashSet<byte>(__instance.Targets.Where(t => t != null).Select(t => t.PlayerId));
+        var taken = new HashSet<byte>(__instance.Targets.Where(t => t.Key != null).Select(t => t.Key.PlayerId));
 
-        foreach (var retrib in retribTargets)
+        foreach (var pair in retribTargets)
         {
+            var retrib = pair.Key;
             retrib.RpcRemoveModifier<InquisitorHereticModifier>();
 
-            var idx = __instance.Targets.IndexOf(retrib);
-            if (idx >= 0)
-            {
-                __instance.Targets.RemoveAt(idx);
-                if (idx < __instance.TargetRoles.Count)
-                {
-                    __instance.TargetRoles.RemoveAt(idx);
-                }
-            }
+            __instance.Targets.Remove(retrib);
 
             taken.Remove(retrib.PlayerId);
 

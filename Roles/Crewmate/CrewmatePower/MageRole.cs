@@ -75,6 +75,7 @@ public sealed class MageRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.MageIcon.LoadAsset(), "DivaniMod.Role.Crewmate.Mage", 1.45f),
         Icon = DivaniAssets.MageIcon,
         IntroSound = DivaniAssets.MageIntroSound,
         OptionsScreenshot = DivaniAssets.MageBanner,

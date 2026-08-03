@@ -12,9 +12,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Crewmate;
 
-public class SkilledModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
+public class SkilledModifier : TouGameModifier, IWikiDiscoverable
 {
     public static readonly Color SkilledColor = new Color32(78, 94, 186, 255); // #4E5EBA
+    public override ModifierUiConfiguration Configuration => new(
+        SkilledColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.SkilledIcon.LoadAsset(),
+            "DivaniMod.Modifier.Crewmate.Skilled", 1.45f));
 
     public override string ModifierName => "Skilled";
     public override string LocaleKey => "Skilled";
