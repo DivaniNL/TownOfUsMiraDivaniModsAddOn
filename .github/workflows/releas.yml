@@ -1,9 +1,7 @@
-name: Build and Release Mod
+name: Manual Build and Artifact Export
 
 on:
-  push:
-    tags:
-      - 'v*' # Triggers the build whenever you create a tag starting with 'v' (e.g., v1.0.0)
+  workflow_dispatch: # Allows you to manually trigger this build from the GitHub Actions tab
 
 jobs:
   build:
@@ -13,18 +11,22 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Setup .NET Core
+    - name: Setup Node.js v24
+      uses: actions/setup-node@v4
+      with:
+        node-version: '24' # Configures the environment to Node 24
+
+    - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '6.0.x' # Adjust to match the .NET framework of the repo if needed
+        dotnet-version: '6.0.x' # TownOfUs extensions typically use .NET 6
 
-    - name: Build with dotnet
+    - name: Build Mod Project
       run: dotnet build -c Release
 
-    - name: Create Release and Upload DLL
-      uses: softprops/action-gh-release@v2
+    - name: Upload DLL as Artifact
+      uses: actions/upload-artifact@v4
       with:
-        files: |
-          **/bin/Release/**/*.dll
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: DivaniMods-Compiled-DLL
+        path: '**/bin/Release/**/*.dll'
+        if-no-files-found: error # Fails the workflow early if compilation fails to produce a DLL
