@@ -102,7 +102,8 @@ Full role and modifier write-ups live on the **[project wiki](https://github.com
 
 | Game Version      | Mod Version | Town Of Us: Mira | Download link |
 | ----------------- | ----------- | ---------------- | ------------- |
-| 17.4              | 1.3.5       | 1.7.0+           | [v1.3.5](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.5) |
+| 17.4              | 1.3.6       | 1.7.1+           | [v1.3.6](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.6) |
+| 17.4              | 1.3.5       | 1.7.0            | [v1.3.5](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.5) |
 | 17.3 (2026.3.31)  | 1.3.4       | 1.6.0 - 1.6.2    | [v1.3.4](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.4) |
 | 17.3 (2026.3.31)  | 1.3.3       | 1.6.0 - 1.6.2    | [v1.3.3](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.3) |
 | 17.3 (2026.3.31)  | 1.3.2       | 1.6.0 - 1.6.2    | [v1.3.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.2) |

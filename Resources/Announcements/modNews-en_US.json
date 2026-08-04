@@ -848,6 +848,23 @@
         "\n- If the Recruiter's target dies during the meeting it was chosen, the charge is refunded now.",
         "\n- Added a button for the Recruiter to also change roles after a successful recruit attempt."
       ]
+    },
+    {
+      "Date": "2026-08-04T12:00:00Z",
+      "Number": "10022",
+      "ShortTitle": "Divani Mods v1.3.6",
+      "Title": "Town Of Us 1.7.1",
+      "SubTitle": "Support for the new Town Of Us Mira version",
+      "Text": [
+        "\r<size=110%><b>Divani Mods v1.3.6</b></size>",
+        "\n\nSupport for Town Of Us Mira 1.7.1.",
+        "\n\n<i>This version does not work with Town Of Us versions lower than 1.7.1.</i>",
+        "\n\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.6>Download v1.3.6</link>",
+        "\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases>All releases</link>",
+        "\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki>Wiki</link>",
+        "\n\n\r<size=108%><b>General changes</b></size>",
+        "\n\n- Added support for Town Of Us Mira 1.7.1."
+      ]
     }
   ]
 }
