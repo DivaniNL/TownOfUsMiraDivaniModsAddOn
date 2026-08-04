@@ -54,7 +54,7 @@ public sealed class CouncillorRole(IntPtr cppPtr)
     {
         var local = PlayerControl.LocalPlayer;
         if (amOwner || local.Data?.Role?.IsImpostor == true ||
-            (localDead && local.DiedOtherRound() && OptionGroupSingleton<GeneralOptions>.Instance.TheDeadKnow))
+            (localDead && OptionGroupSingleton<GeneralOptions>.Instance.TheDeadKnow))
         {
             progress = GetExtraVoteTally();
             return true;
