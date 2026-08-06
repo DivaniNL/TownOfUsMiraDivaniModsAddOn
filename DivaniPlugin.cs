@@ -13,6 +13,8 @@ using DivaniMods.Patches;
 using DivaniMods.Patches.WinConditions;
 using TownOfUs.Patches;
 using DivaniMods.Utilities;
+using MiraAPI.Roles;
+using DivaniMods.Roles.Impostor.ImpostorPower;
 
 namespace DivaniMods;
 
@@ -62,7 +64,7 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
         if (!IL2CPPChainloader.Instance.Plugins.ContainsKey(
                 "com.edgetel.perfectcomms"))
             return;
-
         PerfectCommsVoiceIntegration.Register();
+        TownOfUs.Modules.DraftMode.DraftExclusiveImpostorRoles.Register(CustomRoleSingleton<RecruiterRole>.Instance);
     }
 }
