@@ -86,7 +86,9 @@ public static class MonsterState
                 }
             }
 
-            if (isVisibleToEveryone || isMonsterOrTarget)
+            var canPlayForLocal = isMonsterOrTarget || (isVisibleToEveryone && LocalCanSee(victimPos));
+
+            if (canPlayForLocal)
             {
                 try
                 {
@@ -318,6 +320,22 @@ public static class MonsterState
 
             yield return null;
         }
+    }
+
+    private static bool LocalCanSee(Vector2 pos)
+    {
+        var local = PlayerControl.LocalPlayer;
+        if (local == null) return false;
+
+        var localPos = local.GetTruePosition();
+        var viewDistance = local.lightSource != null ? local.lightSource.ViewDistance : 5f;
+
+        var offset = pos - localPos;
+        var dist = offset.magnitude;
+        if (dist > viewDistance) return false;
+
+        var dirNorm = dist > 0f ? offset / dist : Vector2.zero;
+        return !PhysicsHelpers.AnyNonTriggersBetween(localPos, dirNorm, dist, Constants.ShadowMask);
     }
 
     private static void SnapTo(PlayerControl player, Vector2 pos)
