@@ -33,7 +33,7 @@ public static class CatEvents
     var cat = @event.Target;
     var killerRole = @event.Source.Data.Role.Role;
     
-    @event.IsCancelled = true;
+    @event.cancel();
 
 
     RoleManager.Instance.Setrole(cat, killerRole);
