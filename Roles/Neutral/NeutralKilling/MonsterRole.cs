@@ -29,7 +29,7 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
     public string RoleName => "Monster";
     public string RoleDescription => "Devour Everyone";
     public string RoleLongDescription =>
-        "Eat nearby players to trap them. If you make it to the next meeting,\n everyone you've " +
+        "Eat nearby players to trap them. If you make it to the next meeting,\neveryone you've " +
         "eaten is killed for real. If you die first, they're released instead.";
 
     public Color RoleColor => MonsterColor;

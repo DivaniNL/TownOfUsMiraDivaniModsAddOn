@@ -101,8 +101,7 @@ public sealed class DuelistRole(IntPtr cppPtr)
 
     public bool ProgressOnName(bool localDead, bool inMeeting, bool amOwner, out string progress)
     {
-        if (amOwner || (localDead && PlayerControl.LocalPlayer.DiedOtherRound() &&
-                        OptionGroupSingleton<GeneralOptions>.Instance.TheDeadKnow))
+        if (amOwner || (localDead && OptionGroupSingleton<GeneralOptions>.Instance.TheDeadKnow))
         {
             progress = GetDuelTally();
             return true;
