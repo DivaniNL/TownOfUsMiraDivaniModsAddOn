@@ -29,9 +29,9 @@ using TownOfUs.Extensions;
 namespace DivaniMods.Roles.Neutral.NeutralBenign;
 
 public sealed class CatRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
 {
-    public static readonly Color CatColor = new Color32(222, 125, 127, 255);
+    public static readonly Color CatColor = new Color32(181, 181, 181, 255);
 
 
 
@@ -47,7 +47,6 @@ public sealed class CatRole(IntPtr cppPtr)
 
     public DoomableType DoomHintType => DoomableType.Protective;
 
-    public RoleBehaviour CrewVariant => RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<Role>());
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 

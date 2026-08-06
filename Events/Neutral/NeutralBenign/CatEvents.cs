@@ -14,7 +14,6 @@ using DivaniMods.Roles.Neutral.NeutralBenign;
 using TownOfUs;
 using TownOfUs.Buttons;
 using TownOfUs.Events;
-using TownOfUs.Modifiers;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Networking;
 using TownOfUs.Roles.Neutral;
