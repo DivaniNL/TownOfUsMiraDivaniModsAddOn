@@ -47,7 +47,8 @@ public sealed class CatRole(IntPtr cppPtr)
 
     public DoomableType DoomHintType => DoomableType.Protective;
 
-
+        public RoleBehaviour CrewVariant => RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<VeteranRole>());
+        
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
     public CustomRoleConfiguration Configuration => new(this)
