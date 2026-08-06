@@ -58,6 +58,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> TelecomChatOpen { get; } = new LoadableResourceAsset($"{ShortPath}.TelecomChatOpen.png");
     public static LoadableAsset<Sprite> TelecomChatBubble { get; } = new LoadableResourceAsset($"{ShortPath}.ChatTelecomBubble.png");
     // Role icons (200 ppu)
+    public static LoadableAsset<Sprite> CatIcon { get; } = new LoadableResourceAsset($"{IconPath}.Cat.png", 200);
     public static LoadableAsset<Sprite> ThiefIcon { get; } = new LoadableResourceAsset($"{IconPath}.Thief.png", 200);
     public static LoadableAsset<Sprite> DeadlockIcon { get; } = new LoadableResourceAsset($"{IconPath}.Deadlock.png", 200);
     public static LoadableAsset<Sprite> CouncillorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Councillor.png", 200);
@@ -131,6 +132,7 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<AudioClip> FragGiveSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.FragGive.wav");
     public static LoadableAsset<AudioClip> BearTrapActivateSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.BearTrapActivate.wav");
     public static LoadableAsset<AudioClip> OpportunistIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.OpportunistIntro.wav");
+    public static LoadableAsset<AudioClip> CatIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.CatIntro.wav");
     public static LoadableAsset<AudioClip> DemolitionistIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DemolitionistIntro.wav");
     public static LoadableAsset<AudioClip> DemolitionistExplosionSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DemolitionistExplosion.wav");
     public static LoadableAsset<AudioClip> DomesmithIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DomesmithIntro.wav");
