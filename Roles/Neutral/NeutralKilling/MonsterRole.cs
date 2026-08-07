@@ -15,7 +15,9 @@ using TMPro;
 using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Interfaces;
+using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.RainbowMod;
+using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
@@ -23,7 +25,7 @@ using UnityEngine;
 
 namespace DivaniMods.Roles.Neutral.NeutralKilling;
 
-public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole, IProgressTally
+public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole, IProgressTally, IWikiDiscoverable
 {
     public static readonly Color MonsterColor = new Color32(107, 179, 48, 255);
     public string RoleName => "Monster";
@@ -102,7 +104,17 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
     public string ProgressOnSummaryDetailed => string.Empty;
 
     public TallyLocation TallyPlacement(bool inMeeting) => TallyLocation.AboveName;
-
+    public override void SpawnTaskHeader(PlayerControl playerControl)
+{
+    if (playerControl != PlayerControl.LocalPlayer)
+    {
+        return;
+    }
+    ImportantTextTask orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
+    orCreateTask.Text =
+        $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralKillingTaskHeader")}</color>";
+    orCreateTask.name = "NeutralRoleText";
+}
     public CustomRoleConfiguration Configuration => new(this)
     {
         IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.MonsterIcon.LoadAsset(), "DivaniMod.Role.Neutral.Monster", 1.45f),
