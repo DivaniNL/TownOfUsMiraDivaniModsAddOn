@@ -17,7 +17,7 @@ public class DeathNoteEvents
       {
    foreach (var player in Helpers.GetAlivePlayers())
 {
-    if player.HasModifier<NoteModifier>
+    if player.HasModifier<NoteModifier>())
     if (player.Data.Role.IsImpostor) continue;
     PlayerControl.LocalPlayer.RpcCustomMurder(player, true, teleportMurderer:false);
   }
