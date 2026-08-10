@@ -31,7 +31,7 @@ public sealed class MosquitoRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Note", "Note down a player in your note book, they will die when you are killed.", DivaniAssets.DeathnoteNoteButton)
+        new("Note", "Note down a player in your note book, they will die when you are killed.", DivaniAssets.NoteButton)
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
