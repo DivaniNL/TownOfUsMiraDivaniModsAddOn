@@ -13,6 +13,7 @@ public static class DivaniAssets
     
     // Button sprites (115 ppu)
     public static LoadableAsset<Sprite> PlacePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalUse.png", 100);
+    public static LoadableAsset<Sprite> NoteButton { get; } = new LoadableResourceAsset($"{ShortPath}.Note.png", 100);
     public static LoadableAsset<Sprite> UsePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalUse.png", 100);
     public static LoadableAsset<Sprite> PickpocketButton { get; } = new LoadableResourceAsset($"{ShortPath}.PickPocketButton.png");
     public static LoadableAsset<Sprite> ThiefKillButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefKillButton.png");
