@@ -8,8 +8,8 @@ public class DeathNoteEvents
     {
         if (!AmongUsClient.Instance.AmHost) return;
 
-        var dead = @event.Player
-        var death = @event.DeathReason
+        var dead = @event.Player;
+        var death = @event.DeathReason;
 
         if (dead.Data.Role is DeathNoteRole)
      {
