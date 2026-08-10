@@ -1,13 +1,16 @@
 public class FreezeButton : CustomActionButton<PlayerControl>
 {
-    public override string Name => "Freeze";
-    public override float Cooldown => 5f;
+    public override string Name => "Note";
+    public override float Cooldown => OptionGroupSingleton<DeathnoteRole>.Instance.NoteCooldown.value;
     public override LoadableAsset<Sprite> Sprite => DivaniModsAssets.DeathnoteNoteButton;
     public override bool PauseTimerInVent => true;
-    public override maxuses => OptionGroupSingleton<DeathnoteRole>.Instance.NotesPerGame.value
+    public override int Uses => (Int)OptionGroupSingleton<DeathnoteRole>.Instance.NotesPerGame.value;
 
     protected override void OnClick()
     {
+        if !Target?.HasModifier<NoteModifier>()
+        if !Target?.Is.Data.Role IsImpostor()
+
         Target?.RpcAddModifier<NoteModifier>();
     }
 
