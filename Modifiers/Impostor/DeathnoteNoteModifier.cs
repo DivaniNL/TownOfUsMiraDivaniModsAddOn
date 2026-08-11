@@ -2,7 +2,7 @@
 
 namespace DivaniMods.Modifiers.Impostors;
 
-public class BrawlerModifier : BaseModifier
+public class DeathnoteModifier : BaseModifier
 {
     public override string ModifierName => "Noted";
     public override bool HideOnUi => true;

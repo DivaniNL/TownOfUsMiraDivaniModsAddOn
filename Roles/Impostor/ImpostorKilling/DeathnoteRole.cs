@@ -12,7 +12,7 @@ using TownOfUs.Extensions;
 
 namespace DivaniMods.Roles.Impostor.ImpostorKilling;
 
-public sealed class MosquitoRole(IntPtr cppPtr)
+public sealed class DeathnoteRole(IntPtr cppPtr)
     : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
 {
     public string RoleName => "Deathnote";
@@ -39,7 +39,7 @@ public sealed class MosquitoRole(IntPtr cppPtr)
         IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.DeathnoteIcon.LoadAsset(), "DivaniMod.Role.Impostor.Deathnote", 1.45f),
         UseVanillaKillButton = true,
         Icon = DivaniAssets.DeathnoteIcon,
-        IntroSound = DivaniAssets.DeathnoteIntroSound,
+        IntroSound = DivaniAssets.DeadlockIntroSound,
         MaxRoleCount = 1,
     };
 

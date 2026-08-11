@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AmongUsPath>C:\Users\dylan\Desktop\modtest</AmongUsPath>
+    <AmongUsPath>F:\Users\14089\Desktop\DevUs</AmongUsPath>
     <BepInExPath>$(AmongUsPath)\BepInEx</BepInExPath>
   </PropertyGroup>
 
