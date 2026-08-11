@@ -1,5 +1,10 @@
+using DivaniMods.Modifiers.Impostors;
+using DivaniMods.Roles.Impostor.ImpostorKilling;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Player;
+using MiraAPI.Modifiers;
+using MiraAPI.Networking;
+using MiraAPI.Utilities;
 
 public class DeathNoteEvents
 {
@@ -11,20 +16,23 @@ public class DeathNoteEvents
         var dead = @event.Player;
         var death = @event.DeathReason;
 
-        if (dead.Data.Role is DeathNoteRole)
-     {
-       if death == DeathReason.exile
-      {
-   foreach (var player in Helpers.GetAlivePlayers())
-{
-    if player.HasModifier<NoteModifier>())
-    if (player.Data.Role.IsImpostor) continue;
-    PlayerControl.LocalPlayer.RpcCustomMurder(player, true, teleportMurderer:false);
-  }
-   else
-       {
-         player.RemoveModifier(NoteModifier);
+        if (dead.Data.Role is DeathnoteRole)
+        {
+            if (death == DeathReason.Exile)
+            {
+                foreach (var player in Helpers.GetAlivePlayers())
+                {
+                    if (player.HasModifier<DeathnoteModifier>())
+                    {
+                        if (player.Data.Role.IsImpostor) continue;
+                        PlayerControl.LocalPlayer.RpcCustomMurder(player, true, teleportMurderer: false);
+                    }
+                    else
+                    {
+                        player.RemoveModifier<DeathnoteModifier>();
+                    }
+                }
+            }
         }
-}
-}
+    }
 }

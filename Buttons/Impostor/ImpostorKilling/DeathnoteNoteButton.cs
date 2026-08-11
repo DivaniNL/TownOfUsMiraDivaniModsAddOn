@@ -1,17 +1,29 @@
-public class FreezeButton : CustomActionButton<PlayerControl>
+using DivaniMods.Assets;
+using DivaniMods.Modifiers.Impostors;
+using DivaniMods.Options;
+using DivaniMods.Roles.Impostor.ImpostorKilling;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
+using MiraAPI.Modifiers;
+using MiraAPI.Utilities;
+using MiraAPI.Utilities.Assets;
+using TownOfUs.Utilities;
+using UnityEngine;
+
+public class DeathnoteButton : CustomActionButton<PlayerControl>
 {
     public override string Name => "Note";
-    public override float Cooldown => OptionGroupSingleton<DeathnoteRole>.Instance.NoteCooldown.value;
-    public override LoadableAsset<Sprite> Sprite => DivaniModsAssetsNoteButton;
+    public override float Cooldown => OptionGroupSingleton<DeathnoteOptions>.Instance.NoteCooldown.Value;
+    public override LoadableAsset<Sprite> Sprite => DivaniAssets.NoteButton;
     public override bool PauseTimerInVent => true;
-    public override int Uses => (Int)OptionGroupSingleton<DeathnoteRole>.Instance.NotesPerGame.value;
+    public override int MaxUses => (int)OptionGroupSingleton<DeathnoteOptions>.Instance.NotesPerGame.Value;
 
     protected override void OnClick()
     {
-        if !Target?.HasModifier<NoteModifier>()
-        if !Target?.Is.Data.Role IsImpostor()
-
-        Target?.RpcAddModifier<NoteModifier>();
+        if (Target != null && !Target.HasModifier<DeathnoteModifier>() && !Target.IsImpostorAligned())
+        {
+            Target?.RpcAddModifier<DeathnoteModifier>();
+        }
     }
 
     public override PlayerControl? GetTarget()
