@@ -18,15 +18,17 @@ using TownOfUs.Roles;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
+using TownOfUs.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorPower;
 
 public sealed class RecruiterRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant,IDoubleDraftRole
 {
     public string RoleName => "Recruiter";
     public string LocaleKey => "Recruiter";
     public string RoleDescription => "Pick your partner!";
+    public bool IsDoubleDraftRole => true;
     public string RoleLongDescription =>
         "In any meeting, recruit a non-Impostor to become a Recruit once. The Recruit joins the Impostors and picks a new Impostor role.";
     public Color RoleColor => Palette.ImpostorRed;
