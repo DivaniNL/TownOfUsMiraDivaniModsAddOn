@@ -125,6 +125,17 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
         GhostRole = (RoleTypes)RoleId.Get<NeutralGhostRole>(),
     };
 
+    public override bool CanUse(IUsable usable)
+    {
+        if (!GameManager.Instance.LogicUsables.CanUse(usable, Player))
+        {
+            return false;
+        }
+
+        var console = usable.TryCast<Console>()!;
+        return console == null || console.AllowImpostor;
+    }
+
     [HideFromIl2Cpp]
     public bool WinConditionMet()
     {
