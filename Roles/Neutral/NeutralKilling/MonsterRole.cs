@@ -46,7 +46,12 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
         TmpSpriteUtils.CreateSpriteAsset(TouAssets.ChefProgressFedRainbow.LoadAsset(),
             "DivaniMod.Role.Neutral.Monster.Ui.PlayerRainbow", 1.45f),
     ];
-
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new("Devour", "When you Devour a player, they are trapped. If you die first, they are released instead.", DivaniAssets.MonsterDevourButton),
+    ];
+    public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
+    
     private static string GetIcon(TMP_SpriteAsset asset) => $"<sprite name=\"{asset.name}\">";
 
     private static string GetIconColored(TMP_SpriteAsset asset, string color) =>
