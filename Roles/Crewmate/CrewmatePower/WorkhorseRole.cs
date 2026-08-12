@@ -52,6 +52,7 @@ public sealed class WorkhorseRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.WorkhorseIcon.LoadAsset(), "DivaniMod.Role.Crewmate.Workhorse", 1.45f),
         Icon = DivaniAssets.WorkhorseIcon,
         IntroSound = DivaniAssets.WorkhorseIntroSound,
         MaxRoleCount = 1,

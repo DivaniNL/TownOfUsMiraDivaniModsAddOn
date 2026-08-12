@@ -74,7 +74,7 @@ public static class DemolitionistPatches
     [HarmonyPostfix]
     public static void OnGameEndPostfix()
     {
-        DemolitionistSabotageState.ResetAll();
+        DemolitionistSabotageState.ResetAll(clearProgress: false);
         DemolitionistUtilityConsoles.InvalidateCache();
     }
 

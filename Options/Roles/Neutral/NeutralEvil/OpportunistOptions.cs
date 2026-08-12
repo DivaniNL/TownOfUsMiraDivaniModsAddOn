@@ -5,7 +5,7 @@ using DivaniMods.Roles.Neutral.NeutralEvil;
 
 namespace DivaniMods.Options;
 
-public class OpportunistOptions : AbstractOptionGroup<OpportunistRole>
+public class OpportunistOptions : AbstractRoleOptionGroup<OpportunistRole>
 {
     public override string GroupName => "Opportunist";
 

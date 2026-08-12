@@ -40,7 +40,7 @@ public class DemolitionistDefuseButton : TownOfUsButton
     public override bool Enabled(RoleBehaviour? role)
     {
         Instance = this;
-        return role != null;
+        return role != null && PlayerControl.LocalPlayer != null;
     }
 
     private static bool LocalIsIncompetent()

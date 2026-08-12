@@ -6,17 +6,20 @@ using TownOfUs.Extensions;
 
 namespace DivaniMods.Options;
 
-public class RecruiterOptions : AbstractOptionGroup<RecruiterRole>
+public class RecruiterOptions : AbstractRoleOptionGroup<RecruiterRole>
 {
     public override string GroupName => "Recruiter";
 
     public ModdedToggleOption RecruitedBecomesAssassin { get; } =
         new("Recruited Impostor Becomes Assassin", true);
 
-    public ModdedToggleOption RecruitRemoveExistingRoles { get; } =
-        new("Recruit Can't Pick Existing Impostor Roles", true);
+    public ModdedToggleOption RecruiterCanChangeRole { get; } =
+        new("Recruiter Can Choose A New Role After Recruiting", true);
 
-    public ModdedEnumOption RecruitGuess { get; } = new("Recruit Must Be Guessed As",
+    public ModdedToggleOption RemoveExistingRoles { get; } =
+        new("Role Change Can't Pick Existing Impostor Roles", true);
+
+    public ModdedEnumOption RecruitGuess { get; } = new("Changed Role Must Be Guessed As",
         (int)CacheRoleGuess.ActiveRole, typeof(CacheRoleGuess),
-        ["Recruit", "New Role", "Recruit or New Role"]);
+        ["Original Role", "New Role", "Original Or New Role"]);
 }

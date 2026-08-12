@@ -13,7 +13,7 @@ public enum UAVRevealMode
     Sweeping,
 }
 
-public class UAVOptions : AbstractOptionGroup<UAVModifier>
+public class UAVOptions : AbstractTouModifierOptionGroup<UAVModifier>
 {
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
     public override string GroupName => "UAV";

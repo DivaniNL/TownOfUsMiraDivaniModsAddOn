@@ -41,6 +41,7 @@ public sealed class DomesmithRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.DomesmithIcon.LoadAsset(), "DivaniMod.Role.Crewmate.Domesmith", 1.45f),
         OptionsScreenshot = DivaniAssets.DomesmithBanner,
         Icon = DivaniAssets.DomesmithIcon,
         IntroSound = DivaniAssets.DomesmithIntroSound,

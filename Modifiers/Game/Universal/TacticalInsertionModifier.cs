@@ -20,9 +20,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Universal;
 
-public sealed class TacticalInsertionModifier : UniversalGameModifier, IColoredModifier, IWikiDiscoverable, IButtonModifier
+public sealed class TacticalInsertionModifier : UniversalGameModifier, IWikiDiscoverable, IButtonModifier
 {
     public static readonly Color TacticalColor = new Color32(0, 255, 0, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        TacticalColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.TacticalInsertionIcon.LoadAsset(),
+            "DivaniMod.Modifier.Universal.TacticalInsertion", 1.45f));
 
     public override string ModifierName => "Tactical Insertion";
     public override string LocaleKey => "TacticalInsertion";

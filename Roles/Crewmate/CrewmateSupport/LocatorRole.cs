@@ -40,6 +40,7 @@ public sealed class LocatorRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.LocatorIcon.LoadAsset(), "DivaniMod.Role.Crewmate.Locator", 1.45f),
         Icon = DivaniAssets.LocatorIcon,
         OptionsScreenshot = TouBanners.CrewmateRoleBanner,
         IntroSound = TouAudio.NoisemakerIntroSound,

@@ -13,7 +13,7 @@ public enum DomesmithVisibility
     Everyone,
 }
 
-public class DomesmithOptions : AbstractOptionGroup<DomesmithRole>
+public class DomesmithOptions : AbstractRoleOptionGroup<DomesmithRole>
 {
     public override string GroupName => "Domesmith";
 

@@ -13,9 +13,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Universal;
 
-public sealed class MisvoteModifier : UniversalGameModifier, IColoredModifier, IWikiDiscoverable
+public sealed class MisvoteModifier : UniversalGameModifier, IWikiDiscoverable
 {
     public static readonly Color MisvoteColor = new Color32(180, 180, 180, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        MisvoteColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.MisvoteIcon.LoadAsset(),
+            "DivaniMod.Modifier.Universal.Misvote", 1.45f));
 
     public override string ModifierName => "Misvote";
     public override string LocaleKey => "Misvote";

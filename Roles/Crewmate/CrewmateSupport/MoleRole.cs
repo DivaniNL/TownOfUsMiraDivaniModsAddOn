@@ -62,6 +62,7 @@ public sealed class MoleRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.MoleIcon.LoadAsset(), "DivaniMod.Role.Crewmate.Mole", 1.45f),
         Icon = DivaniAssets.MoleIcon,
         MaxRoleCount = 1,
         IntroSound = TouAudio.MineSound
@@ -127,8 +128,7 @@ public sealed class MoleRole(IntPtr cppPtr)
         }
 
         var ventId = vent.Id;
-        return PlumberRole.VentBlockList.Contains(ventId) ||
-               PlumberRole.VentFlushList.Contains(ventId) ||
+        return PlumberRole.VentFlushSet.Contains(ventId) ||
                PlumberRole.VentsBlocked.Any(x => x.Key == ventId);
     }
 

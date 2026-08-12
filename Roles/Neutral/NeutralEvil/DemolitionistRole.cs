@@ -13,8 +13,10 @@ using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Buttons;
 using TownOfUs.Extensions;
+using TownOfUs.Interfaces;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
+using TownOfUs.Options;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Roles.Neutral;
@@ -24,7 +26,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class DemolitionistRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IProgressTally
 {
     public static readonly Color DemolitionistColor = new Color32(0x28, 0x36, 0x7D, 255);
 
@@ -54,6 +56,7 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.DemolitionistIcon.LoadAsset(), "DivaniMod.Role.Neutral.Demolitionist", 1.45f),
         OptionsScreenshot = DivaniAssets.DemolitionistBanner,
         Icon = DivaniAssets.DemolitionistIcon,
         IntroSound = DivaniAssets.DemolitionistIntroSound,
@@ -73,6 +76,30 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
             $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralEvilTaskHeader")}</color>";
         task.name = "NeutralRoleText";
     }
+
+    public string GetSabotageTally()
+    {
+        var needed = (int)OptionGroupSingleton<DemolitionistOptions>.Instance.SabotagesToWin.Value;
+        var capped = Math.Min(DemolitionistSabotageState.SuccessfulSabotages, needed);
+        return $"{RoleColor.ToTextColor()}({capped}/{needed})</color>";
+    }
+
+    public bool ProgressOnName(bool localDead, bool inMeeting, bool amOwner, out string progress)
+    {
+        if (amOwner || (localDead && OptionGroupSingleton<GeneralOptions>.Instance.TheDeadKnow))
+        {
+            progress = GetSabotageTally();
+            return true;
+        }
+
+        progress = string.Empty;
+        return false;
+    }
+
+    public string ProgressOnSummaryNormal => GetSabotageTally();
+
+    public string ProgressOnSummaryDetailed =>
+        $"Successful sabotages: {Math.Min(DemolitionistSabotageState.SuccessfulSabotages, (int)OptionGroupSingleton<DemolitionistOptions>.Instance.SabotagesToWin.Value)}/{(int)OptionGroupSingleton<DemolitionistOptions>.Instance.SabotagesToWin.Value}";
 
     [HideFromIl2Cpp]
     public StringBuilder SetTabText()

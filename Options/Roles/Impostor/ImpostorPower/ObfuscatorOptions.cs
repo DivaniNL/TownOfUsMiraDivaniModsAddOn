@@ -5,7 +5,7 @@ using DivaniMods.Roles.Impostor.ImpostorPower;
 
 namespace DivaniMods.Options;
 
-public class ObfuscatorOptions : AbstractOptionGroup<ObfuscatorRole>
+public class ObfuscatorOptions : AbstractRoleOptionGroup<ObfuscatorRole>
 {
     public override string GroupName => "Obfuscator";
 

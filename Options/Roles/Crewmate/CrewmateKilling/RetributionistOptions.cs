@@ -9,7 +9,7 @@ using TownOfUs.Utilities;
 
 namespace DivaniMods.Options;
 
-public class RetributionistOptions : AbstractOptionGroup<RetributionistRole>, IWikiOptionsSummaryProvider
+public class RetributionistOptions : AbstractRoleOptionGroup<RetributionistRole>, IWikiOptionsSummaryProvider
 {
     public override string GroupName => "Retributionist";
 

@@ -6,12 +6,12 @@ using DivaniMods.Roles.Neutral.NeutralKilling;
 
 namespace DivaniMods.Options;
 
-public class ThiefOptions : AbstractOptionGroup<ThiefRole>
+public class ThiefOptions : AbstractRoleOptionGroup<ThiefRole>
 {
     public override string GroupName => "Thief";
 
     public ModdedNumberOption MaxStolenModifiers { get; } = new(
-        "Max Stolen Modifiers", 2f, 1f, 5f, 1f, MiraNumberSuffixes.None);
+        "Max Stolen Modifiers", 5f, 1f, 15f, 1f, MiraNumberSuffixes.None);
 
     public ModdedNumberOption KillCooldown { get; } = new(
         "Kill Cooldown", 25f, 10f, 60f, 2.5f, MiraNumberSuffixes.Seconds, "0.0");

@@ -31,7 +31,7 @@ public class UsePortalButton : TownOfUsButton
         return PortalManager.IsNearPortal(player.GetTruePosition());
     }
 
-    public override bool Enabled(RoleBehaviour? role) => true;
+    public override bool Enabled(RoleBehaviour? role) => PlayerControl.LocalPlayer != null;
 
     public static bool ShouldDriveUseButton() => PortalsUsableNow(PlayerControl.LocalPlayer);
 

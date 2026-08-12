@@ -18,7 +18,7 @@ public enum DuelSpawnType
     Random,
 }
 
-public class DuelistOptions : AbstractOptionGroup<DuelistRole>
+public class DuelistOptions : AbstractRoleOptionGroup<DuelistRole>
 {
     public override string GroupName => "Duelist";
 

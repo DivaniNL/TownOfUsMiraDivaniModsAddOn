@@ -2,6 +2,7 @@ using HarmonyLib;
 using MiraAPI.Modifiers;
 using DivaniMods.Modifiers.Game.Crewmate;
 using TownOfUs.Modifiers.Game;
+using TownOfUs.Modifiers.Game.Assailant;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Roles.Neutral;
 

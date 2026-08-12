@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DivaniMods.Options;
 
-public class ArmoredOptions : AbstractOptionGroup<ArmoredModifier>
+public class ArmoredOptions : AbstractTouModifierOptionGroup<ArmoredModifier>
 {
     public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
     public override string GroupName => "Armored";

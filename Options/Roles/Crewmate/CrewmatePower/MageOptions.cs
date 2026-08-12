@@ -25,7 +25,7 @@ public enum ShockShieldVisibility
     Teammates,
 }
 
-public class MageOptions : AbstractOptionGroup<MageRole>
+public class MageOptions : AbstractRoleOptionGroup<MageRole>
 {
     public override string GroupName => "Mage";
 

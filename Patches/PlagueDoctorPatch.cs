@@ -23,16 +23,10 @@ public static class PlagueDoctorPatch
     }
 
     [RegisterEvent]
-    public static void OnMeetingEnd(EndMeetingEvent evt)
-    {
-        PlagueDoctorRole.OnMeetingEnd();
-    }
-
-    [RegisterEvent]
     public static void OnRoundStart(RoundStartEvent evt)
     {
         TryClearStalePlagueDoctorStateIfNeeded();
-        PlagueDoctorRole.OnRoundStart();
+        PlagueDoctorRole.OnRoundStart(evt.TriggeredByIntro);
     }
 
     internal static void TryClearStalePlagueDoctorStateIfNeeded()
@@ -103,6 +97,8 @@ public static class PlagueDoctorPatch
 
         if (PlagueDoctorRole.PlagueDoctorPlayer == null) return;
 
+        PlagueDoctorRole.FreezeInfectionStates();
+
         bool gameplayActive = !MeetingHud.Instance
                               && !ExileController.Instance
                               && !PlagueDoctorRole.MeetingFlag;
@@ -168,19 +164,20 @@ public static class PlagueDoctorPatch
         foreach (var p in PlayerControl.AllPlayerControls)
         {
             if (p == null || p == PlagueDoctorRole.PlagueDoctorPlayer) continue;
-            if (PlagueDoctorRole.DeadPlayers.ContainsKey(p.PlayerId) && PlagueDoctorRole.DeadPlayers[p.PlayerId]) continue;
-            if (p.Data == null || p.Data.IsDead) continue;
+            if (p.Data == null) continue;
+            if (PlagueDoctorRole.IsKnownDead(p)) continue;
             if (PlagueDoctorRole.IsPlagueDoctor(p)) continue;
 
             var entry = $"{TrimName(p.Data.PlayerName)}: ";
 
-            if (PlagueDoctorRole.IsInfected(p))
+            var infected = PlagueDoctorRole.GetDisplayedInfectionState(p, out var progress);
+
+            if (infected)
             {
                 entry += "<color=#FF0000>INFECTED</color>";
             }
             else
             {
-                var progress = PlagueDoctorRole.InfectionProgress.GetValueOrDefault(p.PlayerId, 0f);
                 var percent = Mathf.Clamp01(progress / infectDuration);
                 Color color;
                 if (percent < 0.5f)

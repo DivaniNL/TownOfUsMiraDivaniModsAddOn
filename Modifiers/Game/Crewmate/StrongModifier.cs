@@ -11,9 +11,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Crewmate;
 
-public class StrongModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
+public class StrongModifier : TouGameModifier, IWikiDiscoverable
 {
     public static readonly Color StrongColor = new Color32(50, 201, 147, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        StrongColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.StrongIcon.LoadAsset(),
+            "DivaniMod.Modifier.Crewmate.Strong", 1.45f));
 
     public override string ModifierName => "Strong";
     public override string LocaleKey => "Strong";

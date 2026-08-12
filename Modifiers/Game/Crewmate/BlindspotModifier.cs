@@ -11,9 +11,13 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Game.Crewmate;
 
-public class BlindspotModifier : TouGameModifier, IColoredModifier, IWikiDiscoverable
+public class BlindspotModifier : TouGameModifier, IWikiDiscoverable
 {
     public static readonly Color BlindspotColor = new Color32(128, 126, 124, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        BlindspotColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.BlindspotIcon.LoadAsset(),
+            "DivaniMod.Modifier.Crewmate.Blindspot", 1.45f));
 
     public override string ModifierName => "Blindspot";
     public override string LocaleKey => "Blindspot";

@@ -34,6 +34,7 @@ public sealed class SentinelRole(IntPtr cppPtr)
 
     public CustomRoleConfiguration Configuration => new(this)
     {
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.SentinelIcon.LoadAsset(), "DivaniMod.Role.Crewmate.Sentinel", 1.45f),
         OptionsScreenshot = DivaniAssets.SentinelBanner,
         Icon = DivaniAssets.SentinelIcon,
         IntroSound = DivaniAssets.SentinelIntroSound,

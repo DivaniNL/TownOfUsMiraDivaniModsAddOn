@@ -5,7 +5,7 @@ using DivaniMods.Roles.Impostor.ImpostorConcealing;
 
 namespace DivaniMods.Options;
 
-public class CunctatorOptions : AbstractOptionGroup<CunctatorRole>
+public class CunctatorOptions : AbstractRoleOptionGroup<CunctatorRole>
 {
     public override string GroupName => "Cunctator";
 
