@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <Target Name="CopyToPlugins" AfterTargets="Build" Condition="Exists('$(BepInExPath)\plugins')">
-    <Copy SourceFiles="$(OutputPath)DivaniMods.dll" DestinationFolder="$(BepInExPath)\plugins\" />
+    <Copy SourceFiles="$(OutputPath)DivaniMods.dll" DestinationFolder="/Users/neiljain/Library/Application Support/CrossOver/Bottles/Mainly/drive_c/Program Files (x86)/Steam/steamapps/common/Among Us copy/BepInEx/plugins" />
     <Message Text="Copied $(AssemblyName).dll to BepInEx plugins folder!" Importance="High" />
   </Target>
 
