@@ -1,0 +1,31 @@
+name: Build DivaniMods DLL
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout dev branch
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore DivaniMods.csproj
+
+      - name: Build DLL
+        run: dotnet build DivaniMods.csproj --configuration Release --no-restore
+
+      - name: Upload DLL
+        uses: actions/upload-artifact@v4
+        with:
+          name: DivaniMods
+          path: '**/DivaniMods.dll'
