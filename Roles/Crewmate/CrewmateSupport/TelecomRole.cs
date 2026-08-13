@@ -318,7 +318,7 @@ public sealed class TelecomRole(IntPtr cppPtr)
         var partner = mod.Partner;
         var local = PlayerControl.LocalPlayer;
         var localInvolved = local == sender || (partner != null && local == partner);
-        var deadKnows = DeathHandlerModifier.IsFullyDead(local) &&
+        var deadKnows = GameHistory.IsFullyDead(local) &&
                         OptionGroupSingleton<PostmortemOptions>.Instance.TheDeadKnow;
 
         if (!localInvolved && !deadKnows)

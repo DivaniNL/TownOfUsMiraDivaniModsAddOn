@@ -20,7 +20,7 @@ using DivaniMods.Utilities;
 using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Buttons;
-using TownOfUs.Events;
+using TownOfUs.Modules;
 using TownOfUs.Interfaces;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Modifiers;
@@ -848,25 +848,12 @@ public class PickpocketButton : TownOfUsButton
         var inMeeting = MeetingHud.Instance || ExileController.Instance;
         var heartbreakText = TouLocale.Get("DiedToHeartbreak");
         
-        DeathHandlerModifier.UpdateDeathHandlerImmediate(
-            victim,
-            heartbreakText,
-            DeathEventHandlers.CurrentRound,
-            inMeeting ? DeathHandlerOverride.SetFalse : DeathHandlerOverride.SetTrue,
-            lockInfo: DeathHandlerOverride.SetTrue);
-        
-        while (DeathHandlerModifier.IsAltCoroutineRunning)
-        {
-            yield return null;
-        }
-        
-        if (victim.TryGetModifier<DeathHandlerModifier>(out var deathHandler))
-        {
-            deathHandler.CauseOfDeath = heartbreakText;
-            deathHandler.RoundOfDeath = DeathEventHandlers.CurrentRound;
-            deathHandler.DiedThisRound = !inMeeting;
-            deathHandler.LockInfo = true;
-        }
+        GameHistory.UpdatePlayerDeathData(
+        victim,
+        heartbreakText,
+        roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+        diedThisRound: inMeeting ? DeathHandlerOverride.SetFalse : DeathHandlerOverride.SetTrue,
+        lockInfo: DeathHandlerOverride.SetTrue);
         
         if (inMeeting)
         {

@@ -9,6 +9,8 @@ using TownOfUs.Events;
 using TownOfUs.Modifiers;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Utilities;
+using TownOfUs.Modules;
+using TownOfUs.Modules.Components;
 
 namespace DivaniMods.Networking.Impostor.ImpostorAfterlife;
 
@@ -42,28 +44,19 @@ public static class RevenantRpc
     {
         var cause = TouLocale.Get("DiedToRevenant");
 
-        DeathHandlerModifier.UpdateDeathHandlerImmediate(
+        GameHistory.UpdatePlayerDeathData(
             target,
             cause,
-            DeathEventHandlers.CurrentRound,
-            DeathHandlerOverride.SetTrue,
-            TouLocale.GetParsed("DiedByStringBasic").Replace("<player>", source.Data.PlayerName),
-            lockInfo: DeathHandlerOverride.SetTrue);
-        DeathHandlerModifier.UpdateDeathHandlerImmediate(source, "null", -1, DeathHandlerOverride.SetFalse,
+            roundOfDeath: HudManagerHelper.Instance.CurrentRound,
+            diedThisRound: DeathHandlerOverride.SetTrue,
+            killedBy: TouLocale.GetParsed("DiedByStringBasic").Replace("<player>", source.Data.PlayerName),
             lockInfo: DeathHandlerOverride.SetTrue);
 
-        while (DeathHandlerModifier.IsAltCoroutineRunning)
-        {
-            yield return null;
-        }
-
-        if (target.TryGetModifier<DeathHandlerModifier>(out var deathHandler))
-        {
-            deathHandler.CauseOfDeath = cause;
-            deathHandler.RoundOfDeath = DeathEventHandlers.CurrentRound;
-            deathHandler.DiedThisRound = true;
-            deathHandler.LockInfo = true;
-        }
+        GameHistory.UpdatePlayerDeathData(
+            source,
+            roundOfDeath: -1,
+            diedThisRound: DeathHandlerOverride.SetFalse,
+            lockInfo: DeathHandlerOverride.SetTrue);
 
         if (target.Data == null || target.Data.IsDead)
         {

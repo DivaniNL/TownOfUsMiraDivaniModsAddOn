@@ -76,10 +76,11 @@ public static class DuelistEvents
         DuelManager.MarkDuelDeath(tgt.PlayerId);
 
         var cause = TouLocale.Get("DiedToDuelist");
-        DeathHandlerModifier.UpdateDeathHandlerImmediate(
-            tgt, cause, DeathEventHandlers.CurrentRound, DeathHandlerOverride.SetTrue,
-            TouLocale.GetParsed("DiedByStringBasic").Replace("<player>", src.Data.PlayerName),
-            lockInfo: DeathHandlerOverride.SetTrue);
+        TownOfUs.Modules.GameHistory.UpdatePlayerDeathData(
+            tgt, cause,
+            roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+            diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetTrue,
+            lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
 
         DuelManager.EndDuel(src, tgt, true);
     }
@@ -123,9 +124,10 @@ public static class DuelistEvents
         {
             Coroutines.Start(CoShowLeaveNotification(duelist.Player));
 
-            DeathHandlerModifier.UpdateDeathHandlerImmediate(duelist.Player, TouLocale.Get("DiedToWinning"),
-                DeathEventHandlers.CurrentRound, DeathHandlerOverride.SetFalse,
-                lockInfo: DeathHandlerOverride.SetTrue);
+            TownOfUs.Modules.GameHistory.UpdatePlayerDeathData(duelist.Player, TouLocale.Get("DiedToWinning"),
+                roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+                diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetFalse,
+                lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
 
             duelist.Player.Exiled();
         }
@@ -146,9 +148,10 @@ public static class DuelistEvents
         {
             Coroutines.Start(CoShowLeaveNotification(duelist.Player));
 
-            DeathHandlerModifier.UpdateDeathHandlerImmediate(duelist.Player, TouLocale.Get("DiedToWinning"),
-                DeathEventHandlers.CurrentRound, DeathHandlerOverride.SetFalse,
-                lockInfo: DeathHandlerOverride.SetTrue);
+            TownOfUs.Modules.GameHistory.UpdatePlayerDeathData(duelist.Player, TouLocale.Get("DiedToWinning"),
+                roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+                diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetFalse,
+                lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
 
             duelist.Player.Exiled();
         }
