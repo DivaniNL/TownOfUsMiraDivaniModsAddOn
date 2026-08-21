@@ -25,7 +25,7 @@ using UnityEngine;
 
 namespace DivaniMods.Roles.Neutral.NeutralKilling;
 
-public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole, IProgressTally, IWikiDiscoverable
+public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole, IProgressTally, IWikiDiscoverable, ICrewVariant
 {
     public static readonly Color MonsterColor = new Color32(107, 179, 48, 255);
     public string RoleName => "Monster";
@@ -38,6 +38,8 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralKilling;
     public bool HasImpostorVision => true;
+    public RoleBehaviour CrewVariant =>
+        RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<TrapperRole>());
 
     private static TMP_SpriteAsset[] UxIcons =>
     [
