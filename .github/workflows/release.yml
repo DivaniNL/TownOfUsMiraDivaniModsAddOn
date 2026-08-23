@@ -1,53 +1,179 @@
-name: Release
-
-# Creates a DRAFT GitHub release when you push a `v*` tag (e.g. `v1.0.0`).
-# Intentionally does NOT build in CI - the csproj references BepInEx /
-# TOU-Mira interop DLLs from a local installation, which are not trivially
-# reproducible on a clean runner. Instead:
-#
-#   1. Build locally with:  ./scripts/Package.ps1 -Version 1.0.0
-#   2. Push a tag:          git tag v1.0.0 && git push origin v1.0.0
-#   3. This workflow runs and creates a DRAFT release with the notes from
-#      RELEASE_NOTES.md already filled in.
-#   4. Upload the DivaniMods.dll and DivaniMods-v1.0.0.zip produced by the
-#      packaging script, then hit "Publish release".
+name: Build and Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
   workflow_dispatch:
     inputs:
-      version:
-        description: "Version tag to draft (e.g. v1.0.0)"
+      branch:
+        description: "Branch to build"
         required: true
+        default: "main"
+        type: string
+
+      pr_number:
+        description: "PR number to use for release title and description"
+        required: false
+        type: string
 
 permissions:
   contents: write
+  pull-requests: read
 
 jobs:
-  draft:
-    runs-on: ubuntu-22.04
+  build-and-release:
+    # Automatically run only when a PR from dev is merged into main.
+    # Manual runs are also allowed.
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event.pull_request.merged == true &&
+        github.event.pull_request.head.ref == 'dev'
+      )
+
+    runs-on: windows-latest
+
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Resolve version
-        id: ver
-        shell: bash
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            tag="${{ inputs.version }}"
-          else
-            tag="${{ github.ref_name }}"
-          fi
-          case "$tag" in v*) ;; *) tag="v$tag" ;; esac
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
-          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
-
-      - name: Create draft release
-        uses: softprops/action-gh-release@v2
+      # --------------------------------------------------
+      # Checkout
+      # --------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          draft: true
-          tag_name: ${{ steps.ver.outputs.tag }}
-          name: Divani Mods ${{ steps.ver.outputs.tag }}
-          body_path: RELEASE_NOTES.md
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.branch || 'main' }}
+
+      # --------------------------------------------------
+      # .NET
+      # --------------------------------------------------
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "6.0.x"
+
+      # --------------------------------------------------
+      # Read version from DivaniMods.csproj
+      # --------------------------------------------------
+      - name: Get version
+        id: version
+        shell: pwsh
+        run: |
+          [xml]$project = Get-Content "DivaniMods.csproj"
+
+          $version = $project.Project.PropertyGroup.Version
+
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            Write-Error "Could not find <Version> in DivaniMods.csproj"
+            exit 1
+          }
+
+          Write-Host "Version: $version"
+
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      # --------------------------------------------------
+      # Get PR title + description
+      # --------------------------------------------------
+      - name: Get PR information
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: |
+
+          if ("${{ github.event_name }}" -eq "pull_request") {
+
+            $title = @'
+${{ github.event.pull_request.title }}
+'@
+
+            $body = @'
+${{ github.event.pull_request.body }}
+'@
+
+          }
+          elseif ("${{ inputs.pr_number }}" -ne "") {
+
+            $pr = gh pr view "${{ inputs.pr_number }}" `
+              --repo "${{ github.repository }}" `
+              --json title,body |
+              ConvertFrom-Json
+
+            $title = $pr.title
+            $body = $pr.body
+
+          }
+          else {
+
+            $title = "Divani Mods v${{ steps.version.outputs.version }}"
+            $body = "Manual release of Divani Mods v${{ steps.version.outputs.version }}."
+
+          }
+
+          "title<<EOF" >> $env:GITHUB_OUTPUT
+          $title >> $env:GITHUB_OUTPUT
+          "EOF" >> $env:GITHUB_OUTPUT
+
+          "body<<EOF" >> $env:GITHUB_OUTPUT
+          $body >> $env:GITHUB_OUTPUT
+          "EOF" >> $env:GITHUB_OUTPUT
+
+      # --------------------------------------------------
+      # Restore
+      # --------------------------------------------------
+      - name: Restore dependencies
+        run: dotnet restore DivaniMods.csproj
+
+      # --------------------------------------------------
+      # Build DLL
+      # --------------------------------------------------
+      - name: Build
+        run: |
+          dotnet build DivaniMods.csproj `
+            --configuration Release `
+            --no-restore
+
+      # --------------------------------------------------
+      # Verify DLL exists
+      # --------------------------------------------------
+      - name: Verify DLL
+        shell: pwsh
+        run: |
+
+          $dll = "bin\Release\net6.0\DivaniMods.dll"
+
+          if (!(Test-Path $dll)) {
+            Write-Error "DivaniMods.dll was not found!"
+            exit 1
+          }
+
+          Write-Host "DLL successfully built:"
+          Get-Item $dll
+
+      # --------------------------------------------------
+      # Create GitHub Release
+      # --------------------------------------------------
+      - name: Create Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: |
+
+          $tag = "v${{ steps.version.outputs.version }}"
+
+          $title = @'
+${{ steps.pr.outputs.title }}
+'@
+
+          $body = @'
+${{ steps.pr.outputs.body }}
+'@
+
+          gh release create "$tag" `
+            "bin\Release\net6.0\DivaniMods.dll" `
+            --repo "${{ github.repository }}" `
+            --target "${{ github.sha }}" `
+            --title "$title" `
+            --notes "$body"
