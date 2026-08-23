@@ -11,7 +11,6 @@ using MiraAPI.Utilities.Assets;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
-using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Modifiers.Game.Universal;
 using DivaniMods.Options;
 using DivaniMods.Patches;
@@ -20,7 +19,7 @@ using DivaniMods.Utilities;
 using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Buttons;
-using TownOfUs.Modules;
+using TownOfUs.Events;
 using TownOfUs.Interfaces;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Modifiers;
@@ -31,6 +30,7 @@ using TownOfUs.Modifiers.Game.Assailant;
 using TownOfUs.Utilities;
 using TownOfUs.Utilities.Appearances;
 using UnityEngine;
+using TownOfUs.Modules;
 
 namespace DivaniMods.Buttons.Neutral.NeutralKilling;
 
@@ -139,7 +139,12 @@ public class PickpocketButton : TownOfUsButton
         // Manual targeting (non-target button): pick closest, refresh outline each frame.
         var newTarget = GetTarget();
         if (newTarget != _target) SetOutline(false);
-        _target = IsTargetValid(newTarget) ? newTarget : null;
+        var candidate = IsTargetValid(newTarget) ? newTarget : null;
+        if (candidate != null && !FragBombState.IsHolder(candidate.PlayerId) && GetTargetModifiers(candidate).Count == 0)
+        {
+            candidate = null;
+        }
+        _target = candidate;
         SetOutline(true);
 
         // Bomb snatch is always allowed even at max stolen modifiers because
@@ -268,27 +273,23 @@ public class PickpocketButton : TownOfUsButton
             targetModifiers = targetModifiers.Where(m => m is not LoverModifier).ToList();
         }
 
+        if (targetModifiers.Count == 0)
+        {
+            return;
+        }
+
         var random = new System.Random();
+        var thiefHasButtonModifier = HasButtonModifier(thief);
+        var stolen = PickTargetModifier(targetModifiers, random, thief);
+        var canUseModifier = CanThiefUseModifier(stolen, thief);
 
-        if (targetModifiers.Count > 0)
+        uint fallbackRandomId = 0;
+        if (!canUseModifier)
         {
-            var thiefHasButtonModifier = HasButtonModifier(thief);
-            var stolen = PickTargetModifier(targetModifiers, random, thief);
-            var canUseModifier = CanThiefUseModifier(stolen, thief);
-
-            uint fallbackRandomId = 0;
-            if (!canUseModifier)
-            {
-                fallbackRandomId = PickRandomGivableId(thief, random, allowButtonModifiers: !thiefHasButtonModifier);
-            }
-
-            RpcStealModifier(thief, target.PlayerId, stolen.TypeId, canUseModifier, fallbackRandomId);
+            fallbackRandomId = PickRandomGivableId(thief, random, allowButtonModifiers: !thiefHasButtonModifier);
         }
-        else
-        {
-            var chosenId = PickRandomGivableId(thief, random, allowButtonModifiers: !HasButtonModifier(thief));
-            RpcGiveRandomModifier(thief, chosenId);
-        }
+
+        RpcStealModifier(thief, target.PlayerId, stolen.TypeId, canUseModifier, fallbackRandomId);
     }
     
     private static BaseModifier PickTargetModifier(
@@ -330,7 +331,7 @@ public class PickpocketButton : TownOfUsButton
         if (modifier is ExcludedGameModifier)
             return true;
 
-        if (modifier is BetrayerModifier)
+        if (modifier is AllianceGameModifier && !OptionGroupSingleton<ThiefOptions>.Instance.CanStealAllianceModifiers.Value)
             return true;
 
         if (modifier.GetType().Name.StartsWith("Test", StringComparison.OrdinalIgnoreCase))
@@ -853,7 +854,7 @@ public class PickpocketButton : TownOfUsButton
         heartbreakText,
         roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
         diedThisRound: inMeeting ? DeathHandlerOverride.SetFalse : DeathHandlerOverride.SetTrue,
-        lockInfo: DeathHandlerOverride.SetTrue);
+        lockInfo: DeathHandlerOverride.SetTrue);    
         
         if (inMeeting)
         {
