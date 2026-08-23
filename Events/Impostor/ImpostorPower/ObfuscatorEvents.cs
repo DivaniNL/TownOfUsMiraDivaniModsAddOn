@@ -78,8 +78,8 @@ public static class ObfuscatorEvents
         if (obf.Swap1 == null || obf.Swap2 == null) return;
         if (obf.ChargesRemaining <= 0) return;
 
-        var obfSwap1 = obf.Swap1!.TargetPlayerId;
-        var obfSwap2 = obf.Swap2!.TargetPlayerId;
+        var obfSwap1 = obf.Swap1!.PlayerId;
+        var obfSwap2 = obf.Swap2!.PlayerId;
 
         var originalVoteList = @event.Votes.ToList();
         if (TiebreakerEvents.TiebreakingVote.HasValue)
@@ -98,8 +98,8 @@ public static class ObfuscatorEvents
 
             foreach (var s in swappers)
             {
-                var a = s.Swap1!.TargetPlayerId;
-                var b = s.Swap2!.TargetPlayerId;
+                var a = s.Swap1!.PlayerId;
+                var b = s.Swap2!.PlayerId;
                 if (suspect == a) suspect = b;
                 else if (suspect == b) suspect = a;
             }

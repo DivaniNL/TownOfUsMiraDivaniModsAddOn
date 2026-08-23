@@ -69,9 +69,9 @@ public static class MonsterPatches
 
         foreach (var area in areas)
         {
-            if (area != null && !area.AmDead && pendingIds.Contains(area.TargetPlayerId))
+            if (area != null && !area.AmDead && pendingIds.Contains(area.PlayerId))
             {
-                area.SetDead(area.DidReport, true);
+                area.SetDead(true);
             }
         }
 

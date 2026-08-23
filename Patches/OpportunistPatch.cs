@@ -275,8 +275,8 @@ public static class OpportunistPatch
                 continue;
             }
 
-            var s1 = swap1.TargetPlayerId;
-            var s2 = swap2.TargetPlayerId;
+            var s1 = swap1.PlayerId;
+            var s2 = swap2.PlayerId;
 
             if (playerId == s1)
             {

@@ -155,7 +155,7 @@ public sealed class TelecomRole(IntPtr cppPtr)
 
     private bool IsExempt(PlayerVoteArea voteArea)
     {
-        var target = GameData.Instance.GetPlayerById(voteArea.TargetPlayerId)?.Object;
+        var target = GameData.Instance.GetPlayerById(voteArea.PlayerId)?.Object;
         return target == null ||
                target.Data == null ||
                target.Data.Disconnected ||
@@ -167,14 +167,14 @@ public sealed class TelecomRole(IntPtr cppPtr)
 
     private void OnMeetingToggle(PlayerVoteArea voteArea, MeetingHud hud)
     {
-        if (hud.state == MeetingHud.VoteStates.Discussion || IsExempt(voteArea) || _meetingMenu == null)
+        if (hud.state == MeetingHud.MeetingStates.Discussion || IsExempt(voteArea) || _meetingMenu == null)
         {
             return;
         }
 
-        if (_localSelectedId == voteArea.TargetPlayerId)
+        if (_localSelectedId == voteArea.PlayerId)
         {
-            _meetingMenu.Actives[voteArea.TargetPlayerId] = false;
+            _meetingMenu.Actives[voteArea.PlayerId] = false;
             _localSelectedId = byte.MaxValue;
             RpcSetPendingMeetingTarget(Player, byte.MaxValue);
             return;
@@ -185,10 +185,10 @@ public sealed class TelecomRole(IntPtr cppPtr)
             _meetingMenu.Actives[_localSelectedId] = false;
         }
 
-        _localSelectedId = voteArea.TargetPlayerId;
-        _meetingMenu.Actives[voteArea.TargetPlayerId] = true;
+        _localSelectedId = voteArea.PlayerId;
+        _meetingMenu.Actives[voteArea.PlayerId] = true;
         SoundManager.Instance.PlaySound(DivaniAssets.TelecomTransmissionSound.LoadAsset(), false);
-        RpcSetPendingMeetingTarget(Player, voteArea.TargetPlayerId);
+        RpcSetPendingMeetingTarget(Player, voteArea.PlayerId);
     }
 
     public static bool IsValidTarget(PlayerControl? target, PlayerControl telecom)
