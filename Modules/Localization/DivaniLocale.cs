@@ -14,6 +14,17 @@ public static class DivaniLocale
 
         RegisterDeathCauses(en);
         RegisterLocalSettings(en);
+        RegisterNeutralEvilWinMessages(en);
+    }
+
+    private static void RegisterNeutralEvilWinMessages(Dictionary<string, string> en)
+    {
+        en.TryAdd("DivaniNeutralEvilWonSelf",
+            "You've reached your goal as <role>!");
+        en.TryAdd("DivaniNeutralEvilTormentFeedback",
+            "You may kill one more player before the round continues.");
+        en.TryAdd("DivaniNeutralEvilWonOther",
+            "<player> has left in victory as <role>!");
     }
 
     private static void RegisterLocalSettings(Dictionary<string, string> en)
