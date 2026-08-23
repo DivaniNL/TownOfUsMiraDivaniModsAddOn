@@ -2,7 +2,8 @@ name: Build and Release
 
 on:
   pull_request:
-    types: [closed]
+    types:
+      - closed
     branches:
       - main
 
@@ -25,9 +26,7 @@ permissions:
 
 jobs:
   build-and-release:
-    # Automatically run only when a PR from dev is merged into main.
-    # Manual runs are also allowed.
-    if: |
+    if: >-
       github.event_name == 'workflow_dispatch' ||
       (
         github.event.pull_request.merged == true &&
@@ -37,26 +36,17 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # --------------------------------------------------
-      # Checkout
-      # --------------------------------------------------
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && inputs.branch || 'main' }}
 
-      # --------------------------------------------------
-      # .NET
-      # --------------------------------------------------
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "6.0.x"
 
-      # --------------------------------------------------
-      # Read version from DivaniMods.csproj
-      # --------------------------------------------------
-      - name: Get version
+      - name: Get version from csproj
         id: version
         shell: pwsh
         run: |
@@ -69,79 +59,62 @@ jobs:
             exit 1
           }
 
-          Write-Host "Version: $version"
-
+          Write-Host "Project version: $version"
           "version=$version" >> $env:GITHUB_OUTPUT
 
-      # --------------------------------------------------
-      # Get PR title + description
-      # --------------------------------------------------
       - name: Get PR information
         id: pr
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          VERSION: ${{ steps.version.outputs.version }}
+          REPOSITORY: ${{ github.repository }}
         shell: pwsh
         run: |
-
-          if ("${{ github.event_name }}" -eq "pull_request") {
-
-            $title = @'
-${{ github.event.pull_request.title }}
-'@
-
-            $body = @'
-${{ github.event.pull_request.body }}
-'@
-
+          if ($env:EVENT_NAME -eq "pull_request") {
+            $title = $env:PR_TITLE
+            $body = $env:PR_BODY
           }
-          elseif ("${{ inputs.pr_number }}" -ne "") {
-
-            $pr = gh pr view "${{ inputs.pr_number }}" `
-              --repo "${{ github.repository }}" `
+          elseif (-not [string]::IsNullOrWhiteSpace($env:PR_NUMBER)) {
+            $pr = gh pr view $env:PR_NUMBER `
+              --repo $env:REPOSITORY `
               --json title,body |
               ConvertFrom-Json
 
             $title = $pr.title
             $body = $pr.body
-
           }
           else {
-
-            $title = "Divani Mods v${{ steps.version.outputs.version }}"
-            $body = "Manual release of Divani Mods v${{ steps.version.outputs.version }}."
-
+            $title = "Divani Mods v$($env:VERSION)"
+            $body = "Manual release of Divani Mods v$($env:VERSION)."
           }
 
-          "title<<EOF" >> $env:GITHUB_OUTPUT
+          $titleDelimiter = "TITLE_$([guid]::NewGuid().ToString())"
+          $bodyDelimiter = "BODY_$([guid]::NewGuid().ToString())"
+
+          "title<<$titleDelimiter" >> $env:GITHUB_OUTPUT
           $title >> $env:GITHUB_OUTPUT
-          "EOF" >> $env:GITHUB_OUTPUT
+          "$titleDelimiter" >> $env:GITHUB_OUTPUT
 
-          "body<<EOF" >> $env:GITHUB_OUTPUT
+          "body<<$bodyDelimiter" >> $env:GITHUB_OUTPUT
           $body >> $env:GITHUB_OUTPUT
-          "EOF" >> $env:GITHUB_OUTPUT
+          "$bodyDelimiter" >> $env:GITHUB_OUTPUT
 
-      # --------------------------------------------------
-      # Restore
-      # --------------------------------------------------
       - name: Restore dependencies
         run: dotnet restore DivaniMods.csproj
 
-      # --------------------------------------------------
-      # Build DLL
-      # --------------------------------------------------
-      - name: Build
+      - name: Build DLL
         run: |
           dotnet build DivaniMods.csproj `
             --configuration Release `
             --no-restore
 
-      # --------------------------------------------------
-      # Verify DLL exists
-      # --------------------------------------------------
       - name: Verify DLL
         shell: pwsh
         run: |
-
           $dll = "bin\Release\net6.0\DivaniMods.dll"
 
           if (!(Test-Path $dll)) {
@@ -152,28 +125,22 @@ ${{ github.event.pull_request.body }}
           Write-Host "DLL successfully built:"
           Get-Item $dll
 
-      # --------------------------------------------------
-      # Create GitHub Release
-      # --------------------------------------------------
-      - name: Create Release
+      - name: Create Official Latest Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+          RELEASE_TITLE: ${{ steps.pr.outputs.title }}
+          RELEASE_BODY: ${{ steps.pr.outputs.body }}
+          REPOSITORY: ${{ github.repository }}
+          SHA: ${{ github.sha }}
         shell: pwsh
         run: |
+          $tag = "v$($env:VERSION)"
 
-          $tag = "v${{ steps.version.outputs.version }}"
-
-          $title = @'
-${{ steps.pr.outputs.title }}
-'@
-
-          $body = @'
-${{ steps.pr.outputs.body }}
-'@
-
-          gh release create "$tag" `
+          gh release create $tag `
             "bin\Release\net6.0\DivaniMods.dll" `
-            --repo "${{ github.repository }}" `
-            --target "${{ github.sha }}" `
-            --title "$title" `
-            --notes "$body"
+            --repo $env:REPOSITORY `
+            --target $env:SHA `
+            --title $env:RELEASE_TITLE `
+            --notes $env:RELEASE_BODY `
+            --latest
