@@ -51,7 +51,16 @@ public static class MonsterPatches
 
     private static IEnumerator CoSortDigestedVictims(MeetingHud meetingHud)
     {
-        var pendingIds = MonsterState.PendingDigestSortIds();
+        var pendingIds = new List<byte>();
+        var waitForPending = 1f;
+        while (waitForPending > 0f)
+        {
+            pendingIds = MonsterState.PendingDigestSortIds();
+            if (pendingIds.Count > 0) break;
+            waitForPending -= Time.deltaTime;
+            yield return null;
+        }
+
         if (pendingIds.Count == 0) yield break;
 
         foreach (var id in pendingIds) MonsterState.ClearPendingDigestSort(id);
