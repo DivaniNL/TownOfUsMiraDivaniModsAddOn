@@ -12,8 +12,8 @@ using TownOfUs.Modules.Components;
 namespace DivaniMods.Patches;
 
 [HarmonyPatch(typeof(CustomMurderRpc), nameof(CustomMurderRpc.RpcConfirmCustomMurder),
-    typeof(PlayerControl), typeof(PlayerControl), typeof(PlayerControl), typeof(MurderResultFlags),
-    typeof(bool), typeof(bool), typeof(bool), typeof(bool), typeof(bool))]
+    typeof(PlayerControl), typeof(PlayerControl), typeof(PlayerControl), typeof(bool), typeof(bool),
+    typeof(MurderResultFlags), typeof(bool), typeof(bool), typeof(bool), typeof(bool), typeof(bool))]
 internal static class RetributionistNoTeleportKillPatch
 {
     [HarmonyPriority(Priority.First)]
