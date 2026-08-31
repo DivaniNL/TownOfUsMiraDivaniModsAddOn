@@ -1,11 +1,11 @@
 using MiraAPI.Hud;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Buttons.Neutral;
 using DivaniMods.Interfaces;
 using DivaniMods.Options;
 using TownOfUs.Events;
 using TownOfUs.Modifiers;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Utilities;
 using UnityEngine;
 using TownOfUs.Modules;
@@ -42,14 +42,14 @@ public static class NeutralEvilWinOutcomeUtils
             }
 
             var selfNotif = Helpers.CreateAndShowNotification(
-                $"<b>{TouLocale.GetParsed("DivaniNeutralEvilWonSelf").Replace("<role>", roleTag)}</b>",
+                $"<b>{MiraLocaleManager.Get("DivaniNeutralEvilWonSelf").Replace("<role>", roleTag)}</b>",
                 Color.white, new Vector3(0f, 1f, -20f), spr: role.WinIcon.LoadAsset());
             selfNotif.AdjustNotification();
 
             if (role.EffectiveWinOutcome == NeutralEvilWinOutcome.KillOnePlayer)
             {
                 var tormentNotif = Helpers.CreateAndShowNotification(
-                    $"<b>{TouLocale.GetParsed("DivaniNeutralEvilTormentFeedback")}</b>",
+                    $"<b>{MiraLocaleManager.Get("DivaniNeutralEvilTormentFeedback")}</b>",
                     Color.white, new Vector3(0f, 0.85f, -20f));
                 tormentNotif.AdjustNotification();
 
@@ -62,7 +62,7 @@ public static class NeutralEvilWinOutcomeUtils
         else
         {
             var otherNotif = Helpers.CreateAndShowNotification(
-                $"<b>{TouLocale.GetParsed("DivaniNeutralEvilWonOther").Replace("<role>", roleTag).Replace("<player>", player.Data.PlayerName)}</b>",
+                $"<b>{MiraLocaleManager.Get("DivaniNeutralEvilWonOther").Replace("<role>", roleTag).Replace("<player>", player.Data.PlayerName)}</b>",
                 Color.white, new Vector3(0f, 1f, -20f), spr: role.WinIcon.LoadAsset());
             otherNotif.AdjustNotification();
         }
