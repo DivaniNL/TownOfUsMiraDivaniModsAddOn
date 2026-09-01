@@ -33,6 +33,177 @@
 
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\PickPocketButton.png" />
+    <EmbeddedResource Include="Resources\PortalSprite.png" />
+    <EmbeddedResource Include="Resources\PortalUse.png" />
+    <EmbeddedResource Include="Resources\divanimods-bundle-win.bundle" />
+    <EmbeddedResource Include="Resources\divanimods-bundle-android.bundle" />
+    <EmbeddedResource Include="Resources\PDVent.png" />
+    <EmbeddedResource Include="Resources\BeaconAsset.png" />
+    <EmbeddedResource Include="Resources\BeaconPlace.png" />
+    <EmbeddedResource Include="Resources\DeadlockLockdown.png" />
+    <EmbeddedResource Include="Resources\FragGive.png" Condition="Exists('Resources\FragGive.png')" />
+    <EmbeddedResource Include="Resources\FragPass.png" Condition="Exists('Resources\FragPass.png')" />
+    <EmbeddedResource Include="Resources\FragVentButton.png" Condition="Exists('Resources\FragVentButton.png')" />
+    <!-- Role / modifier icons (logical name DivaniMods.Resources.Icons.* — see DivaniAssets.IconPath) -->
+    <EmbeddedResource Include="Resources\Icons\Thief.png" />
+    <EmbeddedResource Include="Resources\Icons\Blindspot.png" />
+    <EmbeddedResource Include="Resources\Icons\Fragile.png" />
+    <EmbeddedResource Include="Resources\Icons\Deadlock.png" />
+    <EmbeddedResource Include="Resources\Icons\Councillor.png" />
+    <EmbeddedResource Include="Resources\Icons\PortalMaker.png" />
+    <EmbeddedResource Include="Resources\Icons\Ruthless.png" />
+    <EmbeddedResource Include="Resources\Icons\Nullified.png" />
+    <EmbeddedResource Include="Resources\Icons\PlagueDoctor.png" />
+    <EmbeddedResource Include="Resources\Icons\Innocent.png" />
+    <EmbeddedResource Include="Resources\Icons\Sentinel.png" />
+    <EmbeddedResource Include="Resources\Icons\Frag.png" />
+    <EmbeddedResource Include="Resources\Icons\Misvote.png" />
+    <EmbeddedResource Include="Resources\Icons\Sniper.png" />
+    <EmbeddedResource Include="Resources\Icons\Silencer.png" />
+    <EmbeddedResource Include="Resources\Icons\Opportunist.png" />
+    <EmbeddedResource Include="Resources\Icons\Recruiter.png" />
+    <EmbeddedResource Include="Resources\Icons\Shuffle.png" />
+    <EmbeddedResource Include="Resources\Icons\Beartrap.png" />
+    <EmbeddedResource Include="Resources\Icons\Skilled.png" />
+    <EmbeddedResource Include="Resources\Icons\Strong.png" />
+    <EmbeddedResource Include="Resources\Icons\Bloody.png" />
+    <EmbeddedResource Include="Resources\Icons\Demolitionist.png" />
+    <EmbeddedResource Include="Resources\Icons\Domesmith.png" />
+    <EmbeddedResource Include="Resources\Icons\Summoner.png" />
+    <EmbeddedResource Include="Resources\Icons\Revenant.png" />
+    <EmbeddedResource Include="Resources\Icons\Sprout.png" Condition="Exists('Resources\Icons\Sprout.png')" />
+    <EmbeddedResource Include="Resources\Collect.png" Condition="Exists('Resources\Collect.png')" />
+    <EmbeddedResource Include="Resources\DomesmithPlaceDome.png" />
+    <EmbeddedResource Include="Resources\Icons\Memento.png" />
+    <EmbeddedResource Include="Resources\DemolitionistPlant.png" />
+    <EmbeddedResource Include="Resources\DemolitionistDefuse.png" />
+    <EmbeddedResource Include="Resources\DemolitionistVent.png" />
+    <EmbeddedResource Include="Resources\ShuffleButton.png" />
+    <EmbeddedResource Include="Resources\MoleDigButton.png" />
+    <EmbeddedResource Include="Resources\MoleVentButton.png" />
+    <EmbeddedResource Include="Resources\MinerVent.png" />
+    <EmbeddedResource Include="Resources\Icons\Mole.png" />
+    <EmbeddedResource Include="Resources\Icons\Telecom.png" />
+    <EmbeddedResource Include="Resources\TelecomTransmission.png" />
+    <EmbeddedResource Include="Resources\TelecomTransmissionMeeting.png" />
+    <EmbeddedResource Include="Resources\TelecomChatIdle.png" />
+    <EmbeddedResource Include="Resources\TelecomChatHover.png" />
+    <EmbeddedResource Include="Resources\TelecomChatOpen.png" />
+    <EmbeddedResource Include="Resources\ChatTelecomBubble.png" />
+    <!-- Audio clips must be WAV - loaded via MiraAPI's LoadableAudioResourceAsset,
+         matching how TouMiraRolesExtension ships its sounds. -->
+    <EmbeddedResource Include="Resources\FragileBreak.wav" />
+    <EmbeddedResource Include="Resources\PlagueDoctorInfect.png" />
+    <EmbeddedResource Include="Resources\PlagueDoctorIntro.wav" />
+    <EmbeddedResource Include="Resources\InfectSound.wav" />
+    <EmbeddedResource Include="Resources\ThiefIntro.wav" />
+    <EmbeddedResource Include="Resources\PortalMakerIntro.wav" />
+    <EmbeddedResource Include="Resources\DeadlockIntro.wav" />
+    <EmbeddedResource Include="Resources\CouncillorIntro.wav" />
+    <EmbeddedResource Include="Resources\PlacePortalSound.wav" />
+    <EmbeddedResource Include="Resources\FragHeartbeat.wav" Condition="Exists('Resources\FragHeartbeat.wav')" />
+    <EmbeddedResource Include="Resources\FragIntro.wav" Condition="Exists('Resources\FragIntro.wav')" />
+    <EmbeddedResource Include="Resources\SilencerIntro.wav" Condition="Exists('Resources\SilencerIntro.wav')" />
+    <EmbeddedResource Include="Resources\FragGive.wav" Condition="Exists('Resources\FragGive.wav')" />
+    <EmbeddedResource Include="Resources\BearTrapActivate.wav" Condition="Exists('Resources\BearTrapActivate.wav')" />
+    <EmbeddedResource Include="Resources\DoorOpen.wav" />
+    <EmbeddedResource Include="Resources\DoorClose.wav" />
+    <EmbeddedResource Include="Resources\Banners\DivaniModNewsLogo.png" />
+    <EmbeddedResource Include="Resources\Banners\DivaniModsLogoNew.png" Condition="Exists('Resources\Banners\DivaniModsLogoNew.png')" />
+    <EmbeddedResource Include="Resources\OptionBanners\ThiefBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\ClockstopperBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\CunctatorBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\CupidBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\DeadlockBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\DemolitionistBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\DomesmithBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\DuelistBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\FragBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\InnocentBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\MosquitoBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\PortalmakerBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\RetributionistBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\SentinelBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\SilencerBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\SummonerBanner.png" />
+    <EmbeddedResource Include="Resources\OptionBanners\MageBanner.png" />
+    <EmbeddedResource Include="Resources\OpportunistIntro.wav" />
+    <EmbeddedResource Include="Resources\DemolitionistIntro.wav" />
+    <EmbeddedResource Include="Resources\DemolitionistExplosion.wav" />
+    <EmbeddedResource Include="Resources\Announcements\modNews-en_US.json" />
+    <EmbeddedResource Include="Resources\RecruitMeetingCrewmate.png" />
+    <EmbeddedResource Include="Resources\RecruitMeetingImpostor.png" />
+    <EmbeddedResource Include="Resources\SummonerMeetingActive.png" />
+    <EmbeddedResource Include="Resources\SummonerMeetingInactive.png" />
+    <EmbeddedResource Include="Resources\ObfuscateActive.png" />
+    <EmbeddedResource Include="Resources\ObfuscateDisabled.png" />
+    <EmbeddedResource Include="Resources\Icons\Obfuscator.png" />
+    <EmbeddedResource Include="Resources\Icons\Cunctator.png" />
+    <EmbeddedResource Include="Resources\Icons\Incompetent.png" />
+    <EmbeddedResource Include="Resources\Icons\Armored.png" />
+    <EmbeddedResource Include="Resources\DomesmithIntro.wav" />
+    <EmbeddedResource Include="Resources\SummonerIntro.wav" />
+    <EmbeddedResource Include="Resources\SentinelIntro.wav" />
+    <EmbeddedResource Include="Resources\RecruiterIntro.wav" />
+    <EmbeddedResource Include="Resources\Icons\Mosquito.png" />
+    <EmbeddedResource Include="Resources\MosquitoSting.png" />
+    <EmbeddedResource Include="Resources\MosquitoObject.png" />
+    <EmbeddedResource Include="Resources\MosquitoIntro.wav" Condition="Exists('Resources\MosquitoIntro.wav')" />
+    <EmbeddedResource Include="Resources\MosquitoSwat.wav" Condition="Exists('Resources\MosquitoSwat.wav')" />
+    <EmbeddedResource Include="Resources\ObfuscatorIntro.wav" />
+    <EmbeddedResource Include="Resources\CunctatorIntro.wav" />
+    <EmbeddedResource Include="Resources\InnocentIntro.wav" />
+    <EmbeddedResource Include="Resources\Icons\Duellist.png" />
+    <EmbeddedResource Include="Resources\Icons\Clockstopper.png" />
+    <EmbeddedResource Include="Resources\DuelistDuel.png" />
+    <EmbeddedResource Include="Resources\DuelStrikeButton.png" />
+    <EmbeddedResource Include="Resources\DuelistIntro.wav" />
+    <EmbeddedResource Include="Resources\ClockstopperIntro.wav" />
+    <EmbeddedResource Include="Resources\RetributionistIntro.wav" />
+    <EmbeddedResource Include="Resources\Icons\Retributionist.png" />
+    <EmbeddedResource Include="Resources\VengefulSoulRevenge.png" />
+    <EmbeddedResource Include="Resources\Icons\UAV.png" />
+    <EmbeddedResource Include="Resources\UAVAirMap.png" />
+    <EmbeddedResource Include="Resources\Icons\TacticalInsertion.png" />
+    <EmbeddedResource Include="Resources\TacticalInsertionButton.png" />
+    <EmbeddedResource Include="Resources\TacInsertHover.wav" />
+    <EmbeddedResource Include="Resources\TacticalInsertionNonHover.png" />
+    <EmbeddedResource Include="Resources\TacInsertPlace.wav" />
+    <EmbeddedResource Include="Resources\UAVFriendly.wav" />
+    <EmbeddedResource Include="Resources\UAVEnemy.wav" />
+    <EmbeddedResource Include="Resources\UAVEnd.wav" />
+    <EmbeddedResource Include="Resources\Icons\Cupid.png" />
+    <EmbeddedResource Include="Resources\Icons\Mage.png" />
+    <EmbeddedResource Include="Resources\MageChangeSpell.png" />
+    <EmbeddedResource Include="Resources\MageShockShield.png" />
+    <EmbeddedResource Include="Resources\MageEnergize.png" />
+    <EmbeddedResource Include="Resources\MageIllusion.png" />
+    <EmbeddedResource Include="Resources\MageIntro.wav" />
+    <EmbeddedResource Include="Resources\TelecomIntro.wav" />
+    <EmbeddedResource Include="Resources\TelecomTransmiss.wav" />
+    <EmbeddedResource Include="Resources\TelecomMessageSound.wav" />
+    <EmbeddedResource Include="Resources\CupidMatchmake.png" />
+    <EmbeddedResource Include="Resources\CupidProtect.png" />
+    <EmbeddedResource Include="Resources\CupidProtectOne.png" />
+    <EmbeddedResource Include="Resources\CupidProtectTwo.png" />
+    <EmbeddedResource Include="Resources\CupidIntro.wav" Condition="Exists('Resources\CupidIntro.wav')" />
+    <EmbeddedResource Include="Resources\Icons\Dreamer.png" />
+    <EmbeddedResource Include="Resources\DreamerMeetingDream.png" />
+    <EmbeddedResource Include="Resources\DreamerIntro.wav" />
+    <EmbeddedResource Include="Resources\Icons\Watcher.png" />
+    <EmbeddedResource Include="Resources\Icons\Locator.png" />
+    <EmbeddedResource Include="Resources\LocatorMark.png" />
+    <EmbeddedResource Include="Resources\WatcherWatch.png" />
+    <EmbeddedResource Include="Resources\WatcherKillButton.png" Condition="Exists('Resources\WatcherKillButton.png')" />
+    <EmbeddedResource Include="Resources\WatcherVentButton.png" Condition="Exists('Resources\WatcherVentButton.png')" />
+    <EmbeddedResource Include="Resources\WatcherGreenLight.png" />
+    <EmbeddedResource Include="Resources\WatcherRedLight.png" />
+    <EmbeddedResource Include="Resources\WatcherGo.wav" Condition="Exists('Resources\WatcherGo.wav')" />
+    <EmbeddedResource Include="Resources\WatcherStop.wav" Condition="Exists('Resources\WatcherStop.wav')" />
+    <EmbeddedResource Include="Resources\WatcherIntro.wav" Condition="Exists('Resources\WatcherIntro.wav')" />
+    <EmbeddedResource Include="Resources\WatcherShoot.wav" Condition="Exists('Resources\WatcherShoot.wav')" />
+
     <EmbeddedResource Include="Resources\**\*" Exclude="Resources\Headers\**" />
   </ItemGroup>
 
