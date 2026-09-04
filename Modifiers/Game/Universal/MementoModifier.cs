@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using AmongUs.GameOptions;
 using MiraAPI.GameOptions;
+using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -9,6 +10,7 @@ using DivaniMods.Roles.Neutral.NeutralEvil;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
+using TownOfUs.Modifiers.Game.Crewmate;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Utilities;
 using UnityEngine;
@@ -48,7 +50,8 @@ public class MementoModifier : UniversalGameModifier, IWikiDiscoverable
 
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        return base.IsModifierValidOn(role) && role is not RetributionistRole && role is not InnocentRole;
+        return base.IsModifierValidOn(role) && role is not RetributionistRole && role is not InnocentRole &&
+            !(OptionGroupSingleton<MementoOptions>.Instance.PreventBaitPairing && role.Player.HasModifier<BaitModifier>());
     }
 
     public override void OnActivate()

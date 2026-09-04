@@ -10,6 +10,7 @@ using TownOfUs.Modifiers;
 using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralEvil;
 using UnityEngine;
+using TownOfUs.Modules;
 
 namespace DivaniMods.Patches;
 
@@ -107,7 +108,9 @@ public static class PlagueDoctorPatch
             PlagueDoctorRole.TickImmunityTimer(Time.deltaTime);
         }
 
-        bool localIsFullyDead = DeathHandlerModifier.IsFullyDead(localPlayer);
+        bool localIsFullyDead = GameHistory.IsFullyDead(localPlayer);
+
+
 
         if (isLocalPD || localIsFullyDead)
         {

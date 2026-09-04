@@ -21,4 +21,7 @@ public class InnocentOptions : AbstractRoleOptionGroup<InnocentRole>
 
     [ModdedToggleOption("Taunts Break Shields")]
     public bool TauntBreaksShields { get; set; } = true;
+
+    [ModdedEnumOption("Win Outcome", typeof(NeutralEvilWinOutcome), ["Ends Game", "Kill One Player", "Nothing"])]
+    public NeutralEvilWinOutcome WinOutcome { get; set; } = NeutralEvilWinOutcome.EndsGame;
 }

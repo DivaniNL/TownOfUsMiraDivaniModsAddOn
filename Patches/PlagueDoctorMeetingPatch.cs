@@ -3,6 +3,7 @@ using DivaniMods.Roles.Neutral.NeutralEvil;
 using TownOfUs.Modifiers;
 using TownOfUs.Utilities;
 using UnityEngine;
+using TownOfUs.Modules;
 
 namespace DivaniMods.Patches;
 
@@ -23,7 +24,7 @@ public static class PlagueDoctorMeetingPatch
                          (PlagueDoctorRole.PlagueDoctorPlayer != null &&
                           localPlayer.PlayerId == PlagueDoctorRole.PlagueDoctorPlayer.PlayerId);
 
-        bool localIsFullyDead = DeathHandlerModifier.IsFullyDead(localPlayer);
+        bool localIsFullyDead = GameHistory.IsFullyDead(localPlayer);
 
         if (!isLocalPD && !localIsFullyDead) return;
 

@@ -80,6 +80,9 @@ public class DemolitionistOptions : AbstractRoleOptionGroup<DemolitionistRole>, 
     [ModdedToggleOption("Explosion Kills Active Defusers")]
     public bool ExplosionKillsDefusers { get; set; } = false;
 
+    [ModdedEnumOption("Win Outcome", typeof(NeutralEvilWinOutcome), ["Ends Game", "Kill One Player", "Nothing"])]
+    public NeutralEvilWinOutcome WinOutcome { get; set; } = NeutralEvilWinOutcome.EndsGame;
+
     public bool IsTimedSabotageStyle => (DemolitionistSabotageStyle)SabotageStyle.Value is DemolitionistSabotageStyle.Timed;
 
     public IReadOnlySet<StringNames> WikiHiddenOptionKeys =>

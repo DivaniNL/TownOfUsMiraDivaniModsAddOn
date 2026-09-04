@@ -7,12 +7,13 @@ using TownOfUs.Modifiers;
 using TownOfUs.Modules;
 using TownOfUs.Modules.Localization;
 using TownOfUs.Roles;
+using TownOfUs.Modules.Components;
 
 namespace DivaniMods.Patches;
 
 [HarmonyPatch(typeof(CustomMurderRpc), nameof(CustomMurderRpc.RpcConfirmCustomMurder),
-    typeof(PlayerControl), typeof(PlayerControl), typeof(PlayerControl), typeof(MurderResultFlags),
-    typeof(bool), typeof(bool), typeof(bool), typeof(bool), typeof(bool))]
+    typeof(PlayerControl), typeof(PlayerControl), typeof(PlayerControl), typeof(bool), typeof(bool),
+    typeof(MurderResultFlags), typeof(bool), typeof(bool), typeof(bool), typeof(bool), typeof(bool))]
 internal static class RetributionistNoTeleportKillPatch
 {
     [HarmonyPriority(Priority.First)]
@@ -41,14 +42,14 @@ internal static class RetributionistNoTeleportKillPatch
             ? touRole.LocaleKey
             : "Killer";
 
-        DeathHandlerModifier.UpdateDeathHandlerImmediate(
+        GameHistory.UpdatePlayerDeathData(
             target,
             TouLocale.Get($"DiedTo{cod}"),
-            DeathEventHandlers.CurrentRound,
-            !MeetingHud.Instance && !ExileController.Instance
+            roundOfDeath: HudManagerHelper.Instance.CurrentRound,
+            diedThisRound: !MeetingHud.Instance && !ExileController.Instance
                 ? DeathHandlerOverride.SetTrue
                 : DeathHandlerOverride.SetFalse,
-            TouLocale.GetParsed("DiedByStringBasic").Replace("<player>", source.Data.PlayerName),
+            killedBy: TouLocale.GetParsed("DiedByStringBasic").Replace("<player>", source.Data.PlayerName),
             lockInfo: DeathHandlerOverride.SetTrue);
     }
 }

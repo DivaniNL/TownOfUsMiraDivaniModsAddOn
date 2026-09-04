@@ -12,6 +12,7 @@ using MiraAPI.Utilities.Assets;
 using Reactor.Utilities;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
+using DivaniMods.Interfaces;
 using DivaniMods.Modifiers.Neutral.NeutralEvil;
 using DivaniMods.Options;
 using DivaniMods.Patches;
@@ -29,7 +30,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class PlagueDoctorRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, INeutralEvilWinOutcomeRole
 {
     public DoomableType DoomHintType => DoomableType.Fearmonger;
 
@@ -59,6 +60,8 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
         "Infected players will spread the disease\nto others who stand near them.\n" +
         "Win by infecting all living players!";
     public Color RoleColor => PlagueDoctorColor;
+
+    public LoadableAsset<Sprite> WinIcon => DivaniAssets.PlagueDoctorIcon;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralEvil;
 
@@ -98,6 +101,9 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
             HudManager.Instance.ImpostorVentButton.graphic.sprite = DivaniAssets.PlagueDoctorVentButton.LoadAsset();
             HudManager.Instance.ImpostorVentButton.buttonLabelText.SetOutlineColor(PlagueDoctorColor);
         }
+
+        AboutToTorment = false;
+        HasKilled = false;
     }
 
     public override void Deinitialize(PlayerControl targetPlayer)
@@ -263,11 +269,27 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
         }
     }
 
+    public bool ReachedWinCondition
+    {
+        get
+        {
+            if (Player == null) return false;
+            if (!CanWinWhileDead && Player.HasDied()) return false;
+            return HasInfectedAllLivingPlayers(Player);
+        }
+    }
+
+    public NeutralEvilWinOutcome WinOutcome => OptionGroupSingleton<PlagueDoctorOptions>.Instance.WinOutcome;
+
+    public NeutralEvilWinOutcome EffectiveWinOutcome => WinOutcome;
+
+    public bool AboutToTorment { get; set; }
+
+    public bool HasKilled { get; set; }
+
     public bool WinConditionMet()
     {
-        if (Player == null) return false;
-        if (!CanWinWhileDead && Player.HasDied()) return false;
-        return HasInfectedAllLivingPlayers(Player);
+        return WinOutcome is NeutralEvilWinOutcome.EndsGame && ReachedWinCondition;
     }
 
     private static bool HasInfectedAllLivingPlayers(PlayerControl player)
@@ -475,7 +497,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
 
     public override bool DidWin(GameOverReason gameOverReason)
     {
-        return WinConditionMet() && PlagueDoctorPlayer != null && Player == PlagueDoctorPlayer;
+        return ReachedWinCondition && PlagueDoctorPlayer != null && Player == PlagueDoctorPlayer;
     }
 
     public static void TryShowInfectionWarning()

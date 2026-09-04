@@ -28,4 +28,7 @@ public class MementoOptions : AbstractTouModifierOptionGroup<MementoModifier>
 
     public ModdedToggleOption ShowIfEjected { get; } =
         new("Reveal If Ejected", true);
+
+    public ModdedToggleOption PreventBaitPairing { get; } =
+        new("Prevent Pairing With Bait", false);
 }

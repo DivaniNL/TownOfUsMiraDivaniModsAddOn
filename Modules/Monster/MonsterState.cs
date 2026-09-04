@@ -118,6 +118,8 @@ public static class MonsterState
         }
     }
 
+    public static bool IsDigesting { get; private set; }
+
     public static List<byte> PendingDigestSortIds() => pendingDigestSort.ToList();
 
     public static void ClearPendingDigestSort(byte victimId) => pendingDigestSort.Remove(victimId);
@@ -129,33 +131,41 @@ public static class MonsterState
         var localPlayer = PlayerControl.LocalPlayer;
         var shouldPlaySound = false;
 
-        foreach (var victimId in victims.ToList())
+        IsDigesting = true;
+        try
         {
-            var victim = MiscUtils.PlayerById(victimId);
-            if (victim != null && !victim.HasDied())
+            foreach (var victimId in victims.ToList())
             {
-                if (localPlayer != null &&
-                    (localPlayer.PlayerId == MonsterId || localPlayer.PlayerId == victimId))
+                var victim = MiscUtils.PlayerById(victimId);
+                if (victim != null && !victim.HasDied())
                 {
-                    shouldPlaySound = true;
+                    if (localPlayer != null &&
+                        (localPlayer.PlayerId == MonsterId || localPlayer.PlayerId == victimId))
+                    {
+                        shouldPlaySound = true;
+                    }
+
+                    victim.Visible = true;
+                    victim.moveable = true;
+                    var collider = victim.GetComponent<Collider2D>();
+                    if (collider != null) collider.enabled = true;
+
+                    if (Monster != null)
+                        Monster.RpcSpecialMurder(victim,true,true,true,false,false,false,false,true,"Monster");
+                    else
+                        victim.Die(DeathReason.Kill, false);
+
+                    pendingDigestSort.Add(victimId);
+
+                    if (victim.AmOwner) EndSpectating();
                 }
 
-                victim.Visible = true;
-                victim.moveable = true;
-                var collider = victim.GetComponent<Collider2D>();
-                if (collider != null) collider.enabled = true;
-
-                if (Monster != null)
-                    Monster.RpcSpecialMurder(victim,true,true,true,false,false,false,false,true,"Monster");
-                else
-                    victim.Die(DeathReason.Kill, false);
-
-                pendingDigestSort.Add(victimId);
-
-                if (victim.AmOwner) EndSpectating();
+                eatenBy.Remove(victimId);
             }
-
-            eatenBy.Remove(victimId);
+        }
+        finally
+        {
+            IsDigesting = false;
         }
 
         if (shouldPlaySound)

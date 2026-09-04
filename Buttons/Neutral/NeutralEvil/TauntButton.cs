@@ -11,6 +11,7 @@ using TownOfUs.Buttons;
 using TownOfUs.Events;
 using TownOfUs.Networking;
 using UnityEngine;
+using TownOfUs.Modules.Components;
 
 namespace DivaniMods.Buttons.Neutral.NeutralEvil;
 
@@ -29,7 +30,7 @@ public sealed class TauntButton : TownOfUsTargetButton<PlayerControl>
     private static bool CanTauntThisRound =>
         OptionGroupSingleton<InnocentOptions>.Instance.CanTauntFirstRound ||
         TutorialManager.InstanceExists ||
-        DeathEventHandlers.CurrentRound > 1;
+        HudManagerHelper.Instance.CurrentRound > 1;
 
     public override bool Enabled(RoleBehaviour? role)
     {

@@ -66,7 +66,7 @@ public sealed class RetributionistRole(IntPtr cppPtr)
     public string GetRevengeTally()
     {
         var available = Player != null && !RetributionistManager.UsedRevenge.Contains(Player.PlayerId);
-        return $"{RoleColor.ToTextColor()}({(available ? "☐" : "✓")})</color>";
+        return $"{RoleColor.ToTextColor()}{(available ? $"<color=#FF0000>☐</color>" : $"<color=#00FF00>✓</color>")}";
     }
 
     public bool ProgressOnName(bool localDead, bool inMeeting, bool amOwner, out string progress)

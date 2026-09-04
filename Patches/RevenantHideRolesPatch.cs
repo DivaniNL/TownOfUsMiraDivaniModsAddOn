@@ -46,7 +46,7 @@ internal static class RevenantHideRolesPatch
                     continue;
                 }
 
-                var target = GameData.Instance?.GetPlayerById(pva.TargetPlayerId)?.Object;
+                var target = GameData.Instance?.GetPlayerById(pva.PlayerId)?.Object;
                 if (ShouldHide(target) && pva.NameText.text != target!.Data.PlayerName)
                 {
                     pva.NameText.text = target.Data.PlayerName;

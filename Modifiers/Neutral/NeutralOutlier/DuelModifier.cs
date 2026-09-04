@@ -29,6 +29,19 @@ public sealed class DuelModifier(byte opponentId, bool isDuelist, Vector2 return
     public override bool CanUseConsoles => true;
     public override bool CanOpenMap => true;
 
+    public override bool IsConsideredAlive
+    {
+        get
+        {
+            var observer = PlayerControl.LocalPlayer;
+            if (observer == null) return true;
+            var isParticipant = observer.PlayerId == Player.PlayerId || observer.PlayerId == OpponentId;
+            var isDeadSpectator = !isParticipant && TownOfUs.Modules.GameHistory.IsFullyDead(observer);
+            return isParticipant || isDeadSpectator;
+        }
+    }
+
+
     [HideFromIl2Cpp] public bool IsHiddenFromList => true;
 
     public byte OpponentId { get; } = opponentId;
@@ -43,19 +56,6 @@ public sealed class DuelModifier(byte opponentId, bool isDuelist, Vector2 return
     public VisualAppearance GetVisualAppearance()
     {
         var observer = PlayerControl.LocalPlayer;
-        var isParticipant = observer != null &&
-            (observer.PlayerId == Player.PlayerId || observer.PlayerId == OpponentId);
-        var isDeadSpectator = observer != null && !isParticipant && DeathHandlerModifier.IsFullyDead(observer);
-
-        if (!isParticipant && !isDeadSpectator)
-        {
-            var invisible = new VisualAppearance(Player.GetDefaultAppearance(), TownOfUsAppearances.PlayerNameOnly)
-            {
-                Speed = Speed,
-            };
-            ApplyInvisible(invisible);
-            return invisible;
-        }
 
         var shifted = GetShapeshiftAppearance();
         if (shifted != null)
@@ -68,7 +68,7 @@ public sealed class DuelModifier(byte opponentId, bool isDuelist, Vector2 return
         {
             Speed = Speed,
         };
-        if (observer!.PlayerId == OpponentId && IsDuelist)
+        if (observer != null && observer.PlayerId == OpponentId && IsDuelist)
         {
             ApplyCamo(app);
         }

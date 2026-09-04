@@ -134,7 +134,7 @@ public static class FragBombState
     private static IEnumerator CoExplodeInMeeting(byte holderIdCapture, byte fragIdCapture)
     {
         while (MeetingHud.Instance &&
-               MeetingHud.Instance.state == MeetingHud.VoteStates.Animating)
+               MeetingHud.Instance.state == MeetingHud.MeetingStates.Animating)
         {
             yield return null;
         }
