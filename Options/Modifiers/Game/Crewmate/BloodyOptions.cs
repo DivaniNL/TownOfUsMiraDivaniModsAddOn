@@ -11,7 +11,7 @@ namespace DivaniMods.Options;
 
 public sealed class BloodyOptions : AbstractTouModifierOptionGroup<BloodyModifier>
 {
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
 
     public override string GroupName => "Bloody";
 

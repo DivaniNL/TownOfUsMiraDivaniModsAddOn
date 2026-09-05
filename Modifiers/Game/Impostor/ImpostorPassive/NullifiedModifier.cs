@@ -19,7 +19,6 @@ public class NullifiedModifier : TouGameModifier, IWikiDiscoverable
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.NullifiedIcon.LoadAsset(),
             "DivaniMod.Modifier.Impostor.Nullified", 1.45f));
     public override string ModifierName => "Nullified";
-    public override string LocaleKey => "Nullified";
     public override string IntroInfo => "You are immune to kill debuffs.";
     public override ModifierFaction FactionType => ModifierFaction.ImpostorPassive;
     public override Color FreeplayFileColor => NullifiedColor;

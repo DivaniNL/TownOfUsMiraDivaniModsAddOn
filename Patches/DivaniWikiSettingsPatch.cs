@@ -3,7 +3,7 @@ using HarmonyLib;
 using MiraAPI.GameOptions;
 using DivaniMods.Assets;
 using DivaniMods.Options;
-using TownOfUs.Modules.Localization;
+using MiraAPI.Translation;
 using TownOfUs.Modules.Wiki;
 
 namespace DivaniMods.Patches;
@@ -42,10 +42,10 @@ public static class DivaniWikiSettingsPatch
 
     public static void RegisterLocale()
     {
-        if (!TouLocale.TouLocalization.TryGetValue(SupportedLangs.English, out var english))
+        if (!MiraLocaleManager.Locale.TryGetValue(MiraLanguage.English, out var english))
         {
             english = new Dictionary<string, string>();
-            TouLocale.TouLocalization[SupportedLangs.English] = english;
+            MiraLocaleManager.Locale[MiraLanguage.English] = english;
         }
 
         english.TryAdd(TitleKey, "DivaniMods Settings");

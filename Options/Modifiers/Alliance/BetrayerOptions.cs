@@ -10,7 +10,7 @@ namespace DivaniMods.Options;
 public sealed class BetrayerOptions : AbstractTouModifierOptionGroup<BetrayerModifier>
 {
     public override string GroupName => "Betrayer";
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override Color GroupColor => BetrayerModifier.BetrayerColor;
     public override uint GroupPriority => 13;
 

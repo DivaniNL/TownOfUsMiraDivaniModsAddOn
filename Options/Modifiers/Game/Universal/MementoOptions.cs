@@ -15,7 +15,7 @@ public enum MementoRevealMode
 
 public class MementoOptions : AbstractTouModifierOptionGroup<MementoModifier>
 {
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override string GroupName => "Memento";
     public override Color GroupColor => MementoModifier.MementoColor;
     public override uint GroupPriority => 35;

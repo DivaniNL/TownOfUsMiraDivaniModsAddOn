@@ -20,7 +20,6 @@ public class BlindspotModifier : TouGameModifier, IWikiDiscoverable
             "DivaniMod.Modifier.Crewmate.Blindspot", 1.45f));
 
     public override string ModifierName => "Blindspot";
-    public override string LocaleKey => "Blindspot";
     public override string IntroInfo => "You watch camera's without lights.";
     public override ModifierFaction FactionType => ModifierFaction.CrewmateUtility;
     public override Color FreeplayFileColor => BlindspotColor;

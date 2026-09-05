@@ -20,7 +20,6 @@ public class FragileModifier : UniversalGameModifier, IWikiDiscoverable
             "DivaniMod.Modifier.Universal.Fragile", 1.45f));
 
     public override string ModifierName => "Fragile";
-    public override string LocaleKey => "Fragile";
     public override string IntroInfo => "You have a chance to break if someone interacts...";
     public override ModifierFaction FactionType => ModifierFaction.UniversalPassive;
     public override Color FreeplayFileColor => FragileColor;

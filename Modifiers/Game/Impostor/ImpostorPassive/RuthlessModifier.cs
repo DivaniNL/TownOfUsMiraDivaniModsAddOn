@@ -19,7 +19,6 @@ public class RuthlessModifier : TouGameModifier, IWikiDiscoverable
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.RuthlessIcon.LoadAsset(),
             "DivaniMod.Modifier.Impostor.Ruthless", 1.45f));
     public override string ModifierName => "Ruthless";
-    public override string LocaleKey => "Ruthless";
     public override string IntroInfo => "Your kills bypass shields.";
     public override ModifierFaction FactionType => ModifierFaction.ImpostorPassive;
     public override Color FreeplayFileColor => RuthlessColor;

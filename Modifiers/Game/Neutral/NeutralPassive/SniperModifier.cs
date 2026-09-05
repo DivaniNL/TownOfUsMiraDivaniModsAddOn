@@ -23,7 +23,6 @@ public sealed class SniperModifier : TouGameModifier, IWikiDiscoverable
     public const float MaxSniperDistance = 2.5f;
 
     public override string ModifierName => "Sniper";
-    public override string LocaleKey => "Sniper";
     public override string IntroInfo => "You have increased kill range.";
     public override ModifierFaction FactionType => ModifierFaction.NeutralPassive;
     public override Color FreeplayFileColor => SniperColor;

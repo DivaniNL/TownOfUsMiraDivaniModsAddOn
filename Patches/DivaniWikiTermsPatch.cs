@@ -5,7 +5,7 @@ using DivaniMods.Assets;
 using DivaniMods.Roles.Crewmate.CrewmateSupport;
 using DivaniMods.Roles.Neutral.NeutralBenign;
 using DivaniMods.Roles.Neutral.NeutralEvil;
-using TownOfUs.Modules.Localization;
+using MiraAPI.Translation;
 using TownOfUs.Modules.Wiki;
 
 namespace DivaniMods.Patches;
@@ -41,10 +41,10 @@ public static class DivaniWikiTermsPatch
 
     public static void RegisterLocale()
     {
-        if (!TouLocale.TouLocalization.TryGetValue(SupportedLangs.English, out var english))
+        if (!MiraLocaleManager.Locale.TryGetValue(MiraLanguage.English, out var english))
         {
             english = new Dictionary<string, string>();
-            TouLocale.TouLocalization[SupportedLangs.English] = english;
+            MiraLocaleManager.Locale[MiraLanguage.English] = english;
         }
 
         english.TryAdd(TitleKey, "DivaniMods Symbols");

@@ -28,7 +28,6 @@ public class MementoModifier : UniversalGameModifier, IWikiDiscoverable
     public static readonly Dictionary<byte, RoleTypes> RoleBeforeDeath = new();
 
     public override string ModifierName => "Memento";
-    public override string LocaleKey => "Memento";
     public override string IntroInfo => "Your role is revealed to everyone in meetings upon death.";
     public override ModifierFaction FactionType => ModifierFaction.UniversalPostmortem;
     public override Color FreeplayFileColor => MementoColor;
