@@ -9,7 +9,7 @@ namespace DivaniMods.Options;
 
 public class ShuffleOptions : AbstractTouModifierOptionGroup<ShuffleModifier>
 {
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override string GroupName => "Shuffle";
     public override Color GroupColor => ShuffleModifier.ShuffleColor;
     public override uint GroupPriority => 37;

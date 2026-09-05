@@ -23,7 +23,6 @@ public class SproutModifier : TouGameModifier, IWikiDiscoverable, IButtonModifie
             "DivaniMod.Modifier.Crewmate.Sprout", 1.45f));
 
     public override string ModifierName => "Sprout";
-    public override string LocaleKey => "Sprout";
     public override string IntroInfo => "Collect a modifier from a dead body.";
     public override ModifierFaction FactionType => ModifierFaction.CrewmateUtility;
     public override Color FreeplayFileColor => SproutColor;

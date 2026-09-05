@@ -21,7 +21,6 @@ public sealed class BearTrapModifier : TouGameModifier, IWikiDiscoverable
 
     public override string ModifierName => "Bear Trap";
     public override string IntroInfo => "Trap your killer upon death.";
-    public override string LocaleKey => "BearTrap";
     public override ModifierFaction FactionType => ModifierFaction.CrewmatePostmortem;
     public override Color FreeplayFileColor => BearTrapColor;
     public Color ModifierColor => BearTrapColor;

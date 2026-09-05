@@ -15,7 +15,7 @@ public enum UAVRevealMode
 
 public class UAVOptions : AbstractTouModifierOptionGroup<UAVModifier>
 {
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override string GroupName => "UAV";
     public override Color GroupColor => UAVModifier.UavColor;
     public override uint GroupPriority => 39;

@@ -38,9 +38,7 @@ internal static class RetributionistNoTeleportKillPatch
             return;
         }
 
-        var cod = source.GetRoleWhenAlive() is ITownOfUsRole touRole && touRole.LocaleKey != "KEY_MISS"
-            ? touRole.LocaleKey
-            : "Killer";
+        var cod = source.GetRoleWhenAlive() is ITownOfUsRole touRole ? touRole.IdPart : "Killer";
 
         GameHistory.UpdatePlayerDeathData(
             target,

@@ -23,7 +23,6 @@ public class UAVModifier : UniversalGameModifier, IWikiDiscoverable, IButtonModi
             "DivaniMod.Modifier.Universal.UAV", 1.45f));
 
     public override string ModifierName => "UAV";
-    public override string LocaleKey => "UAV";
     public override string IntroInfo => "Call in a UAV to reveal everyone on the map!";
     public override ModifierFaction FactionType => ModifierFaction.UniversalUtility;
     public override Color FreeplayFileColor => UavColor;
