@@ -135,7 +135,12 @@ jobs:
           SHA: ${{ github.sha }}
         shell: pwsh
         run: |
-          $tag = "v$($env:VERSION)"
+          # Sanitize the version string for use as a tag name
+          $tag = "v$($env:VERSION)" -replace '[^a-zA-Z0-9._-]', ''
+          if ([string]::IsNullOrWhiteSpace($tag)) {
+            Write-Error "Tag name is empty after sanitization"
+            exit 1
+          }
 
           gh release create $tag `
             "bin\Release\net6.0\DivaniMods.dll" `
