@@ -12,11 +12,12 @@ using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
 using TownOfUs.Extensions;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorConcealing;
 
 public sealed class CunctatorRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
     public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Cunctator", "Cunctator");
     public string LocaleKey => "Cunctator";

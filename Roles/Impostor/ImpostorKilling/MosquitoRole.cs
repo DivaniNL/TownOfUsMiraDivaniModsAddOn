@@ -9,12 +9,13 @@ using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using UnityEngine;
 using TownOfUs.Extensions;
+using DivaniMods.Interfaces;
 
 
 namespace DivaniMods.Roles.Impostor.ImpostorKilling;
 
 public sealed class MosquitoRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable
 {
    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Mosquito", "Mosquito");
     public string LocaleKey => "Mosquito";

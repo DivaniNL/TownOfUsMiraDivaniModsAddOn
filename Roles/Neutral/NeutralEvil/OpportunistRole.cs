@@ -27,7 +27,7 @@ using MiraAPI.Utilities.Assets;
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class OpportunistRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, IGuessable, IProgressTally, INeutralEvilWinOutcomeRole
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, IGuessable, IProgressTally, INeutralEvilWinOutcomeRole
 {
     public static readonly Color OpportunistColor = new Color32(216, 184, 90, 255); // gold
     public static Dictionary<byte, OpportunistRole> ActiveOpportunists { get; } = new();

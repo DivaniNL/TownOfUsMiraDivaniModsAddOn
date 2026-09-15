@@ -5,6 +5,7 @@ using MiraAPI.Roles;
 using MiraAPI.Utilities;
 using MiraAPI.Translation;
 using DivaniMods.Assets;
+using DivaniMods.Interfaces;
 using TownOfUs.Assets;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
@@ -15,7 +16,7 @@ using TownOfUs.Extensions;
 namespace DivaniMods.Roles.Crewmate.CrewmateSupport;
 
 public sealed class LocatorRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color LocatorColor = new Color32(0xDD, 0xAB, 0x99, 255);
 

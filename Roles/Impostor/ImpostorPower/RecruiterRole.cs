@@ -19,11 +19,12 @@ using TownOfUs.Roles;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorPower;
 
 public sealed class RecruiterRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
     public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Recruiter", "Recruiter");
     public string LocaleKey => "Recruiter";

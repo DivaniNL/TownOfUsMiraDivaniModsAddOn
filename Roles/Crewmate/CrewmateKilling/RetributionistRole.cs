@@ -6,6 +6,7 @@ using MiraAPI.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Events.Crewmate.CrewmateKilling;
 using DivaniMods.Options;
+using DivaniMods.Interfaces;
 using TownOfUs.Extensions;
 using TownOfUs.Interfaces;
 using TownOfUs.Modules.Wiki;
@@ -17,7 +18,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Crewmate.CrewmateKilling;
 
 public sealed class RetributionistRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITouCrewRole, IWikiDiscoverable, IDoomable, IProgressTally
+    : CrewmateRole(cppPtr), IDivaniCrewRole, IWikiDiscoverable, IDoomable, IProgressTally
 {
     public static readonly Color RetributionistColor = new Color32(175, 22, 81, 255);
 

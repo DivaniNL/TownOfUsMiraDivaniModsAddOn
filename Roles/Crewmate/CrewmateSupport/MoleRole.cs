@@ -16,6 +16,7 @@ using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmateSupport;
 using DivaniMods.Modifiers.Crewmate.CrewmateKilling;
 using DivaniMods.Options;
+using DivaniMods.Interfaces;
 using TownOfUs.Assets;
 using TownOfUs.Extensions;
 using TownOfUs.Modules.Anims;
@@ -30,7 +31,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Crewmate.CrewmateSupport;
 
 public sealed class MoleRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color MoleColor = new Color32(150, 255, 171, 255);
 
@@ -45,6 +46,7 @@ public sealed class MoleRole(IntPtr cppPtr)
     // Local-only: seconds left before the local player gets kicked out of the mole vent network.
     [HideFromIl2Cpp] public static float VentTimeLeft { get; set; }
 
+    
     public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Mole", "Mole");
     public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Mole.Description");
     public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Mole.MedDescription");

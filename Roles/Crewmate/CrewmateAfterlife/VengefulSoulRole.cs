@@ -9,6 +9,7 @@ using MiraAPI.Utilities;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using DivaniMods.Interfaces;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using TownOfUs.Modifiers;
 using TownOfUs.Modules.Wiki;
@@ -22,7 +23,7 @@ using UnityEngine.UI;
 namespace DivaniMods.Roles.Crewmate.CrewmateAfterlife;
 
 public sealed class VengefulSoulRole(IntPtr cppPtr)
-    : CrewmateGhostRole(cppPtr), ITownOfUsRole, IGhostRole, IWikiDiscoverable
+    : CrewmateGhostRole(cppPtr), IDivaniRole, IGhostRole, IWikiDiscoverable
 {
     public bool Setup { get; set; }
     public bool Caught { get; set; }

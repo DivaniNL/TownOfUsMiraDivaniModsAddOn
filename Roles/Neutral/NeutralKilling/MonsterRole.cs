@@ -1,5 +1,6 @@
 using AmongUs.GameOptions;
 using DivaniMods.Assets;
+using DivaniMods.Interfaces;
 using DivaniMods.Modules.Monster;
 using DivaniMods.Options;
 using Il2CppInterop.Runtime.Attributes;
@@ -25,7 +26,7 @@ using UnityEngine;
 
 namespace DivaniMods.Roles.Neutral.NeutralKilling;
 
-public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole, IProgressTally, IWikiDiscoverable
+public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), IDivaniRole, IProgressTally, IWikiDiscoverable
 {
     public static readonly Color MonsterColor = new Color32(107, 179, 48, 255);
     public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Monster", "Monster");

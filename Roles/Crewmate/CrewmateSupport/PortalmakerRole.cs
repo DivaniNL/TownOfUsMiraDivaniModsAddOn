@@ -5,6 +5,7 @@ using MiraAPI.Roles;
 using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using DivaniMods.Interfaces;
 using TownOfUs.Extensions;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
@@ -14,7 +15,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Crewmate.CrewmateSupport;
 
 public sealed class PortalmakerRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable
 {
     public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Portalmaker", "Portalmaker");
     public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Description");

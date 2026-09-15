@@ -16,11 +16,12 @@ using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using UnityEngine;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorPower;
 
 public sealed class RecruitRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ISpawnChange, IGuessable
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ISpawnChange, IGuessable
 {
     public bool CanBeGuessed =>
         RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<RecruiterRole>()) is ICustomRole recruiter &&

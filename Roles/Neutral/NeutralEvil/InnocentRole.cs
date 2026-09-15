@@ -23,7 +23,7 @@ using MiraAPI.Utilities.Assets;
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class InnocentRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IGuessable, INeutralEvilWinOutcomeRole
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, IGuessable, INeutralEvilWinOutcomeRole
 {
     public static readonly Color InnocentColor = new Color32(255, 141, 168, 255);
     public static Dictionary<byte, InnocentRole> ActiveInnocents { get; } = new();

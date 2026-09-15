@@ -20,11 +20,12 @@ using TownOfUs.Roles.Crewmate;
 using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
 using UnityEngine;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Neutral.NeutralKilling;
 
 public sealed class ThiefRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
     public static readonly Color ThiefColor = new Color(0.5f, 0.3f, 0.1f);
 

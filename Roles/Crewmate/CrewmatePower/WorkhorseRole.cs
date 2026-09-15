@@ -11,6 +11,7 @@ using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Crewmate.CrewmatePower;
 using DivaniMods.Options;
+using DivaniMods.Interfaces;
 using TownOfUs;
 using TownOfUs.Extensions;
 using TownOfUs.Modifiers.Game.Alliance;
@@ -22,7 +23,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Crewmate.CrewmatePower;
 
 public sealed class WorkhorseRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITouCrewRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), IDivaniCrewRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color WorkhorseColor = new Color32(0x92, 0xD4, 0xDA, 255);
 

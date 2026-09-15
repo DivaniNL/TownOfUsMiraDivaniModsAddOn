@@ -17,11 +17,12 @@ using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
 using TownOfUs.Extensions;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorSupport;
 
 public sealed class CouncillorRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IProgressTally
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, IProgressTally
 {
     public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Councillor", "Councillor");
     public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Councillor.Description");

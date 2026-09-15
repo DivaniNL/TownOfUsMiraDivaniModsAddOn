@@ -21,11 +21,12 @@ using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
 using TownOfUs.Extensions;
 using UnityEngine;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Neutral.NeutralKilling;
 
 public sealed class WatcherRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
     public static readonly Color WatcherColor = new Color32(0xD3, 0xA6, 0x35, 255);
     public static readonly Color GreenLightColor = new Color32(0x7C, 0xCE, 0x34, 255);

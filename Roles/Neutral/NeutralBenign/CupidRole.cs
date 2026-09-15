@@ -27,11 +27,12 @@ using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
 using UnityEngine;
 using TownOfUs.Extensions;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Neutral.NeutralBenign;
 
 public sealed class CupidRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IUnlovable
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, IUnlovable
 {
     public static readonly Color CupidColor = new Color32(222, 125, 127, 255);
 

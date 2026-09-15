@@ -6,6 +6,7 @@ using MiraAPI.Roles;
 using MiraAPI.Utilities;
 using MiraAPI.Translation;
 using DivaniMods.Assets;
+using DivaniMods.Interfaces;
 using DivaniMods.Events.Crewmate.CrewmateSupport;
 using TownOfUs.Extensions;
 using TownOfUs.Interfaces;
@@ -21,7 +22,7 @@ using TownOfUs.Modifiers.Game;
 namespace DivaniMods.Roles.Crewmate.CrewmateSupport;
 
 public sealed class ClockstopperRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, IProgressTally
+    : CrewmateRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, IProgressTally
 {
     public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Clockstopper", "Clockstopper");
     public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Clockstopper.Description");

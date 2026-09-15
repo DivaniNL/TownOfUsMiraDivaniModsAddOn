@@ -15,11 +15,12 @@ using TownOfUs.Utilities;
 using TownOfUs.Utilities.Appearances;
 using UnityEngine;
 using UnityEngine.UI;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorAfterlife;
 
 public sealed class RevenantRole(IntPtr cppPtr)
-    : ImpostorGhostRole(cppPtr), ITownOfUsRole, IGhostRole, IWikiDiscoverable
+    : ImpostorGhostRole(cppPtr), IDivaniRole, IGhostRole, IWikiDiscoverable
 {
     public static readonly Color RevenantColor = new(0.78f, 0.05f, 0.05f, 1f);
 

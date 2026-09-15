@@ -12,6 +12,7 @@ using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmatePower;
 using DivaniMods.Modules;
 using DivaniMods.Options;
+using DivaniMods.Interfaces;
 using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
@@ -29,7 +30,7 @@ public enum MageSpell
 }
 
 public sealed class MageRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color MageColor = new Color32(0x15, 0x86, 0xA2, 255);
 

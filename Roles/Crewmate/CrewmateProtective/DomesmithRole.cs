@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MiraAPI.Roles;
 using MiraAPI.Translation;
 using DivaniMods.Assets;
+using DivaniMods.Interfaces;
 using TownOfUs.Extensions;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
@@ -15,7 +16,7 @@ using TownOfUs.Modifiers.Game;
 namespace DivaniMods.Roles.Crewmate.CrewmateProtective;
 
 public sealed class DomesmithRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color DomesmithColor = new Color32(0x0E, 0xAA, 0xC3, 255);
 

@@ -30,7 +30,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class PlagueDoctorRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, INeutralEvilWinOutcomeRole
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, INeutralEvilWinOutcomeRole
 {
     public DoomableType DoomHintType => DoomableType.Fearmonger;
 

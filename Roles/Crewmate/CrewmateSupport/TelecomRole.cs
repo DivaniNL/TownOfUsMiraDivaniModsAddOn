@@ -13,6 +13,7 @@ using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Crewmate.CrewmateSupport;
 using DivaniMods.Options;
+using DivaniMods.Interfaces;
 using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Extensions;
@@ -27,10 +28,11 @@ using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
 
+
 namespace DivaniMods.Roles.Crewmate.CrewmateSupport;
 
 public sealed class TelecomRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color TelecomColor = new Color32(0x8E, 0xEF, 0xFF, 255);
 

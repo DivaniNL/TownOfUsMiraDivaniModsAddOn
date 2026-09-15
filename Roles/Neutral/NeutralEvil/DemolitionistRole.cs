@@ -28,7 +28,7 @@ using MiraAPI.Utilities.Assets;
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class DemolitionistRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IProgressTally, INeutralEvilWinOutcomeRole
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, IProgressTally, INeutralEvilWinOutcomeRole
 {
     public static readonly Color DemolitionistColor = new Color32(0x28, 0x36, 0x7D, 255);
 

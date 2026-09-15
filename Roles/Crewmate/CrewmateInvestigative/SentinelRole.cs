@@ -3,6 +3,7 @@ using System;
 using MiraAPI.Roles;
 using MiraAPI.Translation;
 using DivaniMods.Assets;
+using DivaniMods.Interfaces;
 using TownOfUs.Extensions;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
@@ -12,7 +13,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Crewmate.CrewmateInvestigative;
 
 public sealed class SentinelRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color SentinelColor = new Color32(244, 169, 60, 255);
 

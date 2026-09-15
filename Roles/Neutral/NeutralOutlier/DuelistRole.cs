@@ -20,11 +20,12 @@ using UnityEngine;
 using TownOfUs.Extensions;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Interfaces;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Neutral.NeutralOutlier;
 
 public sealed class DuelistRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IContinuesGame, IUnlovable,
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, IContinuesGame, IUnlovable,
         IProgressTally
 {
     public static readonly Color DuelistColor = new Color32(244, 237, 90, 255);

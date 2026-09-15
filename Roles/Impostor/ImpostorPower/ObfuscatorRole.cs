@@ -19,11 +19,12 @@ using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using UnityEngine;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorPower;
 
 public sealed class ObfuscatorRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable
 {
     public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Obfuscator", "Obfuscator");
     public string LocaleKey => "Obfuscator";

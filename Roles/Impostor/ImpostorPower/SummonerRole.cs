@@ -19,11 +19,12 @@ using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using UnityEngine;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorPower;
 
 public sealed class SummonerRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
     public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Summoner", "Summoner");
     public string LocaleKey => "Summoner";
