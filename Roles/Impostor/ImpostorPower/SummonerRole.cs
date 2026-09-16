@@ -165,13 +165,13 @@ public sealed class SummonerRole(IntPtr cppPtr)
 
     private bool IsExempt(PlayerVoteArea voteArea)
     {
-        var target = GameData.Instance.GetPlayerById(voteArea.TargetPlayerId)?.Object;
+        var target = GameData.Instance.GetPlayerById(voteArea.PlayerId)?.Object;
         return !IsValidRecruitTarget(target, Player);
     }
 
     private void OnMeetingToggle(PlayerVoteArea voteArea, MeetingHud hud)
     {
-        if (hud.state == MeetingHud.VoteStates.Discussion || IsExempt(voteArea))
+        if (hud.state == MeetingHud.MeetingStates.Discussion || IsExempt(voteArea))
         {
             return;
         }
@@ -181,9 +181,9 @@ public sealed class SummonerRole(IntPtr cppPtr)
             return;
         }
 
-        if (_localSelectedId == voteArea.TargetPlayerId)
+        if (_localSelectedId == voteArea.PlayerId)
         {
-            _meetingMenu.Actives[voteArea.TargetPlayerId] = false;
+            _meetingMenu.Actives[voteArea.PlayerId] = false;
             _localSelectedId = 255;
             RpcSetPendingTarget(Player, 255);
             return;
@@ -194,9 +194,9 @@ public sealed class SummonerRole(IntPtr cppPtr)
             _meetingMenu.Actives[_localSelectedId] = false;
         }
 
-        _localSelectedId = voteArea.TargetPlayerId;
-        _meetingMenu.Actives[voteArea.TargetPlayerId] = true;
-        RpcSetPendingTarget(Player, voteArea.TargetPlayerId);
+        _localSelectedId = voteArea.PlayerId;
+        _meetingMenu.Actives[voteArea.PlayerId] = true;
+        RpcSetPendingTarget(Player, voteArea.PlayerId);
     }
 
     [MethodRpc((uint)DivaniRpcCalls.SummonerSetPendingTarget)]

@@ -29,7 +29,6 @@ public sealed class TacticalInsertionModifier : UniversalGameModifier, IWikiDisc
             "DivaniMod.Modifier.Universal.TacticalInsertion", 1.45f));
 
     public override string ModifierName => "Tactical Insertion";
-    public override string LocaleKey => "TacticalInsertion";
     public override string IntroInfo => "Mark a spot, respawn there after the next meeting!";
     public override ModifierFaction FactionType => ModifierFaction.UniversalUtility;
     public override Color FreeplayFileColor => TacticalColor;

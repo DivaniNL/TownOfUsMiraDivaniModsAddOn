@@ -2,6 +2,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.OptionTypes;
 using MiraAPI.Utilities;
 using DivaniMods.Roles.Neutral.NeutralEvil;
+using MiraAPI.GameOptions.Attributes;
 
 namespace DivaniMods.Options;
 
@@ -16,4 +17,7 @@ public class OpportunistOptions : AbstractRoleOptionGroup<OpportunistRole>
         "Max Votes Collected Per Meeting", 5f, 1f, 10f, 1f, MiraNumberSuffixes.None);
 
     public ModdedToggleOption CanUseWildcard { get; } = new("Opportunist can use Wildcard", false);
+
+    [ModdedEnumOption("Win Outcome", typeof(NeutralEvilWinOutcome), ["Ends Game", "Kill One Player", "Nothing"])]
+    public NeutralEvilWinOutcome WinOutcome { get; set; } = NeutralEvilWinOutcome.EndsGame;
 }

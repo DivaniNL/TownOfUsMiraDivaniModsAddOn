@@ -28,6 +28,7 @@ public static class RetributionistEvents
         var killer = evt.Source;
 
         NotifyFirstDeathShieldBlockedRevenge(target, killer);
+        NotifyIndirectAttackBlockedRevenge(target, killer);
 
         if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
         {
@@ -64,7 +65,7 @@ public static class RetributionistEvents
 
     public static bool IsRevengeEligible(PlayerControl? target, PlayerControl? killer)
     {
-        return CanSeekRevengeOn(target, killer) && !HasFirstDeathShield(killer);
+        return CanSeekRevengeOn(target, killer) && !HasFirstDeathShield(killer) && !IsIndirectAttack(killer);
     }
 
     public static bool IsRevengeBlockedByFirstDeathShield(PlayerControl? target, PlayerControl? killer)
@@ -72,9 +73,19 @@ public static class RetributionistEvents
         return CanSeekRevengeOn(target, killer) && HasFirstDeathShield(killer);
     }
 
+    public static bool IsRevengeBlockedByIndirectAttack(PlayerControl? target, PlayerControl? killer)
+    {
+        return CanSeekRevengeOn(target, killer) && !HasFirstDeathShield(killer) && IsIndirectAttack(killer);
+    }
+
     private static bool HasFirstDeathShield(PlayerControl? killer)
     {
         return killer != null && killer.HasModifier<FirstDeadShield>();
+    }
+
+    private static bool IsIndirectAttack(PlayerControl? killer)
+    {
+        return killer != null && killer.HasModifier<IndirectAttackerModifier>();
     }
 
     private static void NotifyFirstDeathShieldBlockedRevenge(PlayerControl? target, PlayerControl? killer)
@@ -89,6 +100,23 @@ public static class RetributionistEvents
 
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
             $"<b><color=#{hex}>{killer.Data.PlayerName} is protected by the first death shield so you won't be able to seek revenge this time. Feelsbadman</color></b>",
+            Color.white,
+            new Vector3(0f, 1f, -20f),
+            spr: DivaniAssets.RetributionistIcon.LoadAsset());
+    }
+
+    private static void NotifyIndirectAttackBlockedRevenge(PlayerControl? target, PlayerControl? killer)
+    {
+        if (target == null || killer == null || !target.AmOwner ||
+            !IsRevengeBlockedByIndirectAttack(target, killer))
+        {
+            return;
+        }
+
+        var hex = ColorUtility.ToHtmlStringRGB(RetributionistRole.RetributionistColor);
+
+        MiraAPI.Utilities.Helpers.CreateAndShowNotification(
+            $"<b><color=#{hex}>You weren't directly attacked, so you can't seek revenge this time. Feelsbadman</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.RetributionistIcon.LoadAsset());

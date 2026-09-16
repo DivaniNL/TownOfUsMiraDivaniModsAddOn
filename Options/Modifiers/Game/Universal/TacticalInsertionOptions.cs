@@ -9,7 +9,7 @@ namespace DivaniMods.Options;
 
 public class TacticalInsertionOptions : AbstractTouModifierOptionGroup<TacticalInsertionModifier>
 {
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override string GroupName => "Tactical Insertion";
     public override Color GroupColor => TacticalInsertionModifier.TacticalColor;
     public override uint GroupPriority => 38;

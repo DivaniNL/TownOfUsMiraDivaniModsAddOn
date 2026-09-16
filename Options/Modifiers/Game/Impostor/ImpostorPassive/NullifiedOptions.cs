@@ -8,7 +8,7 @@ namespace DivaniMods.Options;
 
 public class NullifiedOptions : AbstractTouModifierOptionGroup<NullifiedModifier>
 {
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override string GroupName => "Nullified";
     public override Color GroupColor => NullifiedModifier.NullifiedColor;
     public override uint GroupPriority => 41;

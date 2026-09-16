@@ -9,7 +9,7 @@ namespace DivaniMods.Options;
 
 public class BearTrapOptions : AbstractTouModifierOptionGroup<BearTrapModifier>
 {
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override string GroupName => "Bear Trap";
     public override Color GroupColor => BearTrapModifier.BearTrapColor;
     public override uint GroupPriority => 24;

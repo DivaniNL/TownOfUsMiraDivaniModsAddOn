@@ -15,7 +15,7 @@ public enum MementoRevealMode
 
 public class MementoOptions : AbstractTouModifierOptionGroup<MementoModifier>
 {
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override string GroupName => "Memento";
     public override Color GroupColor => MementoModifier.MementoColor;
     public override uint GroupPriority => 35;
@@ -28,4 +28,7 @@ public class MementoOptions : AbstractTouModifierOptionGroup<MementoModifier>
 
     public ModdedToggleOption ShowIfEjected { get; } =
         new("Reveal If Ejected", true);
+
+    public ModdedToggleOption PreventBaitPairing { get; } =
+        new("Prevent Pairing With Bait", false);
 }

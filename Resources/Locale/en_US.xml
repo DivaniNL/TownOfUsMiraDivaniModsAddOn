@@ -1,0 +1,23 @@
+<resources>
+    <string name="DiedToSilencer">Silenced</string>
+    <string name="DiedToDeadlock">Deadlocked</string>
+    <string name="DiedToRecruiter">Recruited</string>
+    <string name="DiedToFrag">Fragged</string>
+    <string name="DiedToFragile">Shattered</string>
+    <string name="DiedToTalkedTrash">Provoked</string>
+    <string name="DiedToDemolitionist">Sabotaged</string>
+    <string name="DiedToMonster">Devoured</string>
+    <string name="DiedToSummoner">Killed</string>
+    <string name="DiedToRevenant">Clawed</string>
+    <string name="DiedToMosquito">Stung</string>
+    <string name="DiedToCunctator">Delayed</string>
+    <string name="DiedToObfuscator">Obfuscated</string>
+    <string name="DiedToDuelist">Defeated</string>
+    <string name="DiedToWatcher">Watched</string>
+    <string name="DiedToThief">Robbed</string>
+    <string name="DivaniLocalSettingDisableRainbowComms">Disable Rainbow Comms</string>
+    <string name="DivaniLocalSettingDisableDemoAlternatingColors">Disable Demolitionist Alternating Colors</string>
+    <string name="DivaniNeutralEvilWonSelf">You've reached your goal as [role]!</string>
+    <string name="DivaniNeutralEvilTormentFeedback">You may kill one more player before the round continues.</string>
+    <string name="DivaniNeutralEvilWonOther">[player] has left in victory as [role]!</string>
+</resources>

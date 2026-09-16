@@ -22,7 +22,6 @@ public sealed class MisvoteModifier : UniversalGameModifier, IWikiDiscoverable
             "DivaniMod.Modifier.Universal.Misvote", 1.45f));
 
     public override string ModifierName => "Misvote";
-    public override string LocaleKey => "Misvote";
     public override string IntroInfo => "Your vote is random every meeting.";
     public override ModifierFaction FactionType => ModifierFaction.UniversalPassive;
     public override Color FreeplayFileColor => MisvoteColor;

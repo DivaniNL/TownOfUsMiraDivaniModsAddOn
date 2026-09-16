@@ -12,12 +12,15 @@ namespace DivaniMods.Patches;
 public static class SentinelPatch
 {
     private static bool _wasInMeeting;
+    private static bool _flashActive;
+    private static float _flashEndTime;
 
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
     [HarmonyPostfix]
     public static void ResetOnGameStart()
     {
         BeaconManager.Reset();
+        _flashActive = false;
     }
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
@@ -25,6 +28,7 @@ public static class SentinelPatch
     public static void ResetOnGameEnd()
     {
         BeaconManager.Reset();
+        _flashActive = false;
     }
 
     [HarmonyPatch(typeof(LobbyBehaviour), nameof(LobbyBehaviour.Start))]
@@ -32,6 +36,7 @@ public static class SentinelPatch
     public static void ResetOnLobby()
     {
         BeaconManager.Reset();
+        _flashActive = false;
     }
 
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
@@ -66,7 +71,7 @@ public static class SentinelPatch
 
         foreach (var (beacon, playerName) in newEntries)
         {
-            Coroutines.Start(CoFlashSentinel());
+            TriggerSentinelFlash();
 
             char label = (char)('A' + BeaconManager.Beacons.IndexOf(beacon));
             var colorHex = ColorUtility.ToHtmlStringRGB(SentinelRole.SentinelColor);
@@ -78,9 +83,20 @@ public static class SentinelPatch
         }
     }
 
+    private static void TriggerSentinelFlash()
+    {
+        _flashEndTime = Time.time + 0.5f;
+        if (!_flashActive)
+        {
+            Coroutines.Start(CoFlashSentinel());
+        }
+    }
+
     private static IEnumerator CoFlashSentinel()
     {
         if (!HudManager.Instance) yield break;
+
+        _flashActive = true;
 
         var overlay = UnityEngine.Object.Instantiate(HudManager.Instance.FullScreen, HudManager.Instance.transform);
         overlay.transform.localScale = Vector3.one * 10f;
@@ -92,11 +108,16 @@ public static class SentinelPatch
         overlay.gameObject.SetActive(true);
         overlay.enabled = true;
 
-        yield return new WaitForSeconds(0.5f);
+        while (Time.time < _flashEndTime)
+        {
+            yield return null;
+        }
 
         if (overlay != null)
         {
             UnityEngine.Object.Destroy(overlay.gameObject);
         }
+
+        _flashActive = false;
     }
 }

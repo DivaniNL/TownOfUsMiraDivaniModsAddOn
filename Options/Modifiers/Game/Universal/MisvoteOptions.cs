@@ -8,7 +8,7 @@ namespace DivaniMods.Options;
 
 public class MisvoteOptions : AbstractTouModifierOptionGroup<MisvoteModifier>
 {
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override string GroupName => "Misvote";
     public override Color GroupColor => MisvoteModifier.MisvoteColor;
     public override uint GroupPriority => 36;

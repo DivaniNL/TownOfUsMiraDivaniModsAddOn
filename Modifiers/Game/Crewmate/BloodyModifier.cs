@@ -23,7 +23,6 @@ public sealed class BloodyModifier : TouGameModifier, IWikiDiscoverable
             "DivaniMod.Modifier.Crewmate.Bloody", 1.45f));
 
     public override string ModifierName => "Bloody";
-    public override string LocaleKey => "Bloody";
     public override string IntroInfo => "Your killer leaves red footprints upon death.";
     public override ModifierFaction FactionType => ModifierFaction.CrewmatePostmortem;
     public override Color FreeplayFileColor => ModifierUiColor;

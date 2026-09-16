@@ -1,9 +1,10 @@
 using BepInEx.Configuration;
 using MiraAPI.LocalSettings;
 using DivaniMods.Assets;
-using TownOfUs.LocalSettings.Attributes;
-using TownOfUs.LocalSettings.SettingTypes;
+using MiraAPI.LocalSettings.Attributes;
+using MiraAPI.LocalSettings.SettingTypes;
 using TownOfUs.Modules.Localization;
+using MiraAPI.Translation;
 
 namespace DivaniMods.Modules;
 
@@ -12,27 +13,16 @@ public class DivaniLocalSettings(ConfigFile config) : LocalSettingsTab(config)
     public override string TabName => "Divani Mods";
     protected override bool ShouldCreateLabels => true;
 
-    public override void Open()
-    {
-        base.Open();
-
-        foreach (var entry in TouLocale.LocalizedToggles)
-        {
-            var toggleObject = entry.Key;
-            LocalizedLocalToggleSetting.UpdateToggleText(toggleObject.Text, entry.Value, toggleObject.onState);
-        }
-    }
-
     public override LocalSettingTabAppearance TabAppearance => new()
     {
         TabIcon = DivaniAssets.LocalSettingsTabIcon
     };
 
-    [LocalizedLocalToggleSetting("DivaniLocalSettingDisableRainbowComms")]
+    [LocalToggleSetting("DivaniLocalSettingDisableRainbowComms")]
     public ConfigEntry<bool> DisableRainbowComms { get; private set; } =
-        config.Bind("Accessibility", "DisableRainbowComms", false);
+        config.Bind("Accessibility", "Disable Rainbow Comms", false);
 
-    [LocalizedLocalToggleSetting("DivaniLocalSettingDisableDemoAlternatingColors")]
+    [LocalToggleSetting("DivaniLocalSettingDisableDemoAlternatingColors")]
     public ConfigEntry<bool> DisableDemoAlternatingColors { get; private set; } =
-        config.Bind("Accessibility", "DisableDemoAlternatingColors", false);
+        config.Bind("Accessibility", "Disable Demo Alternating Colors", false);
 }

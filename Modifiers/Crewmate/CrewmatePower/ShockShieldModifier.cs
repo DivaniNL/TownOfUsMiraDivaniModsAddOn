@@ -15,6 +15,7 @@ using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using TownOfUs.Utilities.Appearances;
 using UnityEngine;
+using TownOfUs.Modules;
 
 namespace DivaniMods.Modifiers.Crewmate.CrewmatePower;
 
@@ -41,7 +42,7 @@ public sealed class ShockShieldModifier(PlayerControl mage) : TimedModifier
         }
 
         var genOpt = OptionGroupSingleton<GeneralOptions>.Instance;
-        if (DeathHandlerModifier.IsFullyDead(PlayerControl.LocalPlayer) && genOpt.TheDeadKnow)
+        if (GameHistory.IsFullyDead(PlayerControl.LocalPlayer) && genOpt.TheDeadKnow)
         {
             return true;
         }

@@ -19,7 +19,7 @@ public sealed class DuelReturnInvisModifier : ConcealedModifier, IVisualAppearan
     private bool CanSee()
     {
         var observer = PlayerControl.LocalPlayer;
-        return Player.AmOwner || (observer != null && DeathHandlerModifier.IsFullyDead(observer));
+        return Player.AmOwner || (observer != null && TownOfUs.Modules.GameHistory.IsFullyDead(observer));
     }
 
     private void HideSkinLayer()

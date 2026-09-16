@@ -55,7 +55,7 @@ public sealed class ThiefRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Pickpocket", "Steal a modifier from a nearby player. Trying to steal a modifier you cannot use, as well as stealing from a player which has none, will give you a random modifier instead.", DivaniAssets.PickpocketButton),
+        new("Pickpocket", "Steal a modifier from a nearby player. You can only target players who have a modifier to steal. Trying to steal a modifier you cannot use will give you a random modifier instead.", DivaniAssets.PickpocketButton),
         new("Kill", "Kill a nearby player.", DivaniAssets.ThiefKillButton)
     ];
 

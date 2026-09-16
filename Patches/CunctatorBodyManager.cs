@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using HarmonyLib;
 using MiraAPI.Modifiers;
 using MiraAPI.Networking;
@@ -109,9 +111,16 @@ public static class CunctatorBodyManager
             Coroutines.Start(RottingModifier.StartRotting(target, killer));
         }
     }
-    [HarmonyPatch(typeof(CustomMurderRpc), nameof(CustomMurderRpc.CustomMurder))]
+    [HarmonyPatch]
     public static class SuppressBodyPatch
     {
+        private static IEnumerable<MethodBase> TargetMethods()
+        {
+            return AccessTools.GetDeclaredMethods(typeof(CustomMurderRpc))
+                .Where(m => m.Name == nameof(CustomMurderRpc.CustomMurder)
+                    && m.GetParameters().Any(p => p.Name == "createDeadBody"));
+        }
+
         public static void Prefix(PlayerControl source, PlayerControl target, ref bool createDeadBody)
         {
             if (createDeadBody &&

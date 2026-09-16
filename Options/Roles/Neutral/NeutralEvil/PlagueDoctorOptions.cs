@@ -52,4 +52,7 @@ public class PlagueDoctorOptions : AbstractRoleOptionGroup<PlagueDoctorRole>
     {
         Visible = () => OptionGroupSingleton<PlagueDoctorOptions>.Instance.NotifyPlayersWhenInfectionClose,
     };
+
+    [ModdedEnumOption("Win Outcome", typeof(NeutralEvilWinOutcome), ["Ends Game", "Kill One Player", "Nothing"])]
+    public NeutralEvilWinOutcome WinOutcome { get; set; } = NeutralEvilWinOutcome.EndsGame;
 }

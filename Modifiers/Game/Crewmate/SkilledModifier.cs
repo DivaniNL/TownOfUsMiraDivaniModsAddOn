@@ -21,7 +21,6 @@ public class SkilledModifier : TouGameModifier, IWikiDiscoverable
             "DivaniMod.Modifier.Crewmate.Skilled", 1.45f));
 
     public override string ModifierName => "Skilled";
-    public override string LocaleKey => "Skilled";
     public override string IntroInfo => "You can fix two-part sabotages alone.";
     public override ModifierFaction FactionType => ModifierFaction.CrewmateUtility;
     public override Color FreeplayFileColor => SkilledColor;

@@ -137,14 +137,14 @@ public sealed class ObfuscatorRole(IntPtr cppPtr)
 
     private static bool IsExempt(PlayerVoteArea voteArea)
     {
-        var target = GameData.Instance.GetPlayerById(voteArea.TargetPlayerId)?.Object;
+        var target = GameData.Instance.GetPlayerById(voteArea.PlayerId)?.Object;
         if (target == null || target.Data == null) return true;
         return target.Data.Disconnected || target.Data.IsDead || target.HasModifier<JailedModifier>();
     }
 
     private void SetActive(PlayerVoteArea voteArea, MeetingHud meeting)
     {
-        if (meeting.state == MeetingHud.VoteStates.Discussion || IsExempt(voteArea))
+        if (meeting.state == MeetingHud.MeetingStates.Discussion || IsExempt(voteArea))
         {
             return;
         }
@@ -154,32 +154,32 @@ public sealed class ObfuscatorRole(IntPtr cppPtr)
         if (!Swap1)
         {
             Swap1 = voteArea;
-            _meetingMenu.Actives[voteArea.TargetPlayerId] = true;
+            _meetingMenu.Actives[voteArea.PlayerId] = true;
         }
         else if (!Swap2)
         {
             Swap2 = voteArea;
-            _meetingMenu.Actives[voteArea.TargetPlayerId] = true;
+            _meetingMenu.Actives[voteArea.PlayerId] = true;
         }
         else if (Swap1 == voteArea)
         {
-            _meetingMenu.Actives[Swap1!.TargetPlayerId] = false;
+            _meetingMenu.Actives[Swap1!.PlayerId] = false;
             Swap1 = null;
         }
         else if (Swap2 == voteArea)
         {
-            _meetingMenu.Actives[Swap2!.TargetPlayerId] = false;
+            _meetingMenu.Actives[Swap2!.PlayerId] = false;
             Swap2 = null;
         }
         else
         {
-            _meetingMenu.Actives[Swap1!.TargetPlayerId] = false;
+            _meetingMenu.Actives[Swap1!.PlayerId] = false;
             Swap1 = Swap2;
             Swap2 = voteArea;
-            _meetingMenu.Actives[voteArea.TargetPlayerId] = !_meetingMenu.Actives[voteArea.TargetPlayerId];
+            _meetingMenu.Actives[voteArea.PlayerId] = !_meetingMenu.Actives[voteArea.PlayerId];
         }
 
-        RpcSyncSwaps(Player, Swap1?.TargetPlayerId ?? 255, Swap2?.TargetPlayerId ?? 255);
+        RpcSyncSwaps(Player, Swap1?.PlayerId ?? 255, Swap2?.PlayerId ?? 255);
     }
 
     [MethodRpc((uint)DivaniRpcCalls.ObfuscatorSetSwaps)]
@@ -189,8 +189,8 @@ public sealed class ObfuscatorRole(IntPtr cppPtr)
         if (MeetingHud.Instance == null) return;
 
         var areas = MeetingHud.Instance.playerStates.ToList();
-        role.Swap1 = areas.Find(x => x.TargetPlayerId == swap1);
-        role.Swap2 = areas.Find(x => x.TargetPlayerId == swap2);
+        role.Swap1 = areas.Find(x => x.PlayerId == swap1);
+        role.Swap2 = areas.Find(x => x.PlayerId == swap2);
     }
 
     [MethodRpc((uint)DivaniRpcCalls.ObfuscatorConsumeCharge)]

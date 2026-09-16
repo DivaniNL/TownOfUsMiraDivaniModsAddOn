@@ -114,26 +114,14 @@ public static class RetributionistRpc
         var soulId = soul.PlayerId;
         var cause = "Retaliated";
 
-        DeathHandlerModifier.UpdateDeathHandlerImmediate(
+        GameHistory.UpdatePlayerDeathData(
             killer,
             cause,
-            DeathEventHandlers.CurrentRound,
-            DeathHandlerOverride.SetTrue,
-            TouLocale.GetParsed("DiedByStringBasic").Replace("<player>", soul.Data.PlayerName),
-            lockInfo: DeathHandlerOverride.SetTrue);
+            roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+            diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetTrue,   
+            killedBy: TouLocale.GetParsed("DiedByStringBasic").Replace("<player>", soul.Data.PlayerName),
+            lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
 
-        while (DeathHandlerModifier.IsAltCoroutineRunning)
-        {
-            yield return null;
-        }
-
-        if (killer.TryGetModifier<DeathHandlerModifier>(out var deathHandler))
-        {
-            deathHandler.CauseOfDeath = cause;
-            deathHandler.RoundOfDeath = DeathEventHandlers.CurrentRound;
-            deathHandler.DiedThisRound = true;
-            deathHandler.LockInfo = true;
-        }
 
         var revivePos = (Vector2)soul.transform.position;
         var roleWhenAlive = RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<RetributionistRole>());

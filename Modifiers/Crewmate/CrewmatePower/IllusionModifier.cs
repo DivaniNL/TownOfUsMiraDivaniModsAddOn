@@ -38,7 +38,7 @@ public sealed class IllusionModifier(PlayerControl mage) : TimedModifier, IVisua
         {
             return false;
         }
-        if (obs.PlayerId == Player.PlayerId || DeathHandlerModifier.IsFullyDead(obs))
+        if (obs.PlayerId == Player.PlayerId || TownOfUs.Modules.GameHistory.IsFullyDead(obs))
         {
             return false;
         }

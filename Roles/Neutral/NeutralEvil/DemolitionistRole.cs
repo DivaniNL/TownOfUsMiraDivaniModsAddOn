@@ -7,6 +7,7 @@ using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
 using Il2CppInterop.Runtime.Attributes;
 using DivaniMods.Assets;
+using DivaniMods.Interfaces;
 using DivaniMods.Options;
 using DivaniMods.Patches;
 using TownOfUs;
@@ -22,11 +23,12 @@ using TownOfUs.Roles.Crewmate;
 using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
 using UnityEngine;
+using MiraAPI.Utilities.Assets;
 
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class DemolitionistRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IProgressTally
+    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IProgressTally, INeutralEvilWinOutcomeRole
 {
     public static readonly Color DemolitionistColor = new Color32(0x28, 0x36, 0x7D, 255);
 
@@ -36,6 +38,8 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
         "Plant Bombs at consoles (Admin, Cams, Doorlog, Vitals) to win!\n" +
         "If the crew defuses in time, it fails.";
     public Color RoleColor => DemolitionistColor;
+
+    public LoadableAsset<Sprite> WinIcon => DivaniAssets.DemolitionistIcon;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralEvil;
 
@@ -123,6 +127,9 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
         }
 
         DemolitionistSabotageState.RegisterDemolitionist(targetPlayer);
+
+        AboutToTorment = false;
+        HasKilled = false;
     }
 
     public override void Deinitialize(PlayerControl targetPlayer)
@@ -149,14 +156,30 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
         return console == null || console.AllowImpostor;
     }
 
+    public bool ReachedWinCondition
+    {
+        get
+        {
+            var needed = (int)OptionGroupSingleton<DemolitionistOptions>.Instance.SabotagesToWin.Value;
+            return DemolitionistSabotageState.SuccessfulSabotages >= needed;
+        }
+    }
+
+    public NeutralEvilWinOutcome WinOutcome => OptionGroupSingleton<DemolitionistOptions>.Instance.WinOutcome;
+
+    public NeutralEvilWinOutcome EffectiveWinOutcome => WinOutcome;
+
+    public bool AboutToTorment { get; set; }
+
+    public bool HasKilled { get; set; }
+
     public bool WinConditionMet()
     {
-        var needed = (int)OptionGroupSingleton<DemolitionistOptions>.Instance.SabotagesToWin.Value;
-        return DemolitionistSabotageState.SuccessfulSabotages >= needed;
+        return WinOutcome is NeutralEvilWinOutcome.EndsGame && ReachedWinCondition;
     }
 
     public override bool DidWin(GameOverReason gameOverReason)
     {
-        return WinConditionMet();
+        return ReachedWinCondition;
     }
 }

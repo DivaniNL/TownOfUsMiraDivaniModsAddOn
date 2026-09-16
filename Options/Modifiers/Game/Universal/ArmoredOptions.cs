@@ -9,7 +9,7 @@ namespace DivaniMods.Options;
 
 public class ArmoredOptions : AbstractTouModifierOptionGroup<ArmoredModifier>
 {
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override string GroupName => "Armored";
     public override Color GroupColor => ArmoredModifier.ArmoredColor;
     public override uint GroupPriority => 33;

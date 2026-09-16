@@ -22,7 +22,6 @@ public class ArmoredModifier : UniversalGameModifier, IWikiDiscoverable
             "DivaniMod.Modifier.Universal.Armored", 1.45f));
 
     public override string ModifierName => "Armored";
-    public override string LocaleKey => "Armored";
     public override string IntroInfo => "You survive a number of attacks.";
     public override ModifierFaction FactionType => ModifierFaction.UniversalPassive;
     public override Color FreeplayFileColor => ArmoredColor;

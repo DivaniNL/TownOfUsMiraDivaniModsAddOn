@@ -9,7 +9,7 @@ namespace DivaniMods.Options;
 
 public class SniperOptions : AbstractTouModifierOptionGroup<SniperModifier>
 {
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override string GroupName => "Sniper";
     public override Color GroupColor => SniperModifier.SniperColor;
     public override uint GroupPriority => 50;

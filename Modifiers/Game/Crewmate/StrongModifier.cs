@@ -20,7 +20,6 @@ public class StrongModifier : TouGameModifier, IWikiDiscoverable
             "DivaniMod.Modifier.Crewmate.Strong", 1.45f));
 
     public override string ModifierName => "Strong";
-    public override string LocaleKey => "Strong";
     public override string IntroInfo => "You cannot be guessed in meetings.";
     public override ModifierFaction FactionType => ModifierFaction.CrewmatePassive;
     public override Color FreeplayFileColor => StrongColor;

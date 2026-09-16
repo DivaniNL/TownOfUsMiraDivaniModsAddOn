@@ -21,7 +21,6 @@ public class IncompetentModifier : TouGameModifier, IWikiDiscoverable
             "DivaniMod.Modifier.Crewmate.Incompetent", 1.45f));
 
     public override string ModifierName => "Incompetent";
-    public override string LocaleKey => "Incompetent";
     public override string IntroInfo => "You cannot fix sabotages.";
     public override ModifierFaction FactionType => ModifierFaction.CrewmatePassive;
     public override bool HideFromGuessing => true;

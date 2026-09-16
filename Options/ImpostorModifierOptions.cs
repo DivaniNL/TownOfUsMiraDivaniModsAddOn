@@ -10,7 +10,7 @@ namespace DivaniMods.Options;
 public sealed class ImpostorModifierOptions : AbstractOptionGroup
 {
     public override string GroupName => "Impostor Modifiers";
-    public override Func<bool> GroupVisible => () => OptionGroupSingleton<RoleOptions>.Instance.IsClassicRoleAssignment;
+    public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override Color GroupColor => Palette.ImpostorRoleHeaderRed;
     public override MenuCategory ParentMenu => MenuCategory.Modifiers;
     public override uint GroupPriority => 3;

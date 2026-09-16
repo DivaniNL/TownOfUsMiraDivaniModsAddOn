@@ -17,7 +17,7 @@ public static class StrongGuessExempt
             return false;
         }
 
-        var player = GameData.Instance.GetPlayerById(voteArea.TargetPlayerId)?.Object;
+        var player = GameData.Instance.GetPlayerById(voteArea.PlayerId)?.Object;
         return player != null && player.HasModifier<StrongModifier>();
     }
 }

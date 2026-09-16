@@ -26,4 +26,6 @@ public class ThiefOptions : AbstractRoleOptionGroup<ThiefRole>
     public bool StealingLoverHeartbreaksVictim { get; set; } = true;
 
     public ModdedToggleOption CanVent { get; } = new("Thief Can Vent", true);
+
+    public ModdedToggleOption CanStealAllianceModifiers { get; } = new("Can Steal Alliance Modifiers", false);
 }

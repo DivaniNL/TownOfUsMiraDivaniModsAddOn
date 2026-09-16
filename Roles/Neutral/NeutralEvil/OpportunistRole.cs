@@ -7,6 +7,7 @@ using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
 using Reactor.Utilities.Extensions;
 using TMPro;
+using DivaniMods.Interfaces;
 using DivaniMods.Options;
 using TownOfUs;
 using TownOfUs.Assets;
@@ -21,11 +22,12 @@ using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
 using UnityEngine;
 using DivaniMods.Assets;
+using MiraAPI.Utilities.Assets;
 
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class OpportunistRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, IGuessable, IProgressTally
+    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, IGuessable, IProgressTally, INeutralEvilWinOutcomeRole
 {
     public static readonly Color OpportunistColor = new Color32(216, 184, 90, 255); // gold
     public static Dictionary<byte, OpportunistRole> ActiveOpportunists { get; } = new();
@@ -54,6 +56,8 @@ public sealed class OpportunistRole(IntPtr cppPtr)
         "Reach the required number of collected votes to win alone.\n" +
         "If enabled by host, use wildcard to make skip votes count towards your tally once.";
     public Color RoleColor => OpportunistColor;
+
+    public LoadableAsset<Sprite> WinIcon => DivaniAssets.OpportunistIcon;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralEvil;
     public bool HasImpostorVision => false;
@@ -145,6 +149,8 @@ public sealed class OpportunistRole(IntPtr cppPtr)
         AboutToWin = false;
         WildcardUsed = false;
         WildcardButton = null;
+        AboutToTorment = false;
+        HasKilled = false;
     }
 
     public override void Deinitialize(PlayerControl targetPlayer)
@@ -171,7 +177,7 @@ public sealed class OpportunistRole(IntPtr cppPtr)
         var skip = meeting.SkipVoteButton;
         WildcardButton = Instantiate(skip, skip.transform.parent);
         WildcardButton.Parent = meeting;
-        WildcardButton.SetTargetPlayerId(250);
+        WildcardButton.SetPlayerId(250);
         WildcardButton.transform.localPosition = skip.transform.localPosition + new Vector3(0f, -0.17f, 0f);
 
         WildcardButton.gameObject.GetComponentInChildren<TextTranslatorTMP>().Destroy();
@@ -194,20 +200,20 @@ public sealed class OpportunistRole(IntPtr cppPtr)
             return;
         }
 
-        if (PendingWildcardSkip && meeting.state == MeetingHud.VoteStates.NotVoted)
+        if (PendingWildcardSkip && meeting.state == MeetingHud.MeetingStates.NotVoted)
         {
             PendingWildcardSkip = false;
             meeting.SkipVoteButton.gameObject.GetComponentInChildren<PassiveButton>()?.OnClick.Invoke();
         }
 
-        WildcardButton.gameObject.SetActive(!WildcardUsed && meeting.state == MeetingHud.VoteStates.NotVoted);
+        WildcardButton.gameObject.SetActive(!WildcardUsed && meeting.state == MeetingHud.MeetingStates.NotVoted);
 
         if (!WildcardButton.gameObject.active)
         {
             return;
         }
 
-        if (meeting.state == MeetingHud.VoteStates.Discussion &&
+        if (meeting.state == MeetingHud.MeetingStates.Discussion &&
             meeting.discussionTimer < GameOptionsManager.Instance.currentNormalGameOptions.DiscussionTime)
         {
             WildcardButton.SetDisabled();
@@ -217,7 +223,7 @@ public sealed class OpportunistRole(IntPtr cppPtr)
             WildcardButton.SetEnabled();
         }
 
-        WildcardButton.voteComplete = meeting.SkipVoteButton.voteComplete;
+        WildcardButton.VoteComplete = meeting.SkipVoteButton.VoteComplete;
     }
 
     public override bool CanUse(IUsable usable)
@@ -231,9 +237,19 @@ public sealed class OpportunistRole(IntPtr cppPtr)
         return console == null || console.AllowImpostor;
     }
 
+    public bool ReachedWinCondition => MetThreshold;
+
+    public NeutralEvilWinOutcome WinOutcome => OptionGroupSingleton<OpportunistOptions>.Instance.WinOutcome;
+
+    public NeutralEvilWinOutcome EffectiveWinOutcome => WinOutcome;
+
+    public bool AboutToTorment { get; set; }
+
+    public bool HasKilled { get; set; }
+
     public bool WinConditionMet()
     {
-        return MetThreshold || AboutToWin;
+        return WinOutcome is NeutralEvilWinOutcome.EndsGame && MetThreshold;
     }
 
     public override bool DidWin(GameOverReason gameOverReason) => MetThreshold;

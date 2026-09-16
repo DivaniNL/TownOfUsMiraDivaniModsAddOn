@@ -13,6 +13,8 @@ using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
 using TownOfUs.Modules.Components;
 using TownOfUs.Modules.Wiki;
+using TownOfUs.Modules.Localization;
+using MiraAPI.Translation;
 using TownOfUs.Roles.Impostor;
 using TownOfUs.Utilities;
 using UnityEngine;
@@ -28,7 +30,6 @@ public sealed class BetrayerModifier : AllianceGameModifier, IWikiDiscoverable, 
             "DivaniMod.Modifier.Alliance.Betrayer", 1.45f));
 
     public override string ModifierName => "Betrayer";
-    public override string LocaleKey => "Betrayer";
     public override string IntroInfo => "Ditch the knife for a wand";
     public override string Symbol => "⁉";
     public string ShortName => "Bet";
