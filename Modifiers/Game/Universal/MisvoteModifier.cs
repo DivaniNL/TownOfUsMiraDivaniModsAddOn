@@ -1,5 +1,6 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -21,16 +22,14 @@ public sealed class MisvoteModifier : UniversalGameModifier, IWikiDiscoverable
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.MisvoteIcon.LoadAsset(),
             "DivaniMod.Modifier.Universal.Misvote", 1.45f));
 
-    public override string ModifierName => "Misvote";
-    public override string IntroInfo => "Your vote is random every meeting.";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Misvote", "Misvote");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Misvote.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.UniversalPassive;
     public override Color FreeplayFileColor => MisvoteColor;
     public Color ModifierColor => MisvoteColor;
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.MisvoteIcon;
 
-    public override string GetDescription() =>
-        "Your vote is random every meeting. You vote normally, but the vote(s) - " +
-        "even a Skip - are transferred to a random players each meeting.";
+    public override string GetDescription() => MiraLocaleManager.Get("DivaniMods.Modifier.Misvote.Description");
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
 

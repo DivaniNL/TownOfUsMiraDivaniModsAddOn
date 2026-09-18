@@ -11,13 +11,14 @@ using TownOfUs.Assets;
 using TownOfUs;
 using MiraAPI.LocalSettings;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using TownOfUs.Modifiers;
 
 namespace DivaniMods.Buttons.Neutral.NeutralKilling;
 
 public sealed class MonsterDevourButton : TownOfUsRoleButton<MonsterRole, PlayerControl>
 {
-    public override string Name => "Devour";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Monster.Ability.Devour");
     public override float EffectDuration => 2f;
     public override bool HasEffect => true;
     public override int MaxUses => (int)OptionGroupSingleton<MonsterOptions>.Instance.MaxDevouredPerRound;
@@ -77,7 +78,7 @@ public sealed class MonsterDevourButton : TownOfUsRoleButton<MonsterRole, Player
         }
 
         TownOfUsColors.UseBasic =
-            LocalSettingsTabSingleton<TownOfUsLocalRoleSettings>.Instance.UseCrewmateTeamColorToggle.Value;
+            LocalSettingsTabSingleton<TouLocalTabPlayers>.Instance.UseCrewmateTeamColorToggle.Value;
 
         PassiveComp = Button.GetComponent<PassiveButton>();
     }

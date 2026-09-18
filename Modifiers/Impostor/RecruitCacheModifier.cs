@@ -1,6 +1,7 @@
 using AmongUs.GameOptions;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using MiraAPI.Roles;
 using DivaniMods.Options;
 using DivaniMods.Roles.Impostor.ImpostorPower;
@@ -12,7 +13,7 @@ namespace DivaniMods.Modifiers.Impostor;
 
 public sealed class RecruitCacheModifier : BaseModifier, ICachedRole
 {
-    public override string ModifierName => "Recruit";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.RecruitCache", "Recruit"); //freeplay
     public override bool HideOnUi => true;
     public bool ShowCurrentRoleFirst => true;
 

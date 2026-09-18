@@ -2,6 +2,7 @@ using DivaniMods.Assets;
 using DivaniMods.Modifiers.Game.Alliance;
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using TownOfUs.Options;
 using UnityEngine;
@@ -10,14 +11,14 @@ namespace DivaniMods.Options;
 
 public sealed class AllianceModifierOptions : AbstractOptionGroup
 {
-    public override string GroupName => "Alliance Modifiers";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Options.AllianceModifiers");
     public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override Color GroupColor => Color.white;
     public override MenuCategory ParentMenu => MenuCategory.Modifiers;
     public override uint GroupPriority => 0;
 
     public AmountChanceOption BetrayerAmount { get; } = new(
-        "Betrayer Amount", 1f, 0f, 3f, 1f,
+        MiraLocaleManager.Get("DivaniMods.Options.AllianceModifiers.Betrayer.Amount"), 1f, 0f, 3f, 1f,
         color: BetrayerModifier.BetrayerColor, asset: DivaniAssets.BetrayerIcon,
         assetName: "DivaniMod.Modifier.Alliance.Betrayer", assetScale: 1.45f)
     {
@@ -25,7 +26,7 @@ public sealed class AllianceModifierOptions : AbstractOptionGroup
     };
 
     public AmountChanceOption BetrayerChance { get; } =
-        new("Betrayer Chance", 0f, 0f, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
+        new(MiraLocaleManager.Get("DivaniMods.Options.AllianceModifiers.Betrayer.Chance"), 0f, 0f, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
             color: BetrayerModifier.BetrayerColor, asset: DivaniAssets.BetrayerIcon,
             assetName: "DivaniMod.Modifier.Alliance.Betrayer", assetScale: 1.45f)
         {
@@ -37,7 +38,7 @@ public sealed class AllianceModifierOptions : AbstractOptionGroup
     {
         var optAmount = OptionGroupSingleton<AllianceModifierOptions>.Instance.BetrayerAmount;
         var opt = OptionGroupSingleton<AllianceModifierOptions>.Instance.BetrayerChance;
-        RunNotif(opt, optAmount, "Betrayer");
+        RunNotif(opt, optAmount, MiraLocaleManager.Get("DivaniMods.Modifier.Betrayer", "Betrayer"));
     };
     private static void RunNotif(AmountChanceOption opt, AmountChanceOption optAmount, string title)
     {

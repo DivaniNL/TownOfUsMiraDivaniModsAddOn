@@ -33,7 +33,7 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
         $"<b><color={DivaniCreditsColorPatch.CreditsColor}>DM</color></b>";
 
     public const string Id = "com.divani.mods";
-    public const string Version = "1.3.8";
+    public const string Version = "1.3.9";
     public static DivaniPlugin Instance { get; private set; } = null!;
     public new ManualLogSource Log => base.Log;
     
@@ -55,7 +55,7 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
         VersionDisplay.Register();
         DivaniModAnnouncementPatch.EnsureLoaded();
         DivaniLocale.Register();
-        DivaniWikiTermsPatch.RegisterLocale();
+        // DivaniWikiTermsPatch.RegisterLocale();
         WinConditionRegistry.Register(new BetrayerWinCondition());
         WinConditionRegistry.Register(new ThiefQuotaDrawWinCondition());
         WinConditionRegistry.Register(new InnocentLoverWinCondition());

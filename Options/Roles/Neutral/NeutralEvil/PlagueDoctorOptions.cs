@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Roles.Neutral.NeutralEvil;
 
@@ -8,42 +9,42 @@ namespace DivaniMods.Options;
 
 public class PlagueDoctorOptions : AbstractRoleOptionGroup<PlagueDoctorRole>
 {
-    public override string GroupName => "Plague Doctor";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Role.PlagueDoctor", "Plague Doctor");
 
     public ModdedNumberOption InfectCooldown { get; } = new(
-        "Infect Cooldown", 25f, 5f, 60f, 2.5f, MiraNumberSuffixes.Seconds);
+        MiraLocaleManager.Get("DivaniMods.Options.PlagueDoctor.InfectCooldown"), 25f, 5f, 60f, 2.5f, MiraNumberSuffixes.Seconds);
 
     public ModdedNumberOption MaxInfections { get; } = new(
-        "Max Direct Infections", 2f, 1f, 5f, 1f, MiraNumberSuffixes.None);
+        MiraLocaleManager.Get("DivaniMods.Options.PlagueDoctor.MaxInfections"), 2f, 1f, 5f, 1f, MiraNumberSuffixes.None);
 
     public ModdedNumberOption InfectDistance { get; } = new(
-        "Infection Distance", 1f, 0.4f, 2f, 0.2f, MiraNumberSuffixes.Multiplier);
+        MiraLocaleManager.Get("DivaniMods.Options.PlagueDoctor.InfectDistance"), 1f, 0.4f, 2f, 0.2f, MiraNumberSuffixes.Multiplier);
 
     public ModdedNumberOption InfectDuration { get; } = new(
-        "Infection Duration", 10f, 1f, 30f, 1f, MiraNumberSuffixes.Seconds);
+        MiraLocaleManager.Get("DivaniMods.Options.PlagueDoctor.InfectDuration"), 10f, 1f, 30f, 1f, MiraNumberSuffixes.Seconds);
 
     public ModdedNumberOption ImmunityTime { get; } = new(
-        "Post-Meeting Immunity", 10f, 0f, 30f, 2.5f, MiraNumberSuffixes.Seconds);
+        MiraLocaleManager.Get("DivaniMods.Options.PlagueDoctor.ImmunityTime"), 10f, 0f, 30f, 2.5f, MiraNumberSuffixes.Seconds);
 
-    [ModdedToggleOption("Can Use Vents")]
+    [ModdedToggleOption("DivaniMods.Options.PlagueDoctor.CanVent")]
     public bool CanVent { get; set; } = false;
 
-    [ModdedToggleOption("Turn into Amnesiac after you can no longer win")]
+    [ModdedToggleOption("DivaniMods.Options.PlagueDoctor.TurnIntoAmne")]
     public bool TurnIntoAmne { get; set; } = true;
 
-    [ModdedToggleOption("Can Win While Dead")]
+    [ModdedToggleOption("DivaniMods.Options.PlagueDoctor.CanWinDead")]
     public bool CanWinDead { get; set; } = false;
 
-    public ModdedToggleOption InfectKiller { get; } = new("Infect Killer On Death", false)
+    public ModdedToggleOption InfectKiller { get; } = new("DivaniMods.Options.PlagueDoctor.InfectKiller", false)
     {
         Visible = () => OptionGroupSingleton<PlagueDoctorOptions>.Instance.CanWinDead,
     };
 
-    [ModdedToggleOption("Notify Players When Infection Is Close")]
+    [ModdedToggleOption("DivaniMods.Options.PlagueDoctor.NotifyPlayersWhenInfectionClose")]
     public bool NotifyPlayersWhenInfectionClose { get; set; } = true;
 
     public ModdedNumberOption NotifyWhenUninfectedLeft { get; } = new(
-        "Notify When Uninfected Players Left",
+        MiraLocaleManager.Get("DivaniMods.Options.PlagueDoctor.NotifyWhenUninfectedLeft"),
         3,
         1,
         14,
@@ -53,6 +54,12 @@ public class PlagueDoctorOptions : AbstractRoleOptionGroup<PlagueDoctorRole>
         Visible = () => OptionGroupSingleton<PlagueDoctorOptions>.Instance.NotifyPlayersWhenInfectionClose,
     };
 
-    [ModdedEnumOption("Win Outcome", typeof(NeutralEvilWinOutcome), ["Ends Game", "Kill One Player", "Nothing"])]
+    [ModdedEnumOption("DivaniMods.Options.PlagueDoctor.WinOutcome", typeof(NeutralEvilWinOutcome), 
+        [
+            "DivaniMods.Options.PlagueDoctor.WinOutcome.EndsGame",
+            "DivaniMods.Options.PlagueDoctor.WinOutcome.KillOnePlayer",
+            "DivaniMods.Options.PlagueDoctor.WinOutcome.Nothing"
+        ]
+    )]
     public NeutralEvilWinOutcome WinOutcome { get; set; } = NeutralEvilWinOutcome.EndsGame;
 }

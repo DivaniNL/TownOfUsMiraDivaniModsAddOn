@@ -2,6 +2,7 @@ using System.Linq;
 using MiraAPI.GameEnd;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities;
+using MiraAPI.Translation;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Roles.Crewmate.CrewmatePower;
 using TownOfUs.Modifiers.Game.Alliance;
@@ -27,7 +28,7 @@ public sealed class WorkhorseGameOver : CustomGameOver
     public override void AfterEndGameSetup(EndGameManager endGameManager)
     {
         var winColor = WorkhorseRole.WorkhorseColor;
-        var winText = "Workhorse Wins";
+        var winText = MiraLocaleManager.Get("DivaniMods.GameOver.WorkhorseWins");
 
         endGameManager.BackgroundBar.material.SetColor(ShaderID.Color, winColor);
         GameHistory.WinningFaction = $"<color=#{winColor.ToHtmlStringRGBA()}>{winText}</color>";

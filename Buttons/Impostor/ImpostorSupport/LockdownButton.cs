@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
@@ -14,7 +15,7 @@ namespace DivaniMods.Buttons.Impostor.ImpostorSupport;
 
 public class LockdownButton : TownOfUsButton
 {
-    public override string Name => "Lockdown";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Deadlock.Ability.Lockdown");
     public override float Cooldown => OptionGroupSingleton<DeadlockOptions>.Instance.LockdownCooldown.Value;
     public override float EffectDuration => OptionGroupSingleton<DeadlockOptions>.Instance.LockdownDuration.Value;
     public override int MaxUses => (int)OptionGroupSingleton<DeadlockOptions>.Instance.InitialCharges.Value;
@@ -139,7 +140,7 @@ public class LockdownButton : TownOfUsButton
         
         if (Instance != null)
         {
-            Instance.OverrideName("UNLOCK");
+            Instance.OverrideName(MiraLocaleManager.Get("DivaniMods.Role.Deadlock.Button.Unlock"));
         }
     }
     
@@ -150,7 +151,7 @@ public class LockdownButton : TownOfUsButton
         
         if (Instance != null)
         {
-            Instance.OverrideName("LOCKDOWN");
+            Instance.OverrideName(MiraLocaleManager.Get("DivaniMods.Role.Deadlock.Ability.Lockdown"));
         }
     }
 

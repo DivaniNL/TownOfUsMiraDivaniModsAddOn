@@ -3,6 +3,7 @@ using System.Linq;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting.Voting;
+using MiraAPI.Translation;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using DivaniMods.Assets;
@@ -63,12 +64,19 @@ public static class CouncillorEvents
             return;
         }
 
-        var what = isMayor && isKnighted
-            ? "Knighted Mayor"
-            : isMayor ? "Mayor" : "Knighted player";
+        var key = isMayor && isKnighted // Changed "what" for "key", bc what was confusing for me lol
+            ? "DivaniMods.Role.Councillor.Notification.KilledKnightedMayor"
+            : isMayor
+                ? "DivaniMods.Role.Councillor.Notification.KilledMayor"
+                : "DivaniMods.Role.Councillor.Notification.KilledKnightedPlayer";
+        var notificationText = MiraLocaleManager
+                .Get(key)
+                .Replace("<votes>", votesGained.ToString());
+
         var colorHex = ColorUtility.ToHtmlStringRGB(Palette.ImpostorRed);
+
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#{colorHex}>You killed a {what} and gained {votesGained} extra vote{(votesGained == 1 ? "" : "s")} this round!</color></b>",
+            $"<b><color=#{colorHex}>{notificationText}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.CouncillorIcon.LoadAsset());

@@ -3,6 +3,7 @@ using AmongUs.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Assets;
 using TownOfUs.Modifiers;
@@ -14,11 +15,12 @@ using TownOfUs.Utilities;
 using TownOfUs.Utilities.Appearances;
 using UnityEngine;
 using UnityEngine.UI;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorAfterlife;
 
 public sealed class RevenantRole(IntPtr cppPtr)
-    : ImpostorGhostRole(cppPtr), ITownOfUsRole, IGhostRole, IWikiDiscoverable
+    : ImpostorGhostRole(cppPtr), IDivaniRole, IGhostRole, IWikiDiscoverable
 {
     public static readonly Color RevenantColor = new(0.78f, 0.05f, 0.05f, 1f);
 
@@ -41,11 +43,10 @@ public sealed class RevenantRole(IntPtr cppPtr)
     }
 
     public string LocaleKey => "Revenant";
-    public string RoleName => "Revenant";
-    public string RoleDescription => "Kill for the Impostors from beyond the grave.";
-    public string RoleLongDescription =>
-        "You were summoned as the Impostor afterlife Revenant. Kill and vent! Anyone can click you to put you to rest.\n" +
-        "You will be put to rest in the final four";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Revenant", "Revenant");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Revenant.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Revenant.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Revenant.LongDescription");
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 

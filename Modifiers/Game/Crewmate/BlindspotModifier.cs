@@ -1,4 +1,5 @@
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -19,14 +20,14 @@ public class BlindspotModifier : TouGameModifier, IWikiDiscoverable
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.BlindspotIcon.LoadAsset(),
             "DivaniMod.Modifier.Crewmate.Blindspot", 1.45f));
 
-    public override string ModifierName => "Blindspot";
-    public override string IntroInfo => "You watch camera's without lights.";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Blindspot", "Blindspot");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Blindspot.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.CrewmateUtility;
     public override Color FreeplayFileColor => BlindspotColor;
     public Color ModifierColor => BlindspotColor;
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.BlindspotIcon;
     
-    public override string GetDescription() => "Camera lights don't activate when you use cameras.";
+    public override string GetDescription() => MiraLocaleManager.Get("DivaniMods.Modifier.Blindspot.Description");
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
     

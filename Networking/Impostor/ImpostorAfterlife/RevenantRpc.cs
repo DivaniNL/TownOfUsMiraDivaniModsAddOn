@@ -1,13 +1,13 @@
 using System.Collections;
 using MiraAPI.Modifiers;
 using MiraAPI.Networking;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities;
 using DivaniMods.Roles.Impostor.ImpostorAfterlife;
 using TownOfUs.Events;
 using TownOfUs.Modifiers;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Utilities;
 using TownOfUs.Modules;
 using TownOfUs.Modules.Components;
@@ -42,14 +42,14 @@ public static class RevenantRpc
 
     private static IEnumerator CoRevenantKill(PlayerControl source, PlayerControl target)
     {
-        var cause = TouLocale.Get("DiedToRevenant");
+        var cause = MiraLocaleManager.Get("DiedToRevenant");
 
         GameHistory.UpdatePlayerDeathData(
             target,
             cause,
             roundOfDeath: HudManagerHelper.Instance.CurrentRound,
             diedThisRound: DeathHandlerOverride.SetTrue,
-            killedBy: TouLocale.GetParsed("DiedByStringBasic").Replace("<player>", source.Data.PlayerName),
+            killedBy: MiraLocaleManager.Get("DiedByStringBasic").Replace("<player>", source.Data.PlayerName),
             lockInfo: DeathHandlerOverride.SetTrue);
 
         GameHistory.UpdatePlayerDeathData(

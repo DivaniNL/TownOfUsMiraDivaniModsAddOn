@@ -8,6 +8,7 @@ using HarmonyLib;
 using Il2CppInterop.Runtime.Attributes;
 using Il2CppSystem.Text;
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using Reactor.Utilities.Attributes;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Options;
@@ -542,26 +543,40 @@ internal static class DemolitionistNumpad
                 var applied = Controller.TryFinalizeSuccessfulKeypad(numpadSessionId);
                 if (applied)
                 {
+                    var successText =
+                        MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Numpad.Success");
+
                     tr.Field<bool>("done").Value = true;
-                    SetNumberText(game, "OK");
+
+                    SetNumberText(game, successText);
                     yield return wait;
+
                     SetNumberText(game, string.Empty);
                     yield return wait;
-                    SetNumberText(game, "OK");
+
+                    SetNumberText(game, successText);
                     yield return wait;
+
                     SetNumberText(game, string.Empty);
                     yield return wait;
-                    SetNumberText(game, "OK");
+
+                    SetNumberText(game, successText);
                 }
             }
             else
             {
-                SetNumberText(game, "Bad");
+                var incorrectText =
+                    MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Numpad.Incorrect");
+
+                SetNumberText(game, incorrectText);
                 yield return wait;
+
                 SetNumberText(game, string.Empty);
                 yield return wait;
-                SetNumberText(game, "Bad");
+
+                SetNumberText(game, incorrectText);
                 yield return wait;
+
                 game.numString = string.Empty;
                 game.number = 0;
                 SetNumberText(game, string.Empty);

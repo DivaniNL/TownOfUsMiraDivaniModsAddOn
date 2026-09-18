@@ -10,6 +10,7 @@ using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Modules.Duelist;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using DivaniMods.Options;
 using TownOfUs.Modifiers.Impostor;
 
@@ -82,7 +83,7 @@ public static class BeaconManager
 
     public static void PlaceBeacon(Vector2 position)
     {
-        var roomName = GetRoomName(position) ?? "Unknown";
+        var roomName = GetRoomName(position) ?? MiraLocaleManager.Get("DivaniMods.Common.Unknown");
 
         var beacon = new BeaconData
         {
@@ -141,13 +142,15 @@ public static class BeaconManager
     public static List<(BeaconData Beacon, string PlayerName)> UpdatePlayerTracking()
     {
         var newEntries = new List<(BeaconData, string)>();
-
+        var players = PlayerControl.AllPlayerControls.ToArray();
         var bodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
 
         foreach (var beacon in Beacons)
         {
             var beaconRoom = GetShipRoom(beacon.Position);
             if (beaconRoom == null) continue;
+
+            beacon.BodiesFound.Clear();
 
             foreach (var body in bodies)
             {
@@ -161,7 +164,7 @@ public static class BeaconManager
 
             var currentPlayersInRoom = new HashSet<byte>();
 
-            foreach (var player in PlayerControl.AllPlayerControls)
+            foreach (var player in players)
             {
                 if (player == null || player.Data == null || player.Data.IsDead) continue;
                 if (player.Data.Disconnected) continue;
@@ -201,7 +204,7 @@ public static class BeaconManager
         if (Beacons.Count == 0) return;
 
         var colorHex = ColorUtility.ToHtmlStringRGBA(SentinelRole.SentinelColor);
-        var title = $"<color=#{colorHex}>Beacon Report</color>";
+        var title = $"<color=#{colorHex}>{MiraLocaleManager.Get("DivaniMods.Role.Sentinel.Report.Title")}</color>";
 
         var sb = new StringBuilder();
 
@@ -210,12 +213,23 @@ public static class BeaconManager
         {
             if (beacon.PlayersPassedThrough.Count == 0)
             {
-                sb.AppendLine($"Beacon {label} ({beacon.RoomName}): No activity.");
+                var noActivity = MiraLocaleManager
+                    .Get("DivaniMods.Role.Sentinel.Report.NoActivity")
+                    .Replace("<beacon>", label.ToString())
+                    .Replace("<room>", beacon.RoomName);
+
+                sb.AppendLine(noActivity);
             }
             else
             {
                 var names = string.Join(", ", beacon.PlayersPassedThrough);
-                sb.AppendLine($"Beacon {label} ({beacon.RoomName}): {names}");
+                var activity = MiraLocaleManager
+                    .Get("DivaniMods.Role.Sentinel.Report.Activity")
+                    .Replace("<beacon>", label.ToString())
+                    .Replace("<room>", beacon.RoomName)
+                    .Replace("<players>", names);
+
+                sb.AppendLine(activity);
             }
 
             label++;
@@ -235,8 +249,14 @@ public static class BeaconManager
                 {
                     anyBodies = true;
                     var names = string.Join(", ", beacon.BodiesFound
-                        .Select(id => GameData.Instance?.GetPlayerById(id)?.PlayerName ?? "Unknown"));
-                    bodySb.AppendLine($"Beacon {bodyLabel} ({beacon.RoomName}): {names}");
+                        .Select(id => GameData.Instance?.GetPlayerById(id)?.PlayerName ?? MiraLocaleManager.Get("DivaniMods.Common.Unknown")));
+                    var bodyActivity = MiraLocaleManager
+                        .Get("DivaniMods.Role.Sentinel.Report.Bodies")
+                        .Replace("<beacon>", bodyLabel.ToString())
+                        .Replace("<room>", beacon.RoomName)
+                        .Replace("<players>", names);
+
+                    bodySb.AppendLine(bodyActivity);
                 }
 
                 bodyLabel++;
@@ -244,7 +264,7 @@ public static class BeaconManager
 
             if (anyBodies)
             {
-                var bodyTitle = $"<color=#{colorHex}>Dead Bodies that were present in your room(s)</color>";
+                var bodyTitle = $"<color=#{colorHex}>{MiraLocaleManager.Get("DivaniMods.Role.Sentinel.Report.BodiesTitle")}</color>";
                 MiscUtils.AddFakeChat(sentinel.Data, bodyTitle, bodySb.ToString().TrimEnd(), false, true);
             }
         }

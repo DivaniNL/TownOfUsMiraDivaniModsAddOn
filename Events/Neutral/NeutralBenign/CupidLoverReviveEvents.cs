@@ -5,6 +5,7 @@ using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using MiraAPI.Roles;
 using Reactor.Utilities;
 using DivaniMods.Assets;
@@ -91,7 +92,7 @@ public static class CupidLoverReviveEvents
                 position: pos,
                 roleWhenAlive: liveRole,
                 flashColor: CupidRole.CupidColor,
-                revivedOwnerNotificationText: "Your lovers were revived. You returned to the ship",
+                revivedOwnerNotificationText: MiraLocaleManager.Get("DivaniMods.Role.Cupid.Notification.RevivedWithLovers"),
                 reviverOwnerNotificationText: null,
                 notificationIcon: DivaniAssets.CupidIcon.LoadAsset());
 

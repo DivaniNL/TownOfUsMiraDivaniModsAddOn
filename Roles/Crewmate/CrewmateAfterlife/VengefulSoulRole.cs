@@ -4,10 +4,12 @@ using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using DivaniMods.Interfaces;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using TownOfUs.Modifiers;
 using TownOfUs.Modules.Wiki;
@@ -21,7 +23,7 @@ using UnityEngine.UI;
 namespace DivaniMods.Roles.Crewmate.CrewmateAfterlife;
 
 public sealed class VengefulSoulRole(IntPtr cppPtr)
-    : CrewmateGhostRole(cppPtr), ITownOfUsRole, IGhostRole, IWikiDiscoverable
+    : CrewmateGhostRole(cppPtr), IDivaniRole, IGhostRole, IWikiDiscoverable
 {
     public bool Setup { get; set; }
     public bool Caught { get; set; }
@@ -38,11 +40,10 @@ public sealed class VengefulSoulRole(IntPtr cppPtr)
     public bool CanCatch() => false;
 
     public string LocaleKey => "VengefulSoul";
-    public string RoleName => "Vengeful Soul";
-    public string RoleDescription => "Hunt down your killer!";
-    public string RoleLongDescription =>
-        "You were murdered as the Retributionist and rose as a Vengeful Soul.\n" +
-        "Seek revenge on your killer to return to the ship!";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul", "Vengeful Soul");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.LongDescription");
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 
@@ -52,7 +53,11 @@ public sealed class VengefulSoulRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Revenge", "Hunt down and kill your killer before your time runs out to get revived.", DivaniAssets.VengefulSoulRevengeButton)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Ability.Revenge"),
+            MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Ability.Revenge.Description"),
+            DivaniAssets.VengefulSoulRevengeButton
+        )
     ];
 
     public CustomRoleConfiguration Configuration => new(this)

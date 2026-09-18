@@ -7,6 +7,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities;
@@ -19,7 +20,6 @@ using DivaniMods.Patches;
 using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Extensions;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Crewmate;
@@ -30,7 +30,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class PlagueDoctorRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, INeutralEvilWinOutcomeRole
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, INeutralEvilWinOutcomeRole
 {
     public DoomableType DoomHintType => DoomableType.Fearmonger;
 
@@ -46,6 +46,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
     public static PlayerControl? PlagueDoctorPlayer { get; internal set; }
 
     private static readonly Dictionary<byte, float> LastAccrueFrame = new();
+    private static readonly Dictionary<byte, float> LastSpreadAttempt = new();
     private static float _lastProgressSync;
 
     public static int NumInfectionsRemaining { get; set; }
@@ -53,12 +54,10 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
     public static float ImmunityTimer { get; set; }
     public static bool InfectionWarningShown { get; set; }
 
-    public string RoleName => "Plague Doctor";
-    public string RoleDescription => "Cough, cough!";
-    public string RoleLongDescription => "You are a Plague Doctor.\n" +
-        "Use your ability to infect players directly.\n" +
-        "Infected players will spread the disease\nto others who stand near them.\n" +
-        "Win by infecting all living players!";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.PlagueDoctor", "Plague Doctor");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.PlagueDoctor.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.PlagueDoctor.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.PlagueDoctor.LongDescription");
     public Color RoleColor => PlagueDoctorColor;
 
     public LoadableAsset<Sprite> WinIcon => DivaniAssets.PlagueDoctorIcon;
@@ -71,7 +70,11 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Infect", "Directly infect a player.", DivaniAssets.PlagueDoctorInfectButton)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.PlagueDoctor.Ability.Infect"),
+            MiraLocaleManager.Get("DivaniMods.Role.PlagueDoctor.Ability.Infect.Description"),
+            DivaniAssets.PlagueDoctorInfectButton
+        )
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -132,6 +135,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
     {
         InfectionProgress.Clear();
         LastAccrueFrame.Clear();
+        LastSpreadAttempt.Clear();
         DeadPlayers.Clear();
         FrozenProgress.Clear();
         FrozenInfected.Clear();
@@ -152,7 +156,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
 
         ImportantTextTask orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
         orCreateTask.Text =
-            $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralEvilTaskHeader")}</color>";
+            $"{TownOfUsColors.Neutral.ToTextColor()}{MiraLocaleManager.Get("NeutralEvilTaskHeader")}</color>";
         orCreateTask.name = "NeutralRoleText";
     }
 
@@ -223,6 +227,14 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
             return;
         }
 
+        var now = Time.fixedTime;
+        if (LastSpreadAttempt.TryGetValue(source.PlayerId, out var lastSpread) && now - lastSpread < 0.2f)
+        {
+            return;
+        }
+
+        LastSpreadAttempt[source.PlayerId] = now;
+
         var opts = OptionGroupSingleton<PlagueDoctorOptions>.Instance;
         var infectDistance = opts.InfectDistance.Value;
         var infectDuration = opts.InfectDuration.Value;
@@ -253,7 +265,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
 
             LastAccrueFrame[target.PlayerId] = Time.fixedTime;
 
-            var progress = InfectionProgress.GetValueOrDefault(target.PlayerId, 0f) + Time.fixedDeltaTime;
+            var progress = InfectionProgress.GetValueOrDefault(target.PlayerId, 0f) + 0.2f;
             InfectionProgress[target.PlayerId] = progress;
 
             if (Time.time - _lastProgressSync > 0.5f)
@@ -487,8 +499,11 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
         }
 
         Coroutines.Start(MiscUtils.CoFlash(TownOfUsColors.Amnesiac));
+        var message = MiraLocaleManager.Get("DivaniMods.Role.PlagueDoctor.Notification.BecameAmnesiac")
+            .Replace("<color>", TownOfUsColors.Amnesiac.ToTextColor());
+
         var notification = MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"There are no longer any living infected players, and you have no infections left. You have become an {TownOfUsColors.Amnesiac.ToTextColor()}Amnesiac</color>.",
+            message,
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: TouRoleIcons.Amnesiac.LoadAsset());
@@ -524,8 +539,11 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
         if (InfectionWarningShown) return;
 
         InfectionWarningShown = true;
+        var message = MiraLocaleManager.Get("DivaniMods.Role.PlagueDoctor.Notification.InfectionWarning")
+            .Replace("<count>", uninfectedLeft.ToString(TownOfUsPlugin.Culture));
+
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#FFC000>A plague is spreading. {uninfectedLeft} player(s) remain uninfected.</color></b>",
+            $"<b><color=#FFC000>{message}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.PlagueDoctorIcon.LoadAsset());

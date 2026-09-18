@@ -1,11 +1,5 @@
-using AmongUs.GameOptions;
 using HarmonyLib;
-using MiraAPI.Utilities;
 using DivaniMods.Assets;
-using DivaniMods.Roles.Crewmate.CrewmateSupport;
-using DivaniMods.Roles.Neutral.NeutralBenign;
-using DivaniMods.Roles.Neutral.NeutralEvil;
-using MiraAPI.Translation;
 using TownOfUs.Modules.Wiki;
 
 namespace DivaniMods.Patches;
@@ -20,7 +14,7 @@ public static class DivaniWikiTermsPatch
     [HarmonyPostfix]
     public static void AwakePostfix(IngameWikiMinigame __instance)
     {
-        RegisterLocale();
+        // RegisterLocale();
         AddTerm(__instance);
     }
 
@@ -39,22 +33,23 @@ public static class DivaniWikiTermsPatch
         instance._activeTerms.Add(new TermWikiInfo(TitleKey, DescKey, DivaniAssets.ModNewsLogo));
     }
 
-    public static void RegisterLocale()
-    {
-        if (!MiraLocaleManager.Locale.TryGetValue(MiraLanguage.English, out var english))
-        {
-            english = new Dictionary<string, string>();
-            MiraLocaleManager.Locale[MiraLanguage.English] = english;
-        }
+    // Implemented through Localization 
+    // public static void RegisterLocale()
+    // {
+    //     if (!MiraLocaleManager.Locale.TryGetValue(MiraLanguage.English, out var english))
+    //     {
+    //         english = new Dictionary<string, string>();
+    //         MiraLocaleManager.Locale[MiraLanguage.English] = english;
+    //     }
 
-        english.TryAdd(TitleKey, "DivaniMods Symbols");
-        english.TryAdd(DescKey,
-            "These symbols are the custom symbols from DivaniMods. " +
-            $"\n• Infected players (Plague Doctor) are marked with <b>{PlagueDoctorRole.PlagueDoctorColor.ToTextColor()}µ</color></b> " +
-            $"\n• Taunted killers (Innocent) are marked with <b>{InnocentRole.InnocentColor.ToTextColor()}⊕</color></b>" +
-            $"\n• Players marked by the Locator are shown with <b>{LocatorRole.LocatorColor.ToTextColor()}※</color></b>" +
-            $"\n• Provisional lovers (Cupid) are marked with <b>{CupidRole.CupidColor.ToTextColor()}♡</color></b>" +
-            $"\n• Lovers (Cupid) are marked with <b>{CupidRole.CupidColor.ToTextColor()}♥</color></b>"
-        );
-    }
+    //     english.TryAdd(TitleKey, "DivaniMods Symbols");
+    //     english.TryAdd(DescKey,
+    //         "These symbols are the custom symbols from DivaniMods. " +
+    //         $"\n• Infected players (Plague Doctor) are marked with <b>{PlagueDoctorRole.PlagueDoctorColor.ToTextColor()}µ</color></b> " +
+    //         $"\n• Taunted killers (Innocent) are marked with <b>{InnocentRole.InnocentColor.ToTextColor()}⊕</color></b>" +
+    //         $"\n• Players marked by the Locator are shown with <b>{LocatorRole.LocatorColor.ToTextColor()}※</color></b>" +
+    //         $"\n• Provisional lovers (Cupid) are marked with <b>{CupidRole.CupidColor.ToTextColor()}♡</color></b>" +
+    //         $"\n• Lovers (Cupid) are marked with <b>{CupidRole.CupidColor.ToTextColor()}♥</color></b>"
+    //     );
+    // }
 }

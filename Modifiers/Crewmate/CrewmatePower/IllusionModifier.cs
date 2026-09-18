@@ -2,6 +2,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Modifiers.Types;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Options;
@@ -18,7 +19,7 @@ namespace DivaniMods.Modifiers.Crewmate.CrewmatePower;
 
 public sealed class IllusionModifier(PlayerControl mage) : TimedModifier, IVisualAppearance
 {
-    public override string ModifierName => "Swooped";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Illusion", "Swooped");
     public override float Duration => OptionGroupSingleton<MageOptions>.Instance.IllusionDuration.Value;
     public override bool AutoStart => true;
     public override bool HideOnUi => true;
@@ -89,14 +90,14 @@ public sealed class IllusionModifier(PlayerControl mage) : TimedModifier, IVisua
         if (Player.AmOwner && OptionGroupSingleton<MageOptions>.Instance.IllusionTargetKnows.Value)
         {
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                "<b><color=#1586A2FF>A Mage has cloaked you in an Illusion, hiding you from killers!</color></b>",
+                $"<b><color=#1586A2FF>{MiraLocaleManager.Get("DivaniMods.Modifier.Illusion.Notification")}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.MageIcon.LoadAsset());
 
             DivaniTimers.Set(
                 IllusionTimerId,
-                "<color=#1586A2FF>Cloaking</color>",
+                $"<color=#1586A2FF>{MiraLocaleManager.Get("DivaniMods.Modifier.Illusion.Timer")}</color>",
                 DivaniAssets.MageIllusionButton.LoadAsset(),
                 OptionGroupSingleton<MageOptions>.Instance.IllusionDuration.Value);
         }

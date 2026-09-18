@@ -4,6 +4,7 @@ using System.Text;
 using AmongUs.GameOptions;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Events.Impostor.ImpostorSupport;
@@ -16,16 +17,17 @@ using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
 using TownOfUs.Extensions;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorSupport;
 
 public sealed class CouncillorRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IProgressTally
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, IProgressTally
 {
-    public string RoleName => "Councillor";
-    public string RoleDescription => "Your vote? It's mine!";
-    public string RoleLongDescription =>
-        "Each kill will give you extra votes to use in only the next meeting.";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Councillor", "Councillor");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Councillor.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Councillor.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Councillor.LongDescription");
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorSupport;
@@ -73,7 +75,9 @@ public sealed class CouncillorRole(IntPtr cppPtr)
     {
         var stringB = ITownOfUsRole.SetNewTabText(this);
         var extra = CouncillorEvents.GetExtraVotes(Player.PlayerId);
-        stringB.AppendLine(TownOfUsPlugin.Culture, $"<b>Extra votes next meeting: +{extra}</b>");
+        stringB.AppendLine(
+            $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Councillor.Tab.ExtraVotes")
+                .Replace("<votes>", extra.ToString(TownOfUsPlugin.Culture))}</b>");
         return stringB;
     }
 }

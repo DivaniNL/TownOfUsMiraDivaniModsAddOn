@@ -5,12 +5,12 @@ using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Modules.Duelist;
 using DivaniMods.Options;
 using TownOfUs;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Options;
 using TownOfUs.Roles;
@@ -20,20 +20,20 @@ using UnityEngine;
 using TownOfUs.Extensions;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Interfaces;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Neutral.NeutralOutlier;
 
 public sealed class DuelistRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IContinuesGame, IUnlovable,
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, IContinuesGame, IUnlovable,
         IProgressTally
 {
     public static readonly Color DuelistColor = new Color32(244, 237, 90, 255);
 
-    public string RoleName => "Duelist";
-    public string RoleDescription => "ITS TIME TO D-D-D-DUEL";
-    public string RoleLongDescription =>
-        "Challenge a player to a duel.\n" +
-        "Win enough duels to claim victory.";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Duelist", "Duelist");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Duelist.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Duelist.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Duelist.LongDescription");
     public Color RoleColor => DuelistColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralOutlier;
@@ -49,8 +49,16 @@ public sealed class DuelistRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Duel", "Challenge a shipmate to a duel.", DivaniAssets.DuelistDuelButton),
-        new("Strike", "Attack your opponent during the duel.", DivaniAssets.DuelStrikeButton)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Duelist.Ability.Duel"),
+            MiraLocaleManager.Get("DivaniMods.Role.Duelist.Ability.Duel.Description"),
+            DivaniAssets.DuelistDuelButton
+        ),
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Duelist.Ability.Strike"),
+            MiraLocaleManager.Get("DivaniMods.Role.Duelist.Ability.Strike.Description"),
+            DivaniAssets.DuelStrikeButton
+        )
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -87,7 +95,7 @@ public sealed class DuelistRole(IntPtr cppPtr)
         }
         ImportantTextTask orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
         orCreateTask.Text =
-            $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralOutlierTaskHeader")}</color>";
+            $"{TownOfUsColors.Neutral.ToTextColor()}{MiraLocaleManager.Get("NeutralOutlierTaskHeader")}</color>";
         orCreateTask.name = "NeutralRoleText";
     }
 
@@ -113,15 +121,40 @@ public sealed class DuelistRole(IntPtr cppPtr)
 
     public string ProgressOnSummaryNormal => GetDuelTally();
 
-    public string ProgressOnSummaryDetailed =>
-        $"Duels won: {Math.Min(DuelWins, WinsNeeded)}/{WinsNeeded} | Duels lost: {Math.Min(DuelLosses, LossesToDie)}/{LossesToDie}";
+    public string ProgressOnSummaryDetailed
+        {
+        get
+        {
+            var wins = Math.Min(DuelWins, WinsNeeded);
+            var losses = Math.Min(DuelLosses, LossesToDie);
+
+            return MiraLocaleManager.Get("DivaniMods.Role.Duelist.Progress.Detailed")
+                .Replace("<wins>", wins.ToString(TownOfUsPlugin.Culture))
+                .Replace("<winsNeeded>", WinsNeeded.ToString(TownOfUsPlugin.Culture))
+                .Replace("<losses>", losses.ToString(TownOfUsPlugin.Culture))
+                .Replace("<lossesNeeded>", LossesToDie.ToString(TownOfUsPlugin.Culture));
+        }
+    }
 
     [HideFromIl2Cpp]
     public StringBuilder SetTabText()
     {
         var stringB = ITownOfUsRole.SetNewTabText(this);
-        stringB.AppendLine(TownOfUsPlugin.Culture, $"<b>Duels won ({Math.Min(DuelWins, WinsNeeded)}/{WinsNeeded})</b>");
-        stringB.AppendLine(TownOfUsPlugin.Culture, $"<b>Duels lost ({Math.Min(DuelLosses, LossesToDie)}/{LossesToDie})</b>");
+
+        var wins = Math.Min(DuelWins, WinsNeeded);
+        var losses = Math.Min(DuelLosses, LossesToDie);
+
+        var winsText = MiraLocaleManager.Get("DivaniMods.Role.Duelist.Tab.DuelsWon")
+            .Replace("<wins>", wins.ToString(TownOfUsPlugin.Culture))
+            .Replace("<needed>", WinsNeeded.ToString(TownOfUsPlugin.Culture));
+
+        var lossesText = MiraLocaleManager.Get("DivaniMods.Role.Duelist.Tab.DuelsLost")
+            .Replace("<losses>", losses.ToString(TownOfUsPlugin.Culture))
+            .Replace("<needed>", LossesToDie.ToString(TownOfUsPlugin.Culture));
+
+        stringB.AppendLine($"<b>{winsText}</b>");
+        stringB.AppendLine($"<b>{lossesText}</b>");
+
         return stringB;
     }
 

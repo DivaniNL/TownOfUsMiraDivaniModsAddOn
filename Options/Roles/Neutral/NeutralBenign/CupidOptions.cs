@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Roles.Neutral.NeutralBenign;
 
@@ -25,38 +26,51 @@ public enum CupidBecomeOptions
 
 public class CupidOptions : AbstractRoleOptionGroup<CupidRole>
 {
-    public override string GroupName => "Cupid";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Role.Cupid", "Cupid");
 
     public ModdedNumberOption MatchmakeCooldown { get; } = new(
-        "Matchmake Cooldown", 10f, 5f, 60f, 2.5f, MiraNumberSuffixes.Seconds);
+        MiraLocaleManager.Get("DivaniMods.Options.Cupid.MatchmakeCooldown"), 10f, 5f, 60f, 2.5f, MiraNumberSuffixes.Seconds);
 
     public ModdedNumberOption ProtectCooldown { get; } = new(
-        "Bestow Cooldown", 25f, 5f, 120f, 2.5f, MiraNumberSuffixes.Seconds);
+        MiraLocaleManager.Get("DivaniMods.Options.Cupid.ProtectCooldown"), 25f, 5f, 120f, 2.5f, MiraNumberSuffixes.Seconds);
 
     public ModdedNumberOption ProtectDuration { get; } = new(
-        "Bestow Duration", 10f, 5f, 15f, 1f, MiraNumberSuffixes.Seconds);
+        MiraLocaleManager.Get("DivaniMods.Options.Cupid.ProtectDuration"), 10f, 5f, 15f, 1f, MiraNumberSuffixes.Seconds);
 
     public ModdedEnumOption ShowProtect { get; } = new(
-        "Show Protection", (int)CupidProtectShowOptions.CupidAndLovers, typeof(CupidProtectShowOptions),
-        ["Cupid", "Cupid And Lovers", "Everyone"]);
+        MiraLocaleManager.Get("DivaniMods.Options.Cupid.ShowProtect"), (int)CupidProtectShowOptions.CupidAndLovers, typeof(CupidProtectShowOptions),
+        [
+            MiraLocaleManager.Get("DivaniMods.Options.Cupid.ShowProtect.Cupid"),
+            MiraLocaleManager.Get("DivaniMods.Options.Cupid.ShowProtect.CupidAndLovers"),
+            MiraLocaleManager.Get("DivaniMods.Options.Cupid.ShowProtect.Everyone")
+        ]
+        );
 
     public ModdedEnumOption OnLoverDeath { get; } = new(
-        "When A Lover Dies, Cupid", (int)CupidBecomeOptions.Amnesiac, typeof(CupidBecomeOptions),
-        ["Becomes Crewmate", "Becomes Amnesiac", "Becomes Survivor", "Becomes Mercenary", "Becomes Jester", "Dies"]);
+        MiraLocaleManager.Get("DivaniMods.Options.Cupid.OnLoverDeath"), (int)CupidBecomeOptions.Amnesiac, typeof(CupidBecomeOptions),
+        [
+            MiraLocaleManager.Get("DivaniMods.Options.Cupid.OnLoverDeath.Crew"),
+            MiraLocaleManager.Get("DivaniMods.Options.Cupid.OnLoverDeath.Amnesiac"),
+            MiraLocaleManager.Get("DivaniMods.Options.Cupid.OnLoverDeath.Survivor"),
+            MiraLocaleManager.Get("DivaniMods.Options.Cupid.OnLoverDeath.Mercenary"),
+            MiraLocaleManager.Get("DivaniMods.Options.Cupid.OnLoverDeath.Jester"),
+            MiraLocaleManager.Get("DivaniMods.Options.Cupid.OnLoverDeath.CupidDies")
+        ]
+        );
 
     public ModdedToggleOption CupidRevivedOnLoversRevive { get; } = new(
-        "Cupid is revived on Lovers Revive (When Both Lovers Die And Revive Together is on)", false)
+        MiraLocaleManager.Get("DivaniMods.Options.Cupid.CupidRevivedOnLoversRevive"), false)
     {
         Visible = () => OptionGroupSingleton<CupidOptions>.Instance.OnLoverDeath.Value == (int)CupidBecomeOptions.CupidDies,
     };
 
-    [ModdedToggleOption("Lovers Know Cupid Exists")]
+    [ModdedToggleOption("DivaniMods.Options.Cupid.LoversKnowCupid")]
     public bool LoversKnowCupid { get; set; } = true;
 
-    [ModdedToggleOption("Cupid Knows Lovers' Roles")]
+    [ModdedToggleOption("DivaniMods.Options.Cupid.CupidKnowsLoverRoles")]
     public bool CupidKnowsLoverRoles { get; set; } = true;
 
-    [ModdedToggleOption("Protect Lovers Separately")]
+    [ModdedToggleOption("DivaniMods.Options.Cupid.ProtectSeparately")]
     public bool ProtectSeparately { get; set; } = false;
 
 }

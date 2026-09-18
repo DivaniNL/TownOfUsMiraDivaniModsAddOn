@@ -1,5 +1,6 @@
 using HarmonyLib;
 using Reactor.Utilities;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmateInvestigative;
 using DivaniMods.Roles.Crewmate.CrewmateInvestigative;
@@ -14,6 +15,7 @@ public static class SentinelPatch
     private static bool _wasInMeeting;
     private static bool _flashActive;
     private static float _flashEndTime;
+    private static float _lastBeaconScanTime;
 
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
     [HarmonyPostfix]
@@ -67,6 +69,13 @@ public static class SentinelPatch
         if (PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(localPlayer)) return;
         if (BeaconManager.BeaconsPlaced == 0) return;
 
+        if (Time.time - _lastBeaconScanTime < 0.25f)
+        {
+            return;
+        }
+
+        _lastBeaconScanTime = Time.time;
+
         var newEntries = BeaconManager.UpdatePlayerTracking();
 
         foreach (var (beacon, playerName) in newEntries)
@@ -75,8 +84,13 @@ public static class SentinelPatch
 
             char label = (char)('A' + BeaconManager.Beacons.IndexOf(beacon));
             var colorHex = ColorUtility.ToHtmlStringRGB(SentinelRole.SentinelColor);
+            var text = MiraLocaleManager
+                .Get("DivaniMods.Role.Sentinel.Notification.BeaconTriggered")
+                .Replace("<label>", label.ToString())
+                .Replace("<room>", beacon.RoomName);
+
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{colorHex}>Someone walked through Beacon {label} ({beacon.RoomName})</color></b>",
+                $"<b><color=#{colorHex}>{text}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.SentinelIcon.LoadAsset());

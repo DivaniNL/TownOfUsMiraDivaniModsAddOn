@@ -1,5 +1,6 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Roles.Neutral.NeutralKilling;
 
@@ -7,51 +8,51 @@ namespace DivaniMods.Options;
 
 public class WatcherOptions : AbstractRoleOptionGroup<WatcherRole>
 {
-    public override string GroupName => "Watcher";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Role.Watcher", "Watcher");
 
     public ModdedNumberOption GreenLightMinDuration { get; } = new(
-        "Green Light Min Duration", 2f, 1f, 15f, 1f, MiraNumberSuffixes.Seconds, "0");
+        MiraLocaleManager.Get("DivaniMods.Options.Watcher.GreenLightMinDuration"), 2f, 1f, 15f, 1f, MiraNumberSuffixes.Seconds, "0");
 
     public ModdedNumberOption GreenLightMaxDuration { get; } = new(
-        "Green Light Max Duration", 10f, 1f, 15f, 1f, MiraNumberSuffixes.Seconds, "0");
+        MiraLocaleManager.Get("DivaniMods.Options.Watcher.GreenLightMaxDuration"), 10f, 1f, 15f, 1f, MiraNumberSuffixes.Seconds, "0");
 
     public ModdedNumberOption RedLightDuration { get; } = new(
-        "Red Light Duration", 4f, 2f, 8f, 0.5f, MiraNumberSuffixes.Seconds, "0.0");
+        MiraLocaleManager.Get("DivaniMods.Options.Watcher.RedLightDuration"), 4f, 2f, 8f, 0.5f, MiraNumberSuffixes.Seconds, "0.0");
 
     public ModdedNumberOption RedLightGracePeriod { get; } = new(
-        "Red Light Grace Period", 0.4f, 0f, 1.5f, 0.1f, MiraNumberSuffixes.Seconds, "0.0");
+        MiraLocaleManager.Get("DivaniMods.Options.Watcher.RedLightGracePeriod"), 0.4f, 0f, 1.5f, 0.1f, MiraNumberSuffixes.Seconds, "0.0");
 
     public ModdedNumberOption RedLightGreenLightLoops { get; } = new(
-        "Red Light, Green Light Loops", 2f, 1f, 4f, 1f, MiraNumberSuffixes.None);
+        MiraLocaleManager.Get("DivaniMods.Options.Watcher.RedLightGreenLightLoops"), 2f, 1f, 4f, 1f, MiraNumberSuffixes.None);
 
     public ModdedNumberOption KillCooldown { get; } = new(
-        "Kill Cooldown", 25f, 10f, 60f, 2.5f, MiraNumberSuffixes.Seconds, "0.0");
+        MiraLocaleManager.Get("DivaniMods.Options.Watcher.KillCooldown"), 25f, 10f, 60f, 2.5f, MiraNumberSuffixes.Seconds, "0.0");
 
     public ModdedNumberOption WatchCooldown { get; } = new(
-        "Watch Cooldown", 25f, 10f, 60f, 2.5f, MiraNumberSuffixes.Seconds, "0.0");
+        MiraLocaleManager.Get("DivaniMods.Options.Watcher.WatchCooldown"), 25f, 10f, 60f, 2.5f, MiraNumberSuffixes.Seconds, "0.0");
 
     public ModdedNumberOption InitialWatchCharges { get; } = new(
-        "Initial Watch Charges", 0f, 0f, 5f, 1f, MiraNumberSuffixes.None);
+        MiraLocaleManager.Get("DivaniMods.Options.Watcher.InitialWatchCharges"), 0f, 0f, 5f, 1f, MiraNumberSuffixes.None);
 
     public ModdedNumberOption KillsPerExtraCharge { get; } = new(
-        "Kills Required for Extra Watch Charge", 3f, 1f, 5f, 1f, MiraNumberSuffixes.None);
-    public ModdedToggleOption InstantKillOnMovement { get; } = new("Punish Movers Instantly", true);
+        MiraLocaleManager.Get("DivaniMods.Options.Watcher.KillsPerExtraCharge"), 3f, 1f, 5f, 1f, MiraNumberSuffixes.None);
+    public ModdedToggleOption InstantKillOnMovement { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Watcher.InstantKillOnMovement"), true);
 
-    public ModdedToggleOption LinkWatchKillCooldown { get; } = new("Link Watch & Kill Cooldowns", true);
+    public ModdedToggleOption LinkWatchKillCooldown { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Watcher.LinkWatchKillCooldown"), true);
 
     public ModdedToggleOption KillsDuringLightsCount { get; } =
-        new("Kills during Red Light, Green Light count towards next charge", false)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Watcher.KillsDuringLightsCount"), false)
         {
             Visible = () => !OptionGroupSingleton<WatcherOptions>.Instance.LinkWatchKillCooldown.Value
         };
 
-    public ModdedToggleOption GunshotSoundOnDeath { get; } = new("Enable Gunshot Sound effect on Deaths", true);
+    public ModdedToggleOption GunshotSoundOnDeath { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Watcher.GunshotSoundOnDeath"), true);
 
-    public ModdedToggleOption BlockSabotage { get; } = new("Block Sabotage during Red Light, Green Light", true);
+    public ModdedToggleOption BlockSabotage { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Watcher.BlockSabotage"), true);
 
-    public ModdedToggleOption DisableEmergencyButton { get; } = new("Disable Emergency Button during Red Light, Green Light", true);
+    public ModdedToggleOption DisableEmergencyButton { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Watcher.DisableEmergencyButton"), true);
 
-    public ModdedToggleOption GhostwalkersMustFreeze { get; } = new("Ghostwalkers Must Freeze", true);
+    public ModdedToggleOption GhostwalkersMustFreeze { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Watcher.GhostwalkersMustFreeze"), true);
 
-    public ModdedToggleOption CanVent { get; } = new("Watcher Can Vent", true);
+    public ModdedToggleOption CanVent { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Watcher.CanVent"), true);
 }

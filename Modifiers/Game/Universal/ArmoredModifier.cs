@@ -1,4 +1,5 @@
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -21,8 +22,8 @@ public class ArmoredModifier : UniversalGameModifier, IWikiDiscoverable
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.ArmoredIcon.LoadAsset(),
             "DivaniMod.Modifier.Universal.Armored", 1.45f));
 
-    public override string ModifierName => "Armored";
-    public override string IntroInfo => "You survive a number of attacks.";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Armored", "Armored");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Armored.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.UniversalPassive;
     public override Color FreeplayFileColor => ArmoredColor;
     public Color ModifierColor => ArmoredColor;
@@ -38,8 +39,17 @@ public class ArmoredModifier : UniversalGameModifier, IWikiDiscoverable
 
     public override string GetDescription()
     {
-        var max = MaxAttacks > 0 ? MaxAttacks : (int)OptionGroupSingleton<ArmoredOptions>.Instance.AttacksToSurvive.Value;
-        return $"You survive {max} attack{(max == 1 ? "" : "s")}.\nSurvived attacks {DisplayedAttacksSurvived} / {max}";
+        var max = MaxAttacks > 0
+            ? MaxAttacks
+            : (int)OptionGroupSingleton<ArmoredOptions>.Instance.AttacksToSurvive.Value;
+
+        var descriptionKey = max == 1
+            ? "DivaniMods.Modifier.Armored.Description.Singular"
+            : "DivaniMods.Modifier.Armored.Description.Plural";
+
+        return MiraLocaleManager.Get(descriptionKey)
+            .Replace("<max>", max.ToString())
+            .Replace("<survived>", DisplayedAttacksSurvived.ToString());
     }
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());

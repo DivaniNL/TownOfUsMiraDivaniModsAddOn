@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using AmongUs.GameOptions;
+using MiraAPI.Translation;
 using DivaniMods.Patches;
 using Il2CppInterop.Runtime;
 using TownOfUs.Utilities;
@@ -31,12 +32,23 @@ public static class DemolitionistUtilityConsoles
     public static string GetDisplayName(DemolitionistUtilityKind kind) =>
         kind switch
         {
-            DemolitionistUtilityKind.Admin => "Admin Table",
-            // Fungle's "camera" console is the telescope/Lookout, not a Security room.
-            DemolitionistUtilityKind.Cameras => MiscUtils.GetCurrentMap == ExpandedMapNames.Fungle ? "Lookout" : "Security",
-            DemolitionistUtilityKind.Vitals => "Vitals",
-            DemolitionistUtilityKind.DoorLog => "Door Log",
-            _ => "Unknown",
+             DemolitionistUtilityKind.Admin =>
+            MiraLocaleManager.Get("DivaniMods.Demolitionist.Utility.Admin"),
+
+            DemolitionistUtilityKind.Cameras =>
+                MiraLocaleManager.Get(
+                    MiscUtils.GetCurrentMap == ExpandedMapNames.Fungle
+                        ? "DivaniMods.Demolitionist.Utility.Lookout"
+                        : "DivaniMods.Demolitionist.Utility.Security"),
+
+            DemolitionistUtilityKind.Vitals =>
+                MiraLocaleManager.Get("DivaniMods.Demolitionist.Utility.Vitals"),
+
+            DemolitionistUtilityKind.DoorLog =>
+                MiraLocaleManager.Get("DivaniMods.Demolitionist.Utility.DoorLog"),
+
+            _ =>
+                MiraLocaleManager.Get("DivaniMods.Demolitionist.Utility.Unknown"),
         };
 
     public static bool TryGetClosest(

@@ -1,4 +1,5 @@
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -19,8 +20,8 @@ public class FragileModifier : UniversalGameModifier, IWikiDiscoverable
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.FragileIcon.LoadAsset(),
             "DivaniMod.Modifier.Universal.Fragile", 1.45f));
 
-    public override string ModifierName => "Fragile";
-    public override string IntroInfo => "You have a chance to break if someone interacts...";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Fragile", "Fragile");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Fragile.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.UniversalPassive;
     public override Color FreeplayFileColor => FragileColor;
     public Color ModifierColor => FragileColor;
@@ -29,7 +30,9 @@ public class FragileModifier : UniversalGameModifier, IWikiDiscoverable
     public override string GetDescription()
     {
         var chance = OptionGroupSingleton<FragileOptions>.Instance.ChanceToBreak.Value;
-        return $"You have a {chance:0}% chance to break if any player interacts with you!";
+
+        return MiraLocaleManager.Get("DivaniMods.Modifier.Fragile.Description")
+            .Replace("<chance>", chance.ToString("0"));
     }
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());

@@ -1,4 +1,5 @@
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -18,8 +19,8 @@ public class NullifiedModifier : TouGameModifier, IWikiDiscoverable
         NullifiedColor,
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.NullifiedIcon.LoadAsset(),
             "DivaniMod.Modifier.Impostor.Nullified", 1.45f));
-    public override string ModifierName => "Nullified";
-    public override string IntroInfo => "You are immune to kill debuffs.";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Nullified", "Nullified");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Nullified.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.ImpostorPassive;
     public override Color FreeplayFileColor => NullifiedColor;
     public Color ModifierColor => NullifiedColor;
@@ -28,10 +29,11 @@ public class NullifiedModifier : TouGameModifier, IWikiDiscoverable
 
     public override string GetDescription()
     {
-        var desc = "You are immune to kill debuffs (Bait, Frosty, Diseased, Bloody, Aftermath, Noisemaker, Bear Trap).";
+        var desc = MiraLocaleManager.Get("DivaniMods.Modifier.Nullified.Description");
+
         if (OptionGroupSingleton<NullifiedOptions>.Instance.SilencesCelebrity)
         {
-            desc += " Killing a Celebrity does not announce their death.";
+            desc += " " + MiraLocaleManager.Get("DivaniMods.Modifier.Nullified.Description.SilencesCelebrity");
         }
 
         return desc;

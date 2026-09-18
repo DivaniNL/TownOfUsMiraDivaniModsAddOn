@@ -2,6 +2,7 @@ using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Modifiers.Types;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Extensions;
@@ -28,8 +29,8 @@ public sealed class TacticalInsertionModifier : UniversalGameModifier, IWikiDisc
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.TacticalInsertionIcon.LoadAsset(),
             "DivaniMod.Modifier.Universal.TacticalInsertion", 1.45f));
 
-    public override string ModifierName => "Tactical Insertion";
-    public override string IntroInfo => "Mark a spot, respawn there after the next meeting!";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.TacticalInsertion", "Tactical Insertion");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.TacticalInsertion.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.UniversalUtility;
     public override Color FreeplayFileColor => TacticalColor;
     public Color ModifierColor => TacticalColor;
@@ -40,15 +41,19 @@ public sealed class TacticalInsertionModifier : UniversalGameModifier, IWikiDisc
     public bool UsedThisRound { get; set; }
 
     public override string GetDescription() =>
-        "Mark your current position. After the next meeting you respawn at the marked spot.";
+    MiraLocaleManager.Get("DivaniMods.Modifier.TacticalInsertion.Description");
 
     public string GetAdvancedDescription() =>
-        "Mark your current position. After the next meeting you respawn at the marked spot instead of the meeting area." +
+        MiraLocaleManager.Get("DivaniMods.Modifier.TacticalInsertion.AdvancedDescription") +
         MiscUtils.AppendOptionsText(GetType());
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Tactical Insertion", "Mark your current position to respawn there after the next meeting.", DivaniAssets.TacticalInsertionButton)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Modifier.TacticalInsertion.Ability"),
+            MiraLocaleManager.Get("DivaniMods.Modifier.TacticalInsertion.Ability.Description"),
+            DivaniAssets.TacticalInsertionButton
+        )
     ];
 
     public override int GetAssignmentChance() =>
@@ -137,7 +142,7 @@ public sealed class TacticalInsertionModifier : UniversalGameModifier, IWikiDisc
             Player.NetTransform.RpcSnapTo(location);
 
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                "<b><color=#00FF00>You spawned at the location of your Tactical Insertion</color></b>",
+                $"<b><color=#00FF00>{MiraLocaleManager.Get("DivaniMods.Modifier.TacticalInsertion.Notification.Spawned")}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.TacticalInsertionIcon.LoadAsset());

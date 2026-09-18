@@ -2,6 +2,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -16,7 +17,7 @@ public class FragBombButton : TownOfUsTargetButton<PlayerControl>
 {
     public static FragBombButton? Instance { get; private set; }
 
-    public override string Name => "Pass Frag";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Frag.Ability.PassFrag");
     public override float Cooldown => 0f;
     public override float InitialCooldown => 0f;
     public override float EffectDuration => 0f;

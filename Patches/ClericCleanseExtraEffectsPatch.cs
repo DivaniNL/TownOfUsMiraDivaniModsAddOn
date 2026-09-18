@@ -1,5 +1,6 @@
 using HarmonyLib;
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -56,16 +57,24 @@ public static class ClericCleanseExtraEffectsPatch
 
         if (local.PlayerId == holderId || local.PlayerId == fragId)
         {
+            var text = MiraLocaleManager
+                .Get("DivaniMods.Role.Frag.Notification.DefusedByCleric")
+                .Replace("<clericColor>", clericHex);
+
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b>Your Frag bomb got defused by a <color=#{clericHex}>Cleric</color></b>",
+                $"<b>{text}</b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: icon);
         }
         else if (cleric != null && local.PlayerId == cleric.PlayerId)
         {
+            var text = MiraLocaleManager
+                .Get("DivaniMods.Role.Frag.Notification.DefusedByYou")
+                .Replace("<fragColor>", fragHex);
+
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b>You defused the <color=#{fragHex}>Frag</color> bomb!</b>",
+                $"<b>{text}</b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: icon);

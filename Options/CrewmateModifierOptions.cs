@@ -2,6 +2,7 @@ using DivaniMods.Assets;
 using DivaniMods.Modifiers.Game.Crewmate;
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using TownOfUs.Options;
 using UnityEngine;
@@ -10,14 +11,14 @@ namespace DivaniMods.Options;
 
 public sealed class CrewmateModifierOptions : AbstractOptionGroup
 {
-    public override string GroupName => "Crewmate Modifiers";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers");
     public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override Color GroupColor => Palette.CrewmateRoleHeaderBlue;
     public override MenuCategory ParentMenu => MenuCategory.Modifiers;
     public override uint GroupPriority => 2;
 
     public AmountChanceOption BearTrapAmount { get; } = new(
-        "Bear Trap Amount", 0f, 0f, 5f, 1f,
+        MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.BearTrap.Amount"), 0f, 0f, 5f, 1f,
         color: BearTrapModifier.BearTrapColor, asset: DivaniAssets.BearTrapIcon,
         assetName: "DivaniMod.Modifier.Crewmate.BearTrap", assetScale: 1.45f)
     {
@@ -25,7 +26,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
     };
 
     public AmountChanceOption BearTrapChance { get; } =
-        new("Bear Trap Chance", 20f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
+        new(MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.BearTrap.Chance"), 20f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
             color: BearTrapModifier.BearTrapColor, asset: DivaniAssets.BearTrapIcon,
             assetName: "DivaniMod.Modifier.Crewmate.BearTrap", assetScale: 1.45f)
         {
@@ -34,7 +35,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
         };
 
     public AmountChanceOption BlindspotAmount { get; } = new(
-        "Blindspot Amount", 1f, 0f, 5f, 1f,
+        MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.Blindspot.Amount"), 1f, 0f, 5f, 1f,
         color: BlindspotModifier.BlindspotColor, asset: DivaniAssets.BlindspotIcon,
         assetName: "DivaniMod.Modifier.Crewmate.Blindspot", assetScale: 1.45f)
     {
@@ -42,7 +43,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
     };
 
     public AmountChanceOption BlindspotChance { get; } =
-        new("Blindspot Chance", 50f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
+        new(MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.Blindspot.Chance"), 50f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
             color: BlindspotModifier.BlindspotColor, asset: DivaniAssets.BlindspotIcon,
             assetName: "DivaniMod.Modifier.Crewmate.Blindspot", assetScale: 1.45f)
         {
@@ -51,7 +52,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
         };
 
     public AmountChanceOption BloodyAmount { get; } = new(
-        "Bloody Amount", 0f, 0f, 5f, 1f,
+        MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.Bloody.Amount"), 0f, 0f, 5f, 1f,
         color: BloodyModifier.ModifierUiColor, asset: DivaniAssets.BloodyIcon,
         assetName: "DivaniMod.Modifier.Crewmate.Bloody", assetScale: 1.45f)
     {
@@ -59,7 +60,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
     };
 
     public AmountChanceOption BloodyChance { get; } =
-        new("Bloody Chance", 50f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
+        new(MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.Bloody.Chance"), 50f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
             color: BloodyModifier.ModifierUiColor, asset: DivaniAssets.BloodyIcon,
             assetName: "DivaniMod.Modifier.Crewmate.Bloody", assetScale: 1.45f)
         {
@@ -68,7 +69,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
         };
 
     public AmountChanceOption IncompetentAmount { get; } = new(
-        "Incompetent Amount", 0f, 0f, 5f, 1f,
+        MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.Incompetent.Amount"), 0f, 0f, 5f, 1f,
         color: IncompetentModifier.IncompetentColor, asset: DivaniAssets.IncompetentIcon,
         assetName: "DivaniMod.Modifier.Crewmate.Incompetent", assetScale: 1.45f)
     {
@@ -76,7 +77,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
     };
 
     public AmountChanceOption IncompetentChance { get; } =
-        new("Incompetent Chance", 20f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
+        new(MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.Incompetent.Chance"), 20f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
             color: IncompetentModifier.IncompetentColor, asset: DivaniAssets.IncompetentIcon,
             assetName: "DivaniMod.Modifier.Crewmate.Incompetent", assetScale: 1.45f)
         {
@@ -85,7 +86,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
         };
 
     public AmountChanceOption SkilledAmount { get; } = new(
-        "Skilled Amount", 0f, 0f, 5f, 1f,
+        MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.Skilled.Amount"), 0f, 0f, 5f, 1f,
         color: SkilledModifier.SkilledColor, asset: DivaniAssets.SkilledIcon,
         assetName: "DivaniMod.Modifier.Crewmate.Skilled", assetScale: 1.45f)
     {
@@ -93,7 +94,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
     };
 
     public AmountChanceOption SkilledChance { get; } =
-        new("Skilled Chance", 10f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
+        new(MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.Skilled.Chance"), 10f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
             color: SkilledModifier.SkilledColor, asset: DivaniAssets.SkilledIcon,
             assetName: "DivaniMod.Modifier.Crewmate.Skilled", assetScale: 1.45f)
         {
@@ -102,7 +103,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
         };
 
     public AmountChanceOption SproutAmount { get; } = new(
-        "Sprout Amount", 0f, 0f, 5f, 1f,
+        MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.Sprout.Amount"), 0f, 0f, 5f, 1f,
         color: SproutModifier.SproutColor, asset: DivaniAssets.SproutIcon,
         assetName: "DivaniMod.Modifier.Crewmate.Sprout", assetScale: 1.45f)
     {
@@ -110,7 +111,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
     };
 
     public AmountChanceOption SproutChance { get; } =
-        new("Sprout Chance", 50f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
+        new(MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.Sprout.Chance"), 50f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
             color: SproutModifier.SproutColor, asset: DivaniAssets.SproutIcon,
             assetName: "DivaniMod.Modifier.Crewmate.Sprout", assetScale: 1.45f)
         {
@@ -119,7 +120,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
         };
 
     public AmountChanceOption StrongAmount { get; } = new(
-        "Strong Amount", 0f, 0f, 5f, 1f,
+        MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.Strong.Amount"), 0f, 0f, 5f, 1f,
         color: StrongModifier.StrongColor, asset: DivaniAssets.StrongIcon,
         assetName: "DivaniMod.Modifier.Crewmate.Strong", assetScale: 1.45f)
     {
@@ -127,7 +128,7 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
     };
 
     public AmountChanceOption StrongChance { get; } =
-        new("Strong Chance", 20f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
+        new(MiraLocaleManager.Get("DivaniMods.Options.CrewmateModifiers.Strong.Chance"), 20f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
             color: StrongModifier.StrongColor, asset: DivaniAssets.StrongIcon,
             assetName: "DivaniMod.Modifier.Crewmate.Strong", assetScale: 1.45f)
         {
@@ -139,43 +140,43 @@ public sealed class CrewmateModifierOptions : AbstractOptionGroup
     {
         var optAmount = OptionGroupSingleton<CrewmateModifierOptions>.Instance.BearTrapAmount;
         var opt = OptionGroupSingleton<CrewmateModifierOptions>.Instance.BearTrapChance;
-        RunNotif(opt, optAmount, "Bear Trap");
+        RunNotif(opt, optAmount, MiraLocaleManager.Get("DivaniMods.Modifier.BearTrap", "Bear Trap"));
     };
     private static Action<float> _blindspotNotif = x =>
     {
         var optAmount = OptionGroupSingleton<CrewmateModifierOptions>.Instance.BlindspotAmount;
         var opt = OptionGroupSingleton<CrewmateModifierOptions>.Instance.BlindspotChance;
-        RunNotif(opt, optAmount, "Blindspot");
+        RunNotif(opt, optAmount, MiraLocaleManager.Get("DivaniMods.Modifier.Blindspot", "Blindspot"));
     };
     private static Action<float> _bloodyNotif = x =>
     {
         var optAmount = OptionGroupSingleton<CrewmateModifierOptions>.Instance.BloodyAmount;
         var opt = OptionGroupSingleton<CrewmateModifierOptions>.Instance.BloodyChance;
-        RunNotif(opt, optAmount, "Bloody");
+        RunNotif(opt, optAmount, MiraLocaleManager.Get("DivaniMods.Modifier.Bloody", "Bloody"));
     };
     private static Action<float> _incompetentNotif = x =>
     {
         var optAmount = OptionGroupSingleton<CrewmateModifierOptions>.Instance.IncompetentAmount;
         var opt = OptionGroupSingleton<CrewmateModifierOptions>.Instance.IncompetentChance;
-        RunNotif(opt, optAmount, "Incompetent");
+        RunNotif(opt, optAmount, MiraLocaleManager.Get("DivaniMods.Modifier.Incompetent", "Incompetent"));
     };
     private static Action<float> _skilledNotif = x =>
     {
         var optAmount = OptionGroupSingleton<CrewmateModifierOptions>.Instance.SkilledAmount;
         var opt = OptionGroupSingleton<CrewmateModifierOptions>.Instance.SkilledChance;
-        RunNotif(opt, optAmount, "Skilled");
+        RunNotif(opt, optAmount, MiraLocaleManager.Get("DivaniMods.Modifier.Skilled", "Skilled"));
     };
     private static Action<float> _sproutNotif = x =>
     {
         var optAmount = OptionGroupSingleton<CrewmateModifierOptions>.Instance.SproutAmount;
         var opt = OptionGroupSingleton<CrewmateModifierOptions>.Instance.SproutChance;
-        RunNotif(opt, optAmount, "Sprout");
+        RunNotif(opt, optAmount, MiraLocaleManager.Get("DivaniMods.Modifier.Sprout", "Sprout"));
     };
     private static Action<float> _strongNotif = x =>
     {
         var optAmount = OptionGroupSingleton<CrewmateModifierOptions>.Instance.StrongAmount;
         var opt = OptionGroupSingleton<CrewmateModifierOptions>.Instance.StrongChance;
-        RunNotif(opt, optAmount, "Strong");
+        RunNotif(opt, optAmount, MiraLocaleManager.Get("DivaniMods.Modifier.Strong", "Strong"));
     };
     private static void RunNotif(AmountChanceOption opt, AmountChanceOption optAmount, string title)
     {

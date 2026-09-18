@@ -1,11 +1,13 @@
 using AmongUs.GameOptions;
 using DivaniMods.Assets;
+using DivaniMods.Interfaces;
 using DivaniMods.Modules.Monster;
 using DivaniMods.Options;
 using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
@@ -15,7 +17,6 @@ using TMPro;
 using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Interfaces;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.RainbowMod;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
@@ -25,14 +26,13 @@ using UnityEngine;
 
 namespace DivaniMods.Roles.Neutral.NeutralKilling;
 
-public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole, IProgressTally, IWikiDiscoverable
+public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), IDivaniRole, IProgressTally, IWikiDiscoverable
 {
     public static readonly Color MonsterColor = new Color32(107, 179, 48, 255);
-    public string RoleName => "Monster";
-    public string RoleDescription => "Devour Everyone";
-    public string RoleLongDescription =>
-        "Eat nearby players to trap them. If you make it to the next meeting,\neveryone you've " +
-        "eaten is killed for real. If you die first, they're released instead.";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Monster", "Monster");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Monster.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Monster.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Monster.LongDescription");
 
     public Color RoleColor => MonsterColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
@@ -48,7 +48,11 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
     ];
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Devour", "When you Devour a player, they are trapped. If you die first, they are released instead.", DivaniAssets.MonsterDevourButton),
+       new(
+            MiraLocaleManager.Get("DivaniMods.Role.Monster.Ability.Devour"),
+            MiraLocaleManager.Get("DivaniMods.Role.Monster.Ability.Devour.Description"),
+            DivaniAssets.MonsterDevourButton
+        ),
     ];
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
     
@@ -117,7 +121,7 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
     }
     ImportantTextTask orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
     orCreateTask.Text =
-        $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralKillingTaskHeader")}</color>";
+        $"{TownOfUsColors.Neutral.ToTextColor()}{MiraLocaleManager.Get("NeutralKillingTaskHeader")}</color>";
     orCreateTask.name = "NeutralRoleText";
 }
     public CustomRoleConfiguration Configuration => new(this)

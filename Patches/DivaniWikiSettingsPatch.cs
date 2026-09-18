@@ -1,9 +1,7 @@
-using AmongUs.GameOptions;
 using HarmonyLib;
 using MiraAPI.GameOptions;
 using DivaniMods.Assets;
 using DivaniMods.Options;
-using MiraAPI.Translation;
 using TownOfUs.Modules.Wiki;
 
 namespace DivaniMods.Patches;
@@ -17,7 +15,6 @@ public static class DivaniWikiSettingsPatch
     [HarmonyPostfix]
     public static void AwakePostfix(IngameWikiMinigame __instance)
     {
-        RegisterLocale();
         AddSettings(__instance);
     }
 
@@ -40,14 +37,15 @@ public static class DivaniWikiSettingsPatch
             }, DivaniAssets.ModNewsLogo));
     }
 
-    public static void RegisterLocale()
-    {
-        if (!MiraLocaleManager.Locale.TryGetValue(MiraLanguage.English, out var english))
-        {
-            english = new Dictionary<string, string>();
-            MiraLocaleManager.Locale[MiraLanguage.English] = english;
-        }
+    // Removed in favor of Miralocale
+    // public static void RegisterLocale()
+    // {
+    //     if (!MiraLocaleManager.Locale.TryGetValue(MiraLanguage.English, out var english))
+    //     {
+    //         english = new Dictionary<string, string>();
+    //         MiraLocaleManager.Locale[MiraLanguage.English] = english;
+    //     }
 
-        english.TryAdd(TitleKey, "DivaniMods Settings");
-    }
+    //     english.TryAdd(TitleKey, "DivaniMods Settings");
+    // }
 }

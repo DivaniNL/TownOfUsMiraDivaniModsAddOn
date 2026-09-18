@@ -1,4 +1,5 @@
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -19,15 +20,15 @@ public class StrongModifier : TouGameModifier, IWikiDiscoverable
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.StrongIcon.LoadAsset(),
             "DivaniMod.Modifier.Crewmate.Strong", 1.45f));
 
-    public override string ModifierName => "Strong";
-    public override string IntroInfo => "You cannot be guessed in meetings.";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Strong", "Strong");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Strong.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.CrewmatePassive;
     public override Color FreeplayFileColor => StrongColor;
     public Color ModifierColor => StrongColor;
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.StrongIcon;
 
     public override string GetDescription() =>
-        "You cannot be guessed in meetings.";
+        MiraLocaleManager.Get("DivaniMods.Modifier.Strong.Description");
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
 

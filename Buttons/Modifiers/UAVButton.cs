@@ -2,6 +2,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Game.Universal;
@@ -15,7 +16,7 @@ namespace DivaniMods.Buttons.Modifiers;
 
 public sealed class UAVButton : TownOfUsButton
 {
-    public override string Name => "Call UAV";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Ability.CallUAV");
     public override Color TextOutlineColor => UAVModifier.UavColor;
     public override BaseKeybind Keybind => Keybinds.ModifierAction;
     public override ButtonLocation Location => ButtonLocation.BottomLeft;
@@ -91,7 +92,7 @@ public sealed class UAVButton : TownOfUsButton
 
         player.RpcAddModifier<UAVActiveModifier>();
         RpcUavCall(player);
-        OverrideName("UAV Active");
+        OverrideName(MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Button.Active"));
     }
 
     public override void OnEffectEnd()
@@ -103,7 +104,7 @@ public sealed class UAVButton : TownOfUsButton
             RpcUavEnd(player);
         }
 
-        OverrideName("Call UAV");
+        OverrideName(Name);
     }
 
     [MethodRpc((uint)DivaniRpcCalls.UavCall)]
@@ -126,7 +127,7 @@ public sealed class UAVButton : TownOfUsButton
         if (local.PlayerId == caller.PlayerId)
         {
             PlaySound(DivaniAssets.UavFriendlySound.LoadAsset());
-            ShowTimer(caller, "<b><color=#7CC85A>UAV Active</color></b>", duration);
+            ShowTimer(caller, $"<b><color=#7CC85A>{MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Button.Active")}</color></b>", duration);
             return;
         }
 
@@ -139,10 +140,10 @@ public sealed class UAVButton : TownOfUsButton
             }
 
             PlaySound(DivaniAssets.UavFriendlySound.LoadAsset());
-            ShowTimer(caller, "<b><color=#7CC85A>Friendly UAV Active</color></b>", duration);
+            ShowTimer(caller, $"<b><color=#7CC85A>{MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Notification.FriendlyActive")}</color></b>", duration);
             if (opts.NotifyOthers)
             {
-                Notify("<b><color=#7CC85A>Friendly UAV overhead</color></b>");
+                Notify($"<b><color=#7CC85A>{MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Notification.FriendlyOverhead")}</color></b>");
             }
         }
         else
@@ -150,8 +151,8 @@ public sealed class UAVButton : TownOfUsButton
             if (opts.NotifyOthers)
             {
                 PlaySound(DivaniAssets.UavEnemySound.LoadAsset());
-                ShowTimer(caller, "<b><color=#FF4040>Enemy UAV Active</color></b>", duration);
-                Notify("<b><color=#FF4040>Enemy UAV overhead</color></b>");
+                ShowTimer(caller, $"<b><color=#FF4040>{MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Notification.EnemyActive")}</color></b>", duration);
+                Notify($"<b><color=#FF4040>{MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Notification.EnemyOverhead")}</color></b>");
             }
         }
     }
@@ -175,7 +176,7 @@ public sealed class UAVButton : TownOfUsButton
         if (local.PlayerId == caller.PlayerId)
         {
             PlaySound(DivaniAssets.UavEndSound.LoadAsset());
-            Notify("<b><color=#B37575>UAV signal lost</color></b>");
+            Notify($"<b><color=#B37575>{MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Notification.SignalLost")}</color></b>");
         }
     }
 

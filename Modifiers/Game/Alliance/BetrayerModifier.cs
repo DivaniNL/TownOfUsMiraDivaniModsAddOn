@@ -13,7 +13,6 @@ using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
 using TownOfUs.Modules.Components;
 using TownOfUs.Modules.Wiki;
-using TownOfUs.Modules.Localization;
 using MiraAPI.Translation;
 using TownOfUs.Roles.Impostor;
 using TownOfUs.Utilities;
@@ -29,10 +28,10 @@ public sealed class BetrayerModifier : AllianceGameModifier, IWikiDiscoverable, 
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.BetrayerIcon.LoadAsset(),
             "DivaniMod.Modifier.Alliance.Betrayer", 1.45f));
 
-    public override string ModifierName => "Betrayer";
-    public override string IntroInfo => "Ditch the knife for a wand";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Betrayer", "Betrayer");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Betrayer.IntroInfo");
     public override string Symbol => "⁉";
-    public string ShortName => "Bet";
+    public string ShortName => MiraLocaleManager.Get("DivaniMods.Modifier.Betrayer.ShortName");
     public override bool DoesTasks => false;
     public override bool GetsPunished => false;
     public override ModifierFaction FactionType => ModifierFaction.ImpostorAlliance;
@@ -46,13 +45,10 @@ public sealed class BetrayerModifier : AllianceGameModifier, IWikiDiscoverable, 
     public List<CustomButtonWikiDescription> Abilities { get; } = [];
 
     public override string GetDescription() =>
-        "You no longer win with the Impostors.\n" +
-        "Outlive them and every other killer,\nthen finish off the rest to win alone.";
+        MiraLocaleManager.Get("DivaniMods.Modifier.Betrayer.Description");
 
     public string GetAdvancedDescription() =>
-        "The Betrayer is an Impostor that has turned on their own team. " +
-        "They win like a Neutral Killer: they must be the last killer alive and reach kill majority. " +
-        "The Impostors cannot win by majority while a Betrayer lives, and the Betrayer can kill fellow Impostors."
+        MiraLocaleManager.Get("DivaniMods.Modifier.Betrayer.AdvancedDescription")
         + MiscUtils.AppendOptionsText(GetType());
 
     public override int GetAssignmentChance() =>

@@ -4,6 +4,7 @@ using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using System.Linq;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
@@ -41,8 +42,11 @@ public static class ArmoredEventHandler
                 {
                     mod.NotifiedBroken = true;
                     var colorHex = ColorUtility.ToHtmlStringRGB(ArmoredModifier.ArmoredColor);
+                    var text =
+                        MiraLocaleManager.Get(
+                            "DivaniMods.Modifier.Armored.Notification.Broken");
                     MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                        $"<b><color=#{colorHex}>Your armor is broken</color></b>",
+                        $"<b><color=#{colorHex}>{text}</color></b>",
                         Color.white,
                         new Vector3(0f, 1f, -20f),
                         spr: DivaniAssets.ArmoredIcon.LoadAsset());

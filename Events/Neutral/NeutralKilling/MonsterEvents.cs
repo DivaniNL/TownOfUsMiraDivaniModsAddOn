@@ -2,6 +2,7 @@ using DivaniMods.Modules.Monster;
 using DivaniMods.Roles.Neutral.NeutralKilling;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
+using MiraAPI.Events.Vanilla.Player;
 using MiraAPI.Modifiers;
 using TownOfUs.Modifiers.Game.Assailant;
 using TownOfUs.Modules;
@@ -10,6 +11,13 @@ namespace DivaniMods.Events.Neutral.NeutralKilling;
 
 public static class MonsterEvents
 {
+    [RegisterEvent]
+    public static void OnPlayerDeath(PlayerDeathEvent @event)
+    {
+        var player = @event.Player;
+        if (player != null) MonsterState.ReleaseOnOtherDeath(player.PlayerId);
+    }
+
     [RegisterEvent(100)]
     public static void AfterMurderHandler(AfterMurderEvent @event)
     {

@@ -1,5 +1,6 @@
 using System.Linq;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Assets;
 using TownOfUs.Utilities;
@@ -11,7 +12,7 @@ public sealed class BetrayerRevealedModifier : BaseModifier
 {
     public const string ColorTag = "#BA71FF";
 
-    public override string ModifierName => "Betrayer Revealed";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.BetrayerRevealed", "Betrayer Revealed");
     public override bool HideOnUi => true;
 
     public static bool AnyRevealed()
@@ -57,15 +58,19 @@ public sealed class BetrayerRevealedModifier : BaseModifier
 
         if (local.PlayerId == Player.PlayerId)
         {
-            Notify("<b>The Impostors are aware of your whereabouts as the " +
-                   $"<color={ColorTag}>Betrayer</color>. Stay on your toes!</b>");
+            var message = MiraLocaleManager.Get("DivaniMods.Modifier.BetrayerRevealed.Notification.Revealed").Replace("<color>", ColorTag);
+
+            Notify($"<b>{message}</b>");
             return;
         }
 
         if (local.IsImpostorAligned() && !local.HasModifier<BetrayerModifier>() && !local.HasDied())
         {
-            Notify($"<b>{Player.Data.PlayerName} has been betraying you all along, kill the " +
-                   $"<color={ColorTag}>Betrayer</color> before your victory is stolen!</b>");
+            var message = MiraLocaleManager.Get("DivaniMods.Modifier.BetrayerRevealed.Notification.Impostors")
+                .Replace("<player>", Player.Data.PlayerName)
+                .Replace("<color>", ColorTag);
+
+            Notify($"<b>{message}</b>");
         }
     }
 

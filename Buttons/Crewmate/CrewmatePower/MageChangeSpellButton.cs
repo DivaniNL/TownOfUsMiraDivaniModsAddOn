@@ -1,5 +1,6 @@
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Roles.Crewmate.CrewmatePower;
 using TownOfUs.Buttons;
@@ -9,7 +10,7 @@ namespace DivaniMods.Buttons.Crewmate.CrewmatePower;
 
 public sealed class MageChangeSpellButton : TownOfUsRoleButton<MageRole>
 {
-    public override string Name => "Change Spell";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Mage.Ability.ChangeSpell");
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
     public override Color TextOutlineColor => MageRole.MageColor;
     public override float Cooldown => 0.0001f;

@@ -1,6 +1,7 @@
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Game.Impostor.ImpostorPassive;
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using TownOfUs.Options;
 using UnityEngine;
@@ -9,14 +10,14 @@ namespace DivaniMods.Options;
 
 public sealed class ImpostorModifierOptions : AbstractOptionGroup
 {
-    public override string GroupName => "Impostor Modifiers";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Options.ImpostorModifiers");
     public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
     public override Color GroupColor => Palette.ImpostorRoleHeaderRed;
     public override MenuCategory ParentMenu => MenuCategory.Modifiers;
     public override uint GroupPriority => 3;
 
     public AmountChanceOption NullifiedAmount { get; } = new(
-        "Nullified Amount", 0f, 0f, 5f, 1f,
+        MiraLocaleManager.Get("DivaniMods.Options.ImpostorModifiers.Nullified.Amount"), 0f, 0f, 5f, 1f,
         color: NullifiedModifier.NullifiedColor, asset: DivaniAssets.NullifiedIcon,
         assetName: "DivaniMod.Modifier.Impostor.Nullified", assetScale: 1.45f)
     {
@@ -24,7 +25,7 @@ public sealed class ImpostorModifierOptions : AbstractOptionGroup
     };
 
     public AmountChanceOption NullifiedChance { get; } =
-        new("Nullified Chance", 50f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
+        new(MiraLocaleManager.Get("DivaniMods.Options.ImpostorModifiers.Nullified.Chance"), 50f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
             color: NullifiedModifier.NullifiedColor, asset: DivaniAssets.NullifiedIcon,
             assetName: "DivaniMod.Modifier.Impostor.Nullified", assetScale: 1.45f)
         {
@@ -33,7 +34,7 @@ public sealed class ImpostorModifierOptions : AbstractOptionGroup
         };
 
     public AmountChanceOption RuthlessAmount { get; } = new(
-        "Ruthless Amount", 0f, 0f, 5f, 1f,
+        MiraLocaleManager.Get("DivaniMods.Options.ImpostorModifiers.Ruthless.Amount"), 0f, 0f, 5f, 1f,
         color: NullifiedModifier.NullifiedColor, asset: DivaniAssets.RuthlessIcon,
         assetName: "DivaniMod.Modifier.Impostor.Ruthless", assetScale: 1.45f)
     {
@@ -41,7 +42,7 @@ public sealed class ImpostorModifierOptions : AbstractOptionGroup
     };
 
     public AmountChanceOption RuthlessChance { get; } =
-        new("Ruthless Chance", 50f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
+        new(MiraLocaleManager.Get("DivaniMods.Options.ImpostorModifiers.Ruthless.Chance"), 50f, 0, 100f, 10f, "#", "#", MiraNumberSuffixes.Percent,
             color: NullifiedModifier.NullifiedColor, asset: DivaniAssets.RuthlessIcon,
             assetName: "DivaniMod.Modifier.Impostor.Ruthless", assetScale: 1.45f)
         {
@@ -52,13 +53,13 @@ public sealed class ImpostorModifierOptions : AbstractOptionGroup
     {
         var optAmount = OptionGroupSingleton<ImpostorModifierOptions>.Instance.NullifiedAmount;
         var opt = OptionGroupSingleton<ImpostorModifierOptions>.Instance.NullifiedChance;
-        RunNotif(opt, optAmount, "Nullified");
+        RunNotif(opt, optAmount, MiraLocaleManager.Get("DivaniMods.Modifier.Nullified", "Nullified"));
     };
     private static Action<float> _ruthlessNotif = x =>
     {
         var optAmount = OptionGroupSingleton<ImpostorModifierOptions>.Instance.RuthlessAmount;
         var opt = OptionGroupSingleton<ImpostorModifierOptions>.Instance.RuthlessChance;
-        RunNotif(opt, optAmount, "Ruthless");
+        RunNotif(opt, optAmount, MiraLocaleManager.Get("DivaniMods.Modifier.Ruthless", "Ruthless"));
     };
     private static void RunNotif(AmountChanceOption opt, AmountChanceOption optAmount, string title)
     {

@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -13,7 +14,7 @@ namespace DivaniMods.Buttons.Crewmate.CrewmateInvestigative;
 
 public class PlaceBeaconButton : TownOfUsButton
 {
-    public override string Name => "Place Beacon";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Sentinel.Ability.PlaceBeacon", "Place Beacon");
     public override float Cooldown => OptionGroupSingleton<SentinelOptions>.Instance.PlaceBeaconCooldown.Value;
     public override float EffectDuration => OptionGroupSingleton<SentinelOptions>.Instance.PlaceBeaconDuration.Value;
     public override int MaxUses => 0;
@@ -107,7 +108,7 @@ public class PlaceBeaconButton : TownOfUsButton
         
         var colorHex = ColorUtility.ToHtmlStringRGB(SentinelColor);
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#{colorHex}>Placing beacon...</color></b>",
+            $"<b><color=#{colorHex}>{MiraLocaleManager.Get("DivaniMods.Role.Sentinel.Notification.PlacingBeacon")}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.SentinelIcon.LoadAsset());
@@ -120,13 +121,18 @@ public class PlaceBeaconButton : TownOfUsButton
             yield break;
         }
         
-        var roomName = BeaconManager.GetRoomName(capturedPosition) ?? "Unknown";
+        var roomName = BeaconManager.GetRoomName(capturedPosition) ?? MiraLocaleManager.Get("DivaniMods.Common.Unknown");
         
         BeaconManager.RpcPlaceBeacon(player, capturedPosition.x, capturedPosition.y);
 
         int beaconNum = BeaconManager.BeaconsPlaced;
         char label = (char)('A' + beaconNum - 1);
-        var message = $"<b><color=#{colorHex}>Beacon {label} placed in {roomName}!</color></b>";
+        var messageText = MiraLocaleManager
+            .Get("DivaniMods.Role.Sentinel.Notification.BeaconPlaced")
+            .Replace("<beacon>", label.ToString())
+            .Replace("<room>", roomName);
+
+        var message = $"<b><color=#{colorHex}>{messageText}</color></b>";
 
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
             message,

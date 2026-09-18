@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralBenign;
@@ -13,7 +14,7 @@ namespace DivaniMods.Buttons.Neutral.NeutralBenign;
 
 public sealed class CupidMatchmakeButton : TownOfUsRoleButton<CupidRole, PlayerControl>
 {
-    public override string Name => "Matchmake";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Cupid.Ability.Matchmake");
     public override BaseKeybind Keybind => Keybinds.PrimaryAction;
     public override Color TextOutlineColor => CupidRole.CupidColor;
     public override float Cooldown => Math.Clamp(OptionGroupSingleton<CupidOptions>.Instance.MatchmakeCooldown.Value + MapCooldown, 5f, 120f);

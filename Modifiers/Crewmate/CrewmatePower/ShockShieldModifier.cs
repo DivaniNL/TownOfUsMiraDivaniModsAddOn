@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Modifiers.Types;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using PowerTools;
 using Reactor.Utilities.Extensions;
@@ -21,7 +22,7 @@ namespace DivaniMods.Modifiers.Crewmate.CrewmatePower;
 
 public sealed class ShockShieldModifier(PlayerControl mage) : TimedModifier
 {
-    public override string ModifierName => "Shock Shield";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.ShockShield", "Shock Shield"); // Not on UI but maybe in Freeplay
     public override float Duration => OptionGroupSingleton<MageOptions>.Instance.ShockShieldDuration.Value;
     public override bool AutoStart => true;
     public override bool HideOnUi => true;

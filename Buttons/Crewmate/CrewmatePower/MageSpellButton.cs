@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Crewmate.CrewmatePower;
 using DivaniMods.Options;
@@ -17,8 +18,9 @@ namespace DivaniMods.Buttons.Crewmate.CrewmatePower;
 
 public sealed class MageSpellButton : TownOfUsRoleButton<MageRole, PlayerControl>
 {
-    public override string Name => "Shock Shield";
-    public string CurrentName = "Shock Shield";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Mage.Ability.ShockShield");
+
+    public string CurrentName = MiraLocaleManager.Get("DivaniMods.Role.Mage.Ability.ShockShield");
     public override BaseKeybind Keybind => Keybinds.PrimaryAction;
     public override Color TextOutlineColor => MageRole.MageColor;
     public override float Cooldown =>
@@ -31,8 +33,11 @@ public sealed class MageSpellButton : TownOfUsRoleButton<MageRole, PlayerControl
     };
     private string ActiveLabel => CurrentSpell switch
     {
-        MageSpell.ShockShield => "Shielding",
-        MageSpell.Illusion => "Cloaking",
+        MageSpell.ShockShield =>
+            MiraLocaleManager.Get("DivaniMods.Role.Mage.Button.Shielding"),
+
+        MageSpell.Illusion =>
+            MiraLocaleManager.Get("DivaniMods.Role.Mage.Button.Cloaking"),
         _ => CurrentName,
     };
     public override float Distance => 1.5f;
@@ -54,9 +59,9 @@ public sealed class MageSpellButton : TownOfUsRoleButton<MageRole, PlayerControl
 
     public static List<string> SpellNames { get; } = new()
     {
-        "Shock Shield",
-        "Energize",
-        "Illusion",
+        MiraLocaleManager.Get("DivaniMods.Role.Mage.Ability.ShockShield"),
+        MiraLocaleManager.Get("DivaniMods.Role.Mage.Ability.Energize"),
+        MiraLocaleManager.Get("DivaniMods.Role.Mage.Ability.Illusion"),
     };
 
     public int CurrentSpellUses()
@@ -149,11 +154,17 @@ public sealed class MageSpellButton : TownOfUsRoleButton<MageRole, PlayerControl
                 break;
             case MageSpell.Illusion:
                 Target.RpcAddModifier<IllusionModifier>(PlayerControl.LocalPlayer);
+
+                var illusionText = MiraLocaleManager
+                    .Get("DivaniMods.Role.Mage.Notification.CastIllusion")
+                    .Replace("<player>", Target.Data.PlayerName);
+
                 MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                    $"<b><color=#1586a2>You cast Illusion on {Target.Data.PlayerName}!</color></b>",
+                    $"<b><color=#1586a2>{illusionText}</color></b>",
                     Color.white,
                     new Vector3(0f, 1f, -20f),
                     spr: DivaniAssets.MageIcon.LoadAsset());
+
                 break;
         }
     }

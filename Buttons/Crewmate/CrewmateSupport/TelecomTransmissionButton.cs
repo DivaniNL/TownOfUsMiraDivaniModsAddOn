@@ -2,6 +2,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles.Crewmate.CrewmateSupport;
@@ -12,7 +13,7 @@ namespace DivaniMods.Buttons.Crewmate.CrewmateSupport;
 
 public sealed class TelecomTransmissionButton : TownOfUsTargetButton<PlayerControl>
 {
-    public override string Name => "Transmit";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Telecom.Ability.Transmit");
     public override float Cooldown => (float)OptionGroupSingleton<TelecomOptions>.Instance.TransmissionCooldown.Value;
     public override float EffectDuration => Delay;
     public override bool HasEffect => Delay > 0f;
@@ -106,7 +107,7 @@ public sealed class TelecomTransmissionButton : TownOfUsTargetButton<PlayerContr
         {
             EffectActive = true;
             Timer = EffectDuration;
-            SetLabel("Transmissing");
+            SetLabel(MiraLocaleManager.Get("DivaniMods.Role.Telecom.Button.Transmitting")); // For some reason it said Transmissing instead of Transmitting
         }
         else
         {

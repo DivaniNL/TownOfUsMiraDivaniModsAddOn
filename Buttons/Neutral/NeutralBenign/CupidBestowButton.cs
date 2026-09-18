@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Neutral.NeutralBenign;
 using DivaniMods.Options;
@@ -13,7 +14,7 @@ namespace DivaniMods.Buttons.Neutral.NeutralBenign;
 
 public sealed class CupidBestowButton : TownOfUsRoleButton<CupidRole>
 {
-    public override string Name => "Bestow";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Cupid.Ability.Bestow");
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
     public override Color TextOutlineColor => CupidRole.CupidColor;
     public override float Cooldown => Math.Clamp(OptionGroupSingleton<CupidOptions>.Instance.ProtectCooldown.Value + MapCooldown, 5f, 120f);

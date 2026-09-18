@@ -6,11 +6,13 @@ using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmatePower;
 using DivaniMods.Modules;
 using DivaniMods.Options;
+using DivaniMods.Interfaces;
 using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
@@ -28,32 +30,34 @@ public enum MageSpell
 }
 
 public sealed class MageRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color MageColor = new Color32(0x15, 0x86, 0xA2, 255);
 
-    public string RoleName => "Mage";
-    public string RoleDescription => "Cast spells to aid your team!";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Mage", "Mage");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Mage.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Mage.MedDescription");
+
     public string RoleLongDescription
     {
         get
         {
             if (Player == null)
             {
-                return "Use your knowledge of magic to help the crew and weaken the impostors";
+                return MiraLocaleManager.Get("DivaniMods.Role.Mage.LongDescription");
             }
 
             if (Player.HasModifier<CrewpostorModifier>())
             {
-                return "Use your knowledge of magic to help the impostors and weaken the crew";
+                return MiraLocaleManager.Get("DivaniMods.Role.Mage.LongDescription.Crewpostor");
             }
 
             if (Player.HasModifier<EgotistModifier>())
             {
-                return "Use your knowledge of magic to help the killers and weaken the crew";
+                return MiraLocaleManager.Get("DivaniMods.Role.Mage.LongDescription.Egotist");
             }
 
-            return "Use your knowledge of magic to help the crew and weaken the impostors";
+            return MiraLocaleManager.Get("DivaniMods.Role.Mage.LongDescription");
         }
     }
     public Color RoleColor => MageColor;
@@ -64,13 +68,27 @@ public sealed class MageRole(IntPtr cppPtr)
 
     public DoomableType DoomHintType => DoomableType.Trickster;
 
-    public string GetAdvancedDescription() => "The Mage is a Crewmate Power role that has three spell abilities tied to one cooldown, either to help the crew or weaken the impostors" + MiscUtils.AppendOptionsText(GetType());
+    public string GetAdvancedDescription() =>
+        MiraLocaleManager.Get("DivaniMods.Role.Mage.AdvancedDescription") +
+        MiscUtils.AppendOptionsText(GetType());
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Shock Shield", "Give a player a temporary shock shield. Any killer who attacks them dies instead.", DivaniAssets.MageShockShieldButton),
-        new("Energize", "Add an ability use to crewmates, reduce one from anyone else.", DivaniAssets.MageEnergizeButton),
-        new("Illusion", "Hide a player from killers for a short time.", DivaniAssets.MageIllusionButton),
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Mage.Ability.ShockShield"),
+            MiraLocaleManager.Get("DivaniMods.Role.Mage.Ability.ShockShield.Description"),
+            DivaniAssets.MageShockShieldButton
+        ),
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Mage.Ability.Energize"),
+            MiraLocaleManager.Get("DivaniMods.Role.Mage.Ability.Energize.Description"),
+            DivaniAssets.MageEnergizeButton
+        ),
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Mage.Ability.Illusion"),
+            MiraLocaleManager.Get("DivaniMods.Role.Mage.Ability.Illusion.Description"),
+            DivaniAssets.MageIllusionButton
+        )
     ];
 
     public CustomRoleConfiguration Configuration => new(this)

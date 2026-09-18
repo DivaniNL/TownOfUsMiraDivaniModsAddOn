@@ -1,6 +1,7 @@
 using DivaniMods.Networking.Crewmate.CrewmateKilling;
 using DivaniMods.Roles.Crewmate.CrewmateAfterlife;
 using MiraAPI.Modifiers.Types;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using TownOfUs.Assets;
 using UnityEngine;
@@ -16,7 +17,8 @@ public sealed class RevengeTimerModifier(float time) : TimedModifier
     private GameObject? revengeUI;
     private float soundTimer = 1f;
 
-    public override string ModifierName => "Revenge";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Revenge", "Revenge"); 
+    // Yeah I know this doesn't show on UI but sometimes they show in Freeplay and I didn't want to check
     public override float Duration => time;
     public override bool AutoStart => true;
     public override bool HideOnUi => true;
@@ -31,7 +33,10 @@ public sealed class RevengeTimerModifier(float time) : TimedModifier
             > 5 => Color.yellow,
             _ => Color.red
         };
-        return $"{textColor.ToTextColor()}<size=80%>{roundedTime}s</size></color>";
+        var timeText = MiraLocaleManager.Get("DivaniMods.Modifier.Revenge.Time")
+            .Replace("<seconds>", roundedTime.ToString());
+
+        return $"{textColor.ToTextColor()}<size=80%>{timeText}</size></color>";
     }
 
     public override void OnActivate()
@@ -49,7 +54,11 @@ public sealed class RevengeTimerModifier(float time) : TimedModifier
 
         revengeText = revengeUI.transform.FindChild("ScatterCanvas").FindChild("ScatterText").gameObject
             .GetComponent<TMPro.TextMeshProUGUI>();
-        revengeText.text = $"Revenge: {Duration}s";
+        var timeText = MiraLocaleManager.Get("DivaniMods.Modifier.Revenge.Time")
+            .Replace("<seconds>", Duration.ToString("0"));
+
+        revengeText.text = MiraLocaleManager.Get("DivaniMods.Modifier.Revenge.Timer")
+            .Replace("<time>", timeText);
         revengeText.gameObject.SetActive(false);
 
         revengeBar = revengeUI.transform.FindChild("ScatterCanvas").FindChild("ScatterBar").gameObject
@@ -94,7 +103,11 @@ public sealed class RevengeTimerModifier(float time) : TimedModifier
 
         if (revengeText != null)
         {
-            revengeText.text = $"Revenge: {textColor.ToTextColor()}{roundedTime}s</color>";
+            var timeText = MiraLocaleManager.Get("DivaniMods.Modifier.Revenge.Time")
+                .Replace("<seconds>", roundedTime.ToString());
+
+            revengeText.text = MiraLocaleManager.Get("DivaniMods.Modifier.Revenge.Timer")
+                .Replace("<time>", $"{textColor.ToTextColor()}{timeText}</color>");
         }
 
         if (revengeBar != null)
