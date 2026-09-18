@@ -9,6 +9,7 @@ using MiraAPI.Modifiers;
 using MiraAPI.Modifiers.Types;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
@@ -18,7 +19,6 @@ using DivaniMods.Options;
 using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Interfaces;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Roles;
@@ -27,11 +27,12 @@ using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
 using UnityEngine;
 using TownOfUs.Extensions;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Neutral.NeutralBenign;
 
 public sealed class CupidRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IUnlovable
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, IUnlovable
 {
     public static readonly Color CupidColor = new Color32(222, 125, 127, 255);
 
@@ -43,11 +44,10 @@ public sealed class CupidRole(IntPtr cppPtr)
     private string _lastKnownCoupleKey = string.Empty;
 
     public string LocaleKey => "Cupid";
-    public string RoleName => "Cupid";
-    public string RoleDescription => "Spread the love!";
-    public string RoleLongDescription =>
-        "Use Matchmake to make two people fall in love next round\n" +
-        "You can Bestow your lovers to protect them";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Cupid", "Cupid");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Cupid.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Cupid.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Cupid.LongDescription");
 
     public Color RoleColor => CupidColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
@@ -71,8 +71,16 @@ public sealed class CupidRole(IntPtr cppPtr)
     };
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Matchmake", "Mark a player as a provisional lover.", DivaniAssets.CupidMatchmakeButton),
-        new("Bestow", "Protect your lovers from death for a short time.", DivaniAssets.CupidProtectButton)
+       new(
+        MiraLocaleManager.Get("DivaniMods.Role.Cupid.Ability.Matchmake"),
+        MiraLocaleManager.Get("DivaniMods.Role.Cupid.Ability.Matchmake.Description"),
+        DivaniAssets.CupidMatchmakeButton
+    ),
+    new(
+        MiraLocaleManager.Get("DivaniMods.Role.Cupid.Ability.Bestow"),
+        MiraLocaleManager.Get("DivaniMods.Role.Cupid.Ability.Bestow.Description"),
+        DivaniAssets.CupidProtectButton
+        )
     ];
 
     public override void SpawnTaskHeader(PlayerControl playerControl)
@@ -82,7 +90,7 @@ public sealed class CupidRole(IntPtr cppPtr)
             return;
         }
         var task = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
-        task.Text = $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralBenignTaskHeader")}</color>";
+        task.Text = $"{TownOfUsColors.Neutral.ToTextColor()}{MiraLocaleManager.Get("NeutralBenignTaskHeader")}</color>";
         task.name = "NeutralRoleText";
     }
 
@@ -141,8 +149,12 @@ public sealed class CupidRole(IntPtr cppPtr)
         LoverTwo = couple[1];
         _lastKnownCoupleKey = key;
 
+        var message = MiraLocaleManager.Get("DivaniMods.Role.Cupid.Notification.NowInLove")
+            .Replace("<player1>", couple[0].Data.PlayerName)
+            .Replace("<player2>", couple[1].Data.PlayerName);
+
         var notif = Helpers.CreateAndShowNotification(
-            $"<b>{CupidColor.ToTextColor()}{couple[0].Data.PlayerName} is now in love with {couple[1].Data.PlayerName}!</color></b>",
+            $"<b>{CupidColor.ToTextColor()}{message}</color></b>",
             Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.CupidIcon.LoadAsset());
         notif.AdjustNotification();
     }
@@ -238,7 +250,7 @@ public sealed class CupidRole(IntPtr cppPtr)
 
         if (!Finalized)
         {
-            stringB.Append(TownOfUsPlugin.Culture, $"\n<b>{CupidColor.ToTextColor()}Provisional lovers:</color></b>");
+            stringB.Append($"\n<b>{CupidColor.ToTextColor()}{MiraLocaleManager.Get("DivaniMods.Role.Cupid.Tab.ProvisionalLovers")}</color></b>");
             foreach (var id in ProvisionalTargets)
             {
                 var plr = MiscUtils.PlayerById(id);
@@ -251,7 +263,7 @@ public sealed class CupidRole(IntPtr cppPtr)
         }
 
         var cupidKnowsRoles = OptionGroupSingleton<CupidOptions>.Instance.CupidKnowsLoverRoles;
-        stringB.Append(TownOfUsPlugin.Culture, $"\n<b>{CupidColor.ToTextColor()}Lovers</color></b>");
+        stringB.Append($"\n<b>{CupidColor.ToTextColor()}{MiraLocaleManager.Get("DivaniMods.Role.Cupid.Tab.Lovers")}</color></b>");
         foreach (var lover in GetCurrentCouple())
         {
             if (lover == null)
@@ -364,20 +376,31 @@ public sealed class CupidRole(IntPtr cppPtr)
 
         if (cupid.AmOwner)
         {
+            var message = MiraLocaleManager.Get("DivaniMods.Role.Cupid.Notification.FellInLove")
+                .Replace("<player1>", loverOne.Data.PlayerName)
+                .Replace("<player2>", loverTwo.Data.PlayerName);
+
             var notif = Helpers.CreateAndShowNotification(
-                $"<b>{CupidColor.ToTextColor()}{loverOne.Data.PlayerName} fell in love with {loverTwo.Data.PlayerName}!</color></b>",
-                Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.CupidIcon.LoadAsset());
+                $"<b>{CupidColor.ToTextColor()}{message}</color></b>",
+                Color.white,
+                new Vector3(0f, 1f, -20f),
+                spr: DivaniAssets.CupidIcon.LoadAsset());
             notif.AdjustNotification();
         }
         else if (PlayerControl.LocalPlayer == loverOne || PlayerControl.LocalPlayer == loverTwo)
         {
             var partner = PlayerControl.LocalPlayer == loverOne ? loverTwo : loverOne;
             var message = OptionGroupSingleton<CupidOptions>.Instance.LoversKnowCupid
-                ? $"Cupid thought you and {partner.Data.PlayerName} were cute together."
-                : $"You are now in love with {partner.Data.PlayerName}!";
+                ? MiraLocaleManager.Get("DivaniMods.Role.Cupid.Notification.CupidMatchedYou")
+                    .Replace("<player>", partner.Data.PlayerName)
+                : MiraLocaleManager.Get("DivaniMods.Role.Cupid.Notification.YouAreInLove")
+                    .Replace("<player>", partner.Data.PlayerName);
+
             var notif = Helpers.CreateAndShowNotification(
                 $"<b>{TownOfUsColors.Lover.ToTextColor()}{message}</color></b>",
-                TownOfUsColors.Lover, new Vector3(0f, 1f, -20f), spr: TouModifierIcons.Lover.LoadAsset());
+                TownOfUsColors.Lover,
+                new Vector3(0f, 1f, -20f),
+                spr: TouModifierIcons.Lover.LoadAsset());
             notif.AdjustNotification();
         }
     }

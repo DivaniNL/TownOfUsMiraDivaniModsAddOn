@@ -1,5 +1,6 @@
 using HarmonyLib;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Modifiers.Crewmate.CrewmateSupport;
 using DivaniMods.Roles.Crewmate.CrewmateSupport;
@@ -39,17 +40,28 @@ public static class TelecomChatPatch
             return true;
         }
 
-        if (local.HasModifier<ParasiteInfectedModifier>() || local.HasModifier<PuppeteerControlModifier>())
+       if (local.HasModifier<ParasiteInfectedModifier>() ||
+            local.HasModifier<PuppeteerControlModifier>())
         {
-            MiscUtils.AddTeamChat(local.Data,
-                $"<color=#{TelecomRole.TelecomColor.ToHtmlStringRGBA()}>{local.Data.PlayerName} (Telecom chat)</color>",
-                "You are under control! Your message cannot be sent.", blackoutText: false,
-                bubbleType: BubbleType.None, onLeft: false);
+            var chatLabel = MiraLocaleManager.Get(
+                "DivaniMods.Role.Telecom.Chat.Label");
+
+            var blockedText = MiraLocaleManager.Get(
+                "DivaniMods.Role.Telecom.Chat.UnderControl");
+
+            MiscUtils.AddTeamChat(
+                local.Data,
+                $"<color=#{TelecomRole.TelecomColor.ToHtmlStringRGBA()}>{local.Data.PlayerName} ({chatLabel})</color>",
+                blockedText,
+                blackoutText: false,
+                bubbleType: BubbleType.None,
+                onLeft: false);
         }
         else
         {
             TelecomRole.RpcSendTelecomChat(local, text);
         }
+
 
         __instance.freeChatField.Clear();
         __instance.quickChatMenu.Clear();

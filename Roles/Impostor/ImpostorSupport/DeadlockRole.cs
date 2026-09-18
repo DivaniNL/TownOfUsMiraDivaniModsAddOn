@@ -2,6 +2,7 @@ using Il2CppInterop.Runtime.Attributes;
 using System;
 using AmongUs.GameOptions;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Assets;
 using TownOfUs.Extensions;
@@ -10,16 +11,18 @@ using TownOfUs.Roles;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorSupport;
 
 public sealed class DeadlockRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
-    public string RoleName => "Deadlock";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Deadlock", "Deadlock");
     public string LocaleKey => "Deadlock";
-    public string RoleDescription => "Disable tasks!";
-    public string RoleLongDescription => "Use your Lockdown ability to temporarily\ndisable all crewmate tasks.\nDuring lockdown, crewmates cannot access\nor complete any tasks.";
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Deadlock.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Deadlock.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Deadlock.LongDescription");
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorSupport;
@@ -33,7 +36,11 @@ public sealed class DeadlockRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Lockdown", "Temporarily disable all crewmate tasks.", DivaniAssets.DeadlockLockdownButton)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Deadlock.Ability.Lockdown"),
+            MiraLocaleManager.Get("DivaniMods.Role.Deadlock.Ability.Lockdown.Description"),
+            DivaniAssets.DeadlockLockdownButton
+        )
     ];
 
     public CustomRoleConfiguration Configuration => new(this)

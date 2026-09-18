@@ -5,6 +5,7 @@ using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using Reactor.Utilities.Extensions;
 using TMPro;
 using DivaniMods.Interfaces;
@@ -13,7 +14,6 @@ using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Extensions;
 using TownOfUs.Interfaces;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Options;
 using TownOfUs.Roles;
@@ -27,7 +27,7 @@ using MiraAPI.Utilities.Assets;
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class OpportunistRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, IGuessable, IProgressTally, INeutralEvilWinOutcomeRole
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, IGuessable, IProgressTally, INeutralEvilWinOutcomeRole
 {
     public static readonly Color OpportunistColor = new Color32(216, 184, 90, 255); // gold
     public static Dictionary<byte, OpportunistRole> ActiveOpportunists { get; } = new();
@@ -49,12 +49,10 @@ public sealed class OpportunistRole(IntPtr cppPtr)
     public DoomableType DoomHintType => DoomableType.Trickster;
     public bool CanBeGuessed => true;
 
-    public string RoleName => "Opportunist";
-    public string RoleDescription => "Benefit from others!";
-    public string RoleLongDescription =>
-        "After you vote a target, every other vote cast on that same target during the meeting counts toward your goal.\n" +
-        "Reach the required number of collected votes to win alone.\n" +
-        "If enabled by host, use wildcard to make skip votes count towards your tally once.";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Opportunist", "Opportunist");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Opportunist.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Opportunist.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Opportunist.LongDescription");
     public Color RoleColor => OpportunistColor;
 
     public LoadableAsset<Sprite> WinIcon => DivaniAssets.OpportunistIcon;
@@ -62,15 +60,22 @@ public sealed class OpportunistRole(IntPtr cppPtr)
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralEvil;
     public bool HasImpostorVision => false;
 
-    public string GetAdvancedDescription() =>
-        $"After you vote a target, every other vote cast on that same target during the meeting counts toward your goal (max: {(int)OptionGroupSingleton<OpportunistOptions>.Instance.MaxVotesPerMeeting.Value}).\n" +
-        "Reach the required number of collected votes to win alone.\n" +
-        "If enabled by host, use wildcard to make skip votes count towards your tally once." +
-        MiscUtils.AppendOptionsText(GetType());
+    public string GetAdvancedDescription()
+    {
+        var maxVotes = (int)OptionGroupSingleton<OpportunistOptions>.Instance.MaxVotesPerMeeting.Value;
+
+        return MiraLocaleManager.Get("DivaniMods.Role.Opportunist.AdvancedDescription")
+            .Replace("<max>", maxVotes.ToString(TownOfUsPlugin.Culture))
+            + MiscUtils.AppendOptionsText(GetType());
+    }
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Wildcard", "One-time meeting button that counts Skip votes toward your win goal.", DivaniAssets.OpportunistIcon)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Opportunist.Ability.Wildcard"),
+            MiraLocaleManager.Get("DivaniMods.Role.Opportunist.Ability.Wildcard.Description"),
+            DivaniAssets.OpportunistIcon
+        )
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -90,7 +95,7 @@ public sealed class OpportunistRole(IntPtr cppPtr)
         }
 
         var task = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
-        task.Text = $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralEvilTaskHeader")}</color>";
+        task.Text = $"{TownOfUsColors.Neutral.ToTextColor()}{MiraLocaleManager.Get("NeutralEvilTaskHeader")}</color>";
         task.name = "NeutralRoleText";
     }
 
@@ -115,8 +120,18 @@ public sealed class OpportunistRole(IntPtr cppPtr)
 
     public string ProgressOnSummaryNormal => GetVoteTally();
 
-    public string ProgressOnSummaryDetailed =>
-        $"Votes collected: {Math.Min(VotesCollected, (int)OptionGroupSingleton<OpportunistOptions>.Instance.VotesNeeded.Value)}/{(int)OptionGroupSingleton<OpportunistOptions>.Instance.VotesNeeded.Value}";
+    public string ProgressOnSummaryDetailed
+    {
+        get
+        {
+            var needed = (int)OptionGroupSingleton<OpportunistOptions>.Instance.VotesNeeded.Value;
+            var capped = Math.Min(VotesCollected, needed);
+
+            return MiraLocaleManager.Get("DivaniMods.Role.Opportunist.Progress.VotesCollected")
+                .Replace("<count>", capped.ToString(TownOfUsPlugin.Culture))
+                .Replace("<needed>", needed.ToString(TownOfUsPlugin.Culture));
+        }
+    }
 
     [HideFromIl2Cpp]
     public StringBuilder SetTabText()
@@ -125,12 +140,24 @@ public sealed class OpportunistRole(IntPtr cppPtr)
         var needed = (int)OptionGroupSingleton<OpportunistOptions>.Instance.VotesNeeded.Value;
         var maxPerMeeting = (int)OptionGroupSingleton<OpportunistOptions>.Instance.MaxVotesPerMeeting.Value;
         var capped = Math.Min(VotesCollected, needed);
-        stringB.AppendLine(TownOfUsPlugin.Culture, $"<b>Votes collected: {capped}/{needed}</b>");
-        stringB.AppendLine(TownOfUsPlugin.Culture, $"<b>Max votes per meeting: {maxPerMeeting}</b>");
+        var votesText = MiraLocaleManager.Get("DivaniMods.Role.Opportunist.Progress.VotesCollected")
+            .Replace("<count>", capped.ToString(TownOfUsPlugin.Culture))
+            .Replace("<needed>", needed.ToString(TownOfUsPlugin.Culture));
+
+        stringB.AppendLine($"<b>{votesText}</b>");
+
+        var maxVotesText = MiraLocaleManager.Get("DivaniMods.Role.Opportunist.Tab.MaxVotesPerMeeting")
+            .Replace("<max>", maxPerMeeting.ToString(TownOfUsPlugin.Culture));
+
+        stringB.AppendLine($"<b>{maxVotesText}</b>");
 
         if (OptionGroupSingleton<OpportunistOptions>.Instance.CanUseWildcard.Value)
         {
-            stringB.AppendLine(TownOfUsPlugin.Culture, $"<b>{(WildcardUsed ? "Wildcard Used" : "Wildcard Available")}</b>");
+            var wildcardText = WildcardUsed
+                ? MiraLocaleManager.Get("DivaniMods.Role.Opportunist.Tab.WildcardUsed")
+                : MiraLocaleManager.Get("DivaniMods.Role.Opportunist.Tab.WildcardAvailable");
+
+            stringB.AppendLine($"<b>{wildcardText}</b>");
         }
 
         return stringB;
@@ -181,7 +208,7 @@ public sealed class OpportunistRole(IntPtr cppPtr)
         WildcardButton.transform.localPosition = skip.transform.localPosition + new Vector3(0f, -0.17f, 0f);
 
         WildcardButton.gameObject.GetComponentInChildren<TextTranslatorTMP>().Destroy();
-        WildcardButton.gameObject.GetComponentInChildren<TextMeshPro>().text = "WILDCARD";
+        WildcardButton.gameObject.GetComponentInChildren<TextMeshPro>().text = MiraLocaleManager.Get("DivaniMods.Role.Opportunist.Button.Wildcard");
         WildcardButton.gameObject.name = "button_wildcardButton";
 
         skip.transform.localPosition += new Vector3(0f, 0.20f, 0f);

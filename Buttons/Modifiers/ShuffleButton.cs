@@ -3,6 +3,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Game.Universal;
@@ -53,7 +54,7 @@ public class ShuffleButton : TownOfUsButton
         return !player.GetModifiers<BaseModifier>().Any(x => x is IUntransportable);
     }
 
-    public override string Name => "Shuffle";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Modifier.Shuffle.Ability.Shuffle");
     public override float Cooldown => OptionGroupSingleton<ShuffleOptions>.Instance.ShuffleCooldown.Value;
     public override float EffectDuration => 0f;
     public override int MaxUses => (int)OptionGroupSingleton<ShuffleOptions>.Instance.ShuffleUses.Value;
@@ -334,7 +335,7 @@ public class ShuffleButton : TownOfUsButton
         }
         
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#808080>Everyone has been shuffled!</color></b>", 
+            $"<b><color=#808080>{MiraLocaleManager.Get("DivaniMods.Modifier.Shuffle.Notification.Shuffled")}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f), 
             spr: DivaniAssets.ShuffleIcon.LoadAsset());

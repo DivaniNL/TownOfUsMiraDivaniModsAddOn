@@ -1,5 +1,6 @@
 using System.Collections;
 using MiraAPI.Hud;
+using MiraAPI.Translation;
 using Reactor.Utilities;
 using UnityEngine;
 

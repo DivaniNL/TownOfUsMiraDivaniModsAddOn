@@ -6,6 +6,7 @@ using MiraAPI.Modifiers;
 using MiraAPI.Modifiers.Types;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
@@ -24,7 +25,7 @@ namespace DivaniMods.Buttons.Modifiers;
 
 public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
 {
-    public override string Name => "Collect";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Modifier.Sprout.Ability.Collect");
     public override float Cooldown => 0.001f;
     public override float EffectDuration => 0f;
     public override int MaxUses => 1;
@@ -291,7 +292,7 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
         {
             if (collector == PlayerControl.LocalPlayer)
             {
-                Notify("<b><color=#7CC85A>No new modifiers available!</color></b>");
+                Notify($"<b><color=#7CC85A>{MiraLocaleManager.Get("DivaniMods.Modifier.Sprout.Notification.NoModifiersAvailable")}</color></b>");
             }
             return;
         }
@@ -310,7 +311,11 @@ public class SproutCollectButton : TownOfUsTargetButton<DeadBody>
 
         if (collector == PlayerControl.LocalPlayer)
         {
-            Notify($"<b><color=#7CC85A>Collected/Gained {displayName}!</color></b>");
+            var collectedText = MiraLocaleManager
+                .Get("DivaniMods.Modifier.Sprout.Notification.Collected")
+                .Replace("<modifier>", displayName);
+
+            Notify($"<b><color=#7CC85A>{collectedText}</color></b>");
             ButtonRefresher.RefreshAllButtons();
         }
     }

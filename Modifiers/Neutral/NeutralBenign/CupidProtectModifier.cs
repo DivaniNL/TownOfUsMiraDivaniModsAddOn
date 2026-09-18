@@ -2,6 +2,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.LocalSettings;
 using MiraAPI.Roles;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralBenign;
@@ -15,18 +16,18 @@ namespace DivaniMods.Modifiers.Neutral.NeutralBenign;
 public sealed class CupidProtectModifier(PlayerControl cupid) : BaseShieldModifier
 {
     public override float Duration => OptionGroupSingleton<CupidOptions>.Instance.ProtectDuration.Value;
-    public override string ModifierName => "Protected";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.CupidProtect", "Protected");
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.CupidIcon;
-    public override string ShieldDescription => "You are protected by Cupid!\nYou cannot be killed.";
+    public override string ShieldDescription => MiraLocaleManager.Get("DivaniMods.Modifier.CupidProtect.ShieldDescription");
     public override bool AutoStart => true;
     public PlayerControl Cupid => cupid;
 
     public override bool HideOnUi
     {
         get
-        {
+        { //Changed TownOfUsLocalRoleSettings to TouLocalTabButtons
             var showProtect = OptionGroupSingleton<CupidOptions>.Instance.ShowProtect.Value;
-            return !LocalSettingsTabSingleton<TownOfUsLocalRoleSettings>.Instance.ShowShieldHudToggle.Value ||
+            return !LocalSettingsTabSingleton<TouLocalTabButtons>.Instance.ShowShieldHudToggle.Value ||
                    !OptionGroupSingleton<CupidOptions>.Instance.LoversKnowCupid ||
                    showProtect == (int)CupidProtectShowOptions.Cupid;
         }

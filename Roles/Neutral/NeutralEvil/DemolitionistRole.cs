@@ -4,6 +4,7 @@ using AmongUs.GameOptions;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Patches.Stubs;
+using MiraAPI.Translation;
 using MiraAPI.Roles;
 using Il2CppInterop.Runtime.Attributes;
 using DivaniMods.Assets;
@@ -15,7 +16,6 @@ using TownOfUs.Assets;
 using TownOfUs.Buttons;
 using TownOfUs.Extensions;
 using TownOfUs.Interfaces;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Options;
 using TownOfUs.Roles;
@@ -28,15 +28,14 @@ using MiraAPI.Utilities.Assets;
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class DemolitionistRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IProgressTally, INeutralEvilWinOutcomeRole
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, IProgressTally, INeutralEvilWinOutcomeRole
 {
     public static readonly Color DemolitionistColor = new Color32(0x28, 0x36, 0x7D, 255);
 
-    public string RoleName => "Demolitionist";
-    public string RoleDescription => "The bomb has been planted!";
-    public string RoleLongDescription =>
-        "Plant Bombs at consoles (Admin, Cams, Doorlog, Vitals) to win!\n" +
-        "If the crew defuses in time, it fails.";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Demolitionist", "Demolitionist");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.LongDescription");
     public Color RoleColor => DemolitionistColor;
 
     public LoadableAsset<Sprite> WinIcon => DivaniAssets.DemolitionistIcon;
@@ -54,8 +53,16 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Plant", "Plant a bomb at a console (Admin, Cams, Doorlog, Vitals) to start a sabotage. It explodes unless the crew defuses it in time.", DivaniAssets.DemolitionistPlantButton),
-        new("Defuse", "Defuse the planted bomb before it triggers an explosion", DivaniAssets.DemolitionistDefuseButton)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Ability.Plant"),
+            MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Ability.Plant.Description"),
+            DivaniAssets.DemolitionistPlantButton
+        ),
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Ability.Defuse"),
+            MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Ability.Defuse.Description"),
+            DivaniAssets.DemolitionistDefuseButton
+        )
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -77,7 +84,7 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
         }
         var task = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
         task.Text =
-            $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralEvilTaskHeader")}</color>";
+            $"{TownOfUsColors.Neutral.ToTextColor()}{MiraLocaleManager.Get("NeutralEvilTaskHeader")}</color>";
         task.name = "NeutralRoleText";
     }
 
@@ -102,8 +109,18 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
 
     public string ProgressOnSummaryNormal => GetSabotageTally();
 
-    public string ProgressOnSummaryDetailed =>
-        $"Successful sabotages: {Math.Min(DemolitionistSabotageState.SuccessfulSabotages, (int)OptionGroupSingleton<DemolitionistOptions>.Instance.SabotagesToWin.Value)}/{(int)OptionGroupSingleton<DemolitionistOptions>.Instance.SabotagesToWin.Value}";
+    public string ProgressOnSummaryDetailed
+    {
+        get
+        {
+            var needed = (int)OptionGroupSingleton<DemolitionistOptions>.Instance.SabotagesToWin.Value;
+            var capped = Math.Min(DemolitionistSabotageState.SuccessfulSabotages, needed);
+
+            return MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Progress.SuccessfulSabotages")
+                .Replace("<count>", capped.ToString(TownOfUsPlugin.Culture))
+                .Replace("<needed>", needed.ToString(TownOfUsPlugin.Culture));
+        }
+    }
 
     [HideFromIl2Cpp]
     public StringBuilder SetTabText()
@@ -111,7 +128,11 @@ public sealed class DemolitionistRole(IntPtr cppPtr)
         var stringB = ITownOfUsRole.SetNewTabText(this);
         var needed = (int)OptionGroupSingleton<DemolitionistOptions>.Instance.SabotagesToWin.Value;
         var capped = Math.Min(DemolitionistSabotageState.SuccessfulSabotages, needed);
-        stringB.AppendLine(TownOfUsPlugin.Culture, $"<b>Successful sabotages: {capped}/{needed}</b>");
+        var progressText = MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Progress.SuccessfulSabotages")
+            .Replace("<count>", capped.ToString(TownOfUsPlugin.Culture))
+            .Replace("<needed>", needed.ToString(TownOfUsPlugin.Culture));
+
+        stringB.AppendLine($"<b>{progressText}</b>");
         return stringB;
     }
 

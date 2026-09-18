@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Roles.Neutral.NeutralEvil;
 using TownOfUs.Interfaces;
@@ -11,43 +12,43 @@ namespace DivaniMods.Options;
 
 public class DemolitionistOptions : AbstractRoleOptionGroup<DemolitionistRole>, IWikiOptionsSummaryProvider
 {
-    public override string GroupName => "Demolitionist";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Role.Demolitionist", "Demolitionist");
 
     public ModdedNumberOption SabotagesToWin { get; } = new(
-        "Successful Sabotages To Win", 1f, 1f, 4f, 1f, MiraNumberSuffixes.None);
+        MiraLocaleManager.Get("DivaniMods.Options.Demolitionist.SabotagesToWin"), 1f, 1f, 4f, 1f, MiraNumberSuffixes.None);
 
     public ModdedNumberOption PlantCooldown { get; } = new(
-        "Plant Cooldown", 30f, 10f, 60f, 5f, MiraNumberSuffixes.Seconds);
+        MiraLocaleManager.Get("DivaniMods.Options.Demolitionist.PlantCooldown"), 30f, 10f, 60f, 5f, MiraNumberSuffixes.Seconds);
 
     public ModdedNumberOption PlantToSabotageDelay { get; } = new(
-        "Plant To Sabotage Delay", 3f, 1f, 10f, 1f, MiraNumberSuffixes.Seconds);
+        MiraLocaleManager.Get("DivaniMods.Options.Demolitionist.PlantToSabotageDelay"), 3f, 1f, 10f, 1f, MiraNumberSuffixes.Seconds);
 
     public ModdedNumberOption SabotageDurationSkeld { get; } =
-        new("Sabotage Duration (Skeld)", 20f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Demolitionist.SabotageDuration.Skeld"), 20f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.Skeld),
         };
 
     public ModdedNumberOption SabotageDurationMiraHQ { get; } =
-        new("Sabotage Duration (MIRA HQ)", 20f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Demolitionist.SabotageDuration.MiraHQ"), 20f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.MiraHq),
         };
 
     public ModdedNumberOption SabotageDurationPolus { get; } =
-        new("Sabotage Duration (Polus)", 20f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Demolitionist.SabotageDuration.Polus"), 20f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.Polus),
         };
 
     public ModdedNumberOption SabotageDurationFungle { get; } =
-        new("Sabotage Duration (Fungle)", 30f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Demolitionist.SabotageDuration.Fungle"), 30f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.Fungle),
         };
 
     public ModdedNumberOption SabotageDurationAirship { get; } =
-        new("Sabotage Duration (Airship)", 60f, 10f, 180f, 5f, MiraNumberSuffixes.Seconds)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Demolitionist.SabotageDuration.Airship"), 60f, 10f, 180f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapDurationOption(ExpandedMapNames.Airship),
         };
@@ -55,32 +56,38 @@ public class DemolitionistOptions : AbstractRoleOptionGroup<DemolitionistRole>, 
     public float SabotageDuration => GetSabotageDurationOptionForMap(MiscUtils.GetCurrentMap).Value;
 
     public ModdedEnumOption SabotageStyle { get; } = new(
-        "Sabotage Style",
+        MiraLocaleManager.Get("DivaniMods.Options.Demolitionist.SabotageStyle"),
         (int)DemolitionistSabotageStyle.Numpad,
         typeof(DemolitionistSabotageStyle));
 
     public ModdedNumberOption PlantTime { get; } = new(
-        "Plant Time", 5f, 2f, 10f, 1f, MiraNumberSuffixes.Seconds)
+        MiraLocaleManager.Get("DivaniMods.Options.Demolitionist.PlantTime"), 5f, 2f, 10f, 1f, MiraNumberSuffixes.Seconds)
     {
         Visible = () => OptionGroupSingleton<DemolitionistOptions>.Instance.IsTimedSabotageStyle,
     };
 
     public ModdedNumberOption DefuseTime { get; } = new(
-        "Defuse Time", 5f, 2f, 10f, 1f, MiraNumberSuffixes.Seconds)
+        MiraLocaleManager.Get("DivaniMods.Options.Demolitionist.DefuseTime"), 5f, 2f, 10f, 1f, MiraNumberSuffixes.Seconds)
     {
         Visible = () => OptionGroupSingleton<DemolitionistOptions>.Instance.IsTimedSabotageStyle,
     };
 
-    [ModdedToggleOption("Demolitionist Can Vent")]
+    [ModdedToggleOption("DivaniMods.Options.Demolitionist.CanVent")]
     public bool CanVent { get; set; } = false;
 
-    [ModdedToggleOption("Successful Explosion Disables Utility Console")]
+    [ModdedToggleOption("DivaniMods.Options.Demolitionist.DisableExplodedConsoles")]
     public bool DisableExplodedConsoles { get; set; } = true;
 
-    [ModdedToggleOption("Explosion Kills Active Defusers")]
+    [ModdedToggleOption("DivaniMods.Options.Demolitionist.ExplosionKillsDefusers")]
     public bool ExplosionKillsDefusers { get; set; } = false;
 
-    [ModdedEnumOption("Win Outcome", typeof(NeutralEvilWinOutcome), ["Ends Game", "Kill One Player", "Nothing"])]
+    [ModdedEnumOption("DivaniMods.Options.Demolitionist.WinOutcome", typeof(NeutralEvilWinOutcome), 
+    [
+        "DivaniMods.Options.Demolitionist.WinOutcome.EndsGame",
+        "DivaniMods.Options.Demolitionist.WinOutcome.KillOnePlayer",
+        "DivaniMods.Options.Demolitionist.WinOutcome.Nothing"
+    ]
+    )]
     public NeutralEvilWinOutcome WinOutcome { get; set; } = NeutralEvilWinOutcome.EndsGame;
 
     public bool IsTimedSabotageStyle => (DemolitionistSabotageStyle)SabotageStyle.Value is DemolitionistSabotageStyle.Timed;

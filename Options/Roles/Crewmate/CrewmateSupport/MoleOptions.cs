@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Roles.Crewmate.CrewmateSupport;
 
@@ -8,38 +9,50 @@ namespace DivaniMods.Options;
 
 public sealed class MoleOptions : AbstractRoleOptionGroup<MoleRole>
 {
-    public override string GroupName => "Mole";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Role.Mole", "Mole");
 
-    [ModdedNumberOption("Dig Cooldown", 5f, 60f, 2.5f, MiraNumberSuffixes.Seconds)]
+    [ModdedNumberOption("DivaniMods.Options.Mole.DigCooldown", 5f, 60f, 2.5f, MiraNumberSuffixes.Seconds)]
     public float DigCooldown { get; set; } = 25f;
 
-    [ModdedNumberOption("Max Number Of Mole Vents Per Game", 1f, 6f, 1f, MiraNumberSuffixes.None)]
+    [ModdedNumberOption("DivaniMods.Options.Mole.MaxVents", 1f, 6f, 1f, MiraNumberSuffixes.None)]
     public float MaxVents { get; set; } = 4f;
 
-    public ModdedToggleOption EarnMoreVents { get; } = new("Earn More Vents After Tasks", false);
+    public ModdedToggleOption EarnMoreVents { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Mole.EarnMoreVents"), false);
 
     public ModdedNumberOption TasksPerVent { get; } =
-        new("Tasks Required For Additional Vent", 3f, 1f, 5f, 1f, MiraNumberSuffixes.None)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mole.TasksPerVent"), 3f, 1f, 5f, 1f, MiraNumberSuffixes.None)
         {
             Visible = () => OptionGroupSingleton<MoleOptions>.Instance.EarnMoreVents
         };
 
     public ModdedNumberOption VentTimeLimit { get; } =
-        new("Time In Mole Vents Before Kick Out", 10f, 1f, 15f, 1f, MiraNumberSuffixes.Seconds);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mole.VentTimeLimit"), 10f, 1f, 15f, 1f, MiraNumberSuffixes.Seconds);
 
     public ModdedNumberOption VentCooldown { get; } =
-        new("Mole Vent Cooldown", 10f, 1f, 15f, 1f, MiraNumberSuffixes.Seconds);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mole.VentCooldown"), 10f, 1f, 15f, 1f, MiraNumberSuffixes.Seconds);
 
-    [ModdedNumberOption("Rounds Mole Vents Last", 0f, 15f, 1f, MiraNumberSuffixes.None, "0", true)]
+    [ModdedNumberOption("DivaniMods.Options.Mole.VentRoundDuration", 0f, 15f, 1f, MiraNumberSuffixes.None, "0", true)]
     public float VentRoundDuration { get; set; } = 2f;
 
-    [ModdedEnumOption("Who Can Use Mole Vents", typeof(MoleVentUsage), ["Crewmates", "Anyone", "Mole"])]
+    [ModdedEnumOption("DivaniMods.Options.Mole.VentUsage", typeof(MoleVentUsage), 
+    [
+        "DivaniMods.Options.Mole.VentUsage.Crewmates",
+        "DivaniMods.Options.Mole.VentUsage.Anyone",
+        "DivaniMods.Options.Mole.VentUsage.Mole"
+    ]
+    )]
     public MoleVentUsage VentUsage { get; set; } = MoleVentUsage.Anyone;
 
-    [ModdedEnumOption("Vent Visibility", typeof(MoleVentVisibility), ["Immediate", "After Use", "After Next Meeting"])]
+    [ModdedEnumOption("DivaniMods.Options.Mole.VentVisibility", typeof(MoleVentVisibility), 
+    [
+        "DivaniMods.Options.Mole.VentVisibility.Immediate",
+        "DivaniMods.Options.Mole.VentVisibility.AfterUse",
+        "DivaniMods.Options.Mole.VentVisibility.AfterNextMeeting"
+    ]
+    )]
     public MoleVentVisibility VentVisibility { get; set; } = MoleVentVisibility.Immediate;
 
-    public ModdedNumberOption DigDelay { get; } = new("Dig Delay", 3f, 0f, 10f, 0.5f, MiraNumberSuffixes.Seconds)
+    public ModdedNumberOption DigDelay { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Mole.DigDelay"), 3f, 0f, 10f, 0.5f, MiraNumberSuffixes.Seconds)
     {
         Visible = () => OptionGroupSingleton<MoleOptions>.Instance.VentVisibility is MoleVentVisibility.Immediate
     };

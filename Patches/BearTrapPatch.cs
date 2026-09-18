@@ -6,6 +6,7 @@ using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities;
+using MiraAPI.Translation;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Game.Crewmate;
@@ -47,8 +48,12 @@ public static class BearTrapPatch
 
         if (evt.Source.AmOwner)
         {
+            var notificationText = MiraLocaleManager
+                .Get("DivaniMods.Modifier.BearTrap.Notification.Caught")
+                .Replace("<seconds>", duration.ToString("0"));
+
             Helpers.CreateAndShowNotification(
-                $"<b><color=#A5632D>A Bear Trap caught you for {duration:0} seconds</color></b>",
+                $"<b><color=#A5632D>{notificationText}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: TouCrewAssets.TrapSprite.LoadAsset());

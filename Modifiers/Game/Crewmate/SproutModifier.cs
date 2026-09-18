@@ -2,6 +2,7 @@ using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Modifiers.Types;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -22,21 +23,25 @@ public class SproutModifier : TouGameModifier, IWikiDiscoverable, IButtonModifie
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.SproutIcon.LoadAsset(),
             "DivaniMod.Modifier.Crewmate.Sprout", 1.45f));
 
-    public override string ModifierName => "Sprout";
-    public override string IntroInfo => "Collect a modifier from a dead body.";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Sprout", "Sprout");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Sprout.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.CrewmateUtility;
     public override Color FreeplayFileColor => SproutColor;
     public Color ModifierColor => SproutColor;
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.SproutIcon;
 
     public override string GetDescription() =>
-        "Use Collect near a dead body to gain one random modifier that player had. One time use.";
+        MiraLocaleManager.Get("DivaniMods.Modifier.Sprout.Description");
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Collect", "Use near a dead body to gain one random modifier that player had.", DivaniAssets.SproutCollectButton)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Modifier.Sprout.Ability.Collect"),
+            MiraLocaleManager.Get("DivaniMods.Modifier.Sprout.Ability.Collect.Description"),
+            DivaniAssets.SproutCollectButton
+        )
     ];
 
     public override int GetAssignmentChance() =>

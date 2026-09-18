@@ -6,6 +6,7 @@ using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -18,17 +19,18 @@ using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using UnityEngine;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorPower;
 
 public sealed class ObfuscatorRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable
 {
-    public string RoleName => "Obfuscator";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Obfuscator", "Obfuscator");
     public string LocaleKey => "Obfuscator";
-    public string RoleDescription => "Transfer votes to rig crewmates!";
-    public string RoleLongDescription =>
-    "Transfer votes between Unsuspecting Crewmates. Always goes after regular Swapper";
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Obfuscator.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Obfuscator.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Obfuscator.LongDescription");
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorPower;
@@ -39,7 +41,11 @@ public sealed class ObfuscatorRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Transfer Votes", "Select two players in a meeting that will swap votes at the end.", DivaniAssets.ObfuscateActive)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Obfuscator.Ability.TransferVotes"),
+            MiraLocaleManager.Get("DivaniMods.Role.Obfuscator.Ability.TransferVotes.Description"),
+            DivaniAssets.ObfuscateActive
+        )
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -63,12 +69,18 @@ public sealed class ObfuscatorRole(IntPtr cppPtr)
     {
         var sb = ITownOfUsRole.SetNewTabText(this);
         var killsPer = (int)OptionGroupSingleton<ObfuscatorOptions>.Instance.KillsPerExtraCharge.Value;
-        sb.AppendLine(TownOfUsPlugin.Culture, $"<b>Charges: {ChargesRemaining}</b>");
+        sb.AppendLine(
+            $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Obfuscator.Tab.Charges")
+                .Replace("<charges>", ChargesRemaining.ToString(TownOfUsPlugin.Culture))}</b>");
+
         if (killsPer > 0)
         {
             var capped = Math.Min(KillsSinceLastCharge, killsPer);
-            sb.AppendLine(TownOfUsPlugin.Culture, $"<b>Kills toward next charge: {capped}/{killsPer}</b>");
-        }
+            sb.AppendLine(
+                $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Obfuscator.Tab.KillsTowardCharge")
+                    .Replace("<kills>", capped.ToString(TownOfUsPlugin.Culture))
+                    .Replace("<required>", killsPer.ToString(TownOfUsPlugin.Culture))}</b>");
+                }
         return sb;
     }
 

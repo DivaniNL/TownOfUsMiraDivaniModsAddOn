@@ -1,4 +1,5 @@
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using TownOfUs.Modifiers;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public sealed class WatcherWatchedModifier : DisabledModifier
 {
     public static bool KillButtonContext { get; set; }
 
-    public override string ModifierName => "Watched";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.WatcherWatched", "Watched"); //Freeplay
     public override bool HideOnUi => true;
     public override LoadableAsset<Sprite>? ModifierIcon => null;
 

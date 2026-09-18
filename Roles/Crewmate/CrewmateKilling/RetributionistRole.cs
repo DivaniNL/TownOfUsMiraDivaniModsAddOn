@@ -1,13 +1,14 @@
 using System;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Events.Crewmate.CrewmateKilling;
 using DivaniMods.Options;
+using DivaniMods.Interfaces;
 using TownOfUs.Extensions;
 using TownOfUs.Interfaces;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Options;
 using TownOfUs.Roles;
@@ -17,7 +18,7 @@ using UnityEngine;
 namespace DivaniMods.Roles.Crewmate.CrewmateKilling;
 
 public sealed class RetributionistRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITouCrewRole, IWikiDiscoverable, IDoomable, IProgressTally
+    : CrewmateRole(cppPtr), IDivaniCrewRole, IWikiDiscoverable, IDoomable, IProgressTally
 {
     public static readonly Color RetributionistColor = new Color32(175, 22, 81, 255);
 
@@ -36,9 +37,10 @@ public sealed class RetributionistRole(IntPtr cppPtr)
         }
     }
 
-    public string RoleName => "Retributionist";
-    public string RoleDescription => "Seek revenge on your killer!";
-    public string RoleLongDescription => "When you die, you get to seek revenge on your killer";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Retributionist", "Retributionist");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Retributionist.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Retributionist.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Retributionist.LongDescription");
     public Color RoleColor => RetributionistColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmateKilling;
@@ -46,10 +48,7 @@ public sealed class RetributionistRole(IntPtr cppPtr)
     public DoomableType DoomHintType => DoomableType.Death;
 
     public string GetAdvancedDescription() =>
-        "When you get killed, you spawn on a random vent as the Vengeful Soul and you get a " +
-        "limited time to find and kill your killer. If you succeed, you get to live again. " +
-        "If you fail, you become a normal ghost. Your killer cannot vent or use their ability " +
-        "if they're an Impostor Concealing role." +
+        MiraLocaleManager.Get("DivaniMods.Role.Retributionist.AdvancedDescription") +
         MiscUtils.AppendOptionsText(GetType());
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -85,6 +84,6 @@ public sealed class RetributionistRole(IntPtr cppPtr)
     public string ProgressOnSummaryNormal => Player.TaskInfo();
 
     public string ProgressOnSummaryDetailed =>
-        TouLocale.GetParsed("StatsTaskCount")
+       MiraLocaleManager.Get("StatsTaskCount")
             .Replace("<count>", Player.TaskInfo().Replace("(", "").Replace(")", ""));
 }

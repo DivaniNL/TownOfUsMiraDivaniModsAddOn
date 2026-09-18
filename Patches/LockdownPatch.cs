@@ -3,6 +3,7 @@ using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Impostor.ImpostorSupport;
 using DivaniMods.Options;
@@ -114,9 +115,12 @@ public static class LockdownPatch
         
         if (LockdownButton.IsLockdownActive && LockdownButton.LockdownTimeRemaining > 0 && !inMeeting)
         {
+            var text = MiraLocaleManager.Get(
+                "DivaniMods.Role.Deadlock.Timer.Lockdown");
+
             DivaniTimers.Set(
                 TimerId,
-                "<b><color=#CC3333>LOCKDOWN</color></b>",
+                $"<b><color=#CC3333>{text}</color></b>",
                 GetDeadlockRoleIcon(),
                 Mathf.Max(0f, LockdownButton.LockdownTimeRemaining),
                 useLocalTimeDelta: false,

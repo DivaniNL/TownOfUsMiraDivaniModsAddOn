@@ -36,8 +36,11 @@ public static class NeutralEvilWinOutcomeUtils
             if (!player.HasDied())
             {
                 player.DelayExile();
-                GameHistory.UpdatePlayerDeathData(player,
-                    "DiedToWinning", TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound, diedThisRound : DeathHandlerOverride.SetTrue,
+                GameHistory.UpdatePlayerDeathData(
+                    player,
+                    MiraLocaleManager.Get("DiedToWinning"),
+                    TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+                    diedThisRound: DeathHandlerOverride.SetTrue,
                     lockInfo: DeathHandlerOverride.SetTrue);
             }
 

@@ -1,5 +1,6 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Modules.Watcher;
@@ -15,7 +16,7 @@ public sealed class WatcherWatchButton : TownOfUsButton, IDiseaseableButton
 {
     public static WatcherWatchButton? Instance { get; private set; }
 
-    public override string Name => "Watch";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Watcher.Ability.Watch");
     public override float Cooldown => OptionGroupSingleton<WatcherOptions>.Instance.WatchCooldown.Value;
     public override float EffectDuration => 0f;
     public override int MaxUses => (int)OptionGroupSingleton<WatcherOptions>.Instance.InitialWatchCharges.Value;
@@ -90,7 +91,7 @@ public sealed class WatcherWatchButton : TownOfUsButton, IDiseaseableButton
 
         if (Button != null)
         {
-            Button.buttonLabelText.text = WatcherLightSystem.IsActive ? "WATCHING" : "WATCH";
+            Button.buttonLabelText.text = WatcherLightSystem.IsActive ? MiraLocaleManager.Get("DivaniMods.Role.Watcher.Button.Watching") : Name;
         }
     }
 

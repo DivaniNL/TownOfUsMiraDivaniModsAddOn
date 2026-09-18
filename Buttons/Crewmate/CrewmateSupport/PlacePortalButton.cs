@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -17,7 +18,7 @@ namespace DivaniMods.Buttons.Crewmate.CrewmateSupport;
 
 public class PlacePortalButton : TownOfUsButton
 {
-    public override string Name => "Place Portal";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Ability.PlacePortal");
     public override float Cooldown => OptionGroupSingleton<PortalmakerOptions>.Instance.PlacePortalCooldown.Value;
     public override float EffectDuration => OptionGroupSingleton<PortalmakerOptions>.Instance.PlacePortalDuration.Value;
     public override int MaxUses => 2;
@@ -165,7 +166,7 @@ public class PlacePortalButton : TownOfUsButton
         
         
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            "<b><color=#0C6BF5>Placing portal...</color></b>",
+            $"<b><color=#0C6BF5>{MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Notification.PlacingPortal")}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.PortalmakerIcon.LoadAsset());
@@ -184,11 +185,13 @@ public class PlacePortalButton : TownOfUsButton
         
         int portalNum = PortalManager.PortalsPlaced;
         var afterMeeting = OptionGroupSingleton<PortalmakerOptions>.Instance.EnableAfterFirstMeeting;
-        string message = portalNum == 1
-            ? "<b><color=#0C6BF5>Portal 1 placed! Place another portal to complete the link.</color></b>"
+        string messageText = portalNum == 1
+            ? MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Notification.Portal1Placed")
             : afterMeeting
-                ? "<b><color=#0C6BF5>Portal 2 placed! Portals will be enabled after the next meeting.</color></b>"
-                : "<b><color=#0C6BF5>Portal 2 placed! Portals are now active!</color></b>";
+                ? MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Notification.Portal2PlacedNextMeeting")
+                : MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Notification.Portal2PlacedActive");
+
+        string message = $"<b><color=#0C6BF5>{messageText}</color></b>";
         
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
             message,

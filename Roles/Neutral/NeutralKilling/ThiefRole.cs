@@ -6,6 +6,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -13,25 +14,26 @@ using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Extensions;
 using TownOfUs.Modifiers.Game.Impostor;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
 using UnityEngine;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Neutral.NeutralKilling;
 
 public sealed class ThiefRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
     public static readonly Color ThiefColor = new Color(0.5f, 0.3f, 0.1f);
 
-    public string RoleName => "Thief";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Thief", "Thief");
     public string LocaleKey => "Thief";
-    public string RoleDescription => "Steal everything!";
-    public string RoleLongDescription => "Use your Pickpocket ability to steal modifiers from players and kill to be the last person standing!";
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Thief.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Thief.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Thief.LongDescription");
     public Color RoleColor => ThiefColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralKilling;
@@ -55,8 +57,16 @@ public sealed class ThiefRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Pickpocket", "Steal a modifier from a nearby player. You can only target players who have a modifier to steal. Trying to steal a modifier you cannot use will give you a random modifier instead.", DivaniAssets.PickpocketButton),
-        new("Kill", "Kill a nearby player.", DivaniAssets.ThiefKillButton)
+       new(
+            MiraLocaleManager.Get("DivaniMods.Role.Thief.Ability.Pickpocket"),
+            MiraLocaleManager.Get("DivaniMods.Role.Thief.Ability.Pickpocket.Description"),
+            DivaniAssets.PickpocketButton
+        ),
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Thief.Ability.Kill"),
+            MiraLocaleManager.Get("DivaniMods.Role.Thief.Ability.Kill.Description"),
+            DivaniAssets.ThiefKillButton
+        ),
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -78,7 +88,7 @@ public sealed class ThiefRole(IntPtr cppPtr)
         }
         ImportantTextTask orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
         orCreateTask.Text =
-            $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralKillingTaskHeader")}</color>";
+            $"{TownOfUsColors.Neutral.ToTextColor()}{MiraLocaleManager.Get("NeutralKillingTaskHeader")}</color>";
         orCreateTask.name = "NeutralRoleText";
     }
 

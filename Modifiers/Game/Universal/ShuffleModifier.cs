@@ -2,6 +2,7 @@ using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Modifiers.Types;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -22,8 +23,8 @@ public class ShuffleModifier : UniversalGameModifier, IWikiDiscoverable, IButton
             "DivaniMod.Modifier.Universal.Shuffle", 1.45f));
     public static readonly Color ShuffleColor = new Color32(0, 255, 30, 255);
 
-    public override string ModifierName => "Shuffle";
-    public override string IntroInfo => "Shuffle all players' positions!";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Shuffle", "Shuffle");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Shuffle.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.UniversalUtility;
     public override Color FreeplayFileColor => ShuffleColor;
     public Color ModifierColor => ShuffleColor;
@@ -44,13 +45,19 @@ public class ShuffleModifier : UniversalGameModifier, IWikiDiscoverable, IButton
         set => _usesRemaining = value;
     }
     
-    public override string GetDescription() => $"Shuffle all players' positions! ({UsesRemaining} uses left)";
+    public override string GetDescription() => MiraLocaleManager.Get("DivaniMods.Modifier.Shuffle.Description").Replace("<uses>", UsesRemaining.ToString());
 
-    public string GetAdvancedDescription() => "Shuffle all players' positions!" + MiscUtils.AppendOptionsText(GetType());
+public string GetAdvancedDescription() =>
+        MiraLocaleManager.Get("DivaniMods.Modifier.Shuffle.AdvancedDescription")
+        + MiscUtils.AppendOptionsText(GetType());
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Shuffle", "Teleport every living player to a random other player's position.", DivaniAssets.ShuffleButton)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Modifier.Shuffle.Ability.Shuffle"),
+            MiraLocaleManager.Get("DivaniMods.Modifier.Shuffle.Ability.Shuffle.Description"),
+            DivaniAssets.ShuffleButton
+        )
     ];
     
     public override int GetAssignmentChance() =>

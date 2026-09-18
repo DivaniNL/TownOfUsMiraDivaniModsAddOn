@@ -5,6 +5,7 @@ using MiraAPI.Hud;
 using MiraAPI.Roles;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities.Extensions;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles.Impostor.ImpostorPower;
@@ -22,7 +23,7 @@ namespace DivaniMods.Buttons.Impostor.ImpostorPower;
 
 public sealed class RecruitChangeButton : TownOfUsRoleButton<RecruitRole>
 {
-    public override string Name => "Change Role";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Recruit.Ability.ChangeRole");
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
     public override Color TextOutlineColor => Palette.ImpostorRed;
     public override float Cooldown => 0.01f;
@@ -175,11 +176,12 @@ public sealed class RecruitChangeButton : TownOfUsRoleButton<RecruitRole>
 
     private static void ShowNoRolesNotification()
     {
+        var text = MiraLocaleManager.Get("DivaniMods.Notification.NoImpostorRolesAvailable");
         var notif = MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            "<b>No Impostor roles are available to change into.</b>",
+            $"<b>{text}</b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
-            spr: DivaniAssets.RecruitIcon.LoadAsset());
+            spr: DivaniAssets.RecruiterIcon.LoadAsset());
         notif.AdjustNotification();
     }
 }

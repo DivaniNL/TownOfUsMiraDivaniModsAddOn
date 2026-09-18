@@ -7,13 +7,13 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Neutral.NeutralKilling;
 using DivaniMods.Options;
 using TownOfUs;
 using TownOfUs.Assets;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Crewmate;
@@ -21,22 +21,22 @@ using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
 using TownOfUs.Extensions;
 using UnityEngine;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Neutral.NeutralKilling;
 
 public sealed class WatcherRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
     public static readonly Color WatcherColor = new Color32(0xD3, 0xA6, 0x35, 255);
     public static readonly Color GreenLightColor = new Color32(0x7C, 0xCE, 0x34, 255);
     public static readonly Color RedLightColor = new Color32(0xE4, 0x33, 0x22, 255);
 
-    public string RoleName => "Watcher";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Watcher", "Watcher");
     public string LocaleKey => "Watcher";
-    public string RoleDescription => "Green light... Red light!";
-    public string RoleLongDescription =>
-        "Call out Red Light, Green Light.\n" +
-        "Anyone who moves during Red Light dies.";
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Watcher.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Watcher.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Watcher.LongDescription");
     public Color RoleColor => WatcherColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralKilling;
@@ -55,10 +55,11 @@ public sealed class WatcherRole(IntPtr cppPtr)
         var grace = OptionGroupSingleton<WatcherOptions>.Instance.RedLightGracePeriod.Value;
         if (grace > 0f)
         {
-            desc += $"\nRed Light starts with a {grace:0.0}s grace period. Moving during it won't get you killed.";
+            desc += "\n" + MiraLocaleManager.Get("DivaniMods.Role.Watcher.Advanced.GracePeriod")
+                .Replace("<seconds>", grace.ToString("0.0", TownOfUsPlugin.Culture));
         }
 
-        desc += "\nPlayers locked in a Duel or currently invisible are not affected by Red Light.";
+        desc += "\n" + MiraLocaleManager.Get("DivaniMods.Role.Watcher.Advanced.Exceptions");
 
         return desc + MiscUtils.AppendOptionsText(GetType());
     }
@@ -72,16 +73,31 @@ public sealed class WatcherRole(IntPtr cppPtr)
         var charges = button?.CurrentCharges ?? 0;
         var kills = button != null ? Math.Min(button.KillsTowardCharge, req) : 0;
 
-        sb.AppendLine(TownOfUsPlugin.Culture, $"<b>Watch charges: {charges}</b>");
-        sb.AppendLine(TownOfUsPlugin.Culture, $"<b>Kills until next charge {kills}/{req}</b>");
+        var chargesText = MiraLocaleManager.Get("DivaniMods.Role.Watcher.Tab.WatchCharges")
+            .Replace("<charges>", charges.ToString(TownOfUsPlugin.Culture));
+
+        var killsText = MiraLocaleManager.Get("DivaniMods.Role.Watcher.Tab.KillsUntilNextCharge")
+            .Replace("<kills>", kills.ToString(TownOfUsPlugin.Culture))
+            .Replace("<required>", req.ToString(TownOfUsPlugin.Culture));
+
+        sb.AppendLine($"<b>{chargesText}</b>");
+        sb.AppendLine($"<b>{killsText}</b>");
 
         return sb;
     }
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Watch", "Start a Green Light, then a Red Light. Anyone who moves during Red Light (after the grace period) dies. Players locked in a Duel or currently invisible are not affected by Red Light.", DivaniAssets.WatcherWatchButton),
-        new("Kill", "Kill a nearby player.", DivaniAssets.WatcherKillButton)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Watcher.Ability.Watch"),
+            MiraLocaleManager.Get("DivaniMods.Role.Watcher.Ability.Watch.Description"),
+            DivaniAssets.WatcherWatchButton
+        ),
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Watcher.Ability.Kill"),
+            MiraLocaleManager.Get("DivaniMods.Role.Watcher.Ability.Kill.Description"),
+            DivaniAssets.WatcherKillButton
+        ),
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -102,7 +118,7 @@ public sealed class WatcherRole(IntPtr cppPtr)
         }
         ImportantTextTask orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
         orCreateTask.Text =
-            $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralKillingTaskHeader")}</color>";
+            $"{TownOfUsColors.Neutral.ToTextColor()}{MiraLocaleManager.Get("NeutralKillingTaskHeader")}</color>";
         orCreateTask.name = "NeutralRoleText";
     }
 

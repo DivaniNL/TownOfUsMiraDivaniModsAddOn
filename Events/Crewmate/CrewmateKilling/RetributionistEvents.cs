@@ -2,6 +2,7 @@ using MiraAPI.Events;
 using MiraAPI.Events.Mira;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
+using MiraAPI.Translation;
 using MiraAPI.GameOptions;
 using DivaniMods.Assets;
 using DivaniMods.Networking.Crewmate.CrewmateKilling;
@@ -98,8 +99,12 @@ public static class RetributionistEvents
 
         var hex = ColorUtility.ToHtmlStringRGB(RetributionistRole.RetributionistColor);
 
+        var notificationText = MiraLocaleManager
+            .Get("DivaniMods.Role.Retributionist.Notification.FirstDeathShieldBlocked")
+            .Replace("<player>", killer.Data.PlayerName);
+
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#{hex}>{killer.Data.PlayerName} is protected by the first death shield so you won't be able to seek revenge this time. Feelsbadman</color></b>",
+            $"<b><color=#{hex}>{notificationText}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.RetributionistIcon.LoadAsset());
@@ -115,8 +120,11 @@ public static class RetributionistEvents
 
         var hex = ColorUtility.ToHtmlStringRGB(RetributionistRole.RetributionistColor);
 
+        var notificationText =
+            MiraLocaleManager.Get("DivaniMods.Role.Retributionist.Notification.IndirectAttackBlocked");
+
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#{hex}>You weren't directly attacked, so you can't seek revenge this time. Feelsbadman</color></b>",
+            $"<b><color=#{hex}>{notificationText}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.RetributionistIcon.LoadAsset());

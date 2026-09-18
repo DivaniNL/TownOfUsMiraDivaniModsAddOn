@@ -14,7 +14,7 @@ namespace DivaniMods.Buttons.Neutral;
 
 public sealed class NeutralEvilTormentButton : TownOfUsButton
 {
-    public override string Name => "Kill";
+    public override string Name => TranslationController.Instance.GetStringWithDefault(StringNames.KillLabel, "Kill");
     public override BaseKeybind Keybind => Keybinds.PrimaryAction;
     public override Color TextOutlineColor => TownOfUsColors.Neutral;
     public override float Cooldown => 0.01f;

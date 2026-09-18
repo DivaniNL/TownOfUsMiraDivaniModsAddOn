@@ -2,6 +2,7 @@ using Il2CppInterop.Runtime.Attributes;
 using AmongUs.GameOptions;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -22,8 +23,8 @@ public sealed class BloodyModifier : TouGameModifier, IWikiDiscoverable
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.BloodyIcon.LoadAsset(),
             "DivaniMod.Modifier.Crewmate.Bloody", 1.45f));
 
-    public override string ModifierName => "Bloody";
-    public override string IntroInfo => "Your killer leaves red footprints upon death.";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Bloody", "Bloody");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Bloody.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.CrewmatePostmortem;
     public override Color FreeplayFileColor => ModifierUiColor;
     public Color ModifierColor => ModifierUiColor;
@@ -31,7 +32,7 @@ public sealed class BloodyModifier : TouGameModifier, IWikiDiscoverable
 
     public override string GetDescription()
     {
-        return "When you are killed, your killer leaves red footprints for a short period of time.";
+        return MiraLocaleManager.Get("DivaniMods.Modifier.Bloody.Description");
     }
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());

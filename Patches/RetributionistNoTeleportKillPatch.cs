@@ -1,11 +1,11 @@
 using HarmonyLib;
 using MiraAPI.Networking;
 using MiraAPI.Utilities;
+using MiraAPI.Translation;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using TownOfUs.Events;
 using TownOfUs.Modifiers;
 using TownOfUs.Modules;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Roles;
 using TownOfUs.Modules.Components;
 
@@ -42,12 +42,12 @@ internal static class RetributionistNoTeleportKillPatch
 
         GameHistory.UpdatePlayerDeathData(
             target,
-            TouLocale.Get($"DiedTo{cod}"),
+            MiraLocaleManager.Get($"DiedTo{cod}"),
             roundOfDeath: HudManagerHelper.Instance.CurrentRound,
             diedThisRound: !MeetingHud.Instance && !ExileController.Instance
                 ? DeathHandlerOverride.SetTrue
                 : DeathHandlerOverride.SetFalse,
-            killedBy: TouLocale.GetParsed("DiedByStringBasic").Replace("<player>", source.Data.PlayerName),
+            killedBy: MiraLocaleManager.Get("DiedByStringBasic").Replace("<player>", source.Data.PlayerName),
             lockInfo: DeathHandlerOverride.SetTrue);
     }
 }

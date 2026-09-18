@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
+using MiraAPI.Translation;
 using DivaniMods.Roles.Impostor.ImpostorAfterlife;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -21,6 +22,8 @@ internal static class RevenantEndScreenPatch
         }
 
         var hex = ColorUtility.ToHtmlStringRGBA(RevenantRole.RevenantColor);
+        var revenantName = MiraLocaleManager.Get(
+            "DivaniMods.Role.Revenant");
 
         foreach (var pp in Object.FindObjectsOfType<PoolablePlayer>())
         {
@@ -37,7 +40,7 @@ internal static class RevenantEndScreenPatch
             }
 
             pp.SetName(
-                $"\n<size=85%>{name}</size>\n<size=65%><color=#{hex}>Revenant</color></size>",
+               $"\n<size=85%>{name}</size>\n<size=65%><color=#{hex}>{revenantName}</color></size>",
                 new Vector3(1.1619f, 1.1619f, 1f),
                 Color.white,
                 -15f);

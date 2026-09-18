@@ -1,5 +1,6 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -22,8 +23,8 @@ public sealed class SniperModifier : TouGameModifier, IWikiDiscoverable
             "DivaniMod.Modifier.Neutral.Sniper", 1.45f));
     public const float MaxSniperDistance = 2.5f;
 
-    public override string ModifierName => "Sniper";
-    public override string IntroInfo => "You have increased kill range.";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Sniper", "Sniper");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Sniper.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.NeutralPassive;
     public override Color FreeplayFileColor => SniperColor;
     public Color ModifierColor => SniperColor;
@@ -32,7 +33,8 @@ public sealed class SniperModifier : TouGameModifier, IWikiDiscoverable
     public override string GetDescription()
     {
         var multiplier = OptionGroupSingleton<SniperOptions>.Instance.KillDistanceMultiplier.Value;
-        return $"Kill without teleporting. Kill range is multiplied by {multiplier:0.0}x, up to long kill distance.";
+        return MiraLocaleManager.Get("DivaniMods.Modifier.Sniper.Description")
+            .Replace("<multiplier>", multiplier.ToString("0.0"));
     }
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());

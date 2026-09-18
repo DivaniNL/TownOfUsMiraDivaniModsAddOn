@@ -1,6 +1,7 @@
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.Utilities;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Events.Impostor.ImpostorPower;
 using DivaniMods.Roles.Impostor.ImpostorAfterlife;
@@ -45,8 +46,11 @@ public static class RevenantEvents
 
         if (localWasRevenant)
         {
+            var text =
+                MiraLocaleManager.Get("DivaniMods.Role.Revenant.Notification.FinalFour");
+
             Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>Final four reached - your Revenant returns to rest.</color></b>",
+                $"<b><color=#{hex}>{text}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.RevenantIcon.LoadAsset());
@@ -54,8 +58,11 @@ public static class RevenantEvents
 
         if (PlayerControl.LocalPlayer?.Data?.Role is SummonerRole)
         {
+             var text =
+                MiraLocaleManager.Get("DivaniMods.Role.Summoner.Notification.FinalFour");
+
             Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>Final four reached - you can no longer summon a Revenant.</color></b>",
+                $"<b><color=#{hex}>{text}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.SummonerIcon.LoadAsset());

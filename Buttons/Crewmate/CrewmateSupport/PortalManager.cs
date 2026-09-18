@@ -8,6 +8,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Reactor.Networking.Attributes;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Roles.Crewmate.CrewmateSupport;
 using MiraAPI.Hud;
@@ -93,7 +94,7 @@ public static class PortalManager
         string msg;
         if (PortalUsers.Count == 0 && ImmovablePortalUsers.Count == 0)
         {
-            msg = "No one used the portals.";
+            msg = MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Report.NoActivity");
         }
         else
         {
@@ -101,7 +102,8 @@ public static class PortalManager
 
             if (PortalUsers.Count > 0)
             {
-                message.Append("Players who used the portals:\n");
+                message.Append(MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Report.PlayersUsed"));
+                message.Append('\n');
                 message.Append(string.Join(", ", PortalUsers));
             }
 
@@ -111,15 +113,17 @@ public static class PortalManager
                 {
                     message.Append("\n\n");
                 }
-                message.Append("Immovable player(s) who tried to use the portals:\n");
+                message.Append(MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Report.ImmovablePlayers"));
+                message.Append('\n');
                 message.Append(string.Join(", ", ImmovablePortalUsers));
-                message.Append("\nFeels bad man..."); 
+                message.Append('\n');
+                message.Append(MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Report.ImmovableComment"));
             }
 
             msg = message.ToString();
         }
         
-        var title = "<color=#0C6BF5FF>Portal Activity</color>";
+        var title = $"<color=#0C6BF5FF>{MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Report.Title")}</color>";
         
         MiscUtils.AddFakeChat(portalmaker.Data, title, msg, false, true);
         
@@ -132,13 +136,13 @@ public static class PortalManager
         if (!Portal1Position.HasValue)
         {
             Portal1Position = position;
-            Portal1RoomName = RoomHelpers.GetRoomName(position) ?? "Outside/Hallway";
+            Portal1RoomName = RoomHelpers.GetRoomName(position) ?? MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Location.OutsideHallway");
             CreatePortalVisual(position, 1);
         }
         else if (!Portal2Position.HasValue)
         {
             Portal2Position = position;
-            Portal2RoomName = RoomHelpers.GetRoomName(position) ?? "Outside/Hallway";
+            Portal2RoomName = RoomHelpers.GetRoomName(position) ?? MiraLocaleManager.Get("DivaniMods.Role.Portalmaker.Location.OutsideHallway");
             CreatePortalVisual(position, 2);
         }
     }

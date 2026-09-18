@@ -1,4 +1,5 @@
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -20,15 +21,15 @@ public class SkilledModifier : TouGameModifier, IWikiDiscoverable
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.SkilledIcon.LoadAsset(),
             "DivaniMod.Modifier.Crewmate.Skilled", 1.45f));
 
-    public override string ModifierName => "Skilled";
-    public override string IntroInfo => "You can fix two-part sabotages alone.";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Skilled", "Skilled");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Skilled.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.CrewmateUtility;
     public override Color FreeplayFileColor => SkilledColor;
     public Color ModifierColor => SkilledColor;
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.SkilledIcon;
 
     public override string GetDescription() =>
-        "You can fix two-part sabotages on your own!";
+        MiraLocaleManager.Get("DivaniMods.Modifier.Skilled.Description");
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
 

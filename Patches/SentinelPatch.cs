@@ -1,5 +1,6 @@
 using HarmonyLib;
 using Reactor.Utilities;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmateInvestigative;
 using DivaniMods.Roles.Crewmate.CrewmateInvestigative;
@@ -83,8 +84,13 @@ public static class SentinelPatch
 
             char label = (char)('A' + BeaconManager.Beacons.IndexOf(beacon));
             var colorHex = ColorUtility.ToHtmlStringRGB(SentinelRole.SentinelColor);
+            var text = MiraLocaleManager
+                .Get("DivaniMods.Role.Sentinel.Notification.BeaconTriggered")
+                .Replace("<label>", label.ToString())
+                .Replace("<room>", beacon.RoomName);
+
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{colorHex}>Someone walked through Beacon {label} ({beacon.RoomName})</color></b>",
+                $"<b><color=#{colorHex}>{text}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.SentinelIcon.LoadAsset());

@@ -1,6 +1,7 @@
 using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -22,23 +23,26 @@ public class UAVModifier : UniversalGameModifier, IWikiDiscoverable, IButtonModi
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.UavIcon.LoadAsset(),
             "DivaniMod.Modifier.Universal.UAV", 1.45f));
 
-    public override string ModifierName => "UAV";
-    public override string IntroInfo => "Call in a UAV to reveal everyone on the map!";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.UAV", "UAV");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.UAV.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.UniversalUtility;
     public override Color FreeplayFileColor => UavColor;
     public Color ModifierColor => UavColor;
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.UavIcon;
 
     public override string GetDescription() =>
-        "Call in a UAV: while active, open the map to see everyone walking around.";
+        MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Description");
 
     public string GetAdvancedDescription() =>
-        "Call in a UAV: while active, open the map to see everyone walking around." +
-        MiscUtils.AppendOptionsText(GetType());
+        GetDescription() + MiscUtils.AppendOptionsText(GetType());
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Call UAV", "Call in a UAV to see your shipmates' locations.", DivaniAssets.UavButton)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Ability.CallUAV"),
+            MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Ability.CallUAV.Description"),
+            DivaniAssets.UavButton
+        )
     ];
 
     public override int GetAssignmentChance() =>

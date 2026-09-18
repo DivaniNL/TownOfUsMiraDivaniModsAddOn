@@ -2,6 +2,7 @@ using System;
 using AmongUs.GameOptions;
 using MiraAPI.GameOptions;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -11,17 +12,18 @@ using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
 using TownOfUs.Extensions;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorConcealing;
 
 public sealed class CunctatorRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
-    public string RoleName => "Cunctator";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Cunctator", "Cunctator");
     public string LocaleKey => "Cunctator";
-    public string RoleDescription => "Delay Bodies!";
-    public string RoleLongDescription =>
-        "Bodies of those you kill only appear after a delay.";
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Cunctator.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Cunctator.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Cunctator.LongDescription");
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorConcealing;
@@ -35,8 +37,10 @@ public sealed class CunctatorRole(IntPtr cppPtr)
     {
         var delay = OptionGroupSingleton<CunctatorOptions>.Instance?.BodyDelay?.Value;
         var delayText = delay.HasValue
-            ? $"\n\nBodies appear after {delay.Value:0}s."
+            ? "\n\n" + MiraLocaleManager.Get("DivaniMods.Role.Cunctator.Advanced.BodyDelay")
+                .Replace("<seconds>", delay.Value.ToString("0"))
             : string.Empty;
+
         return RoleLongDescription + delayText + MiscUtils.AppendOptionsText(GetType());
     }
 

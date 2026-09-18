@@ -8,6 +8,7 @@ using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.GameOptions;
 using MiraAPI.LocalSettings;
 using MiraAPI.Networking;
+using MiraAPI.Translation;
 
 using Reactor.Networking.Attributes;
 
@@ -261,9 +262,12 @@ public static class DemolitionistSabotageState
 
         var colorHex = ColorUtility.ToHtmlStringRGB(DemolitionistRole.DemolitionistColor);
 
-        MiraAPI.Utilities.Helpers.CreateAndShowNotification(
+        var notificationText = MiraLocaleManager
+            .Get("DivaniMods.Role.Demolitionist.Notification.SabotageActive")
+            .Replace("<location>", PlantedLocationName);
 
-            $"<b><color=#{colorHex}>Demolitionist Sabotage active\nLocation: {PlantedLocationName}</color></b>",
+        MiraAPI.Utilities.Helpers.CreateAndShowNotification(
+            $"<b><color=#{colorHex}>{notificationText}</color></b>",
 
             Color.white,
 
@@ -289,9 +293,12 @@ public static class DemolitionistSabotageState
 
         var colorHex = ColorUtility.ToHtmlStringRGB(DemolitionistRole.DemolitionistColor);
 
-        MiraAPI.Utilities.Helpers.CreateAndShowNotification(
+        var notificationText = MiraLocaleManager
+            .Get("DivaniMods.Role.Demolitionist.Notification.SabotageDefused")
+            .Replace("<location>", location);
 
-            $"<b><color=#{colorHex}>Demolitionist Sabotage Defused\nLocation: {location}</color></b>",
+        MiraAPI.Utilities.Helpers.CreateAndShowNotification(
+            $"<b><color=#{colorHex}>{notificationText}</color></b>",
 
             Color.white,
 
@@ -329,15 +336,18 @@ public static class DemolitionistSabotageState
 
         var colorHex = ColorUtility.ToHtmlStringRGB(DemolitionistRole.DemolitionistColor);
 
-        var progress = remaining > 0
+        var key = remaining > 0
+            ? "DivaniMods.Role.Demolitionist.Notification.Exploded"
+            : "DivaniMods.Role.Demolitionist.Notification.GoalReached";
 
-            ? $" ({SuccessfulSabotages}/{needed})"
-
-            : " — Demolitionist goal reached!";
+        var notificationText = MiraLocaleManager
+            .Get(key)
+            .Replace("<location>", location)
+            .Replace("<count>", SuccessfulSabotages.ToString())
+            .Replace("<needed>", needed.ToString());
 
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-
-            $"<b><color=#{colorHex}>Demolitionist Exploded {location}{progress}</color></b>",
+            $"<b><color=#{colorHex}>{notificationText}</color></b>",
 
             Color.white,
 

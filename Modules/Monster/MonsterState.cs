@@ -3,6 +3,7 @@ using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralKilling;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
+using MiraAPI.Translation;
 using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using Reactor.Utilities;
@@ -113,7 +114,7 @@ public static class MonsterState
 
         if (victim.AmOwner)
         {
-            Notify(victim, "You have been eaten by the Monster!");
+            Notify(victim, MiraLocaleManager.Get("DivaniMods.Role.Monster.Notification.Eaten"));
             BeginSpectating(MonsterId);
         }
     }
@@ -206,7 +207,7 @@ public static class MonsterState
                 if (victim.AmOwner)
                 {
                     EndSpectating();
-                    Notify(victim, "You have been released from the Monster!");
+                    Notify(victim,MiraLocaleManager.Get("DivaniMods.Role.Monster.Notification.Released"));
                 }
             }
 

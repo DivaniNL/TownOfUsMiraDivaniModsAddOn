@@ -3,6 +3,7 @@ using MiraAPI.Hud;
 using MiraAPI.Networking;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralEvil;
@@ -17,7 +18,7 @@ namespace DivaniMods.Buttons.Neutral.NeutralEvil;
 
 public sealed class TauntButton : TownOfUsTargetButton<PlayerControl>
 {
-    public override string Name => "Taunt";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Innocent.Ability.Taunt");
     public override float Cooldown => OptionGroupSingleton<InnocentOptions>.Instance.TauntCooldown.Value;
     public override float EffectDuration => 0f;
     public override int MaxUses => 0;

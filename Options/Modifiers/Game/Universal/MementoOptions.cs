@@ -1,5 +1,6 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using DivaniMods.Modifiers.Game.Universal;
 using TownOfUs.Options;
 using UnityEngine;
@@ -16,19 +17,19 @@ public enum MementoRevealMode
 public class MementoOptions : AbstractTouModifierOptionGroup<MementoModifier>
 {
     public override Func<bool> GroupVisible => () => RoleOptions.IsClassicRoleAssignment;
-    public override string GroupName => "Memento";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Modifier.Memento", "Memento");
     public override Color GroupColor => MementoModifier.MementoColor;
     public override uint GroupPriority => 35;
 
     public ModdedEnumOption RevealMode { get; } =
-        new("Reveal Mode", (int)MementoRevealMode.Role, typeof(MementoRevealMode));
+        new(MiraLocaleManager.Get("DivaniMods.Options.Memento.RevealMode"), (int)MementoRevealMode.Role, typeof(MementoRevealMode));
 
     public ModdedToggleOption ShowHeldModifiers { get; } =
-        new("Show Held Modifiers", true);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Memento.ShowHeldModifiers"), true);
 
     public ModdedToggleOption ShowIfEjected { get; } =
-        new("Reveal If Ejected", true);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Memento.ShowIfEjected"), true);
 
     public ModdedToggleOption PreventBaitPairing { get; } =
-        new("Prevent Pairing With Bait", false);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Memento.PreventBaitPairing"), false);
 }
