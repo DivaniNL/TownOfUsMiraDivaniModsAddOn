@@ -13,6 +13,10 @@ public sealed class MonsterDevourAnimation
 
     public static bool ShouldBeHidden(byte victimId) => HidingVictims.Contains(victimId);
 
+    public static void ClearHidingVictims() => HidingVictims.Clear();
+
+    public static void RemoveHidingVictim(byte victimId) => HidingVictims.Remove(victimId);
+
     public static void Play(PlayerControl monster, PlayerControl victim, Vector3? victimPosBeforeSnap = null, float hideVictimAtFraction = 0.5f, Action? onComplete = null)
     {
         if (monster == null)
@@ -36,7 +40,11 @@ public sealed class MonsterDevourAnimation
 
         var victimPos = victimPosBeforeSnap ?? (victim != null ? victim.transform.position : monster.transform.position);
         var monsterPos = monster.transform.position;
-        var targetOnLeft = victimPos.x < monsterPos.x;
+        var delta = (Vector2)(victimPos - monsterPos);
+
+        const float horizontalDeadzone = 0.2f;
+        var wasFlipped = monster.MyPhysics != null && monster.MyPhysics.FlipX;
+        var targetOnLeft = Mathf.Abs(delta.x) < horizontalDeadzone ? wasFlipped : delta.x < 0f;
 
         var cosmetics = monster.cosmetics;
         if (cosmetics != null && cosmetics.gameObject != null)
@@ -52,8 +60,10 @@ public sealed class MonsterDevourAnimation
         go.transform.localScale = new Vector3(scaleX, animScale, animScale);
 
         const float xOffset = 0.6f;
+        const float yOffset = 0.5f;
         var posX = targetOnLeft ? -xOffset : xOffset;
-        go.transform.localPosition = new Vector3(posX, 0.1f, -0.1f);
+        var posY = Mathf.Clamp(delta.y, -yOffset, yOffset) + 0.1f;
+        go.transform.localPosition = new Vector3(posX, posY, -0.1f);
 
         var renderer = go.AddComponent<SpriteRenderer>();
         renderer.material = HatManager.Instance.PlayerMaterial;
