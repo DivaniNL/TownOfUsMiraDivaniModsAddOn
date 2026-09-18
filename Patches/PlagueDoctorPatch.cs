@@ -20,6 +20,7 @@ namespace DivaniMods.Patches;
 public static class PlagueDoctorPatch
 {
     private static readonly StringBuilder StatusBuilder = new(512);
+    private static float _lastWarningCheck;
 
     [RegisterEvent]
     public static void OnMeetingStart(StartMeetingEvent evt)
@@ -167,20 +168,22 @@ public static class PlagueDoctorPatch
         {
             var immunityText = MiraLocaleManager
                 .Get("DivaniMods.Role.PlagueDoctor.Status.Immunity")
-                .Replace(
-                    "<seconds>",
-                    PlagueDoctorRole.ImmunityTimer.ToString("F1"));
+                .Replace("<seconds>", PlagueDoctorRole.ImmunityTimer.ToString("F1"));
 
-            text += $"<color=#00FF00>{immunityText}</color>\n";
+            StatusBuilder.Append("<color=#00FF00>")
+                .Append(immunityText)
+                .Append("</color>\n");
         }
 
-       var progressText = MiraLocaleManager.Get(
-            "DivaniMods.Role.PlagueDoctor.Status.InfectionProgress");
+        var progressText = MiraLocaleManager.Get("DivaniMods.Role.PlagueDoctor.Status.InfectionProgress");
+        StatusBuilder.Append("<color=#FFC000>")
+            .Append(progressText)
+            .Append("</color>\n");
 
-        text += $"<color=#FFC000>{progressText}</color>\n";
-
-        var infectedText = MiraLocaleManager.Get(
-            "DivaniMods.Role.PlagueDoctor.Status.Infected");
+        var leftColumn = new StringBuilder(256);
+        var rightColumn = new StringBuilder(256);
+        var playerCount = 0;
+        var infectedText = MiraLocaleManager.Get("DivaniMods.Role.PlagueDoctor.Status.Infected");
 
         foreach (var p in PlayerControl.AllPlayerControls)
         {
@@ -196,10 +199,11 @@ public static class PlagueDoctorPatch
             builder.Append(": ");
 
             var infected = PlagueDoctorRole.GetDisplayedInfectionState(p, out var progress);
-
             if (infected)
             {
-                entry += $"<color=#FF0000>{infectedText}</color>";
+                builder.Append("<color=#FF0000>")
+                    .Append(infectedText)
+                    .Append("</color>");
             }
             else
             {
