@@ -9,12 +9,15 @@ using TownOfUs.Modules;
 using TownOfUs.Modules.RainbowMod;
 using TownOfUs.Patches;
 using TownOfUs.Utilities.Appearances;
+using UnityEngine;
 
 namespace DivaniMods.Patches;
 
 [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
 public static class RainbowCamoCommsPatch
 {
+    private static int _lastRefreshFrame;
+
     [HarmonyPostfix]
     [HarmonyPriority(Priority.Last)]
     public static void Postfix()
@@ -29,6 +32,16 @@ public static class RainbowCamoCommsPatch
         {
             return;
         }
+
+        // This is a purely cosmetic effect; refreshing every frame is unnecessary and
+        // causes recurring work on every client when camo is active. Re-check on a short
+        // cadence instead of every HUD tick while preserving the same appearance behavior.
+        if (Time.frameCount - _lastRefreshFrame < 8)
+        {
+            return;
+        }
+
+        _lastRefreshFrame = Time.frameCount;
 
         var commsCamo = HudManagerPatches.CamouflageCommsEnabled;
 

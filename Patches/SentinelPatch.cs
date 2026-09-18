@@ -15,6 +15,7 @@ public static class SentinelPatch
     private static bool _wasInMeeting;
     private static bool _flashActive;
     private static float _flashEndTime;
+    private static float _lastBeaconScanTime;
 
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
     [HarmonyPostfix]
@@ -67,6 +68,13 @@ public static class SentinelPatch
 
         if (PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(localPlayer)) return;
         if (BeaconManager.BeaconsPlaced == 0) return;
+
+        if (Time.time - _lastBeaconScanTime < 0.25f)
+        {
+            return;
+        }
+
+        _lastBeaconScanTime = Time.time;
 
         var newEntries = BeaconManager.UpdatePlayerTracking();
 

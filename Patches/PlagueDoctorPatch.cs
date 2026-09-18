@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using HarmonyLib;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
@@ -18,6 +19,8 @@ namespace DivaniMods.Patches;
 [HarmonyPatch]
 public static class PlagueDoctorPatch
 {
+    private static readonly StringBuilder StatusBuilder = new(512);
+
     [RegisterEvent]
     public static void OnMeetingStart(StartMeetingEvent evt)
     {
@@ -122,7 +125,11 @@ public static class PlagueDoctorPatch
             ClearStatusText();
         }
 
-        PlagueDoctorRole.TryShowInfectionWarning();
+        if (Time.time - _lastWarningCheck >= 1f)
+        {
+            PlagueDoctorRole.TryShowInfectionWarning();
+            _lastWarningCheck = Time.time;
+        }
 
     }
 
@@ -154,8 +161,7 @@ public static class PlagueDoctorPatch
     private static string BuildInfectionStatusText()
     {
         var infectDuration = OptionGroupSingleton<PlagueDoctorOptions>.Instance.InfectDuration.Value;
-
-        var text = string.Empty;
+        StatusBuilder.Clear();
 
         if (PlagueDoctorRole.ImmunityTimer > 0f)
         {
@@ -176,7 +182,6 @@ public static class PlagueDoctorPatch
         var infectedText = MiraLocaleManager.Get(
             "DivaniMods.Role.PlagueDoctor.Status.Infected");
 
-        var entries = new List<string>();
         foreach (var p in PlayerControl.AllPlayerControls)
         {
             if (p == null || p == PlagueDoctorRole.PlagueDoctorPlayer) continue;
@@ -184,7 +189,11 @@ public static class PlagueDoctorPatch
             if (PlagueDoctorRole.IsKnownDead(p)) continue;
             if (PlagueDoctorRole.IsPlagueDoctor(p)) continue;
 
-            var entry = $"{TrimName(p.Data.PlayerName)}: ";
+            var builder = (playerCount % 2 == 0) ? leftColumn : rightColumn;
+            playerCount++;
+
+            builder.Append(TrimName(p.Data.PlayerName));
+            builder.Append(": ");
 
             var infected = PlagueDoctorRole.GetDisplayedInfectionState(p, out var progress);
 
@@ -200,25 +209,32 @@ public static class PlagueDoctorPatch
                     color = Color.Lerp(Color.green, Color.yellow, percent * 2f);
                 else
                     color = Color.Lerp(Color.yellow, Color.red, (percent * 2f) - 1f);
-                entry += $"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{(percent * 100f):F0}%</color>";
+
+                builder.Append("<color=#")
+                    .Append(ColorUtility.ToHtmlStringRGB(color))
+                    .Append('>')
+                    .Append((percent * 100f).ToString("F0"))
+                    .Append("%</color>");
             }
 
-            entries.Add(entry);
+            builder.Append('\n');
         }
 
-        var splitIndex = (entries.Count + 1) / 2;
-        for (var i = 0; i < splitIndex; i++)
+        if (leftColumn.Length > 0)
         {
-            text += entries[i];
-            var rightIndex = i + splitIndex;
-            if (rightIndex < entries.Count)
+            StatusBuilder.Append(leftColumn);
+            if (rightColumn.Length > 0)
             {
-                text += $"<pos=90%>{entries[rightIndex]}";
+                StatusBuilder.Append("<pos=90%>")
+                    .Append(rightColumn);
             }
-            text += "\n";
+        }
+        else if (rightColumn.Length > 0)
+        {
+            StatusBuilder.Append(rightColumn);
         }
 
-        return text;
+        return StatusBuilder.ToString();
     }
 
     private static string TrimName(string playerName)

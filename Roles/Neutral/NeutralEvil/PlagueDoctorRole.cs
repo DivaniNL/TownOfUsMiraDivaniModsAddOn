@@ -46,6 +46,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
     public static PlayerControl? PlagueDoctorPlayer { get; internal set; }
 
     private static readonly Dictionary<byte, float> LastAccrueFrame = new();
+    private static readonly Dictionary<byte, float> LastSpreadAttempt = new();
     private static float _lastProgressSync;
 
     public static int NumInfectionsRemaining { get; set; }
@@ -134,6 +135,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
     {
         InfectionProgress.Clear();
         LastAccrueFrame.Clear();
+        LastSpreadAttempt.Clear();
         DeadPlayers.Clear();
         FrozenProgress.Clear();
         FrozenInfected.Clear();
@@ -225,6 +227,14 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
             return;
         }
 
+        var now = Time.fixedTime;
+        if (LastSpreadAttempt.TryGetValue(source.PlayerId, out var lastSpread) && now - lastSpread < 0.2f)
+        {
+            return;
+        }
+
+        LastSpreadAttempt[source.PlayerId] = now;
+
         var opts = OptionGroupSingleton<PlagueDoctorOptions>.Instance;
         var infectDistance = opts.InfectDistance.Value;
         var infectDuration = opts.InfectDuration.Value;
@@ -255,7 +265,7 @@ public sealed class PlagueDoctorRole(IntPtr cppPtr)
 
             LastAccrueFrame[target.PlayerId] = Time.fixedTime;
 
-            var progress = InfectionProgress.GetValueOrDefault(target.PlayerId, 0f) + Time.fixedDeltaTime;
+            var progress = InfectionProgress.GetValueOrDefault(target.PlayerId, 0f) + 0.2f;
             InfectionProgress[target.PlayerId] = progress;
 
             if (Time.time - _lastProgressSync > 0.5f)

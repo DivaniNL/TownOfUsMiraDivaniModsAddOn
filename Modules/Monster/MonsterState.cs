@@ -125,6 +125,12 @@ public static class MonsterState
 
     public static void ClearPendingDigestSort(byte victimId) => pendingDigestSort.Remove(victimId);
 
+    private static void ClearVictimHideState(byte victimId)
+    {
+        MonsterDevourAnimation.RemoveHidingVictim(victimId);
+        pendingDigestSort.Remove(victimId);
+    }
+
     public static void DigestAll(byte MonsterId)
     {
         if (!stomachs.TryGetValue(MonsterId, out var victims)) return;
@@ -161,6 +167,7 @@ public static class MonsterState
                     if (victim.AmOwner) EndSpectating();
                 }
 
+                ClearVictimHideState(victimId);
                 eatenBy.Remove(victimId);
             }
         }
@@ -204,10 +211,33 @@ public static class MonsterState
                 }
             }
 
+            ClearVictimHideState(victimId);
             eatenBy.Remove(victimId);
         }
 
         stomachs.Remove(MonsterId);
+    }
+
+    public static void ReleaseOnOtherDeath(byte victimId)
+    {
+        if (!eatenBy.TryGetValue(victimId, out var MonsterId)) return;
+
+        var victim = MiscUtils.PlayerById(victimId);
+        if (victim != null)
+        {
+            victim.Visible = true;
+            victim.moveable = true;
+            var collider = victim.GetComponent<Collider2D>();
+            if (collider != null) collider.enabled = true;
+
+            if (victim.AmOwner) EndSpectating();
+        }
+
+        if (stomachs.TryGetValue(MonsterId, out var list))
+            list.Remove(victimId);
+
+        ClearVictimHideState(victimId);
+        eatenBy.Remove(victimId);
     }
 
     public static void ForgetMonster(byte MonsterId)
@@ -225,6 +255,7 @@ public static class MonsterState
                     if (collider != null) collider.enabled = true;
                     if (victim.AmOwner) EndSpectating();
                 }
+                ClearVictimHideState(victimId);
                 eatenBy.Remove(victimId);
             }
         }
@@ -245,11 +276,13 @@ public static class MonsterState
             victim.moveable = true;
             var collider = victim.GetComponent<Collider2D>();
             if (collider != null) collider.enabled = true;
+            MonsterDevourAnimation.RemoveHidingVictim(victimId);
         }
 
         stomachs.Clear();
         eatenBy.Clear();
         pendingDigestSort.Clear();
+        MonsterDevourAnimation.ClearHidingVictims();
     }
 
     private static void BreakControllingEffects(PlayerControl victim)
@@ -316,11 +349,8 @@ public static class MonsterState
         var local = PlayerControl.LocalPlayer;
         if (local == null) yield break;
 
-        while (true)
+        while (AmongUsClient.Instance != null && AmongUsClient.Instance.IsGameStarted && IsEaten(local.PlayerId))
         {
-            if (AmongUsClient.Instance == null || !AmongUsClient.Instance.IsGameStarted || !IsEaten(local.PlayerId))
-                yield break;
-
             var Monster = MiscUtils.PlayerById(MonsterId);
             if (Monster != null && !Monster.HasDied() && Camera.main != null)
             {
@@ -331,6 +361,9 @@ public static class MonsterState
 
             yield return null;
         }
+
+        if (Camera.main != null)
+            Camera.main.GetComponent<FollowerCamera>()?.SetTarget(local);
     }
 
     private static bool LocalCanSee(Vector2 pos)
