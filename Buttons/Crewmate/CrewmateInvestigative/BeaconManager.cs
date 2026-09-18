@@ -141,13 +141,15 @@ public static class BeaconManager
     public static List<(BeaconData Beacon, string PlayerName)> UpdatePlayerTracking()
     {
         var newEntries = new List<(BeaconData, string)>();
-
+        var players = PlayerControl.AllPlayerControls.ToArray();
         var bodies = UnityEngine.Object.FindObjectsOfType<DeadBody>();
 
         foreach (var beacon in Beacons)
         {
             var beaconRoom = GetShipRoom(beacon.Position);
             if (beaconRoom == null) continue;
+
+            beacon.BodiesFound.Clear();
 
             foreach (var body in bodies)
             {
@@ -161,7 +163,7 @@ public static class BeaconManager
 
             var currentPlayersInRoom = new HashSet<byte>();
 
-            foreach (var player in PlayerControl.AllPlayerControls)
+            foreach (var player in players)
             {
                 if (player == null || player.Data == null || player.Data.IsDead) continue;
                 if (player.Data.Disconnected) continue;

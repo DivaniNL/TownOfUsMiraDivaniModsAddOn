@@ -28,6 +28,9 @@ public static class UseButtonOverridePatch
     private static string? _savedLabel;
     private static bool _savedLabelActive;
     private static bool _savedLabelValid;
+    private static Sprite? _portalSprite;
+    private static Sprite? _defuseSprite;
+    private static readonly Dictionary<int, SpriteRenderer[]> RendererCache = new();
 
     // FixedUpdate runs before Unity polls mouse/collider input, so forcing the use
     // button active here (on an always-active object) guarantees it owns the slot at
@@ -208,9 +211,7 @@ public static class UseButtonOverridePatch
 
         DriveSlot(hud, useButton);
 
-        var sprite = kind == Kind.Defuse
-            ? DivaniAssets.DemolitionistDefuseButton.LoadAsset()
-            : DivaniAssets.UsePortalButton.LoadAsset();
+        var sprite = GetOverrideSprite(kind);
 
         var label = kind == Kind.Defuse ? "DEFUSE" : "USE PORTAL";
         var labelColor = kind == Kind.Defuse ? DemolitionistRole.DemolitionistColor : PortalLabelColor;
@@ -241,7 +242,7 @@ public static class UseButtonOverridePatch
             useButton.SetCoolDown(0f, 1f);
         }
 
-        if (useButton.graphic != null && sprite != null)
+        if (useButton.graphic != null && sprite != null && useButton.graphic.sprite != sprite)
         {
             useButton.graphic.sprite = sprite;
             useButton.graphic.SetCooldownNormalizedUvs();
@@ -270,9 +271,31 @@ public static class UseButtonOverridePatch
         }
     }
 
+    private static Sprite? GetOverrideSprite(Kind kind)
+    {
+        return kind switch
+        {
+            Kind.Defuse => _defuseSprite ??= DivaniAssets.DemolitionistDefuseButton.LoadAsset(),
+            Kind.Portal => _portalSprite ??= DivaniAssets.UsePortalButton.LoadAsset(),
+            _ => null,
+        };
+    }
+
+    private static SpriteRenderer[] GetCachedRenderers(UseButton useButton)
+    {
+        var key = useButton.GetInstanceID();
+        if (!RendererCache.TryGetValue(key, out var renderers))
+        {
+            renderers = useButton.GetComponentsInChildren<SpriteRenderer>(true);
+            RendererCache[key] = renderers;
+        }
+
+        return renderers;
+    }
+
     private static void ForceVisualEnabled(UseButton useButton)
     {
-        var renderers = useButton.GetComponentsInChildren<SpriteRenderer>(true);
+        var renderers = GetCachedRenderers(useButton);
         foreach (var sr in renderers)
         {
             if (sr == null)
@@ -316,6 +339,8 @@ public static class UseButtonOverridePatch
             useButton.graphic.sprite = _savedSprite;
             useButton.graphic.SetCooldownNormalizedUvs();
         }
+
+        RendererCache.Remove(useButton.GetInstanceID());
 
         if (_savedLabelValid && useButton.buttonLabelText != null)
         {
