@@ -1,38 +1,46 @@
 using DivaniMods.Modifiers.Impostors;
 using DivaniMods.Roles.Impostor.ImpostorKilling;
 using MiraAPI.Events;
-using MiraAPI.Events.Vanilla.Player;
+using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.Modifiers;
 using MiraAPI.Networking;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 
 public class DeathNoteEvents
 {
     [RegisterEvent]
-    public static void OnPlayerDeath(PlayerDeathEvent @event)
+    public static void OnEjection(EjectionEvent evt)
     {
-        if (!AmongUsClient.Instance.AmHost) return;
-
-        var dead = @event.Player;
-        var death = @event.DeathReason;
-
-        if (dead.Data.Role is DeathnoteRole)
+        if (!AmongUsClient.Instance.AmHost)
         {
-            if (death == DeathReason.Exile)
+            return;
+        }
+
+        var exiled = evt.ExileController?.initData?.networkedPlayer?.Object;
+        if (exiled == null || exiled.Data == null || exiled.Data.Role is not DeathnoteRole)
+        {
+            return;
+        }
+
+        foreach (var player in PlayerControl.AllPlayerControls)
+        {
+            if (player == null || player.Data == null || player.Data.IsDead || player.PlayerId == exiled.PlayerId)
             {
-                foreach (var player in Helpers.GetAlivePlayers())
-                {
-                    if (player.HasModifier<DeathnoteModifier>())
-                    {
-                        if (player.Data.Role.IsImpostor) continue;
-                        PlayerControl.LocalPlayer.RpcCustomMurder(player, true, teleportMurderer: false);
-                    }
-                    else
-                    {
-                        player.RemoveModifier<DeathnoteModifier>();
-                    }
-                }
+                continue;
             }
+
+            if (!player.HasModifier<DeathnoteModifier>() || player.Data.Role.IsImpostor)
+            {
+                continue;
+            }
+
+            TownOfUs.Modules.GameHistory.UpdatePlayerDeathData(player, MiraLocaleManager.Get("DiedToDeathnote"),
+                roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+                diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetFalse,
+                lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
+
+            exiled.RpcCustomMurder(player, MeetingCheck.Ignore);
         }
     }
 }
