@@ -14,6 +14,7 @@
     <string name="DiedToCunctator">Retrasado</string>
     <string name="DiedToObfuscator">Ofuscado</string>
     <string name="DiedToDuelist">Derrotado</string>
+    <string name="DiedToDeathnote">Marcado</string>
     <string name="DiedToWatcher">Observado</string>
     <string name="DiedToThief">Robado</string>
     <string name="DivaniMods.DeathReason.Retaliated">Represalia</string>
