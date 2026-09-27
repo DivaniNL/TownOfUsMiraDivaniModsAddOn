@@ -68,9 +68,4 @@ public enum DivaniRpcCalls : uint
     MonsterDevour = 263,
     MonsterDigest = 264,
     RecruiterSetRecruited = 265,
-    YinYangAssign = 266,
-    YinYangMark = 267,
-    YinYangWin = 268,
-    YinYangDissolve = 269,
-    YinYangShame = 270,
 }

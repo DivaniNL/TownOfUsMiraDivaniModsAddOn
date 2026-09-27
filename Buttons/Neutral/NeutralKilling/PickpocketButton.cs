@@ -21,6 +21,7 @@ using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Buttons;
 using TownOfUs.Events;
+using DivaniMods.Modifiers.Game.Alliance;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
@@ -336,9 +337,6 @@ public class PickpocketButton : TownOfUsButton
             return true;
 
         if (modifier is AllianceGameModifier && !OptionGroupSingleton<ThiefOptions>.Instance.CanStealAllianceModifiers.Value)
-            return true;
-
-        if (modifier is YinYangModifier or YinMarkedModifier or YangMarkedModifier)
             return true;
 
         if (modifier.GetType().Name.StartsWith("Test", StringComparison.OrdinalIgnoreCase))

@@ -96,8 +96,6 @@ public static class RecruiterPatch
 
         recruiter.HasRecruited = true;
 
-        YinYangModifier.CheckAlliedPair();
-
         if (recruiterPlayer.AmOwner)
         {
             ShowRecruiterChangeButton(recruiter);

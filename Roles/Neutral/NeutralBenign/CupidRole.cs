@@ -375,8 +375,6 @@ public sealed class CupidRole(IntPtr cppPtr)
         role._lastKnownCoupleKey = CoupleKey([loverOne, loverTwo]);
         CupidLoverReviveEvents.FinalizedCouples[cupid.PlayerId] = (loverOneId, loverTwoId);
 
-        YinYangModifier.CheckAlliedPair();
-
         if (cupid.AmOwner)
         {
             var message = MiraLocaleManager.Get("DivaniMods.Role.Cupid.Notification.FellInLove")
