@@ -3,6 +3,7 @@ using System.Reflection;
 using BepInEx.Logging;
 using HarmonyLib;
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using MiraAPI.Hud;
 using DivaniMods.Buttons.Neutral.NeutralEvil;
 using DivaniMods.Options;
@@ -103,7 +104,7 @@ public static class DemolitionistPatches
         }
         catch
         {
-            return "You cannot call an emergency meeting during a sabotage.";
+            return MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Notification.EmergencyDuringSabotage"); //just in case
         }
     }
 

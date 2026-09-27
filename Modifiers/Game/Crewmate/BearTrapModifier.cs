@@ -1,4 +1,5 @@
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -19,9 +20,8 @@ public sealed class BearTrapModifier : TouGameModifier, IWikiDiscoverable
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.BearTrapIcon.LoadAsset(),
             "DivaniMod.Modifier.Crewmate.BearTrap", 1.45f));
 
-    public override string ModifierName => "Bear Trap";
-    public override string IntroInfo => "Trap your killer upon death.";
-    public override string LocaleKey => "BearTrap";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.BearTrap", "Bear Trap");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.BearTrap.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.CrewmatePostmortem;
     public override Color FreeplayFileColor => BearTrapColor;
     public Color ModifierColor => BearTrapColor;
@@ -30,7 +30,8 @@ public sealed class BearTrapModifier : TouGameModifier, IWikiDiscoverable
     public override string GetDescription()
     {
         var duration = OptionGroupSingleton<BearTrapOptions>.Instance.FreezeDuration.Value;
-        return $"When you are killed, your killer is frozen for {duration:0} seconds and cannot report your body.";
+        return MiraLocaleManager.Get("DivaniMods.Modifier.BearTrap.Description")
+            .Replace("<seconds>", duration.ToString("0"));
     }
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());

@@ -7,11 +7,11 @@ using MiraAPI.Modifiers.ModifierDisplay;
 using MiraAPI.Modifiers.Types;
 using MiraAPI.Networking;
 using MiraAPI.Utilities;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
-using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Modifiers.Game.Universal;
 using DivaniMods.Options;
 using DivaniMods.Patches;
@@ -22,7 +22,6 @@ using TownOfUs.Assets;
 using TownOfUs.Buttons;
 using TownOfUs.Events;
 using TownOfUs.Interfaces;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
 using TownOfUs.Modifiers.Neutral;
@@ -31,12 +30,13 @@ using TownOfUs.Modifiers.Game.Assailant;
 using TownOfUs.Utilities;
 using TownOfUs.Utilities.Appearances;
 using UnityEngine;
+using TownOfUs.Modules;
 
 namespace DivaniMods.Buttons.Neutral.NeutralKilling;
 
 public class PickpocketButton : TownOfUsButton
 {
-    public override string Name => "Pickpocket";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Thief.Ability.Pickpocket");
     public override float Cooldown => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketCooldown.Value;
     public override float EffectDuration => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketDuration.Value;
     public override int MaxUses => (int)OptionGroupSingleton<ThiefOptions>.Instance.MaxStolenModifiers.Value;
@@ -139,7 +139,12 @@ public class PickpocketButton : TownOfUsButton
         // Manual targeting (non-target button): pick closest, refresh outline each frame.
         var newTarget = GetTarget();
         if (newTarget != _target) SetOutline(false);
-        _target = IsTargetValid(newTarget) ? newTarget : null;
+        var candidate = IsTargetValid(newTarget) ? newTarget : null;
+        if (candidate != null && !FragBombState.IsHolder(candidate.PlayerId) && GetTargetModifiers(candidate).Count == 0)
+        {
+            candidate = null;
+        }
+        _target = candidate;
         SetOutline(true);
 
         // Bomb snatch is always allowed even at max stolen modifiers because
@@ -179,11 +184,15 @@ public class PickpocketButton : TownOfUsButton
         }
 
         _capturedTargetId = _target.PlayerId;
-        var targetName = _target.Data?.PlayerName ?? "them";
+        var targetName = _target.Data?.PlayerName ?? MiraLocaleManager.Get("DivaniMods.Role.Thief.Notification.UnknownTarget");;
         var delay = EffectDuration;
 
+        var pickpocketingText = MiraLocaleManager.Get("DivaniMods.Role.Thief.Notification.Pickpocketing")
+            .Replace("<player>", targetName)
+            .Replace("<seconds>", delay.ToString("0.#"));
+
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#804D1A>Pickpocketing {targetName} in {delay:0.#}s...</color></b>",
+            $"<b><color=#804D1A>{pickpocketingText}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.ThiefIcon.LoadAsset());
@@ -268,27 +277,23 @@ public class PickpocketButton : TownOfUsButton
             targetModifiers = targetModifiers.Where(m => m is not LoverModifier).ToList();
         }
 
+        if (targetModifiers.Count == 0)
+        {
+            return;
+        }
+
         var random = new System.Random();
+        var thiefHasButtonModifier = HasButtonModifier(thief);
+        var stolen = PickTargetModifier(targetModifiers, random, thief);
+        var canUseModifier = CanThiefUseModifier(stolen, thief);
 
-        if (targetModifiers.Count > 0)
+        uint fallbackRandomId = 0;
+        if (!canUseModifier)
         {
-            var thiefHasButtonModifier = HasButtonModifier(thief);
-            var stolen = PickTargetModifier(targetModifiers, random, thief);
-            var canUseModifier = CanThiefUseModifier(stolen, thief);
-
-            uint fallbackRandomId = 0;
-            if (!canUseModifier)
-            {
-                fallbackRandomId = PickRandomGivableId(thief, random, allowButtonModifiers: !thiefHasButtonModifier);
-            }
-
-            RpcStealModifier(thief, target.PlayerId, stolen.TypeId, canUseModifier, fallbackRandomId);
+            fallbackRandomId = PickRandomGivableId(thief, random, allowButtonModifiers: !thiefHasButtonModifier);
         }
-        else
-        {
-            var chosenId = PickRandomGivableId(thief, random, allowButtonModifiers: !HasButtonModifier(thief));
-            RpcGiveRandomModifier(thief, chosenId);
-        }
+
+        RpcStealModifier(thief, target.PlayerId, stolen.TypeId, canUseModifier, fallbackRandomId);
     }
     
     private static BaseModifier PickTargetModifier(
@@ -330,7 +335,7 @@ public class PickpocketButton : TownOfUsButton
         if (modifier is ExcludedGameModifier)
             return true;
 
-        if (modifier is BetrayerModifier)
+        if (modifier is AllianceGameModifier && !OptionGroupSingleton<ThiefOptions>.Instance.CanStealAllianceModifiers.Value)
             return true;
 
         if (modifier is YinYangModifier or YinMarkedModifier or YangMarkedModifier)
@@ -716,8 +721,14 @@ public class PickpocketButton : TownOfUsButton
 
         if (target == PlayerControl.LocalPlayer)
         {
+            var stolenFromYouText = MiraLocaleManager.Get(
+                    bundledTypeId != 0
+                        ? "DivaniMods.Role.Thief.Notification.ModifiersStolenFromYou"
+                        : "DivaniMods.Role.Thief.Notification.ModifierStolenFromYou")
+                .Replace("<modifier>", displayName);
+
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#804D1A>Your {displayName} {(bundledTypeId != 0 ? "modifiers were" : "modifier was")} stolen!</color></b>",
+                $"<b><color=#804D1A>{stolenFromYouText}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.ThiefIcon.LoadAsset());
@@ -748,8 +759,11 @@ public class PickpocketButton : TownOfUsButton
                 
                 if (loverPartner == PlayerControl.LocalPlayer)
                 {
+                    var newLoverText = MiraLocaleManager.Get("DivaniMods.Role.Thief.Notification.NowInLove")
+                        .Replace("[player]", thief.Data.PlayerName);
+
                     MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                        $"<b><color=#FF66CC>You are now in love with {thief.Data.PlayerName}!</color></b>",
+                        $"<b><color=#FF66CC>{newLoverText}</color></b>",
                         TownOfUsColors.Lover,
                         new Vector3(0f, 1f, -20f),
                         spr: TouModifierIcons.Lover.LoadAsset());
@@ -784,8 +798,10 @@ public class PickpocketButton : TownOfUsButton
             {
                 var stoleLover = isStealingLover && loverPartner != null;
                 var stolenMsg = stoleLover
-                    ? $"<b><color=#FF66CC>Stole Lover! You are now in love with {loverPartner!.Data.PlayerName}!</color></b>"
-                    : $"<b><color=#804D1A>Stole/Gained {displayName}!</color></b>";
+                    ? $"<b><color=#FF66CC>{MiraLocaleManager.Get("DivaniMods.Role.Thief.Notification.StoleLover")
+                        .Replace("[player]", loverPartner!.Data.PlayerName)}</color></b>"
+                    : $"<b><color=#804D1A>{MiraLocaleManager.Get("DivaniMods.Role.Thief.Notification.StoleModifier")
+                        .Replace("[modifier]", displayName)}</color></b>";
                 MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                     stolenMsg,
                     stoleLover ? TownOfUsColors.Lover : Color.white,
@@ -812,7 +828,7 @@ public class PickpocketButton : TownOfUsButton
                 loverPartner.RemoveModifier<LoverModifier>();
             }
             
-            ApplyGivenModifier(thief, fallbackRandomId, prefix: "Stole/Gained");
+            ApplyGivenModifier(thief, fallbackRandomId);
         }
 
         ScheduleModifierDisplayRefresh(thief, target);
@@ -849,27 +865,14 @@ public class PickpocketButton : TownOfUsButton
         
         
         var inMeeting = MeetingHud.Instance || ExileController.Instance;
-        var heartbreakText = TouLocale.Get("DiedToHeartbreak");
+        var heartbreakText = MiraLocaleManager.Get("DiedToHeartbreak");
         
-        DeathHandlerModifier.UpdateDeathHandlerImmediate(
-            victim,
-            heartbreakText,
-            DeathEventHandlers.CurrentRound,
-            inMeeting ? DeathHandlerOverride.SetFalse : DeathHandlerOverride.SetTrue,
-            lockInfo: DeathHandlerOverride.SetTrue);
-        
-        while (DeathHandlerModifier.IsAltCoroutineRunning)
-        {
-            yield return null;
-        }
-        
-        if (victim.TryGetModifier<DeathHandlerModifier>(out var deathHandler))
-        {
-            deathHandler.CauseOfDeath = heartbreakText;
-            deathHandler.RoundOfDeath = DeathEventHandlers.CurrentRound;
-            deathHandler.DiedThisRound = !inMeeting;
-            deathHandler.LockInfo = true;
-        }
+        GameHistory.UpdatePlayerDeathData(
+        victim,
+        heartbreakText,
+        roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+        diedThisRound: inMeeting ? DeathHandlerOverride.SetFalse : DeathHandlerOverride.SetTrue,
+        lockInfo: DeathHandlerOverride.SetTrue);    
         
         if (inMeeting)
         {
@@ -889,7 +892,7 @@ public class PickpocketButton : TownOfUsButton
         if (thief == PlayerControl.LocalPlayer)
         {
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                "<b><color=#e8a87c>You stole the Frag!</color></b>",
+                $"<b><color=#e8a87c>{MiraLocaleManager.Get("DivaniMods.Role.Thief.Notification.StoleFrag")}</color></b>",
                 FragRole.FragColor,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.FragIcon.LoadAsset());
@@ -898,7 +901,7 @@ public class PickpocketButton : TownOfUsButton
         if (PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.PlayerId == targetId)
         {
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                "<b><color=#e8a87c>Your Frag was stolen by the Thief!</color></b>",
+                $"<b><color=#e8a87c>{MiraLocaleManager.Get("DivaniMods.Role.Thief.Notification.FragStolen")}</color></b>",
                 FragRole.FragColor,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.FragIcon.LoadAsset());
@@ -908,11 +911,11 @@ public class PickpocketButton : TownOfUsButton
     [MethodRpc((uint)DivaniRpcCalls.GiveRandomModifier)]
     public static void RpcGiveRandomModifier(PlayerControl thief, uint chosenId)
     {
-        ApplyGivenModifier(thief, chosenId, prefix: "Stole/Gained");
+        ApplyGivenModifier(thief, chosenId);
         ScheduleModifierDisplayRefresh(thief);
     }
     
-    private static void ApplyGivenModifier(PlayerControl thief, uint rolledId, string prefix)
+    private static void ApplyGivenModifier(PlayerControl thief, uint rolledId)
     {
         var chosenId = ResolveGrantedModifierId(rolledId);
 
@@ -922,7 +925,7 @@ public class PickpocketButton : TownOfUsButton
             if (thief == PlayerControl.LocalPlayer)
             {
                 MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                    $"<b><color=#804D1A>No new modifiers available!</color></b>",
+                    $"<b><color=#804D1A>{MiraLocaleManager.Get("DivaniMods.Role.Thief.Notification.NoModifiersAvailable")}</color></b>",
                     Color.white,
                     new Vector3(0f, 1f, -20f),
                     spr: DivaniAssets.ThiefIcon.LoadAsset());
@@ -965,12 +968,16 @@ public class PickpocketButton : TownOfUsButton
         
         if (thief == PlayerControl.LocalPlayer)
         {
+            var message = MiraLocaleManager
+                .Get("DivaniMods.Role.Thief.Notification.StoleOrGainedModifier")
+                .Replace("[modifier]", displayName);
+
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#804D1A>{prefix} {displayName}!</color></b>",
+                $"<b><color=#804D1A>{message}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.ThiefIcon.LoadAsset());
-            
+
             ButtonRefresher.RefreshAllButtons();
         }
         

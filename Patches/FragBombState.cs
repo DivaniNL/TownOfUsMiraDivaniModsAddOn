@@ -6,6 +6,7 @@ using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Networking;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using Reactor.Utilities;
 using DivaniMods.Assets;
@@ -134,7 +135,7 @@ public static class FragBombState
     private static IEnumerator CoExplodeInMeeting(byte holderIdCapture, byte fragIdCapture)
     {
         while (MeetingHud.Instance &&
-               MeetingHud.Instance.state == MeetingHud.VoteStates.Animating)
+               MeetingHud.Instance.state == MeetingHud.MeetingStates.Animating)
         {
             yield return null;
         }
@@ -403,9 +404,12 @@ public static class FragBombState
             return;
         }
 
+       var text = MiraLocaleManager.Get(
+            "DivaniMods.Role.Frag.Timer.PassTheFrag");
+
         DivaniTimers.Set(
             TimerId,
-            "<b><color=#e8a87c>PASS THE FRAG!</color></b>",
+            $"<b><color=#e8a87c>{text}</color></b>",
             GetFragRoleIcon(),
             Mathf.Max(0f, TimeRemaining),
             useLocalTimeDelta: false,

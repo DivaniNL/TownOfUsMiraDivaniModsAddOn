@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Game.Universal;
@@ -13,7 +14,7 @@ namespace DivaniMods.Buttons.Modifiers;
 
 public sealed class TacticalInsertionButton : TownOfUsButton
 {
-    public override string Name => "Tactical Insertion";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Modifier.TacticalInsertion.Ability.Mark");
     public override Color TextOutlineColor => TacticalInsertionModifier.TacticalColor;
     public override BaseKeybind Keybind => Keybinds.ModifierAction;
     public override ButtonLocation Location => ButtonLocation.BottomLeft;
@@ -98,7 +99,7 @@ public sealed class TacticalInsertionButton : TownOfUsButton
         }
 
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            "<b><color=#00FF00>Position marked</color></b>",
+            $"<b><color=#00FF00>{MiraLocaleManager.Get("DivaniMods.Modifier.TacticalInsertion.Notification.PositionMarked")}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.TacticalInsertionIcon.LoadAsset());

@@ -13,6 +13,8 @@ using DivaniMods.Patches;
 using DivaniMods.Patches.WinConditions;
 using TownOfUs.Patches;
 using DivaniMods.Utilities;
+using MiraAPI.Roles;
+using DivaniMods.Roles.Impostor.ImpostorPower;
 
 namespace DivaniMods;
 
@@ -31,8 +33,7 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
         $"<b><color={DivaniCreditsColorPatch.CreditsColor}>DM</color></b>";
 
     public const string Id = "com.divani.mods";
-    public const string Version = "1.3.4";
-    
+    public const string Version = "1.3.9";
     public static DivaniPlugin Instance { get; private set; } = null!;
     public new ManualLogSource Log => base.Log;
     
@@ -54,7 +55,7 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
         VersionDisplay.Register();
         DivaniModAnnouncementPatch.EnsureLoaded();
         DivaniLocale.Register();
-        DivaniWikiTermsPatch.RegisterLocale();
+        // DivaniWikiTermsPatch.RegisterLocale();
         WinConditionRegistry.Register(new BetrayerWinCondition());
         WinConditionRegistry.Register(new ThiefQuotaDrawWinCondition());
         WinConditionRegistry.Register(new InnocentLoverWinCondition());
@@ -62,7 +63,6 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
         if (!IL2CPPChainloader.Instance.Plugins.ContainsKey(
                 "com.edgetel.perfectcomms"))
             return;
-
         PerfectCommsVoiceIntegration.Register();
     }
 }

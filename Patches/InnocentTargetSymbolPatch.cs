@@ -6,6 +6,7 @@ using DivaniMods.Roles.Neutral.NeutralEvil;
 using TownOfUs.Modifiers;
 using TownOfUs.Utilities;
 using UnityEngine;
+using TownOfUs.Modules;
 
 namespace DivaniMods.Patches;
 
@@ -39,7 +40,7 @@ internal static class InnocentTauntMeetingDisplay
                 continue;
             }
 
-            if (MeetingHud.Instance != null ? local.HasDied() : DeathHandlerModifier.IsFullyDead(local))
+            if (MeetingHud.Instance != null ? local.HasDied() : GameHistory.IsFullyDead(local))
             {
                 return true;
             }

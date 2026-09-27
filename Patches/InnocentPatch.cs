@@ -12,6 +12,7 @@ using DivaniMods.Modifiers.Neutral.NeutralEvil;
 using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralEvil;
 using UnityEngine;
+using TownOfUs.Utilities;
 
 namespace DivaniMods.Patches;
 
@@ -91,6 +92,7 @@ public static class InnocentPatch
             innocent.AboutToWin = true;
             innocent.AwaitingNextMeetingExile = false;
             innocent.TargetVoted = true;
+            innocent.TargetWasEvil = !exiled.IsCrewmate();
             RemoveInnocentTauntMarker(exiled.PlayerId, innocent.Player.PlayerId);
         }
     }
@@ -108,6 +110,7 @@ public static class InnocentPatch
             if (innocent.TauntedKillerId == evt.Player.PlayerId && innocent.AboutToWin && !innocent.WinWindowExpired)
             {
                 innocent.TargetVoted = true;
+                innocent.TargetWasEvil = !evt.Player.IsCrewmate();
             }
         }
     }
@@ -125,6 +128,12 @@ public static class InnocentPatch
             if (innocent.AboutToWin && innocent.TauntedKillerId.HasValue)
             {
                 innocent.TargetVoted = true;
+                var killer = GameData.Instance?.GetPlayerById(innocent.TauntedKillerId.Value)?.Object;
+                if (killer != null)
+                {
+                    innocent.TargetWasEvil = !killer.IsCrewmate();
+                }
+
                 RemoveInnocentTauntMarker(innocent.TauntedKillerId.Value, innocent.Player.PlayerId);
             }
             else if (innocent.AwaitingNextMeetingExile)

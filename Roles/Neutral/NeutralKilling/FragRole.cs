@@ -6,6 +6,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using Reactor.Utilities;
 using DivaniMods.Assets;
@@ -15,27 +16,25 @@ using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Buttons;
 using TownOfUs.Extensions;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
 using UnityEngine;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Neutral.NeutralKilling;
 
 public sealed class FragRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
     public static readonly Color FragColor = new Color32(232, 168, 124, 255);
 
-    public string RoleName => "Frag";
-    public string RoleDescription => "Here, Hold this!";
-    public string RoleLongDescription =>
-        "Give a Frag to a player.\n" +
-        "Everyone can pass this Frag to one other\n"+
-        "The one holding it at the end, dies!";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Frag", "Frag");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Frag.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Frag.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Frag.LongDescription");
     public Color RoleColor => FragColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralKilling;
@@ -51,8 +50,16 @@ public sealed class FragRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Give Frag", "Give the Frag to someone.", DivaniAssets.FragGiveButton),
-        new("Pass Frag", "While holding the Frag, pass it on to another player before it explodes.", DivaniAssets.FragPassButton)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Frag.Ability.GiveFrag"),
+            MiraLocaleManager.Get("DivaniMods.Role.Frag.Ability.GiveFrag.Description"),
+            DivaniAssets.FragGiveButton
+        ),
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Frag.Ability.PassFrag"),
+            MiraLocaleManager.Get("DivaniMods.Role.Frag.Ability.PassFrag.Description"),
+            DivaniAssets.FragPassButton
+        )
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -74,7 +81,7 @@ public sealed class FragRole(IntPtr cppPtr)
         }
         ImportantTextTask orCreateTask = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
         orCreateTask.Text =
-            $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralKillingTaskHeader")}</color>";
+            $"{TownOfUsColors.Neutral.ToTextColor()}{MiraLocaleManager.Get("NeutralKillingTaskHeader")}</color>";
         orCreateTask.name = "NeutralRoleText";
     }
 

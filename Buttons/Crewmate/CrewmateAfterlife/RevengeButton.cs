@@ -1,5 +1,6 @@
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Events.Crewmate.CrewmateKilling;
 using DivaniMods.Networking.Crewmate.CrewmateKilling;
@@ -13,7 +14,7 @@ namespace DivaniMods.Buttons.Crewmate.CrewmateAfterlife;
 
 public sealed class RevengeButton : TownOfUsKillRoleButton<VengefulSoulRole, PlayerControl>, IKillButton
 {
-    public override string Name => "Revenge";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Ability.Revenge");
     public override float Cooldown => 0f;
     public override float InitialCooldown => 0f;
     public override float EffectDuration => 0f;

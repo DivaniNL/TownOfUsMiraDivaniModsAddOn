@@ -1,4 +1,5 @@
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -20,9 +21,8 @@ public class IncompetentModifier : TouGameModifier, IWikiDiscoverable
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.IncompetentIcon.LoadAsset(),
             "DivaniMod.Modifier.Crewmate.Incompetent", 1.45f));
 
-    public override string ModifierName => "Incompetent";
-    public override string LocaleKey => "Incompetent";
-    public override string IntroInfo => "You cannot fix sabotages.";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Incompetent", "Incompetent");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Incompetent.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.CrewmatePassive;
     public override bool HideFromGuessing => true;
     public override Color FreeplayFileColor => IncompetentColor;
@@ -30,7 +30,7 @@ public class IncompetentModifier : TouGameModifier, IWikiDiscoverable
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.IncompetentIcon;
 
     public override string GetDescription() =>
-        "You are unable to fix sabotages. Sabotage consoles won't light up or work for you.";
+        MiraLocaleManager.Get("DivaniMods.Modifier.Incompetent.Description");
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
 

@@ -1,5 +1,6 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using DivaniMods.Assets;
@@ -36,9 +37,15 @@ public static class ClockstopperRpc
         if (local.PlayerId == clockstopper.PlayerId)
         {
             var perReset = (int)OptionGroupSingleton<ClockstopperOptions>.Instance.TasksPerReset.Value;
+            var resetSelfText = MiraLocaleManager
+                .Get("DivaniMods.Role.Clockstopper.Notification.SelfReset")
+                .Replace("<tasks>", perReset.ToString());
+
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>Completed {perReset} more tasks, cooldowns are reset</color></b>",
-                Color.white, pos, spr: icon);
+                $"<b><color=#{hex}>{resetSelfText}</color></b>",
+                Color.white,
+                pos,
+                spr: icon);
             return;
         }
 
@@ -64,9 +71,14 @@ public static class ClockstopperRpc
             local.SetKillTimer(Mathf.Max(local.GetKillCooldown(), local.killTimer));
         }
 
+        var resetOtherText =
+            MiraLocaleManager.Get("DivaniMods.Role.Clockstopper.Notification.ResetByClockstopper");
+
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#{hex}>Your cooldown has been reset by the Clockstopper</color></b>",
-            Color.white, pos, spr: icon);
+            $"<b><color=#{hex}>{resetOtherText}</color></b>",
+            Color.white,
+            pos,
+            spr: icon);
     }
 
     private static bool ShouldResetFor(PlayerControl player, PlayerControl clockstopper)

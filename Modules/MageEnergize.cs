@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmatePower;
@@ -82,9 +83,15 @@ public static class MageEnergize
             return;
         }
 
-        var msg = isBuff
-            ? $"<b><color=#1586a2>The Mage has Energized you, giving you an additional {ability} use!</color></b>"
-            : $"<b><color=#1586a2>The Mage has Energized you, zapping a {ability} use from you!</color></b>";
+        var key = isBuff
+            ? "DivaniMods.Role.Mage.Notification.EnergizedGain"
+            : "DivaniMods.Role.Mage.Notification.EnergizedLose";
+
+        var text = MiraLocaleManager
+            .Get(key)
+            .Replace("<ability>", ability);
+
+        var msg = $"<b><color=#1586a2>{text}</color></b>";
 
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
             msg,
@@ -110,7 +117,7 @@ public static class MageEnergize
                     return null;
                 }
                 PlagueDoctorRole.NumInfectionsRemaining += isBuff ? 1 : -1;
-                return ButtonName(CustomButtonSingleton<InfectButton>.Instance, "Infect");
+                return ButtonName(CustomButtonSingleton<InfectButton>.Instance, "DivaniMods.Role.PlagueDoctor.Ability.Infect");
             }
 
             case MosquitoRole:
@@ -121,7 +128,7 @@ public static class MageEnergize
                     return null;
                 }
                 btn.AddCharges(isBuff ? 1 : -1);
-                return ButtonName(btn, "Sting");
+                return ButtonName(btn, "DivaniMods.Role.Mosquito.Ability.Sting");
             }
 
             case DeadlockRole:
@@ -132,7 +139,7 @@ public static class MageEnergize
                     return null;
                 }
                 btn.AddCharges(isBuff ? 1 : -1);
-                return ButtonName(btn, "Lockdown");
+                return ButtonName(btn, "DivaniMods.Role.Deadlock.Ability.Lockdown");
             }
 
             case VeteranRole vet:
@@ -143,7 +150,7 @@ public static class MageEnergize
                     return null;
                 }
                 vet.Alerts += isBuff ? 1 : -1;
-                return ButtonName(btn, "Alert");
+                return ButtonName(btn, MiraLocaleManager.Get("TownOfUsMira.Role.VeteranAlert"));
             }
 
             case MageRole:

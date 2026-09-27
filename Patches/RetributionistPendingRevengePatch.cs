@@ -8,8 +8,8 @@ namespace DivaniMods.Patches;
 // the end-game check runs first on a dead Retributionist and hands the win to the killer's team
 // (or to a Betrayer) before the Vengeful Soul ever spawns.
 [HarmonyPatch(typeof(CustomMurderRpc), nameof(CustomMurderRpc.RpcConfirmCustomMurder),
-    typeof(PlayerControl), typeof(PlayerControl), typeof(PlayerControl), typeof(MurderResultFlags),
-    typeof(bool), typeof(bool), typeof(bool), typeof(bool), typeof(bool))]
+    typeof(PlayerControl), typeof(PlayerControl), typeof(PlayerControl), typeof(bool), typeof(bool),
+    typeof(MurderResultFlags), typeof(bool), typeof(bool), typeof(bool), typeof(bool), typeof(bool))]
 internal static class RetributionistPendingRevengePatch
 {
     [HarmonyPriority(Priority.First)]

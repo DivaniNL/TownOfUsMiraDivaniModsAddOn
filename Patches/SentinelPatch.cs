@@ -1,5 +1,6 @@
 using HarmonyLib;
 using Reactor.Utilities;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmateInvestigative;
 using DivaniMods.Roles.Crewmate.CrewmateInvestigative;
@@ -12,12 +13,16 @@ namespace DivaniMods.Patches;
 public static class SentinelPatch
 {
     private static bool _wasInMeeting;
+    private static bool _flashActive;
+    private static float _flashEndTime;
+    private static float _lastBeaconScanTime;
 
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
     [HarmonyPostfix]
     public static void ResetOnGameStart()
     {
         BeaconManager.Reset();
+        _flashActive = false;
     }
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
@@ -25,6 +30,7 @@ public static class SentinelPatch
     public static void ResetOnGameEnd()
     {
         BeaconManager.Reset();
+        _flashActive = false;
     }
 
     [HarmonyPatch(typeof(LobbyBehaviour), nameof(LobbyBehaviour.Start))]
@@ -32,6 +38,7 @@ public static class SentinelPatch
     public static void ResetOnLobby()
     {
         BeaconManager.Reset();
+        _flashActive = false;
     }
 
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
@@ -62,25 +69,48 @@ public static class SentinelPatch
         if (PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(localPlayer)) return;
         if (BeaconManager.BeaconsPlaced == 0) return;
 
+        if (Time.time - _lastBeaconScanTime < 0.25f)
+        {
+            return;
+        }
+
+        _lastBeaconScanTime = Time.time;
+
         var newEntries = BeaconManager.UpdatePlayerTracking();
 
         foreach (var (beacon, playerName) in newEntries)
         {
-            Coroutines.Start(CoFlashSentinel());
+            TriggerSentinelFlash();
 
             char label = (char)('A' + BeaconManager.Beacons.IndexOf(beacon));
             var colorHex = ColorUtility.ToHtmlStringRGB(SentinelRole.SentinelColor);
+            var text = MiraLocaleManager
+                .Get("DivaniMods.Role.Sentinel.Notification.BeaconTriggered")
+                .Replace("<label>", label.ToString())
+                .Replace("<room>", beacon.RoomName);
+
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{colorHex}>Someone walked through Beacon {label} ({beacon.RoomName})</color></b>",
+                $"<b><color=#{colorHex}>{text}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.SentinelIcon.LoadAsset());
         }
     }
 
+    private static void TriggerSentinelFlash()
+    {
+        _flashEndTime = Time.time + 0.5f;
+        if (!_flashActive)
+        {
+            Coroutines.Start(CoFlashSentinel());
+        }
+    }
+
     private static IEnumerator CoFlashSentinel()
     {
         if (!HudManager.Instance) yield break;
+
+        _flashActive = true;
 
         var overlay = UnityEngine.Object.Instantiate(HudManager.Instance.FullScreen, HudManager.Instance.transform);
         overlay.transform.localScale = Vector3.one * 10f;
@@ -92,11 +122,16 @@ public static class SentinelPatch
         overlay.gameObject.SetActive(true);
         overlay.enabled = true;
 
-        yield return new WaitForSeconds(0.5f);
+        while (Time.time < _flashEndTime)
+        {
+            yield return null;
+        }
 
         if (overlay != null)
         {
             UnityEngine.Object.Destroy(overlay.gameObject);
         }
+
+        _flashActive = false;
     }
 }

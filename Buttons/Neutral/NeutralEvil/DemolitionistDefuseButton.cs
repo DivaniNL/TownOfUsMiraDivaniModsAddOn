@@ -3,6 +3,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Game.Crewmate;
@@ -16,7 +17,7 @@ namespace DivaniMods.Buttons.Neutral.NeutralEvil;
 
 public class DemolitionistDefuseButton : TownOfUsButton
 {
-    public override string Name => "Defuse";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Ability.Defuse");
     public override float Cooldown => 1f;
     public override float InitialCooldown => 0f;
     public override float EffectDuration => OptionGroupSingleton<DemolitionistOptions>.Instance.IsTimedSabotageStyle
@@ -136,10 +137,10 @@ public class DemolitionistDefuseButton : TownOfUsButton
 
         EffectActive = true;
         Timer = defuseTime;
-        Button?.OverrideText("DEFUSING");
+        Button?.OverrideText(MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Button.Defusing"));
 
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#{colorHex}>Defusing...</color></b>",
+            $"<b><color=#{colorHex}>{MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Notification.Defusing")}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.DemolitionistIcon.LoadAsset());
@@ -162,7 +163,7 @@ public class DemolitionistDefuseButton : TownOfUsButton
             if (!DemolitionistSabotageState.IsLocalPlayerAtPlantedConsole())
             {
                 MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                    $"<b><color=#{colorHex}>Defuse aborted — too far from sabotage!</color></b>",
+                    $"<b><color=#{colorHex}>{MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Notification.DefuseTooFar")}</color></b>",
                     Color.white,
                     new Vector3(0f, 1f, -20f),
                     spr: DivaniAssets.DemolitionistIcon.LoadAsset());
@@ -195,7 +196,7 @@ public class DemolitionistDefuseButton : TownOfUsButton
         if (!DemolitionistSabotageState.IsLocalPlayerAtPlantedConsole())
         {
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{colorHex}>Defuse aborted — too far from sabotage!</color></b>",
+               $"<b><color=#{colorHex}>{MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Notification.DefuseTooFar")}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.DemolitionistIcon.LoadAsset());

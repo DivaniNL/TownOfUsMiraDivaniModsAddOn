@@ -7,6 +7,7 @@ using MiraAPI.Events.Vanilla.Player;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using MiraAPI.Roles;
 using Reactor.Utilities;
 using DivaniMods.Modifiers.Neutral.NeutralBenign;
@@ -23,6 +24,7 @@ using TownOfUs.Options;
 using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
 using UnityEngine;
+using TownOfUs.Modules;
 
 namespace DivaniMods.Events.Neutral.NeutralBenign;
 
@@ -119,9 +121,9 @@ public static class CupidEvents
     private static void KillCupid(PlayerControl cupid)
     {
         var inMeeting = MeetingHud.Instance || ExileController.Instance;
-        DeathHandlerModifier.UpdateDeathHandlerImmediate(cupid, TouLocale.Get("DiedToHeartbreak"),
-            DeathEventHandlers.CurrentRound,
-            inMeeting ? DeathHandlerOverride.SetFalse : DeathHandlerOverride.SetTrue,
+        GameHistory.UpdatePlayerDeathData(cupid, MiraLocaleManager.Get("DiedToHeartbreak"),
+            roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+            diedThisRound: inMeeting ? DeathHandlerOverride.SetFalse : DeathHandlerOverride.SetTrue,
             lockInfo: DeathHandlerOverride.SetTrue);
 
         if (inMeeting)

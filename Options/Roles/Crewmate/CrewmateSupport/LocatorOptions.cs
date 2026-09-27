@@ -1,5 +1,6 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Roles.Crewmate.CrewmateSupport;
 
@@ -7,21 +8,21 @@ namespace DivaniMods.Options;
 
 public class LocatorOptions : AbstractRoleOptionGroup<LocatorRole>
 {
-    public override string GroupName => "Locator";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Role.Locator", "Locator");
 
     public ModdedNumberOption AbilityUses { get; } = new(
-        "Mark Uses", 5f, 1f, 10f, 1f, MiraNumberSuffixes.None);
+        MiraLocaleManager.Get("DivaniMods.Options.Locator.AbilityUses"), 5f, 1f, 10f, 1f, MiraNumberSuffixes.None);
 
     public ModdedNumberOption MarksPerRound { get; } = new(
-        "Marks Per Round", 1f, 1f, 5f, 1f, MiraNumberSuffixes.None);
+        MiraLocaleManager.Get("DivaniMods.Options.Locator.MarksPerRound"), 1f, 1f, 5f, 1f, MiraNumberSuffixes.None);
 
-    public ModdedToggleOption EarnMoreUses { get; } = new("Earn More Uses After Tasks", false);
+    public ModdedToggleOption EarnMoreUses { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Locator.EarnMoreUses"), false);
 
     public ModdedNumberOption TasksPerUse { get; } =
-        new("Tasks Required For Additional Use", 3f, 1f, 5f, 1f, MiraNumberSuffixes.None)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Locator.TasksPerUse"), 3f, 1f, 5f, 1f, MiraNumberSuffixes.None)
         {
             Visible = () => OptionGroupSingleton<LocatorOptions>.Instance.EarnMoreUses
         };
 
-    public ModdedToggleOption TargetKnows { get; } = new("Target Knows About Being Marked", false);
+    public ModdedToggleOption TargetKnows { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Locator.TargetKnows"), false);
 }

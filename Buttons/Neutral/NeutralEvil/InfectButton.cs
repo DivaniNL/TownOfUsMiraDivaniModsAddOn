@@ -3,6 +3,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralEvil;
@@ -13,7 +14,7 @@ namespace DivaniMods.Buttons.Neutral.NeutralEvil;
 
 public class InfectButton : TownOfUsTargetButton<PlayerControl>
 {
-    public override string Name => "Infect";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.PlagueDoctor.Ability.Infect");
     public override float Cooldown => OptionGroupSingleton<PlagueDoctorOptions>.Instance.InfectCooldown.Value;
     public override float EffectDuration => 0f;
     public override int MaxUses => (int)OptionGroupSingleton<PlagueDoctorOptions>.Instance.MaxInfections.Value;

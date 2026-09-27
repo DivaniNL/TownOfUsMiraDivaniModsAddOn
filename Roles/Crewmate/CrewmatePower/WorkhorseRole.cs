@@ -5,11 +5,13 @@ using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
+using MiraAPI.Translation;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Crewmate.CrewmatePower;
 using DivaniMods.Options;
+using DivaniMods.Interfaces;
 using TownOfUs;
 using TownOfUs.Extensions;
 using TownOfUs.Modifiers.Game.Alliance;
@@ -21,18 +23,18 @@ using UnityEngine;
 namespace DivaniMods.Roles.Crewmate.CrewmatePower;
 
 public sealed class WorkhorseRole(IntPtr cppPtr)
-    : CrewmateRole(cppPtr), ITouCrewRole, IWikiDiscoverable, IDoomable
+    : CrewmateRole(cppPtr), IDivaniCrewRole, IWikiDiscoverable, IDoomable
 {
     public static readonly Color WorkhorseColor = new Color32(0x92, 0xD4, 0xDA, 255);
 
-    private static string ColoredName => $"{WorkhorseColor.ToTextColor()}Workhorse</color>";
+    private static string ColoredName => $"{WorkhorseColor.ToTextColor()}{MiraLocaleManager.Get("DivaniMods.Role.Workhorse")}</color>";
 
     public bool IsPowerCrew => OptionGroupSingleton<WorkhorseOptions>.Instance.ContinuesGame;
 
-    public string RoleName => "Workhorse";
-    public string RoleDescription => "Task. Overwork. Win.";
-    public string RoleLongDescription => "Gain an extra set of tasks after completing your original list.\n" +
-        "Finsh these extra tasks to result in a task win.";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Workhorse", "Workhorse");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Workhorse.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Workhorse.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Workhorse.LongDescription");
     public Color RoleColor => WorkhorseColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmatePower;
@@ -98,13 +100,13 @@ public sealed class WorkhorseRole(IntPtr cppPtr)
         if (Player.AmOwner)
         {
             Coroutines.Start(MiscUtils.CoFlash(WorkhorseColor, alpha: 0.5f));
-            ShowNotification("Your work is not done. A second task list awaits!");
+            ShowNotification(MiraLocaleManager.Get("DivaniMods.Role.Workhorse.Notification.SecondList"));
         }
         else if (OptionGroupSingleton<WorkhorseOptions>.Instance.NotifyEvilsOnFirstList &&
                  IsRevealTarget(PlayerControl.LocalPlayer))
         {
             Coroutines.Start(MiscUtils.CoFlash(WorkhorseColor, alpha: 0.5f));
-            ShowNotification($"The {ColoredName} has finished their first task list!");
+            ShowNotification(MiraLocaleManager.Get("DivaniMods.Role.Workhorse.Notification.FirstListFinished").Replace("<role>", ColoredName));
         }
     }
 
@@ -164,8 +166,8 @@ public sealed class WorkhorseRole(IntPtr cppPtr)
         }
 
         ShowNotification(IsEvilTarget(PlayerControl.LocalPlayer)
-            ? $"The {ColoredName} is almost done! You must stop him, NOW!"
-            : $"The {ColoredName} is almost done! Your job is to vote them out, NOW!");
+            ? MiraLocaleManager.Get("DivaniMods.Role.Workhorse.Notification.AlmostDone.Evil").Replace("<role>", ColoredName)
+            : MiraLocaleManager.Get("DivaniMods.Role.Workhorse.Notification.AlmostDone.Other").Replace("<role>", ColoredName));
     }
 
     private void RevealOpponents()
@@ -174,13 +176,13 @@ public sealed class WorkhorseRole(IntPtr cppPtr)
 
         if (IsAlliedWithEvils)
         {
-            ShowNotification("You've been exposed! Everyone who loses to you knows who you are now!");
+            ShowNotification(MiraLocaleManager.Get("DivaniMods.Role.Workhorse.Notification.Exposed"));
             return;
         }
 
         CreateEvilArrows();
 
-        ShowNotification("The evils know who you are now, but you can see them now too!");
+        ShowNotification(MiraLocaleManager.Get("DivaniMods.Role.Workhorse.Notification.EvilsRevealed"));
     }
 
     private void CreateEvilArrows()

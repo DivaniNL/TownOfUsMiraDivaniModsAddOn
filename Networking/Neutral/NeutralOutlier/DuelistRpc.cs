@@ -3,6 +3,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Networking;
 using MiraAPI.Utilities;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities;
@@ -141,9 +142,12 @@ public static class DuelistRpc
         }
 
         var hex = ColorUtility.ToHtmlStringRGB(DuelistRole.DuelistColor);
+        var text = MiraLocaleManager.Get("DivaniMods.Role.Duelist.Notification.VictoryPending");
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#{hex}>You have won enough duels, so you can no longer duel. Victory awaits!</color></b>",
-            Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.DuelistIcon.LoadAsset());
+            $"<b><color=#{hex}>{text}</color></b>",
+            Color.white,
+            new Vector3(0f, 1f, -20f),
+            spr: DivaniAssets.DuelistIcon.LoadAsset());
     }
 
     private static IEnumerator CoSanctionedMurder(PlayerControl killer, PlayerControl victim)
@@ -178,14 +182,19 @@ public static class DuelistRpc
 
         if (local.PlayerId == target.PlayerId)
         {
+             var challengedText =
+            MiraLocaleManager.Get("DivaniMods.Role.Duelist.Notification.Challenged");
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>You have been challenged to a duel by the Duelist! Show 'em what you're worth!</color></b>",
+                $"<b><color=#{hex}>{challengedText}</color></b>",
                 Color.white, pos, spr: icon);
         }
         else if (local.PlayerId == duelist.PlayerId)
         {
+            var duelStartedText = MiraLocaleManager
+                .Get("DivaniMods.Role.Duelist.Notification.DuelStarted")
+                .Replace("<player>", target.Data.PlayerName);
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>Your duel against {target.Data.PlayerName} started. Show no mercy!</color></b>",
+                $"<b><color=#{hex}>{duelStartedText}</color></b>",
                 Color.white, pos, spr: icon);
         }
     }

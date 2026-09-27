@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using TownOfUs.Interfaces;
@@ -11,34 +12,34 @@ namespace DivaniMods.Options;
 
 public class RetributionistOptions : AbstractRoleOptionGroup<RetributionistRole>, IWikiOptionsSummaryProvider
 {
-    public override string GroupName => "Retributionist";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Role.Retributionist", "Retributionist");
 
     public ModdedNumberOption RevengeTimerSkeld { get; } =
-        new("Revenge Timer (Skeld)", 30f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Retributionist.RevengeTimer.Skeld"), 30f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapTimerOption(ExpandedMapNames.Skeld),
         };
 
     public ModdedNumberOption RevengeTimerMiraHQ { get; } =
-        new("Revenge Timer (MIRA HQ)", 45f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Retributionist.RevengeTimer.MiraHQ"), 45f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapTimerOption(ExpandedMapNames.MiraHq),
         };
 
     public ModdedNumberOption RevengeTimerPolus { get; } =
-        new("Revenge Timer (Polus)", 60f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Retributionist.RevengeTimer.Polus"), 60f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapTimerOption(ExpandedMapNames.Polus),
         };
 
     public ModdedNumberOption RevengeTimerFungle { get; } =
-        new("Revenge Timer (Fungle)", 60f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Retributionist.RevengeTimer.Fungle"), 60f, 10f, 120f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapTimerOption(ExpandedMapNames.Fungle),
         };
 
     public ModdedNumberOption RevengeTimerAirship { get; } =
-        new("Revenge Timer (Airship)", 90f, 10f, 180f, 5f, MiraNumberSuffixes.Seconds)
+        new(MiraLocaleManager.Get("DivaniMods.Options.Retributionist.RevengeTimer.Airship"), 90f, 10f, 180f, 5f, MiraNumberSuffixes.Seconds)
         {
             Visible = () => ShouldShowMapTimerOption(ExpandedMapNames.Airship),
         };
@@ -46,21 +47,21 @@ public class RetributionistOptions : AbstractRoleOptionGroup<RetributionistRole>
     public float RevengeTimer => GetRevengeTimerOptionForMap(MiscUtils.GetCurrentMap).Value;
 
     public ModdedNumberOption VengefulSoulSpeed { get; } = new(
-        "Vengeful Soul Speed", 1.00f, 0.90f, 1.25f, 0.05f, MiraNumberSuffixes.Multiplier, "0.00");
+        MiraLocaleManager.Get("DivaniMods.Options.Retributionist.VengefulSoulSpeed"), 1.00f, 0.90f, 1.25f, 0.05f, MiraNumberSuffixes.Multiplier, "0.00");
 
-    [ModdedEnumOption("Vengeful Soul Visible To", typeof(VengefulSoulVisibility))]
+    [ModdedEnumOption("DivaniMods.Options.Retributionist.VengefulSoulVisibleTo", typeof(VengefulSoulVisibility))]
     public VengefulSoulVisibility SoulVisibleTo { get; set; } = VengefulSoulVisibility.All;
 
-    [ModdedToggleOption("Only Turn Into Vengeful Soul Once")]
+    [ModdedToggleOption("DivaniMods.Options.Retributionist.TurnIntoSoulOnce")]
     public bool TurnIntoSoulOnce { get; set; } = true;
 
-    [ModdedToggleOption("Continues Game In Final 3")]
+    [ModdedToggleOption("DivaniMods.Options.Retributionist.StallGame")]
     public bool StallGame { get; set; } = false;
 
-    [ModdedToggleOption("Revenge Breaks Through Shields")]
+    [ModdedToggleOption("DivaniMods.Options.Retributionist.RevengeBreaksShields")]
     public bool RevengeBreaksShields { get; set; } = false;
 
-    [ModdedToggleOption("Revenge Triggers On Crewmate Kill")]
+    [ModdedToggleOption("DivaniMods.Options.Retributionist.RevengeOnCrewmateKill")]
     public bool RevengeOnCrewmateKill { get; set; } = false;
 
     public IReadOnlySet<StringNames> WikiHiddenOptionKeys =>

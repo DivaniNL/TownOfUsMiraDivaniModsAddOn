@@ -4,6 +4,7 @@ using AmongUs.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
@@ -18,17 +19,18 @@ using TownOfUs.Roles;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorPower;
 
 public sealed class RecruiterRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
-    public string RoleName => "Recruiter";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Recruiter", "Recruiter");
     public string LocaleKey => "Recruiter";
-    public string RoleDescription => "Pick your partner!";
-    public string RoleLongDescription =>
-        "In any meeting, recruit a non-Impostor to become a Recruit once. The Recruit joins the Impostors and picks a new Impostor role.";
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Recruiter.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Recruiter.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Recruiter.LongDescription");
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorPower;
@@ -42,8 +44,16 @@ public sealed class RecruiterRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Recruit", "During a meeting, mark one non-Impostor to convert them into a Recruit.", DivaniAssets.RecruitMeetingImpostor),
-        new("Change Role", "If enabled, pick a new Impostor role for yourself after a successful recruit.", TouImpAssets.TraitorSelect)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Recruiter.Ability.Recruit"),
+            MiraLocaleManager.Get("DivaniMods.Role.Recruiter.Ability.Recruit.Description"),
+            DivaniAssets.RecruitMeetingImpostor
+        ),
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Recruiter.Ability.ChangeRole"),
+            MiraLocaleManager.Get("DivaniMods.Role.Recruiter.Ability.ChangeRole.Description"),
+            TouImpAssets.TraitorSelect
+        )
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -135,7 +145,7 @@ public sealed class RecruiterRole(IntPtr cppPtr)
 
     private bool IsExempt(PlayerVoteArea voteArea)
     {
-        var target = GameData.Instance.GetPlayerById(voteArea.TargetPlayerId)?.Object;
+        var target = GameData.Instance.GetPlayerById(voteArea.PlayerId)?.Object;
         return target == null ||
                target.Data == null ||
                target.Data.Disconnected ||
@@ -147,7 +157,7 @@ public sealed class RecruiterRole(IntPtr cppPtr)
 
     private void OnMeetingToggle(PlayerVoteArea voteArea, MeetingHud hud)
     {
-        if (hud.state == MeetingHud.VoteStates.Discussion || IsExempt(voteArea))
+        if (hud.state == MeetingHud.MeetingStates.Discussion || IsExempt(voteArea))
         {
             return;
         }
@@ -157,9 +167,9 @@ public sealed class RecruiterRole(IntPtr cppPtr)
             return;
         }
 
-        if (_localSelectedId == voteArea.TargetPlayerId)
+        if (_localSelectedId == voteArea.PlayerId)
         {
-            _meetingMenu.Actives[voteArea.TargetPlayerId] = false;
+            _meetingMenu.Actives[voteArea.PlayerId] = false;
             _localSelectedId = 255;
             RpcSetPendingTarget(Player, 255);
             return;
@@ -170,9 +180,9 @@ public sealed class RecruiterRole(IntPtr cppPtr)
             _meetingMenu.Actives[_localSelectedId] = false;
         }
 
-        _localSelectedId = voteArea.TargetPlayerId;
-        _meetingMenu.Actives[voteArea.TargetPlayerId] = true;
-        RpcSetPendingTarget(Player, voteArea.TargetPlayerId);
+        _localSelectedId = voteArea.PlayerId;
+        _meetingMenu.Actives[voteArea.PlayerId] = true;
+        RpcSetPendingTarget(Player, voteArea.PlayerId);
     }
 
     [MethodRpc((uint)DivaniRpcCalls.RecruiterSetPendingTarget)]

@@ -2,6 +2,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Patches;
@@ -19,7 +20,7 @@ public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>, IDiseasea
 
     public static FragGiveBombButton? Instance { get; private set; }
 
-    public override string Name => "Give Frag";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Frag.Ability.GiveFrag");
     public override float Cooldown => OptionGroupSingleton<FragOptions>.Instance.GiveBombCooldown.Value;
 
     public override float EffectDuration =>
@@ -128,7 +129,11 @@ public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>, IDiseasea
 
         if (showBombOnButton)
         {
-            instance.OverrideName(FragBombState.IsArmed ? "ARMED" : "ARMING");
+            instance.OverrideName(
+                MiraLocaleManager.Get(
+                    FragBombState.IsArmed
+                        ? "DivaniMods.Role.Frag.Button.Armed"
+                        : "DivaniMods.Role.Frag.Button.Arming"));
             _bombCountdownOnButton = true;
             _giveCooldownRunning = false;
             instance.TimerPaused = true;

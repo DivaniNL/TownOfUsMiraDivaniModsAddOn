@@ -3,6 +3,7 @@ using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Crewmate.CrewmateSupport;
 using DivaniMods.Options;
@@ -14,7 +15,7 @@ namespace DivaniMods.Buttons.Crewmate.CrewmateSupport;
 
 public sealed class LocatorMarkButton : TownOfUsTargetButton<PlayerControl>
 {
-    public override string Name => "Mark";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Locator.Ability.Mark");
     public override float Cooldown => 25f;
     public override float EffectDuration => 0f;
     public override int MaxUses => (int)OptionGroupSingleton<LocatorOptions>.Instance.AbilityUses.Value;

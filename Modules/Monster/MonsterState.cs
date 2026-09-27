@@ -3,6 +3,7 @@ using DivaniMods.Options;
 using DivaniMods.Roles.Neutral.NeutralKilling;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
+using MiraAPI.Translation;
 using MiraAPI.GameOptions;
 using MiraAPI.Utilities;
 using Reactor.Utilities;
@@ -30,6 +31,9 @@ public static class MonsterState
 
     public static int CountHeldBy(byte MonsterId) =>
         stomachs.TryGetValue(MonsterId, out var list) ? list.Count : 0;
+
+    public static List<byte> GetHeld(byte MonsterId) =>
+        stomachs.TryGetValue(MonsterId, out var list) ? list.ToList() : [];
 
     public static float CooldownFor(byte MonsterId)
     {
@@ -83,7 +87,9 @@ public static class MonsterState
                 }
             }
 
-            if (isVisibleToEveryone || isMonsterOrTarget)
+            var canPlayForLocal = isMonsterOrTarget || (isVisibleToEveryone && LocalCanSee(victimPos));
+
+            if (canPlayForLocal)
             {
                 try
                 {
@@ -108,14 +114,22 @@ public static class MonsterState
 
         if (victim.AmOwner)
         {
-            Notify(victim, "You have been eaten by the Monster!");
+            Notify(victim, MiraLocaleManager.Get("DivaniMods.Role.Monster.Notification.Eaten"));
             BeginSpectating(MonsterId);
         }
     }
 
+    public static bool IsDigesting { get; private set; }
+
     public static List<byte> PendingDigestSortIds() => pendingDigestSort.ToList();
 
     public static void ClearPendingDigestSort(byte victimId) => pendingDigestSort.Remove(victimId);
+
+    private static void ClearVictimHideState(byte victimId)
+    {
+        MonsterDevourAnimation.RemoveHidingVictim(victimId);
+        pendingDigestSort.Remove(victimId);
+    }
 
     public static void DigestAll(byte MonsterId)
     {
@@ -124,33 +138,42 @@ public static class MonsterState
         var localPlayer = PlayerControl.LocalPlayer;
         var shouldPlaySound = false;
 
-        foreach (var victimId in victims.ToList())
+        IsDigesting = true;
+        try
         {
-            var victim = MiscUtils.PlayerById(victimId);
-            if (victim != null && !victim.HasDied())
+            foreach (var victimId in victims.ToList())
             {
-                if (localPlayer != null &&
-                    (localPlayer.PlayerId == MonsterId || localPlayer.PlayerId == victimId))
+                var victim = MiscUtils.PlayerById(victimId);
+                if (victim != null && !victim.HasDied())
                 {
-                    shouldPlaySound = true;
+                    if (localPlayer != null &&
+                        (localPlayer.PlayerId == MonsterId || localPlayer.PlayerId == victimId))
+                    {
+                        shouldPlaySound = true;
+                    }
+
+                    victim.Visible = true;
+                    victim.moveable = true;
+                    var collider = victim.GetComponent<Collider2D>();
+                    if (collider != null) collider.enabled = true;
+
+                    if (Monster != null)
+                        Monster.RpcSpecialMurder(victim,true,true,true,false,false,false,false,true,"Monster");
+                    else
+                        victim.Die(DeathReason.Kill, false);
+
+                    pendingDigestSort.Add(victimId);
+
+                    if (victim.AmOwner) EndSpectating();
                 }
 
-                victim.Visible = true;
-                victim.moveable = true;
-                var collider = victim.GetComponent<Collider2D>();
-                if (collider != null) collider.enabled = true;
-
-                if (Monster != null)
-                    Monster.RpcSpecialMurder(victim,true,true,true,false,false,false,false,true,"Monster");
-                else
-                    victim.Die(DeathReason.Kill, false);
-
-                pendingDigestSort.Add(victimId);
-
-                if (victim.AmOwner) EndSpectating();
+                ClearVictimHideState(victimId);
+                eatenBy.Remove(victimId);
             }
-
-            eatenBy.Remove(victimId);
+        }
+        finally
+        {
+            IsDigesting = false;
         }
 
         if (shouldPlaySound)
@@ -184,14 +207,37 @@ public static class MonsterState
                 if (victim.AmOwner)
                 {
                     EndSpectating();
-                    Notify(victim, "You have been released from the Monster!");
+                    Notify(victim,MiraLocaleManager.Get("DivaniMods.Role.Monster.Notification.Released"));
                 }
             }
 
+            ClearVictimHideState(victimId);
             eatenBy.Remove(victimId);
         }
 
         stomachs.Remove(MonsterId);
+    }
+
+    public static void ReleaseOnOtherDeath(byte victimId)
+    {
+        if (!eatenBy.TryGetValue(victimId, out var MonsterId)) return;
+
+        var victim = MiscUtils.PlayerById(victimId);
+        if (victim != null)
+        {
+            victim.Visible = true;
+            victim.moveable = true;
+            var collider = victim.GetComponent<Collider2D>();
+            if (collider != null) collider.enabled = true;
+
+            if (victim.AmOwner) EndSpectating();
+        }
+
+        if (stomachs.TryGetValue(MonsterId, out var list))
+            list.Remove(victimId);
+
+        ClearVictimHideState(victimId);
+        eatenBy.Remove(victimId);
     }
 
     public static void ForgetMonster(byte MonsterId)
@@ -209,6 +255,7 @@ public static class MonsterState
                     if (collider != null) collider.enabled = true;
                     if (victim.AmOwner) EndSpectating();
                 }
+                ClearVictimHideState(victimId);
                 eatenBy.Remove(victimId);
             }
         }
@@ -229,11 +276,13 @@ public static class MonsterState
             victim.moveable = true;
             var collider = victim.GetComponent<Collider2D>();
             if (collider != null) collider.enabled = true;
+            MonsterDevourAnimation.RemoveHidingVictim(victimId);
         }
 
         stomachs.Clear();
         eatenBy.Clear();
         pendingDigestSort.Clear();
+        MonsterDevourAnimation.ClearHidingVictims();
     }
 
     private static void BreakControllingEffects(PlayerControl victim)
@@ -300,11 +349,8 @@ public static class MonsterState
         var local = PlayerControl.LocalPlayer;
         if (local == null) yield break;
 
-        while (true)
+        while (AmongUsClient.Instance != null && AmongUsClient.Instance.IsGameStarted && IsEaten(local.PlayerId))
         {
-            if (AmongUsClient.Instance == null || !AmongUsClient.Instance.IsGameStarted || !IsEaten(local.PlayerId))
-                yield break;
-
             var Monster = MiscUtils.PlayerById(MonsterId);
             if (Monster != null && !Monster.HasDied() && Camera.main != null)
             {
@@ -315,6 +361,25 @@ public static class MonsterState
 
             yield return null;
         }
+
+        if (Camera.main != null)
+            Camera.main.GetComponent<FollowerCamera>()?.SetTarget(local);
+    }
+
+    private static bool LocalCanSee(Vector2 pos)
+    {
+        var local = PlayerControl.LocalPlayer;
+        if (local == null) return false;
+
+        var localPos = local.GetTruePosition();
+        var viewDistance = local.lightSource != null ? local.lightSource.ViewDistance : 5f;
+
+        var offset = pos - localPos;
+        var dist = offset.magnitude;
+        if (dist > viewDistance) return false;
+
+        var dirNorm = dist > 0f ? offset / dist : Vector2.zero;
+        return !PhysicsHelpers.AnyNonTriggersBetween(localPos, dirNorm, dist, Constants.ShadowMask);
     }
 
     private static void SnapTo(PlayerControl player, Vector2 pos)

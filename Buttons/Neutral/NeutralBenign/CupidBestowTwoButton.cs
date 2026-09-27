@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Neutral.NeutralBenign;
 using DivaniMods.Options;
@@ -24,7 +25,7 @@ public sealed class CupidBestowTwoButton : TownOfUsRoleButton<CupidRole>
             {
                 return $"<color=#25972B>{cupid.LoverTwo.Data.PlayerName}</color>";
             }
-            return "Bestow";
+            return MiraLocaleManager.Get("DivaniMods.Role.Cupid.Ability.Bestow");
         }
     }
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;

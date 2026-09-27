@@ -1,5 +1,6 @@
 using HarmonyLib;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using Reactor.Localization.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Game.Universal;
@@ -11,7 +12,7 @@ namespace DivaniMods.Patches;
 internal static class TacticalInsertionSpawnPatch
 {
     private static readonly StringNames TacticalLabel =
-        CustomStringName.CreateAndRegister("Tactical Insertion");
+        CustomStringName.CreateAndRegister("Tactical Insertion"); // Localizing Note: No idea if this can be changed and I'm tired so I left it as is
 
     [HarmonyPatch(nameof(SpawnInMinigame.Begin))]
     [HarmonyPrefix]
@@ -85,8 +86,10 @@ internal static class TacticalInsertionSpawnPatch
             return;
         }
 
+        var text = MiraLocaleManager.Get(
+            "DivaniMods.Modifier.TacticalInsertion.Notification.Spawned");
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            "<b><color=#00FF00>You spawned at the location of your Tactical Insertion</color></b>",
+            $"<b><color=#00FF00>{text}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.TacticalInsertionIcon.LoadAsset());

@@ -2,6 +2,7 @@ using System.Linq;
 using MiraAPI.GameEnd;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities;
+using MiraAPI.Translation;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Modifiers.Game.Alliance;
 using TownOfUs.Modules;
@@ -26,7 +27,7 @@ public sealed class BetrayerGameOver : CustomGameOver
     public override void AfterEndGameSetup(EndGameManager endGameManager)
     {
         var winColor = BetrayerModifier.BetrayerColor;
-        var winText = "Betrayer Wins";
+        var winText = MiraLocaleManager.Get("DivaniMods.GameOver.BetrayerWins");
 
         endGameManager.BackgroundBar.material.SetColor(ShaderID.Color, winColor);
         GameHistory.WinningFaction = $"<color=#{winColor.ToHtmlStringRGBA()}>{winText}</color>";

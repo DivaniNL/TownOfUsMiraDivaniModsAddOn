@@ -3,6 +3,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Roles;
 using MiraAPI.Utilities;
+using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using Reactor.Utilities;
@@ -17,7 +18,6 @@ using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Options.Modifiers.Alliance;
 using TownOfUs.Modules;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Utilities;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -71,7 +71,7 @@ public static class RetributionistRpc
         {
             Coroutines.Start(MiscUtils.CoFlash(RetributionistRole.RetributionistColor));
             Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>A Vengeful Soul is on the loose...</color></b>",
+                $"<b><color=#{hex}>{MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Notification.OnTheLoose")}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.RetributionistIcon.LoadAsset());
@@ -80,7 +80,7 @@ public static class RetributionistRpc
         if (soul.AmOwner)
         {
             Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>You are a Vengeful Soul. Seek revenge on your killer!</color></b>",
+                $"<b><color=#{hex}>{MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Notification.SeekRevenge")}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.RetributionistIcon.LoadAsset());
@@ -112,28 +112,16 @@ public static class RetributionistRpc
     private static IEnumerator CoRevenge(PlayerControl soul, PlayerControl killer)
     {
         var soulId = soul.PlayerId;
-        var cause = "Retaliated";
+        var cause = MiraLocaleManager.Get("DivaniMods.DeathReason.Retaliated");
 
-        DeathHandlerModifier.UpdateDeathHandlerImmediate(
+        GameHistory.UpdatePlayerDeathData(
             killer,
             cause,
-            DeathEventHandlers.CurrentRound,
-            DeathHandlerOverride.SetTrue,
-            TouLocale.GetParsed("DiedByStringBasic").Replace("<player>", soul.Data.PlayerName),
-            lockInfo: DeathHandlerOverride.SetTrue);
+            roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+            diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetTrue,   
+            killedBy: MiraLocaleManager.Get("DiedByStringBasic").Replace("<player>", soul.Data.PlayerName),
+            lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
 
-        while (DeathHandlerModifier.IsAltCoroutineRunning)
-        {
-            yield return null;
-        }
-
-        if (killer.TryGetModifier<DeathHandlerModifier>(out var deathHandler))
-        {
-            deathHandler.CauseOfDeath = cause;
-            deathHandler.RoundOfDeath = DeathEventHandlers.CurrentRound;
-            deathHandler.DiedThisRound = true;
-            deathHandler.LockInfo = true;
-        }
 
         var revivePos = (Vector2)soul.transform.position;
         var roleWhenAlive = RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<RetributionistRole>());
@@ -154,7 +142,7 @@ public static class RetributionistRpc
             position: revivePos,
             roleWhenAlive: roleWhenAlive,
             flashColor: RetributionistRole.RetributionistColor,
-            revivedOwnerNotificationText: "Your revenge is complete. You returned to the ship",
+            revivedOwnerNotificationText: MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Notification.RevengeComplete"),
             reviverOwnerNotificationText: null,
             notificationIcon: DivaniAssets.RetributionistIcon.LoadAsset());
 
@@ -205,7 +193,7 @@ public static class RetributionistRpc
             position: loverPos,
             roleWhenAlive: liveRole,
             flashColor: RetributionistRole.RetributionistColor,
-            revivedOwnerNotificationText: "Your lover took their revenge. You returned to the ship",
+            revivedOwnerNotificationText: MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Notification.LoverRevived"),
             reviverOwnerNotificationText: null,
             notificationIcon: DivaniAssets.RetributionistIcon.LoadAsset());
     }
@@ -258,7 +246,7 @@ public static class RetributionistRpc
         if (soul.AmOwner)
         {
             Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>Your revenge failed.</color></b>",
+                $"<b><color=#{hex}>{MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Notification.RevengeFailed")}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.RetributionistIcon.LoadAsset());
@@ -268,7 +256,7 @@ public static class RetributionistRpc
         {
             Coroutines.Start(MiscUtils.CoFlash(RetributionistRole.RetributionistColor));
             Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>The Vengeful Soul failed to take its revenge. You live to fight another day.</color></b>",
+                $"<b><color=#{hex}>{MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Notification.KillerSurvived")}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.RetributionistIcon.LoadAsset());

@@ -2,6 +2,7 @@ using System.Linq;
 using AmongUs.GameOptions;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Options;
@@ -16,7 +17,7 @@ namespace DivaniMods.Modifiers.Crewmate.CrewmateSupport;
 
 public sealed class LocatorMarkModifier : BaseModifier
 {
-    public override string ModifierName => "Noisemaker";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.LocatorMark", "Noisemaker");
     public override LoadableAsset<Sprite>? ModifierIcon => TouRoleIcons.Noisemaker;
     public override bool HideOnUi => true;
 
@@ -27,7 +28,7 @@ public sealed class LocatorMarkModifier : BaseModifier
         if (Player != null && Player.AmOwner && OptionGroupSingleton<LocatorOptions>.Instance.TargetKnows)
         {
             Helpers.CreateAndShowNotification(
-                "<b><color=#DDAB99>The Locator marked you as Noisemaker</color></b>",
+                $"<b><color=#DDAB99>{MiraLocaleManager.Get("DivaniMods.Modifier.LocatorMark.Notification")}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: TouRoleIcons.Noisemaker.LoadAsset());

@@ -2,6 +2,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Networking.Impostor.ImpostorKilling;
@@ -16,7 +17,7 @@ namespace DivaniMods.Buttons.Impostor.ImpostorKilling;
 
 public sealed class MosquitoStingButton : TownOfUsButton, IDiseaseableButton
 {
-    public override string Name => "Sting";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Mosquito.Ability.Sting");
     public override float Cooldown => OptionGroupSingleton<MosquitoOptions>.Instance.StingCooldown.Value;
     public override float EffectDuration => 0f;
     public override int MaxUses => (int)OptionGroupSingleton<MosquitoOptions>.Instance.StingCharges.Value;

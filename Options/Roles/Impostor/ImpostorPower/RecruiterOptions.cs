@@ -1,5 +1,6 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Roles.Impostor.ImpostorPower;
 using TownOfUs.Extensions;
@@ -8,18 +9,23 @@ namespace DivaniMods.Options;
 
 public class RecruiterOptions : AbstractRoleOptionGroup<RecruiterRole>
 {
-    public override string GroupName => "Recruiter";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Role.Recruiter", "Recruiter");
 
     public ModdedToggleOption RecruitedBecomesAssassin { get; } =
-        new("Recruited Impostor Becomes Assassin", true);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Recruiter.RecruitedBecomesAssassin"), true);
 
     public ModdedToggleOption RecruiterCanChangeRole { get; } =
-        new("Recruiter Can Choose A New Role After Recruiting", true);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Recruiter.RecruiterCanChangeRole"), true);
 
     public ModdedToggleOption RemoveExistingRoles { get; } =
-        new("Role Change Can't Pick Existing Impostor Roles", true);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Recruiter.RemoveExistingRoles"), true);
 
-    public ModdedEnumOption RecruitGuess { get; } = new("Changed Role Must Be Guessed As",
+    public ModdedEnumOption RecruitGuess { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Recruiter.RecruitGuess"),
         (int)CacheRoleGuess.ActiveRole, typeof(CacheRoleGuess),
-        ["Original Role", "New Role", "Original Or New Role"]);
+        [
+            MiraLocaleManager.Get("DivaniMods.Options.Recruiter.RecruitGuess.OriginalRole"),
+            MiraLocaleManager.Get("DivaniMods.Options.Recruiter.RecruitGuess.NewRole"),
+            MiraLocaleManager.Get("DivaniMods.Options.Recruiter.RecruitGuess.OriginalOrNewRole")
+        ]
+        );
 }

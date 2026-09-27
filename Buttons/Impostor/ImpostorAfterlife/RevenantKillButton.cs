@@ -13,7 +13,7 @@ namespace DivaniMods.Buttons.Impostor.ImpostorAfterlife;
 
 public sealed class RevenantKillButton : TownOfUsKillRoleButton<RevenantRole, PlayerControl>, IKillButton
 {
-    public override string Name => "Kill";
+    public override string Name => TranslationController.Instance.GetStringWithDefault(StringNames.KillLabel, "Kill");
     public override float Cooldown => OptionGroupSingleton<SummonerOptions>.Instance.RevenantKillCooldown.Value;
     public override float EffectDuration => 0f;
     public override int MaxUses => 1;

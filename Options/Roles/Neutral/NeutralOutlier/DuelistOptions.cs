@@ -1,5 +1,6 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Roles.Neutral.NeutralOutlier;
 
@@ -20,25 +21,33 @@ public enum DuelSpawnType
 
 public class DuelistOptions : AbstractRoleOptionGroup<DuelistRole>
 {
-    public override string GroupName => "Duelist";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Role.Duelist", "Duelist");
 
     public ModdedNumberOption DuelCooldown { get; } = new(
-        "Duel Cooldown", 40f, 10f, 60f, 2.5f, MiraNumberSuffixes.Seconds);
+        MiraLocaleManager.Get("DivaniMods.Options.Duelist.DuelCooldown"), 40f, 10f, 60f, 2.5f, MiraNumberSuffixes.Seconds);
 
     public ModdedNumberOption DuelSpeed { get; } = new(
-        "Duel Speed Boost", 1.10f, 1.00f, 1.50f, 0.05f, MiraNumberSuffixes.Multiplier);
+        MiraLocaleManager.Get("DivaniMods.Options.Duelist.DuelSpeed"), 1.10f, 1.00f, 1.50f, 0.05f, MiraNumberSuffixes.Multiplier);
 
     public ModdedNumberOption DuelsToWin { get; } = new(
-        "Duels Needed To Win", 4f, 1f, 10f, 1f, MiraNumberSuffixes.None);
+        MiraLocaleManager.Get("DivaniMods.Options.Duelist.DuelsToWin"), 4f, 1f, 10f, 1f, MiraNumberSuffixes.None);
 
     public ModdedNumberOption DuelsLostToDie { get; } = new(
-        "Duels Lost Before Dying", 2f, 1f, 10f, 1f, MiraNumberSuffixes.None);
+        MiraLocaleManager.Get("DivaniMods.Options.Duelist.DuelsLostToDie"), 2f, 1f, 10f, 1f, MiraNumberSuffixes.None);
 
     public ModdedEnumOption WinType { get; } = new(
-        "When Victorious", (int)DuelistWinType.WinAlone, typeof(DuelistWinType),
-        ["Win Alone", "Leave In Victory"]);
+        MiraLocaleManager.Get("DivaniMods.Options.Duelist.WinType"), (int)DuelistWinType.WinAlone, typeof(DuelistWinType),
+        [
+            MiraLocaleManager.Get("DivaniMods.Options.Duelist.WinType.WinAlone"),
+            MiraLocaleManager.Get("DivaniMods.Options.Duelist.WinType.LeaveInVictory")
+        ]
+        );
 
     public ModdedEnumOption SpawnType { get; } = new(
-        "Duelers Spawn", (int)DuelSpawnType.Close, typeof(DuelSpawnType),
-        ["Close", "Far", "Random"]);
+        MiraLocaleManager.Get("DivaniMods.Options.Duelist.SpawnType"), (int)DuelSpawnType.Close, typeof(DuelSpawnType),
+        [
+            MiraLocaleManager.Get("DivaniMods.Options.Duelist.SpawnType.Close"),
+            MiraLocaleManager.Get("DivaniMods.Options.Duelist.SpawnType.Far"),
+            MiraLocaleManager.Get("DivaniMods.Options.Duelist.SpawnType.Random")
+        ]);
 }

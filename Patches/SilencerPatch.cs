@@ -80,8 +80,8 @@ public static class SilencerPatch
             if (__instance == null) return;
 
             var state = __instance.state;
-            if (state != MeetingHud.VoteStates.NotVoted &&
-                state != MeetingHud.VoteStates.Voted)
+            if (state != MeetingHud.MeetingStates.NotVoted &&
+                state != MeetingHud.MeetingStates.Voted)
             {
                 return;
             }

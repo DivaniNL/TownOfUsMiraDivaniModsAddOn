@@ -1,5 +1,6 @@
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
@@ -15,7 +16,7 @@ namespace DivaniMods.Buttons.Neutral.NeutralOutlier;
 
 public sealed class DuelStrikeButton : TownOfUsTargetButton<PlayerControl>, IKillButton, IDiseaseableButton
 {
-    public override string Name => "Strike";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Duelist.Ability.Strike");
     public override BaseKeybind Keybind => Keybinds.PrimaryAction;
     public override Color TextOutlineColor => DuelistRole.DuelistColor;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.DuelStrikeButton;

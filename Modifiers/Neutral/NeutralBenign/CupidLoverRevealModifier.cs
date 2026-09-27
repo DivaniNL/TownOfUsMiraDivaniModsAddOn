@@ -1,4 +1,5 @@
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using DivaniMods.Options;
 using TownOfUs.Modifiers;
 using UnityEngine;

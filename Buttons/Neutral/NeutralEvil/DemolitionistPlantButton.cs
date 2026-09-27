@@ -3,6 +3,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Patches;
@@ -15,7 +16,7 @@ namespace DivaniMods.Buttons.Neutral.NeutralEvil;
 
 public class DemolitionistPlantButton : TownOfUsButton
 {
-    public override string Name => "Plant";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Ability.Plant");
     public override float Cooldown => OptionGroupSingleton<DemolitionistOptions>.Instance.PlantCooldown.Value;
     public override float EffectDuration => _arming
         ? OptionGroupSingleton<DemolitionistOptions>.Instance.PlantToSabotageDelay.Value
@@ -151,10 +152,10 @@ public class DemolitionistPlantButton : TownOfUsButton
 
         EffectActive = true;
         Timer = plantTime;
-        Button?.OverrideText("PLANTING");
+        Button?.OverrideText(MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Button.Planting"));
 
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#{colorHex}>Planting sabotage...</color></b>",
+            $"<b><color=#{colorHex}>{MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Notification.Planting")}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.DemolitionistIcon.LoadAsset());
@@ -173,7 +174,7 @@ public class DemolitionistPlantButton : TownOfUsButton
                 || DemolitionistUtilityConsoles.GetStableId(currentKind, currentPos) != _capturedConsoleKey)
             {
                 MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                    $"<b><color=#{colorHex}>Plant aborted — too far from console!</color></b>",
+                    $"<b><color=#{colorHex}>{MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Notification.PlantTooFar")}</color></b>",
                     Color.white,
                     new Vector3(0f, 1f, -20f),
                     spr: DivaniAssets.DemolitionistIcon.LoadAsset());
@@ -257,13 +258,19 @@ public class DemolitionistPlantButton : TownOfUsButton
 
         var delay = OptionGroupSingleton<DemolitionistOptions>.Instance.PlantToSabotageDelay.Value;
         var colorHex = ColorUtility.ToHtmlStringRGB(DemolitionistRole.DemolitionistColor);
+        var armingText = MiraLocaleManager
+            .Get("DivaniMods.Role.Demolitionist.Notification.Arming")
+            .Replace("<seconds>", delay.ToString("0"));
+
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#{colorHex}>Bomb arming in {delay:0}s...</color></b>",
+            $"<b><color=#{colorHex}>{armingText}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.DemolitionistIcon.LoadAsset());
 
-        Button?.OverrideText("ARMING");
+        Button?.OverrideText(
+            MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Button.Arming"));
+
 
         if (delay > 0f)
         {
@@ -285,7 +292,7 @@ public class DemolitionistPlantButton : TownOfUsButton
             {
                 var colorHex = ColorUtility.ToHtmlStringRGB(DemolitionistRole.DemolitionistColor);
                 MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                    $"<b><color=#{colorHex}>Plant cancelled, impostor sabotage started</color></b>",
+                    $"<b><color=#{colorHex}>{MiraLocaleManager.Get("DivaniMods.Role.Demolitionist.Notification.CancelledBySabotage")}</color></b>",
                     Color.white,
                     new Vector3(0f, 1f, -20f),
                     spr: DivaniAssets.DemolitionistIcon.LoadAsset());

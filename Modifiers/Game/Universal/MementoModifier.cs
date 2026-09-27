@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using AmongUs.GameOptions;
 using MiraAPI.GameOptions;
+using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
@@ -9,6 +11,7 @@ using DivaniMods.Roles.Neutral.NeutralEvil;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
+using TownOfUs.Modifiers.Game.Crewmate;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Utilities;
 using UnityEngine;
@@ -25,9 +28,8 @@ public class MementoModifier : UniversalGameModifier, IWikiDiscoverable
 
     public static readonly Dictionary<byte, RoleTypes> RoleBeforeDeath = new();
 
-    public override string ModifierName => "Memento";
-    public override string LocaleKey => "Memento";
-    public override string IntroInfo => "Your role is revealed to everyone in meetings upon death.";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Memento", "Memento");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Memento.IntroInfo");
     public override ModifierFaction FactionType => ModifierFaction.UniversalPostmortem;
     public override Color FreeplayFileColor => MementoColor;
     public Color ModifierColor => MementoColor;
@@ -35,7 +37,7 @@ public class MementoModifier : UniversalGameModifier, IWikiDiscoverable
 
     public override string GetDescription()
     {
-        return "When you die, your role is revealed to everyone in meetings for the rest of the game.";
+        return MiraLocaleManager.Get("DivaniMods.Modifier.Memento.Description");
     }
 
     public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
@@ -48,7 +50,8 @@ public class MementoModifier : UniversalGameModifier, IWikiDiscoverable
 
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        return base.IsModifierValidOn(role) && role is not RetributionistRole && role is not InnocentRole;
+        return base.IsModifierValidOn(role) && role is not RetributionistRole && role is not InnocentRole &&
+            !(OptionGroupSingleton<MementoOptions>.Instance.PreventBaitPairing && role.Player.HasModifier<BaitModifier>());
     }
 
     public override void OnActivate()

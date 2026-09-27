@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MiraAPI.GameOptions;
+using MiraAPI.Translation;
 using DivaniMods.Options;
 using DivaniMods.Roles.Crewmate.CrewmateProtective;
 using TownOfUs.Assets;

@@ -2,6 +2,7 @@ using System.Linq;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Networking.Crewmate.CrewmateProtective;
@@ -16,9 +17,8 @@ namespace DivaniMods.Buttons.Crewmate.CrewmateProtective;
 
 public class PlaceDomeButton : TownOfUsButton
 {
-    private const string ActiveDomeLabel = "Dome Active";
-
-    public override string Name => "Place Dome";
+    private static string ActiveDomeLabel => MiraLocaleManager.Get("DivaniMods.Role.Domesmith.Button.DomeActive");
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Domesmith.Ability.PlaceDome");
     public override float Cooldown => OptionGroupSingleton<DomesmithOptions>.Instance.PlaceDomeCooldown.Value;
     public override float EffectDuration => OptionGroupSingleton<DomesmithOptions>.Instance.PlaceDomeDuration.Value;
     public override int MaxUses => (int)OptionGroupSingleton<DomesmithOptions>.Instance.Charges.Value;
@@ -100,8 +100,12 @@ public class PlaceDomeButton : TownOfUsButton
 
         var colorHex = ColorUtility.ToHtmlStringRGB(DomesmithRole.DomesmithColor);
         var delay = EffectDuration;
+        var placingText = MiraLocaleManager
+            .Get("DivaniMods.Role.Domesmith.Notification.PlacingDome")
+            .Replace("<seconds>", delay.ToString("0.#"));
+
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#{colorHex}>Placing dome in {delay:0.#}s...</color></b>",
+            $"<b><color=#{colorHex}>{placingText}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.DomesmithIcon.LoadAsset());
@@ -139,7 +143,7 @@ public class PlaceDomeButton : TownOfUsButton
 
                 var colorHex = ColorUtility.ToHtmlStringRGB(DomesmithRole.DomesmithColor);
                 MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                    $"<b><color=#{colorHex}>Dome placed!</color></b>",
+                    $"<b><color=#{colorHex}>{MiraLocaleManager.Get("DivaniMods.Role.Domesmith.Notification.DomePlaced")}</color></b>",
                     Color.white,
                     new Vector3(0f, 1f, -20f),
                     spr: DivaniAssets.DomesmithIcon.LoadAsset());
@@ -182,7 +186,7 @@ public class PlaceDomeButton : TownOfUsButton
         _domeTimerOnButton = false;
         TimerPaused = false;
         EffectActive = false;
-        OverrideName("Place Dome");
+        OverrideName(MiraLocaleManager.Get("DivaniMods.Role.Domesmith.Ability.PlaceDome"));
         SetTimer(Cooldown);
     }
 }

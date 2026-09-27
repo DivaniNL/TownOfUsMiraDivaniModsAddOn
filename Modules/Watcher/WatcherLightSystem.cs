@@ -7,6 +7,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using Reactor.Utilities;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Neutral.NeutralKilling;
 using DivaniMods.Modifiers;
@@ -408,8 +409,10 @@ public static class WatcherLightSystem
 
         PlayGunshot();
 
+        var text =
+            MiraLocaleManager.Get("DivaniMods.Role.Watcher.Notification.MovementDetected");
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b>{WatcherRole.RedLightColor.ToTextColor()}Movement Detected!</color></b>",
+            $"<b>{WatcherRole.RedLightColor.ToTextColor()}{text}</color></b>",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.WatcherRedLight.LoadAsset());
@@ -429,8 +432,11 @@ public static class WatcherLightSystem
 
         if (victim.AmOwner)
         {
+            var text =
+                MiraLocaleManager.Get("DivaniMods.Role.Watcher.Notification.MovementDetected");
+
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b>{WatcherRole.RedLightColor.ToTextColor()}Movement Detected!</color></b>",
+                $"<b>{WatcherRole.RedLightColor.ToTextColor()}{text}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.WatcherRedLight.LoadAsset());
@@ -536,7 +542,7 @@ public static class WatcherLightSystem
         }
 
         _localInvisNotified = true;
-        ShowExemptNotification("While invisible, you won't be affected.");
+        ShowExemptNotification(MiraLocaleManager.Get("DivaniMods.Role.Watcher.Notification.InvisibleExempt"));
     }
 
     private static void NotifyLocalExempt()
@@ -549,18 +555,21 @@ public static class WatcherLightSystem
 
         if (!me.HasDied() && me.HasModifier<DuelModifier>())
         {
-            ShowExemptNotification("You are in a Duel and won't be affected.");
+            ShowExemptNotification(MiraLocaleManager.Get("DivaniMods.Role.Watcher.Notification.DuelExempt"));
         }
         else if (me.HasDied() && !Options.GhostwalkersMustFreeze.Value && me.Data?.Role is IGhostRole)
         {
-            ShowExemptNotification("Ghost Roles like you are not affected.");
+            ShowExemptNotification(MiraLocaleManager.Get("DivaniMods.Role.Watcher.Notification.GhostExempt"));
         }
     }
 
     private static void ShowExemptNotification(string body)
     {
+        var title =
+            MiraLocaleManager.Get("DivaniMods.Role.Watcher.Notification.RedLightGreenLight");
+
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b>{WatcherRole.WatcherColor.ToTextColor()}Red Light, Green Light</color></b>\n" + body,
+            $"<b>{WatcherRole.WatcherColor.ToTextColor()}{title}</color></b>\n{body}",
             Color.white,
             new Vector3(0f, 1f, -20f),
             spr: DivaniAssets.WatcherIcon.LoadAsset());
@@ -627,18 +636,24 @@ public static class WatcherLightSystem
 
     private static void UpdateGreenTimer()
     {
+        var text =
+        MiraLocaleManager.Get("DivaniMods.Role.Watcher.Timer.GreenLight");
+
         DivaniTimers.Set(
             TimerId,
-            $"{WatcherRole.GreenLightColor.ToTextColor()}<b>GREEN LIGHT</b></color>",
+            $"{WatcherRole.GreenLightColor.ToTextColor()}<b>{text}</b></color>",
             DivaniAssets.WatcherGreenLight.LoadAsset());
     }
 
     private static void UpdateRedTimer(float remaining)
     {
         var secs = Mathf.Max(0, Mathf.CeilToInt(remaining));
+        var text =
+            MiraLocaleManager.Get("DivaniMods.Role.Watcher.Timer.RedLight");
+
         DivaniTimers.Set(
             TimerId,
-            $"{WatcherRole.RedLightColor.ToTextColor()}<b>RED LIGHT</b></color>  <color=#FFFFFF>{secs}s</color>",
+            $"{WatcherRole.RedLightColor.ToTextColor()}<b>{text}</b></color>  <color=#FFFFFF>{secs}s</color>",
             DivaniAssets.WatcherRedLight.LoadAsset());
     }
 

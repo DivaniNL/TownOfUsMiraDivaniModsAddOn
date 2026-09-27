@@ -3,6 +3,7 @@ using MiraAPI.Events;
 using MiraAPI.Events.Mira;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
+using MiraAPI.Translation;
 using MiraAPI.Hud;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Impostor.ImpostorKilling;
@@ -51,8 +52,12 @@ public static class MosquitoEvents
             MosquitoObject.PendingStingTargetId = byte.MaxValue;
 
             var colorHex = ColorUtility.ToHtmlStringRGB(Palette.ImpostorRed);
+            var notificationText = MiraLocaleManager
+                .Get("DivaniMods.Role.Mosquito.Notification.Stung")
+                .Replace("<player>", evt.Target.Data.PlayerName);
+
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{colorHex}>Your mosquito stung {evt.Target.Data.PlayerName}</color></b>",
+                $"<b><color=#{colorHex}>{notificationText}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.MosquitoIcon.LoadAsset());

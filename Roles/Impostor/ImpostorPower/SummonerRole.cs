@@ -5,6 +5,7 @@ using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
@@ -18,18 +19,18 @@ using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using UnityEngine;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorPower;
 
 public sealed class SummonerRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
-    public string RoleName => "Summoner";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Summoner", "Summoner");
     public string LocaleKey => "Summoner";
-    public string RoleDescription => "Recruit dead shipmates!";
-    public string RoleLongDescription =>
-        "During meetings, recruit a dead Crewmate or Neutral to rise as the Impostor afterlife Revenant.\n" +
-        "Disabled in the final four";
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Summoner.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Summoner.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Summoner.LongDescription");
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorPower;
@@ -47,17 +48,20 @@ public sealed class SummonerRole(IntPtr cppPtr)
         var sb = ITownOfUsRole.SetNewTabText(this);
         var req = SummonerState.Required;
         var kills = Math.Min(SummonerState.KillsSinceRevenant, req);
-        sb.AppendLine(TownOfUsPlugin.Culture, $"<b>Kills required for new summon {kills}/{req}</b>");
+        sb.AppendLine(
+            $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Summoner.Tab.KillsRequired")
+                .Replace("<kills>", kills.ToString(TownOfUsPlugin.Culture))
+                .Replace("<required>", req.ToString(TownOfUsPlugin.Culture))}</b>");
         if (RevenantActive())
         {
             sb.AppendLine(TownOfUsPlugin.Culture,
-                $"<b>{TownOfUsColors.Impostor.ToTextColor()}One of your Revenants is on the loose.</color></b>");
-            sb.AppendLine(TownOfUsPlugin.Culture, $"<b>Recruit again after its death</b>");
+                 $"<b>{TownOfUsColors.Impostor.ToTextColor()}{MiraLocaleManager.Get("DivaniMods.Role.Summoner.Tab.RevenantActive")}</color></b>");
+            sb.AppendLine($"<b>{MiraLocaleManager.Get("DivaniMods.Role.Summoner.Tab.RecruitAfterDeath")}</b>");
         }
         else if (SummonerState.SummonReady)
         {
             sb.AppendLine(TownOfUsPlugin.Culture,
-                $"<b>{TownOfUsColors.Impostor.ToTextColor()}Summon Active</color></b>");
+                $"<b>{TownOfUsColors.Impostor.ToTextColor()}{MiraLocaleManager.Get("DivaniMods.Role.Summoner.Tab.SummonActive")}</color></b>");
         }
 
         return sb;
@@ -65,7 +69,11 @@ public sealed class SummonerRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Summon", "In a meeting, mark a dead player to become a Revenant from next round.", DivaniAssets.SummonerMeetingActive)
+       new(
+            MiraLocaleManager.Get("DivaniMods.Role.Summoner.Ability.Summon"),
+            MiraLocaleManager.Get("DivaniMods.Role.Summoner.Ability.Summon.Description"),
+            DivaniAssets.SummonerMeetingActive
+        )
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -165,13 +173,13 @@ public sealed class SummonerRole(IntPtr cppPtr)
 
     private bool IsExempt(PlayerVoteArea voteArea)
     {
-        var target = GameData.Instance.GetPlayerById(voteArea.TargetPlayerId)?.Object;
+        var target = GameData.Instance.GetPlayerById(voteArea.PlayerId)?.Object;
         return !IsValidRecruitTarget(target, Player);
     }
 
     private void OnMeetingToggle(PlayerVoteArea voteArea, MeetingHud hud)
     {
-        if (hud.state == MeetingHud.VoteStates.Discussion || IsExempt(voteArea))
+        if (hud.state == MeetingHud.MeetingStates.Discussion || IsExempt(voteArea))
         {
             return;
         }
@@ -181,9 +189,9 @@ public sealed class SummonerRole(IntPtr cppPtr)
             return;
         }
 
-        if (_localSelectedId == voteArea.TargetPlayerId)
+        if (_localSelectedId == voteArea.PlayerId)
         {
-            _meetingMenu.Actives[voteArea.TargetPlayerId] = false;
+            _meetingMenu.Actives[voteArea.PlayerId] = false;
             _localSelectedId = 255;
             RpcSetPendingTarget(Player, 255);
             return;
@@ -194,9 +202,9 @@ public sealed class SummonerRole(IntPtr cppPtr)
             _meetingMenu.Actives[_localSelectedId] = false;
         }
 
-        _localSelectedId = voteArea.TargetPlayerId;
-        _meetingMenu.Actives[voteArea.TargetPlayerId] = true;
-        RpcSetPendingTarget(Player, voteArea.TargetPlayerId);
+        _localSelectedId = voteArea.PlayerId;
+        _meetingMenu.Actives[voteArea.PlayerId] = true;
+        RpcSetPendingTarget(Player, voteArea.PlayerId);
     }
 
     [MethodRpc((uint)DivaniRpcCalls.SummonerSetPendingTarget)]

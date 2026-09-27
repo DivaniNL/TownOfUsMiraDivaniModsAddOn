@@ -4,24 +4,26 @@ using AmongUs.GameOptions;
 using MiraAPI.GameOptions;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
+using DivaniMods.Interfaces;
 using DivaniMods.Options;
 using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Extensions;
 using TownOfUs.Interfaces;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
 using UnityEngine;
+using MiraAPI.Utilities.Assets;
 
 namespace DivaniMods.Roles.Neutral.NeutralEvil;
 
 public sealed class InnocentRole(IntPtr cppPtr)
-    : NeutralRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant, IGuessable
+    : NeutralRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, IGuessable, INeutralEvilWinOutcomeRole
 {
     public static readonly Color InnocentColor = new Color32(255, 141, 168, 255);
     public static Dictionary<byte, InnocentRole> ActiveInnocents { get; } = new();
@@ -29,6 +31,7 @@ public sealed class InnocentRole(IntPtr cppPtr)
     public byte? PendingTauntKillerId { get; set; }
     public byte? TauntedKillerId { get; set; }
     public bool TargetVoted { get; set; }
+    public bool TargetWasEvil { get; set; }
     public bool AboutToWin { get; set; }
     public bool AwaitingNextMeetingExile { get; set; }
     public bool WinWindowExpired { get; set; }
@@ -36,12 +39,13 @@ public sealed class InnocentRole(IntPtr cppPtr)
     public DoomableType DoomHintType => DoomableType.Trickster;
     public RoleBehaviour CrewVariant => RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<EngineerTouRole>());
     public bool CanBeGuessed => true;
-    public string RoleName => "Innocent";
-    public string RoleDescription => "I swear it wasn't me!";
-    public string RoleLongDescription =>
-        "Use Taunt on another player to make them immediately kill you.\n" +
-        "If that player is voted out in the next meeting, you win.";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Innocent", "Innocent");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Innocent.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Innocent.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Innocent.LongDescription");
     public Color RoleColor => InnocentColor;
+
+    public LoadableAsset<Sprite> WinIcon => DivaniAssets.InnocentIcon;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralEvil;
     public bool HasImpostorVision => false;
@@ -50,7 +54,11 @@ public sealed class InnocentRole(IntPtr cppPtr)
 
     [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
     [
-        new("Taunt", "Force a player to immediately kill you.You will win if that player is voted out in the next meeting.", TouNeutAssets.JesterHauntSprite)
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Innocent.Ability.Taunt"),
+            MiraLocaleManager.Get("DivaniMods.Role.Innocent.Ability.Taunt.Description"),
+            TouNeutAssets.JesterHauntSprite
+        )
     ];
 
     public CustomRoleConfiguration Configuration => new(this)
@@ -71,7 +79,7 @@ public sealed class InnocentRole(IntPtr cppPtr)
         }
 
         var task = PlayerTask.GetOrCreateTask<ImportantTextTask>(playerControl, 0);
-        task.Text = $"{TownOfUsColors.Neutral.ToTextColor()}{TouLocale.GetParsed("NeutralEvilTaskHeader")}</color>";
+        task.Text = $"{TownOfUsColors.Neutral.ToTextColor()}{MiraLocaleManager.Get("NeutralEvilTaskHeader")}</color>";
         task.name = "NeutralRoleText";
     }
 
@@ -85,6 +93,9 @@ public sealed class InnocentRole(IntPtr cppPtr)
         AboutToWin = false;
         AwaitingNextMeetingExile = false;
         WinWindowExpired = false;
+        TargetWasEvil = false;
+        AboutToTorment = false;
+        HasKilled = false;
     }
 
     public override void Deinitialize(PlayerControl targetPlayer)
@@ -116,19 +127,24 @@ public sealed class InnocentRole(IntPtr cppPtr)
                innocent.PendingTauntKillerId == source.PlayerId;
     }
 
+    public bool ReachedWinCondition => TargetVoted;
+
+    public NeutralEvilWinOutcome WinOutcome => OptionGroupSingleton<InnocentOptions>.Instance.WinOutcome;
+
+    public NeutralEvilWinOutcome EffectiveWinOutcome => TargetWasEvil ? NeutralEvilWinOutcome.Nothing : WinOutcome;
+
+    public bool AboutToTorment { get; set; }
+
+    public bool HasKilled { get; set; }
+
     public bool WinConditionMet()
     {
-        return TargetVoted || AboutToWin;
+        return WinOutcome is NeutralEvilWinOutcome.EndsGame && (TargetVoted || AboutToWin) && !TargetWasEvil;
     }
 
     public override bool DidWin(GameOverReason gameOverReason)
     {
-        if (!TargetVoted)
-        {
-            return false;
-        }
-
-        return true;
+        return TargetVoted;
     }
 
     public static void ClearAndReload()

@@ -2,6 +2,7 @@ using Il2CppInterop.Runtime.Attributes;
 using Il2CppSystem.Text;
 using Reactor.Utilities.Attributes;
 using DivaniMods.Utilities;
+using MiraAPI.Translation;
 using UnityEngine;
 
 namespace DivaniMods.Patches;
@@ -31,8 +32,13 @@ public sealed class DemolitionistSabotageTask(nint cppPtr) : SabotageTask(cppPtr
         var seconds = Mathf.CeilToInt(DemolitionistSabotageState.TimeRemaining);
         var hex = ColorUtility.ToHtmlStringRGB(color);
 
+        var text = MiraLocaleManager
+            .Get("DivaniMods.Role.Demolitionist.Task.SabotageActive")
+            .Replace("<location>", location)
+            .Replace("<seconds>", seconds.ToString());
+
         sb.AppendLine(
-            $"<color=#{hex}>Demolitionist Sabotage active\nLocation: {location}\n{seconds}s</color>");
+            $"<color=#{hex}>{text}</color>");
     }
 
     public override void Complete()

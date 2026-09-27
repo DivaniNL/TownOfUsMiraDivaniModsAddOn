@@ -1,6 +1,7 @@
 using System;
 using AmongUs.GameOptions;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Assets;
 using TownOfUs.Extensions;
@@ -9,18 +10,18 @@ using TownOfUs.Roles;
 using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
+using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorKilling;
 
 public sealed class SilencerRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
 {
-    public string RoleName => "Silencer";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Silencer", "Silencer");
     public string LocaleKey => "Silencer";
-    public string RoleDescription => "Cut meeting time!";
-    public string RoleLongDescription =>
-        "Each kill you make shaves seconds\n" +
-        "off the voting time of every meeting for the rest of the game.";
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Silencer.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Silencer.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Silencer.LongDescription");
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorKilling;

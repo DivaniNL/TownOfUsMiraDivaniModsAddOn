@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using MiraAPI.GameOptions;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Options;
 using DivaniMods.Roles.Crewmate.CrewmateSupport;
@@ -15,7 +16,7 @@ namespace DivaniMods.Buttons.Crewmate.CrewmateSupport;
 
 public sealed class MoleDigButton : TownOfUsRoleButton<MoleRole>
 {
-    public override string Name => "Dig";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Mole.Ability.Dig");
     public override BaseKeybind Keybind => Keybinds.PrimaryAction;
     public override Color TextOutlineColor => MoleRole.MoleColor;
 
@@ -90,8 +91,11 @@ public sealed class MoleDigButton : TownOfUsRoleButton<MoleRole>
 
             var roomName = MiscUtils.GetRoomName(SavedPos.Value);
             var hex = ColorUtility.ToHtmlStringRGB(MoleRole.MoleColor);
+            var notificationText = MiraLocaleManager
+                .Get("DivaniMods.Role.Mole.Notification.VentActivatesNextMeeting")
+                .Replace("<room>", roomName);
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>Your placed vent at {roomName} will activate after the next meeting.</color></b>",
+                $"<b><color=#{hex}>{notificationText}</color></b>",
                 Color.white,
                 new Vector3(0f, 1f, -20f),
                 spr: DivaniAssets.MoleDigButton.LoadAsset());

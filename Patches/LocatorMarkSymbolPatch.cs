@@ -7,6 +7,7 @@ using DivaniMods.Roles.Crewmate.CrewmateSupport;
 using TownOfUs.Modifiers;
 using TownOfUs.Utilities;
 using UnityEngine;
+using TownOfUs.Modules;
 
 namespace DivaniMods.Patches;
 
@@ -33,7 +34,7 @@ internal static class LocatorMarkDisplay
             return false;
         }
 
-        return DeathHandlerModifier.IsFullyDead(local)
+        return GameHistory.IsFullyDead(local)
                || local.Data.Role is LocatorRole
                || (local == row && OptionGroupSingleton<LocatorOptions>.Instance.TargetKnows);
     }

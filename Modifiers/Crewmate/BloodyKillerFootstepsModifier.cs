@@ -4,6 +4,7 @@ using System.Linq;
 using AmongUs.GameOptions;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using Reactor.Utilities;
 using Reactor.Utilities.Extensions;
@@ -29,7 +30,7 @@ public sealed class BloodyKillerFootstepsModifier : BaseModifier
     private float _footstepInterval;
     private float _effectEndsAt;
 
-    public override string ModifierName => "Bloody Footsteps";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.BloodyFootsteps", "Bloody Footsteps"); //Appears in Freeplay
     public override bool HideOnUi => true;
 
     public override void OnActivate()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities;
+using MiraAPI.Translation;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
@@ -387,10 +388,19 @@ public static class DuelManager
                 yield break;
             }
 
-            var unit = seconds == 1 ? "second" : "seconds";
+            var key = seconds == 1
+                ? "DivaniMods.Role.Duelist.Notification.ReturningSingular"
+                : "DivaniMods.Role.Duelist.Notification.ReturningPlural";
+
+            var text = MiraLocaleManager
+                .Get(key)
+                .Replace("<seconds>", seconds.ToString());
+
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>Returning to the map in {seconds} {unit}</color></b>", Color.white,
-                new Vector3(0f, 1f, -20f), spr: icon);
+                $"<b><color=#{hex}>{text}</color></b>",
+                Color.white,
+                new Vector3(0f, 1f, -20f),
+                spr: icon);
 
             yield return new WaitForSeconds(1f);
         }
@@ -426,15 +436,20 @@ public static class DuelManager
 
         if (local.PlayerId == winner.PlayerId)
         {
+             var text =
+                MiraLocaleManager.Get("DivaniMods.Role.Duelist.Notification.WonDuel");
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>You won the duel!</color></b>", Color.white,
+                $"<b><color=#{hex}>{text}</color></b>", Color.white,
                 new Vector3(0f, 1f, -20f), spr: icon);
             Coroutines.Start(MiscUtils.CoFlash(Color.green, alpha: 0.4f));
         }
         else if (local.PlayerId == loser.PlayerId)
         {
+            var text =
+                MiraLocaleManager.Get("DivaniMods.Role.Duelist.Notification.LostDuel");
+
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>You lost the duel!</color></b>", Color.white,
+                $"<b><color=#{hex}>{text}</color></b>", Color.white,
                 new Vector3(0f, 1f, -20f), spr: icon);
             Coroutines.Start(MiscUtils.CoFlash(Color.red, alpha: 0.4f));
         }
@@ -451,8 +466,10 @@ public static class DuelManager
         var hex = ColorUtility.ToHtmlStringRGB(DuelistRole.DuelistColor);
         var icon = DivaniAssets.DuelistIcon.LoadAsset();
 
+        var text =
+            MiraLocaleManager.Get("DivaniMods.Role.Duelist.Notification.Draw");
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-            $"<b><color=#{hex}>Clash! Both blades landed at once. The duel ends in a draw.</color></b>", Color.white,
+            $"<b><color=#{hex}>{text}</color></b>", Color.white,
             new Vector3(0f, 1f, -20f), spr: icon);
         Coroutines.Start(MiscUtils.CoFlash(Color.grey, alpha: 0.4f));
     }

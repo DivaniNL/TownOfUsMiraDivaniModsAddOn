@@ -1,4 +1,5 @@
 using HarmonyLib;
+using MiraAPI.Translation;
 using DivaniMods.Events.Impostor.ImpostorSupport;
 using DivaniMods.Roles.Impostor.ImpostorSupport;
 using TownOfUs.Extensions;
@@ -24,6 +25,10 @@ public static class CouncillorMeetingTimerPatch
         }
 
         var total = 1 + CouncillorEvents.GetExtraVotes(local.PlayerId);
-        __instance.TimerText.text += $"<color=#FFFFFF>\nCurrent votes this meeting: {total}</color>";
+        var text = MiraLocaleManager
+            .Get("DivaniMods.Role.Councillor.Meeting.CurrentVotes")
+            .Replace("<votes>", total.ToString());
+
+        __instance.TimerText.text += $"<color=#FFFFFF>\n{text}</color>";
     }
 }

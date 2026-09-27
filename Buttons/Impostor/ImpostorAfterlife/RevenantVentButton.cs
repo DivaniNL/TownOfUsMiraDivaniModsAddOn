@@ -18,7 +18,7 @@ namespace DivaniMods.Buttons.Impostor.ImpostorAfterlife;
 
 public sealed class RevenantVentButton : TownOfUsRoleButton<RevenantRole, Vent>
 {
-    public override string Name => "Vent";
+    public override string Name => TranslationController.Instance.GetStringWithDefault(StringNames.VentLabel, "Vent");
     public override BaseKeybind Keybind => Keybinds.VentAction;
     public override Color TextOutlineColor => RevenantRole.RevenantColor;
     public override float Cooldown => OptionGroupSingleton<SummonerOptions>.Instance.RevenantVentCooldown.Value;
@@ -211,7 +211,8 @@ public sealed class RevenantVentButton : TownOfUsRoleButton<RevenantRole, Vent>
 
         if (_ventText != null)
         {
-            _ventText.text = $"Vent: <color=#{hex}>{rounded}s</color>";
+            var ventLabel = TranslationController.Instance.GetStringWithDefault(StringNames.VentLabel, "Vent");
+            _ventText.text = $"{ventLabel}: <color=#{hex}>{rounded}s</color>";
             _ventText.gameObject.SetActive(true);
         }
 

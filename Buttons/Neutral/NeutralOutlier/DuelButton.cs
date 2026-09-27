@@ -2,6 +2,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Utilities.Assets;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Modules.Duelist;
@@ -19,7 +20,7 @@ namespace DivaniMods.Buttons.Neutral.NeutralOutlier;
 
 public sealed class DuelButton : TownOfUsRoleButton<DuelistRole>, IDiseaseableButton
 {
-    public override string Name => "Duel";
+    public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Duelist.Ability.Duel");
     public override float Cooldown => OptionGroupSingleton<DuelistOptions>.Instance.DuelCooldown.Value;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.DuelistDuelButton;
     public override ButtonLocation Location => ButtonLocation.BottomRight;

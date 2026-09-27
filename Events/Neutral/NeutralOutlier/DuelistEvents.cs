@@ -5,6 +5,7 @@ using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
 using MiraAPI.Modifiers;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using Reactor.Utilities;
 using DivaniMods.Assets;
@@ -14,7 +15,6 @@ using DivaniMods.Roles.Neutral.NeutralOutlier;
 using TownOfUs.Events;
 using TownOfUs.Events.TouEvents;
 using TownOfUs.Modifiers;
-using TownOfUs.Modules.Localization;
 using TownOfUs.Utilities;
 using UnityEngine;
 
@@ -75,11 +75,12 @@ public static class DuelistEvents
 
         DuelManager.MarkDuelDeath(tgt.PlayerId);
 
-        var cause = TouLocale.Get("DiedToDuelist");
-        DeathHandlerModifier.UpdateDeathHandlerImmediate(
-            tgt, cause, DeathEventHandlers.CurrentRound, DeathHandlerOverride.SetTrue,
-            TouLocale.GetParsed("DiedByStringBasic").Replace("<player>", src.Data.PlayerName),
-            lockInfo: DeathHandlerOverride.SetTrue);
+        var cause = MiraLocaleManager.Get("DiedToDuelist");
+        TownOfUs.Modules.GameHistory.UpdatePlayerDeathData(
+            tgt, cause,
+            roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+            diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetTrue,
+            lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
 
         DuelManager.EndDuel(src, tgt, true);
     }
@@ -123,9 +124,10 @@ public static class DuelistEvents
         {
             Coroutines.Start(CoShowLeaveNotification(duelist.Player));
 
-            DeathHandlerModifier.UpdateDeathHandlerImmediate(duelist.Player, TouLocale.Get("DiedToWinning"),
-                DeathEventHandlers.CurrentRound, DeathHandlerOverride.SetFalse,
-                lockInfo: DeathHandlerOverride.SetTrue);
+            TownOfUs.Modules.GameHistory.UpdatePlayerDeathData(duelist.Player, MiraLocaleManager.Get("DiedToWinning"),
+                roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+                diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetFalse,
+                lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
 
             duelist.Player.Exiled();
         }
@@ -146,9 +148,10 @@ public static class DuelistEvents
         {
             Coroutines.Start(CoShowLeaveNotification(duelist.Player));
 
-            DeathHandlerModifier.UpdateDeathHandlerImmediate(duelist.Player, TouLocale.Get("DiedToWinning"),
-                DeathEventHandlers.CurrentRound, DeathHandlerOverride.SetFalse,
-                lockInfo: DeathHandlerOverride.SetTrue);
+            TownOfUs.Modules.GameHistory.UpdatePlayerDeathData(duelist.Player, MiraLocaleManager.Get("DiedToWinning"),
+                roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+                diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetFalse,
+                lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
 
             duelist.Player.Exiled();
         }
@@ -168,8 +171,9 @@ public static class DuelistEvents
 
         var hex = ColorUtility.ToHtmlStringRGB(DuelistRole.DuelistColor);
         var text = duelist.AmOwner
-            ? $"<b><color=#{hex}>You have successfully won as the Duelist, as you have won enough duels!</color></b>"
-            : $"<b><color=#{hex}>The Duelist, {duelist.Data.PlayerName}, has successfully won, as they have won enough duels!</color></b>";
+            ? MiraLocaleManager.Get("DivaniMods.Role.Duelist.Notification.YouWon")
+            : MiraLocaleManager.Get("DivaniMods.Role.Duelist.Notification.PlayerWon")
+                .Replace("<player>", duelist.Data.PlayerName);
 
         var notif = Helpers.CreateAndShowNotification(
             text, Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.DuelistIcon.LoadAsset());

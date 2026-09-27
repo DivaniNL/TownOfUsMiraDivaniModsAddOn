@@ -1,4 +1,5 @@
 using MiraAPI.Modifiers;
+using MiraAPI.Translation;
 
 namespace DivaniMods.Modifiers.Crewmate.CrewmateKilling;
 
@@ -6,7 +7,7 @@ public sealed class CursedModifier : BaseModifier
 {
     private int _savedEmergencies;
 
-    public override string ModifierName => "Cursed";
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Cursed", "Cursed");
     public override bool HideOnUi => true;
     public override bool Unique => true;
 

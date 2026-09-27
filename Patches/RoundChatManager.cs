@@ -1,5 +1,6 @@
 using System;
 using HarmonyLib;
+using MiraAPI.Translation;
 using MiraAPI.Modifiers;
 using TMPro;
 using DivaniMods.Assets;
@@ -206,19 +207,21 @@ public static class RoundChatManager
         if (telecom && lover)
         {
             var loverSelected = Selected == RoundChat.Lover;
-            _statusText.text = loverSelected
-                ? "Lover Chat is Active. Press the switch button to cycle."
-                : "Telecom Chat is Active. Press the switch button to cycle.";
+            _statusText.text = MiraLocaleManager.Get(
+                loverSelected
+                    ? "DivaniMods.RoundChat.Lover.Switch"
+                    : "DivaniMods.RoundChat.Telecom.Switch");
             _statusText.color = loverSelected ? TownOfUsColors.Lover : TelecomRole.TelecomColor;
         }
         else if (telecom)
         {
-            _statusText.text = "Telecom Chat is Active. Messages will be sent to this chat.";
+            _statusText.text = MiraLocaleManager.Get("DivaniMods.RoundChat.Telecom.Active");
+
             _statusText.color = TelecomRole.TelecomColor;
         }
         else
         {
-            _statusText.text = "Lover Chat is Active. Messages will be sent to this chat.";
+            _statusText.text = MiraLocaleManager.Get("DivaniMods.RoundChat.Lover.Active");
             _statusText.color = TownOfUsColors.Lover;
         }
     }
