@@ -2,6 +2,7 @@ using Il2CppInterop.Runtime.Attributes;
 using System;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using DivaniMods.Assets;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
@@ -15,12 +16,11 @@ namespace DivaniMods.Roles.Impostor.ImpostorKilling;
 public sealed class DeathnoteRole(IntPtr cppPtr)
     : ImpostorRole(cppPtr), ITownOfUsRole, IWikiDiscoverable, IDoomable
 {
-    public string RoleName => "Deathnote";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Deathnote", "Deathnote");
     public string LocaleKey => "Deathnote";
-    public string RoleDescription => "Collect my pages!";
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Deathnote.Description", "Collect my pages!");
     public string RoleLongDescription =>
-        "Note players, their name will be in your book.\n" + 
-        "they will succumb with you when you die.";
+        MiraLocaleManager.Get("DivaniMods.Role.Deathnote.LongDescription", "Note players, their name will be in your book.\nthey will succumb with you when you die.");
     public Color RoleColor => Palette.ImpostorRed;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorKilling;

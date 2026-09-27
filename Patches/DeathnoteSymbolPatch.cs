@@ -31,8 +31,10 @@ internal static class DeathnoteDisplay
             return false;
         }
 
+        var isDead = local.HasDied() || GameHistory.IsFullyDead(local);
         return local.Data.Role is DeathnoteRole
-               || (MeetingHud.Instance != null ? local.HasDied() : GameHistory.IsFullyDead(local));
+               || local.Data.Role.IsImpostor
+               || isDead;
     }
 
     internal static void TryAppendMarkSymbol(ref string result, PlayerControl row)

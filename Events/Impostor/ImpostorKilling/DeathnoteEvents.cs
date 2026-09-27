@@ -1,14 +1,39 @@
+using DivaniMods.Buttons.Impostor.ImpostorKilling;
 using DivaniMods.Modifiers.Impostors;
 using DivaniMods.Roles.Impostor.ImpostorKilling;
 using MiraAPI.Events;
+using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.Events.Vanilla.Meeting;
+using MiraAPI.GameOptions;
+using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Networking;
 using MiraAPI.Translation;
 using MiraAPI.Utilities;
+using TownOfUs.Networking;
 
 public class DeathNoteEvents
 {
+    [RegisterEvent]
+    public static void OnRoundStart(RoundStartEvent evt)
+    {
+        if (evt.TriggeredByIntro)
+        {
+            CustomButtonSingleton<DeathnoteButton>.Instance?.ResetCharges();
+        }
+    }
+
+    [RegisterEvent]
+    public static void OnAfterMurder(AfterMurderEvent evt)
+    {
+        if (evt.Source == null || !evt.Source.AmOwner || evt.Source.Data?.Role is not DeathnoteRole)
+        {
+            return;
+        }
+
+        CustomButtonSingleton<DeathnoteButton>.Instance?.AccrueKill();
+    }
+
     [RegisterEvent]
     public static void OnEjection(EjectionEvent evt)
     {
@@ -40,7 +65,10 @@ public class DeathNoteEvents
                 diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetFalse,
                 lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
 
-            exiled.RpcCustomMurder(player, MeetingCheck.Ignore);
+            exiled.RpcSpecialMurder(player, MeetingCheck.Ignore,
+                causeOfDeath: "Deathnote",
+                playKillSound: false,
+                showKillAnim: false);
         }
     }
 }
