@@ -14,8 +14,18 @@
     <string name="DiedToCunctator">Delayed</string>
     <string name="DiedToObfuscator">Obfuscated</string>
     <string name="DiedToDuelist">Defeated</string>
+    <string name="DiedToDeathnote">Noted</string>
     <string name="DiedToWatcher">Watched</string>
     <string name="DiedToThief">Robbed</string>
+    <string name="DivaniMods.Role.Deathnote">Deathnote</string>
+    <string name="DivaniMods.Role.Deathnote.Description">Collect my pages!</string>
+    <string name="DivaniMods.Role.Deathnote.LongDescription">Note players, their name will be in your book.&#10;they will succumb with you when you die.</string>
+    <string name="DivaniMods.Role.Deathnote.Ability.Note">Note</string>
+    <string name="DivaniMods.Options.Deathnote.CanNoteFirstRound">Can Note First Round</string>
+    <string name="DivaniMods.Options.Deathnote.MaxNotesPerGame">Max Notes Per Game</string>
+    <string name="DivaniMods.Options.Deathnote.StartingCharges">Starting Note Charges</string>
+    <string name="DivaniMods.Options.Deathnote.KillsPerExtraCharge">Kills Per Extra Note Charge</string>
+    <string name="DivaniMods.Options.Deathnote.NoteCooldown">Note Cooldown</string>
     <string name="DivaniMods.DeathReason.Retaliated">Retaliated</string>
 <!-- Uncategorized Strings -->
     <string name="DivaniLocalSettingDisableRainbowComms">Disable Rainbow Comms</string>

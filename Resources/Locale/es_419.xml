@@ -14,8 +14,18 @@
     <string name="DiedToCunctator">Retrasado</string>
     <string name="DiedToObfuscator">Ofuscado</string>
     <string name="DiedToDuelist">Derrotado</string>
+    <string name="DiedToDeathnote">Marcado</string>
     <string name="DiedToWatcher">Observado</string>
     <string name="DiedToThief">Robado</string>
+    <string name="DivaniMods.Role.Deathnote">Nota mortal</string>
+    <string name="DivaniMods.Role.Deathnote.Description">¡Recoge mis páginas!</string>
+    <string name="DivaniMods.Role.Deathnote.LongDescription">Marca a los jugadores; sus nombres estarán en tu cuaderno.&#10;morirán contigo cuando seas expulsado.</string>
+    <string name="DivaniMods.Role.Deathnote.Ability.Note">Marcar</string>
+    <string name="DivaniMods.Options.Deathnote.CanNoteFirstRound">Puede anotar en la primera ronda</string>
+    <string name="DivaniMods.Options.Deathnote.MaxNotesPerGame">Máximo de notas por partida</string>
+    <string name="DivaniMods.Options.Deathnote.StartingCharges">Cargas iniciales de nota</string>
+    <string name="DivaniMods.Options.Deathnote.KillsPerExtraCharge">Muertes por carga extra</string>
+    <string name="DivaniMods.Options.Deathnote.NoteCooldown">Tiempo de recarga de la nota</string>
     <string name="DivaniMods.DeathReason.Retaliated">Represalia</string>
 <!-- Strings no categorizadas -->
     <string name="DivaniLocalSettingDisableRainbowComms">Desactivar Comms arcoíris</string>
