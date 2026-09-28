@@ -68,4 +68,8 @@ public enum DivaniRpcCalls : uint
     MonsterDevour = 263,
     MonsterDigest = 264,
     RecruiterSetRecruited = 265,
+    DreamweaverSetReimagineTarget = 266,
+    DreamweaverReimagine = 267,
+    DreamweaverNotifyDreamFailed = 268,
+    DreamweaverNotifyDreamRedirected = 269,
 }
