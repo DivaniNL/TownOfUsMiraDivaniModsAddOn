@@ -2,7 +2,7 @@ using MiraAPI.Modifiers;
 
 namespace DivaniMods.Modifiers.Crewmate.CrewmatePower;
 
-public sealed class DreamweaverInsomniaModifier(int rounds) : BaseModifier
+public sealed class MentorInsomniaModifier(int rounds) : BaseModifier
 {
     public override string ModifierName => "Insomnia";
     public override bool HideOnUi => true;

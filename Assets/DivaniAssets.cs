@@ -2,6 +2,7 @@ using System;
 using DivaniMods;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities;
+using TMPro;
 using UnityEngine;
 
 namespace DivaniMods.Assets;
@@ -82,7 +83,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> ClockstopperIcon { get; } = new LoadableResourceAsset($"{IconPath}.Clockstopper.png", 200);
     public static LoadableAsset<Sprite> RetributionistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Retributionist.png", 200);
     public static LoadableAsset<Sprite> CupidIcon { get; } = new LoadableResourceAsset($"{IconPath}.Cupid.png", 200);
-    public static LoadableAsset<Sprite> DreamweaverIcon { get; } = new LoadableResourceAsset($"{IconPath}.Dreamweaver.png", 200);
+    public static LoadableAsset<Sprite> MentorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mentor.png", 200);
     public static LoadableAsset<Sprite> MageIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mage.png", 200);
     public static LoadableAsset<Sprite> WatcherIcon { get; } = new LoadableResourceAsset($"{IconPath}.Watcher.png", 200);
     public static LoadableAsset<Sprite> MonsterIcon { get; } = new LoadableResourceAsset($"{IconPath}.Monster.png", 200);
@@ -119,6 +120,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> ArmoredIcon { get; } = new LoadableResourceAsset($"{IconPath}.Armored.png", 200);
     public static LoadableAsset<Sprite> UavIcon { get; } = new LoadableResourceAsset($"{IconPath}.UAV.png", 200);
     public static LoadableAsset<Sprite> TacticalInsertionIcon { get; } = new LoadableResourceAsset($"{IconPath}.TacticalInsertion.png", 200);
+    public static LoadableAsset<Sprite> MentorTaughtIcon { get; } = new LoadableResourceAsset($"{ShortPath}.MentorTaught.png", 200);
     // Audio clips (16000hz)
     public static LoadableAsset<AudioClip> FragileBreak { get; } = new LoadableAudioResourceAsset($"{ShortPath}.FragileBreak.wav");
     public static LoadableAsset<AudioClip> PlagueDoctorIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.PlagueDoctorIntro.wav");
@@ -153,7 +155,7 @@ public static class DivaniAssets
     public static LoadableAsset<AudioClip> UavEnemySound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVEnemy.wav");
     public static LoadableAsset<AudioClip> UavEndSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVEnd.wav");
     public static LoadableAsset<AudioClip> CupidIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.CupidIntro.wav");
-    public static LoadableAsset<AudioClip> DreamweaverIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DreamweaverIntro.wav");
+    public static LoadableAsset<AudioClip> MentorIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.MentorIntro.wav");
     public static LoadableAsset<AudioClip> WatcherIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WatcherIntro.wav");
     public static LoadableAsset<AudioClip> WatcherGoSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WatcherGo.wav");
     public static LoadableAsset<AudioClip> WatcherStopSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WatcherStop.wav");
@@ -180,8 +182,19 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> BeaconSprite { get; } = new LoadableResourceAsset($"{ShortPath}.BeaconAsset.png", 550);
 
     // Meeting nameplate buttons:
-    public static LoadableAsset<Sprite> DreamweaverMeetingDream { get; } =
-        new LoadableResourceAsset($"{ShortPath}.DreamweaverMeetingDream.png", 440f);
+    public static LoadableAsset<Sprite> MentorTeachButton { get; } =
+        new LoadableResourceAsset($"{ShortPath}.MentorTeachButton.png", 440f);
+
+    // Shown on the taught player's nameplate (where the Teach button was) once the Mentor picks them.
+    public static LoadableAsset<Sprite> MentorTaughtMeeting { get; } =
+        new LoadableResourceAsset($"{ShortPath}.MentorTaught.png", 440f);
+
+    // TMP sprite for MentorTaught, built like the role icons' IconTmp. Put MentorTaughtSpriteTag in text.
+    public const string MentorTaughtTmpName = "DivaniMod.Modifier.Crewmate.MentorTaught";
+    public static string MentorTaughtSpriteTag => $"<sprite name=\"{MentorTaughtTmpName}\">";
+    private static TMP_SpriteAsset? _mentorTaughtTmp;
+    public static TMP_SpriteAsset MentorTaughtTmp =>
+        _mentorTaughtTmp ??= TmpSpriteUtils.CreateSpriteAsset(MentorTaughtIcon.LoadAsset(), MentorTaughtTmpName, 1.45f);
 
     // Meeting nameplate toggles:
     public static LoadableAsset<Sprite> RecruitMeetingCrewmate { get; } =
