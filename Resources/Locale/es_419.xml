@@ -26,6 +26,7 @@
     <string name="DivaniMods.Options.Deathnote.StartingCharges">Cargas iniciales de nota</string>
     <string name="DivaniMods.Options.Deathnote.KillsPerExtraCharge">Muertes por carga extra</string>
     <string name="DivaniMods.Options.Deathnote.NoteCooldown">Tiempo de recarga de la nota</string>
+    <string name="DivaniMods.Options.Deathnote.CooldownSync">Reiniciar juntas las recargas de matar y de la nota</string>
     <string name="DivaniMods.DeathReason.Retaliated">Represalia</string>
 <!-- Strings no categorizadas -->
     <string name="DivaniLocalSettingDisableRainbowComms">Desactivar Comms arcoíris</string>
@@ -47,6 +48,37 @@
     <string name="DivaniMods.GameOver.WorkhorseWins">El Laborioso gana</string>
 <!-- ROLES -->
 <!-- TRIPULANTES -->
+<!-- Mentor -->
+    <string name="DivaniMods.Role.Mentor">Mentor</string>
+    <string name="DivaniMods.Role.Mentor.Description">¡Enseña a los Tripulantes!</string>
+    <string name="DivaniMods.Role.Mentor.LongDescription">Enseña a los jugadores las habilidades de otros roles durante una ronda.&#10;Tu lección falla si el objetivo no es un Tripulante.</string>
+    <string name="DivaniMods.Role.Mentor.Ability.Teach">Enseñar</string>
+    <string name="DivaniMods.Role.Mentor.Tab.CurrentLessons">Lecciones actuales:</string>
+    <string name="DivaniMods.Role.Mentor.Tab.Student">Alumno: [player]. Rol enseñado: [role]</string>
+    <string name="DivaniMods.Role.Mentor.Menu.ChooseRole">Elige un rol</string>
+    <string name="DivaniMods.Role.Mentor.Menu.HoverOverRole">Pasa el cursor sobre un rol</string>
+    <string name="DivaniMods.Role.Mentor.Menu.Random">Aleatorio</string>
+    <string name="DivaniMods.Role.Mentor.Menu.RandomCrewmate">Tripulante aleatorio</string>
+    <string name="DivaniMods.Role.Mentor.Fallback.Them">esa persona</string>
+    <string name="DivaniMods.Role.Mentor.Fallback.NewRole">un nuevo rol</string>
+    <string name="DivaniMods.Role.Mentor.Notification.WillTeach">¡Enseñarás a [player] a ser [role] la próxima ronda!</string>
+    <string name="DivaniMods.Role.Mentor.Notification.TriedAndFailed">¡El [mentor] intentó darte una lección, pero falló!</string>
+    <string name="DivaniMods.Role.Mentor.Notification.LessonFailed">¡Tu lección para [player] falló!</string>
+    <string name="DivaniMods.Role.Mentor.Notification.Redirected">El rol que elegiste no estaba disponible: ¡a tu alumno se le enseñó [role] en su lugar!</string>
+    <string name="DivaniMods.Modifier.MentorTaught">Enseñado</string>
+    <string name="DivaniMods.Modifier.MentorTaught.Description">El Mentor te ha enseñado: ¡eres [role] durante una ronda!</string>
+    <string name="DivaniMods.Modifier.MentorTaught.Notification">¡El [mentor] te ha enseñado un nuevo rol! Ahora eres [role].</string>
+    <string name="DivaniMods.Modifier.MentorInsomnia">Insomnio</string>
+    <string name="DivaniMods.Options.Mentor.CanTeachCrewKilling">Puede enseñar a ser Tripulante Asesino</string>
+    <string name="DivaniMods.Options.Mentor.CanTeachCrewPower">Puede enseñar a ser Tripulante de Poder</string>
+    <string name="DivaniMods.Options.Mentor.CanTeachCrewInves">Puede enseñar a ser Tripulante Investigador</string>
+    <string name="DivaniMods.Options.Mentor.NotifyTargetOnAttempt">El objetivo recibe aviso si el intento falla</string>
+    <string name="DivaniMods.Options.Mentor.NotifyMentorOnFail">El Mentor recibe aviso si la lección falla</string>
+    <string name="DivaniMods.Options.Mentor.FailLessonOnNoChange">La lección falla si el objetivo ya tiene el rol enseñado</string>
+    <string name="DivaniMods.Options.Mentor.InsomniaRounds">Rondas necesarias para volver a enseñar</string>
+    <string name="DivaniMods.Options.Mentor.CanTeachRoundOne">Puede enseñar en la primera reunión</string>
+    <string name="DivaniMods.Options.Mentor.TasksNeededToTeachAgain">Tareas necesarias para volver a enseñar</string>
+    <string name="DivaniMods.Options.Mentor.CanTeachOnSamePlayerAgain">Puede enseñar al mismo jugador más de una vez</string>
 <!-- Alma Vengativa -->
     <string name="DivaniMods.Role.VengefulSoul">Alma Vengativa</string>
     <string name="DivaniMods.Role.VengefulSoul.Description">¡Caza a tu asesino!</string>

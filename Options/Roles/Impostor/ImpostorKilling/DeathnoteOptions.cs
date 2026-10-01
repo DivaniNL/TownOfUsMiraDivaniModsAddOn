@@ -23,4 +23,8 @@ public class DeathnoteOptions : AbstractRoleOptionGroup<DeathnoteRole>
 
     public ModdedNumberOption NoteCooldown { get; } = new(
         MiraAPI.Translation.MiraLocaleManager.Get("DivaniMods.Options.Deathnote.NoteCooldown"), 35f, 0f, 60f, 2.5f, MiraNumberSuffixes.Seconds);
+    
+    [ModdedToggleOption("DivaniMods.Options.Deathnote.CooldownSync")]
+    public bool DeathnoteCooldownSync { get; set; } = false;
 }
+

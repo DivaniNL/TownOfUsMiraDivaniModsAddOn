@@ -10,6 +10,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using Reactor.Utilities;
@@ -41,9 +42,10 @@ public sealed class MentorRole(IntPtr cppPtr)
     private int tasksCompletedAtLastLesson = -1;
     private readonly HashSet<byte> taughtPlayers = new();
     public static readonly Color MentorColor = new Color32(150, 150, 200, 255);
-    public string RoleName => "Mentor";
-    public string RoleDescription => "Teach the Crewmates!";
-    public string RoleLongDescription => "Teach players to learn skills of roles for one round.\nYour lesson fails if it targets a Non-Crewmate.";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Mentor", "Mentor");
+    public string LocaleKey => "Mentor";
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Mentor.Description", "Teach the Crewmates!");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Mentor.LongDescription", "Teach players to learn skills of roles for one round.\nYour lesson fails if it targets a Non-Crewmate.");
     public Color RoleColor => MentorColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Crewmate;
     public RoleAlignment RoleAlignment => RoleAlignment.CrewmatePower;
@@ -70,7 +72,7 @@ public sealed class MentorRole(IntPtr cppPtr)
     {
        var stringB = ITownOfUsRole.SetNewTabText(this);
 
-        stringB.AppendLine($"Current Lessons:");
+        stringB.AppendLine(MiraLocaleManager.Get("DivaniMods.Role.Mentor.Tab.CurrentLessons", "Current Lessons:"));
 
         if (ShowChosenLesson())
         {
@@ -78,7 +80,10 @@ public sealed class MentorRole(IntPtr cppPtr)
             var roleObj = RoleManager.Instance.GetRole((RoleTypes)LessonRoleId) as ITownOfUsRole;
             var roleName = roleObj?.RoleName;
             var roleColor = roleObj != null ? ColorUtility.ToHtmlStringRGB(roleObj.RoleColor) : "9999FF";
-            stringB.AppendLine($"<b>Student: {targetName}. Role Taught: <color=#{roleColor}>{roleName}</color></b>");
+            var line = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Tab.Student", "Student: [player]. Role Taught: [role]")
+                .Replace("[player]", targetName ?? string.Empty)
+                .Replace("[role]", $"<color=#{roleColor}>{roleName}</color>");
+            stringB.AppendLine($"<b>{line}</b>");
             return stringB;
         }
 
@@ -101,7 +106,7 @@ public sealed class MentorRole(IntPtr cppPtr)
             meetingMenu = new MeetingMenu(
                 this,
                 OpenLessonMenu,
-                "Teach",
+                MiraLocaleManager.Get("DivaniMods.Role.Mentor.Ability.Teach", "Teach"),
                 MeetingAbilityType.Click,
                 DivaniAssets.MentorTeachButton,
                 exemption: IsExempt,
@@ -247,9 +252,9 @@ public sealed class MentorRole(IntPtr cppPtr)
             yield break;
         }
 
-        menu.StatusText.text = "Choose a role";
-        menu.RoleName.text = "Mentor";
-        menu.RoleTeam.text = "Hover over a role";
+        menu.StatusText.text = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Menu.ChooseRole", "Choose a role");
+        menu.RoleName.text = MiraLocaleManager.Get("DivaniMods.Role.Mentor", "Mentor");
+        menu.RoleTeam.text = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Menu.HoverOverRole", "Hover over a role");
         menu.RoleIcon.sprite = DivaniAssets.MentorIcon.LoadAsset();
 
         foreach (var ring in new[] { menu.RedRing, menu.WarpRing })
@@ -265,7 +270,8 @@ public sealed class MentorRole(IntPtr cppPtr)
         var actualCard = randomCard.GetChild(0);
         var crewColor = (Color)Palette.CrewmateBlue;
         var crewIcon = TouRoleIcons.RandomCrew.LoadAsset();
-        const string randomTeam = "Random Crewmate";
+        var randomTeam = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Menu.RandomCrewmate", "Random Crewmate");
+        var randomName = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Menu.Random", "Random");
 
         var cardName = actualCard.GetChild(0).GetComponent<TextMeshPro>();
         var cardIcon = actualCard.GetChild(1).GetComponent<SpriteRenderer>();
@@ -281,7 +287,7 @@ public sealed class MentorRole(IntPtr cppPtr)
 
         button.OnMouseOver.AddListener((UnityAction)(() =>
         {
-            menu.RoleName.text = "Random";
+            menu.RoleName.text = randomName;
             menu.RoleTeam.text = randomTeam;
             menu.RoleIcon.sprite = crewIcon;
         }));
@@ -371,13 +377,18 @@ public sealed class MentorRole(IntPtr cppPtr)
 
         if (Mentor.AmOwner)
         {
-            var targetName = GameData.Instance.GetPlayerById(targetId)?.Object?.Data?.PlayerName ?? "them";
+            var targetName = GameData.Instance.GetPlayerById(targetId)?.Object?.Data?.PlayerName
+                             ?? MiraLocaleManager.Get("DivaniMods.Role.Mentor.Fallback.Them", "them");
             var roleObj = RoleManager.Instance.GetRole((RoleTypes)roleId) as ITownOfUsRole;
-            var lessonRole = roleObj?.RoleName ?? "a new role";
+            var lessonRole = roleObj?.RoleName ?? MiraLocaleManager.Get("DivaniMods.Role.Mentor.Fallback.NewRole", "a new role");
             var lessonRoleHex = roleObj != null ? ColorUtility.ToHtmlStringRGB(roleObj.RoleColor) : "9999FF";
 
+            var message = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.WillTeach", "You will teach [player] to be the [role] next round!")
+                .Replace("[player]", $"<color=white>{targetName}</color>")
+                .Replace("[role]", $"<color=#{lessonRoleHex}>{lessonRole}</color>");
+
             Helpers.CreateAndShowNotification(
-                $"<b>You will teach <color=white>{targetName}</color> to be the <color=#{lessonRoleHex}>{lessonRole}</color> next round!</b>",
+                $"<b>{message}</b>",
                 MentorColor, spr: DivaniAssets.MentorIcon.LoadAsset()
             );
         }
@@ -390,15 +401,20 @@ public sealed class MentorRole(IntPtr cppPtr)
 
         if (target != null && target.AmOwner && options.NotifyTargetOnAttempt.Value)
         {
+            var mentorName = $"<color=\"#{MentorColor.ToHtmlStringRGBA()}\">{MiraLocaleManager.Get("DivaniMods.Role.Mentor", "Mentor")}</color>";
+            var message = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.TriedAndFailed", "The [mentor] tried to teach you a lesson but failed!")
+                .Replace("[mentor]", mentorName);
             Helpers.CreateAndShowNotification(
-                $"<b>The <color=\"#{MentorColor.ToHtmlStringRGBA()}\">Mentor</color> tried to teach you a lesson but failed!</b>",
+                $"<b>{message}</b>",
                 Color.white, spr: DivaniAssets.MentorIcon.LoadAsset());
         }
 
         if (Mentor != null && Mentor.AmOwner && options.NotifyMentorOnFail.Value)
         {
+            var message = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.LessonFailed", "Your lesson for [player] failed!")
+                .Replace("[player]", target?.Data?.PlayerName ?? MiraLocaleManager.Get("DivaniMods.Role.Mentor.Fallback.Them", "them"));
             Helpers.CreateAndShowNotification(
-                $"<b>Your lesson for {target?.Data?.PlayerName ?? "them"} failed!</b>",
+                $"<b>{message}</b>",
                 MentorColor, spr: DivaniAssets.MentorIcon.LoadAsset());
         }
     }
@@ -412,11 +428,14 @@ public sealed class MentorRole(IntPtr cppPtr)
         }
 
         var roleObj = RoleManager.Instance.GetRole((RoleTypes)newRoleId) as ITownOfUsRole;
-        var roleName = roleObj?.RoleName ?? "a new role";
+        var roleName = roleObj?.RoleName ?? MiraLocaleManager.Get("DivaniMods.Role.Mentor.Fallback.NewRole", "a new role");
         var roleHex = roleObj != null ? ColorUtility.ToHtmlStringRGB(roleObj.RoleColor) : "9999FF";
 
+        var message = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.Redirected", "The role you chose was unavailable- your student was taught the [role] instead!")
+            .Replace("[role]", $"<color=#{roleHex}>{roleName}</color>");
+
         Helpers.CreateAndShowNotification(
-            $"<b>The role you chose was unavailable- your student was taught the <color=#{roleHex}>{roleName}</color> instead!</b>",
+            $"<b>{message}</b>",
             MentorColor, spr: DivaniAssets.MentorIcon.LoadAsset());
     }
 

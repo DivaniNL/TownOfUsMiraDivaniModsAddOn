@@ -1,5 +1,6 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using DivaniMods.Roles.Crewmate.CrewmatePower;
 
@@ -7,32 +8,32 @@ namespace DivaniMods.Options;
 
 public class MentorOptions : AbstractOptionGroup<MentorRole>
 {
-    public override string GroupName => "Mentor";
+    public override string GroupName => MiraLocaleManager.Get("DivaniMods.Role.Mentor", "Mentor");
 
     public ModdedToggleOption CanTeachCrewKilling { get; } =
-        new("Can teach to be Crewmate Killing", false);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.CanTeachCrewKilling", "Can Teach To Be Crewmate Killing"), false);
     public ModdedToggleOption CanTeachCrewPower { get; } =
-        new("Can teach to be Crewmate Power", false);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.CanTeachCrewPower", "Can Teach To Be Crewmate Power"), false);
     public ModdedToggleOption CanTeachCrewInves { get; } =
-        new("Can teach to be Crewmate Investigative", false);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.CanTeachCrewInves", "Can Teach To Be Crewmate Investigative"), false);
     public ModdedToggleOption NotifyTargetOnAttempt { get; } =
-        new("Target Is Notified On Failed Attempt", false);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.NotifyTargetOnAttempt", "Target Is Notified On Failed Attempt"), false);
 
     public ModdedToggleOption NotifyMentorOnFail { get; } =
-        new("Mentor Notified On Failed Lesson", false);
-    
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.NotifyMentorOnFail", "Mentor Notified On Failed Lesson"), false);
+
     public ModdedToggleOption FailLessonOnNoChange { get; } =
-        new ("Fail the Lesson If Target And Taught Role Are Same", true);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.FailLessonOnNoChange", "Fail The Lesson If Target And Taught Role Are Same"), true);
 
     public ModdedNumberOption InsomniaRounds { get; } = new(
-        "Rounds needed to Teach again", 1f, 1f, 3f, 1f, MiraNumberSuffixes.None);
+        MiraLocaleManager.Get("DivaniMods.Options.Mentor.InsomniaRounds", "Rounds Needed To Teach Again"), 1f, 1f, 3f, 1f, MiraNumberSuffixes.None);
 
     public ModdedToggleOption CanTeachRoundOne { get; } =
-        new("Can Teach In First Meeting", true);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.CanTeachRoundOne", "Can Teach In First Meeting"), true);
 
     public ModdedNumberOption TasksNeededToTeachAgain { get; } = new(
-        "Tasks Needed To Teach Again", 0f, 0f, 10f, 1f, MiraNumberSuffixes.None);
+        MiraLocaleManager.Get("DivaniMods.Options.Mentor.TasksNeededToTeachAgain", "Tasks Needed To Teach Again"), 0f, 0f, 10f, 1f, MiraNumberSuffixes.None);
 
     public ModdedToggleOption CanTeachOnSamePlayerAgain { get; } =
-        new("Can Teach On The Same Player More Than Once", true);
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.CanTeachOnSamePlayerAgain", "Can Teach The Same Player More Than Once"), true);
 }
