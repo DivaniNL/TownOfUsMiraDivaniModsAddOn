@@ -86,6 +86,23 @@ public class DeathnoteButton : TownOfUsRoleButton<DeathnoteRole, PlayerControl>
         if (Target != null && !Target.HasModifier<DeathnoteModifier>() && !Target.IsImpostorAligned())
         {
             Target?.RpcAddModifier<DeathnoteModifier>();
+            CheckReset(false);
+        }
+    }
+
+    public void CheckReset(bool resetSelf)
+    {
+        var sync = OptionGroupSingleton<DeathnoteOptions>.Instance.DeathnoteCooldownSync;
+        if (sync == true)
+        {
+            if (resetSelf)
+            {
+                ResetCooldownAndOrEffect();
+            }
+            else
+            {
+                PlayerControl.LocalPlayer.SetKillTimer(PlayerControl.LocalPlayer.GetKillCooldown());
+            }
         }
     }
 

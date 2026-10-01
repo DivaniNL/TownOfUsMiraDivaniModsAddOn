@@ -32,6 +32,12 @@ public class DeathNoteEvents
         }
 
         CustomButtonSingleton<DeathnoteButton>.Instance?.AccrueKill();
+
+        // Kill -> reset the Note cooldown (per the "Reset Kill & Note Cooldowns Together" option)
+        if (evt.Source != evt.Target && !MeetingHud.Instance)
+        {
+            CustomButtonSingleton<DeathnoteButton>.Instance?.CheckReset(true);
+        }
     }
 
     [RegisterEvent]
