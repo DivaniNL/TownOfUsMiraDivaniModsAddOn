@@ -33,4 +33,13 @@ public class MentorOptions : AbstractOptionGroup<MentorRole>
         {
             Visible = () => OptionGroupSingleton<MentorOptions>.Instance.CanTeachOnSamePlayerAgain
         };
+    
+    public ModdedToggleOption NotifyTargetOnAttempt { get; } =
+        new("DivaniMods.Options.Mentor.NotifyEvilTargetOnAttempt", true);
+    
+    public ModdedToggleOption NotifyTargetOfRoleOnAttempt { get; } =
+        new("DivaniMods.Options.Mentor.NotifyEvilTargetOfRole", true)
+        {
+            Visible = () => OptionGroupSingleton<MentorOptions>.Instance.NotifyTargetOnAttempt
+        };
 }

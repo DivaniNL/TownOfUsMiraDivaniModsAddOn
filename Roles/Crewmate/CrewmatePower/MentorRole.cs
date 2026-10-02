@@ -405,31 +405,27 @@ public sealed class MentorRole(IntPtr cppPtr)
 
         var role = RoleManager.Instance.GetRole((RoleTypes)roleId);
         var options = OptionGroupSingleton<MentorOptions>.Instance;
-        var onBreak = (DreamerOnDreamBreakMaxRoleCount)options.OnMaxRoleCountBroken.Value;//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         if (IsBreakingMaxRoleCount(role, target))
         {
-            if (onBreak == DreamerOnDreamBreakMaxRoleCount.ApplyRandom)//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            var randomRole = GetRandomValidRole(target);
+            if (randomRole == null)
             {
-                var randomRole = GetRandomValidRole(target);
-                if (randomRole == null)
-                {
-                    canApplyRole = false;
-                }
-                else
-                {
-                    roleId = (ushort)randomRole.Role;
-                    mentorRole.LessonRoleId = roleId;
+                canApplyRole = false;
+            }
+            else
+            {
+                roleId = (ushort)randomRole.Role;
+                mentorRole.LessonRoleId = roleId;
 
-                    if (Mentor.AmOwner)
-                    {
-                        var roleObj = role as ITownOfUsRole;
-                        var notif = Helpers.CreateAndShowNotification(
-                        $"<b>{MiraLocaleManager.Get("TownOfUsMira.Role.DreamerAttemptedDreamRandomRole").Replace("<player>", $"{VigilanteColors.Dreamer.ToTextColor()}{target.Data.PlayerName}</color>").Replace("<role>", $"{roleObj?.RoleColor.ToTextColor()}{roleObj?.RoleName}</color>")}</b>",
-                        Color.white, new Vector3(0f, 1f, -20f), spr: VigilanteAssets.DreamerIcon.LoadAsset());//!!!!!!!!!!!!!!!!!!!!!!!!!
+                if (Mentor.AmOwner)
+                {
+                    var roleObj = role as ITownOfUsRole;
+                    var notif = Helpers.CreateAndShowNotification(
+                    $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.Redirected").Replace("<player>", $"{MentorColor.ToTextColor()}{target.Data.PlayerName}</color>").Replace("<role>", $"{roleObj?.RoleColor.ToTextColor()}{roleObj?.RoleName}</color>")}</b>",
+                    Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.MentorIcon.LoadAsset());
 
-                        notif.AdjustNotification();
-                    }
+                    notif.AdjustNotification();
                 }
             }
             else
@@ -444,11 +440,11 @@ public sealed class MentorRole(IntPtr cppPtr)
             {
                 if (target.AmOwner)
                 {
-                    var roleObj = RoleManager.Instance.GetRole((RoleTypes)dreamerRole.DreamRoleId) as ITownOfUsRole;
+                    var roleObj = RoleManager.Instance.GetRole((RoleTypes)mentorRole.LessonRoleId) as ITownOfUsRole;
 
                     var notif = Helpers.CreateAndShowNotification(
-                    $"<b>{MiraLocaleManager.Get("TownOfUsMira.Role.DreamerAttemptedDreamWithRole").Replace("<role>", $"{roleObj?.RoleColor.ToTextColor()}{roleObj?.RoleName}</color>")}</b>",
-                    Color.white, new Vector3(0f, 1f, -20f), spr: VigilanteAssets.DreamerIcon.LoadAsset());
+                    $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.FailedLessonWithRole").Replace("<role>", $"{roleObj?.RoleColor.ToTextColor()}{roleObj?.RoleName}</color>")}</b>",
+                    Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.MentorIcon.LoadAsset());
 
                     notif.AdjustNotification();
                 }
@@ -458,8 +454,8 @@ public sealed class MentorRole(IntPtr cppPtr)
                 if (target.AmOwner)
                 {
                     var notif = Helpers.CreateAndShowNotification(
-                    $"<b>{MiraLocaleManager.Get("TownOfUsMira.Role.DreamerAttemptedDream")}</b>",
-                    Color.white, new Vector3(0f, 1f, -20f), spr: VigilanteAssets.DreamerIcon.LoadAsset());
+                    $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.FailedLesson")}</b>",
+                    Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.MentorIcon.LoadAsset());
 
                     notif.AdjustNotification();
                 }
@@ -479,7 +475,7 @@ public sealed class MentorRole(IntPtr cppPtr)
                     target.RpcChangeRole(RoleId.Get<ImitatorRole>(), false);
                 }
                 var originalRole = (ushort)target.Data.Role.Role;
-                target.RpcChangeRole(dreamRoleId, false);
+                target.RpcChangeRole(LessonRoleId, false);
                 target.RpcAddModifier<MentorTaughtModifier>(originalRole, LessonRoleId);
             }
         }

@@ -59,25 +59,25 @@ public static class MentorEvents
 
         foreach (var player in PlayerControl.AllPlayerControls)
         {
-            if (player == null || player.Data == null || player.Data.Role is not DreamerRole dreamer)
+            if (player == null || player.Data == null || player.Data.Role is not MentorRole mentor)
             {
                 continue;
             }
 
-            if (dreamer.Player == null || dreamer.Player.HasDied() || dreamer.DreamTargetId == byte.MaxValue)
+            if (mentor.Player == null || mentor.Player.HasDied() || mentor.TargetId == byte.MaxValue)
             {
                 continue;
             }
 
-            var target = GameData.Instance.GetPlayerById(dreamer.DreamTargetId)?.Object;
+            var target = GameData.Instance.GetPlayerById(mentor.TargetId)?.Object;
             if (target == null)
             {
                 continue;
             }
 
-            var chosenRoleId = dreamer.DreamRoleId;
+            var chosenRoleId = mentor.LessonRoleId;
 
-            DreamerRole.RpcReimagine(dreamer.Player, target, chosenRoleId);
+            MentorRole.RpcReimagine(mentor.Player, target, chosenRoleId);
         }
     }
 }

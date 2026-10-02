@@ -59,11 +59,9 @@
     <string name="DivaniMods.Role.Mentor.Menu.HoverOverRole">Hover over a role</string>
     <string name="DivaniMods.Role.Mentor.Menu.Random">Random</string>
     <string name="DivaniMods.Role.Mentor.Menu.RandomCrewmate">Random Crewmate</string>
-    <string name="DivaniMods.Role.Mentor.Fallback.Them">them</string>
-    <string name="DivaniMods.Role.Mentor.Fallback.NewRole">a new role</string>
     <string name="DivaniMods.Role.Mentor.Notification.WillTeach">You will teach [player] to be the [role] next round!</string>
-    <string name="DivaniMods.Role.Mentor.Notification.TriedAndFailed">The [mentor] tried to teach you a lesson but failed!</string>
-    <string name="DivaniMods.Role.Mentor.Notification.LessonFailed">Your lesson for [player] failed!</string>
+    <string name="DivaniMods.Role.Mentor.Notification.FailedLesson">The Mentor tried to change your role but failed!</string>
+    <string name="DivaniMods.Role.Mentor.Notification.FailedLessonWithRole">The Mentor tried to change your role to the [role] but failed!</string>
     <string name="DivaniMods.Role.Mentor.Notification.Redirected">The role you chose was unavailable- your student was taught the [role] instead!</string>
     <string name="DivaniMods.Modifier.MentorTaught">Taught</string>
     <string name="DivaniMods.Modifier.MentorTaught.Description">You have been taught by the Mentor- you are the [role] for one round!</string>
@@ -73,12 +71,12 @@
     <string name="DivaniMods.Options.Mentor.CanTeachCrewPower">Can Teach To Be Crewmate Power</string>
     <string name="DivaniMods.Options.Mentor.CanTeachCrewInves">Can Teach To Be Crewmate Investigative</string>
     <string name="DivaniMods.Options.Mentor.NotifyTargetOnAttempt">Target Is Notified On Failed Attempt</string>
-    <string name="DivaniMods.Options.Mentor.NotifyMentorOnFail">Mentor Notified On Failed Lesson</string>
-    <string name="DivaniMods.Options.Mentor.FailLessonOnNoChange">Fail The Lesson If Target And Taught Role Are Same</string>
     <string name="DivaniMods.Options.Mentor.InsomniaRounds">Rounds Needed To Teach Again</string>
     <string name="DivaniMods.Options.Mentor.CanTeachRoundOne">Can Teach In First Meeting</string>
     <string name="DivaniMods.Options.Mentor.TasksNeededToTeachAgain">Tasks Needed To Teach Again</string>
     <string name="DivaniMods.Options.Mentor.CanTeachOnSamePlayerAgain">Can Teach The Same Player More Than Once</string>
+    <string name="DivaniMods.Options.Mentor.NotifyEvilTargetOnAttempt">Notify Evil Target On Attempted Lesson</string>
+    <string name="DivaniMods.Options.Mentor.NotifyEvilTargetOfRole">Also Notify Evil Target Of Attempted Lesson Role</string>
 <!-- Vengeful Soul -->
     <string name="DivaniMods.Role.VengefulSoul">Vengeful Soul</string>
     <string name="DivaniMods.Role.VengefulSoul.Description">Hunt down your killer!</string>
