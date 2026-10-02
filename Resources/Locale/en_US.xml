@@ -65,7 +65,7 @@
     <string name="DivaniMods.Role.Mentor.Notification.Redirected">The role you chose was unavailable- your student was taught the [role] instead!</string>
     <string name="DivaniMods.Modifier.MentorTaught">Taught</string>
     <string name="DivaniMods.Modifier.MentorTaught.Description">You have been taught by the Mentor- you are the [role] for one round!</string>
-    <string name="DivaniMods.Modifier.MentorTaught.Notification">The [mentor] has taught you a new role! You are now the [role].</string>
+    <string name="DivaniMods.Modifier.MentorTaught.Notification">The mentor has taught you a new role! You are now the [role].</string>
     <string name="DivaniMods.Modifier.MentorUntaught.Notification">The lesson wore off and your role has been reverted!</string>
     <string name="DivaniMods.Modifier.MentorInsomnia">Insomnia</string>
     <string name="DivaniMods.Options.Mentor.CanTeachCrewKilling">Can Teach To Be Crewmate Killing</string>
