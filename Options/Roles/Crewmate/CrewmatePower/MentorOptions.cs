@@ -19,15 +19,6 @@ public class MentorOptions : AbstractOptionGroup<MentorRole>
     public ModdedToggleOption NotifyTargetOnAttempt { get; } =
         new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.NotifyTargetOnAttempt", "Target Is Notified On Failed Attempt"), false);
 
-    public ModdedToggleOption NotifyMentorOnFail { get; } =
-        new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.NotifyMentorOnFail", "Mentor Notified On Failed Lesson"), false);
-
-    public ModdedToggleOption FailLessonOnNoChange { get; } =
-        new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.FailLessonOnNoChange", "Fail The Lesson If Target And Taught Role Are Same"), true);
-
-    public ModdedNumberOption InsomniaRounds { get; } = new(
-        MiraLocaleManager.Get("DivaniMods.Options.Mentor.InsomniaRounds", "Rounds Needed To Teach Again"), 1f, 1f, 3f, 1f, MiraNumberSuffixes.None);
-
     public ModdedToggleOption CanTeachRoundOne { get; } =
         new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.CanTeachRoundOne", "Can Teach In First Meeting"), true);
 
@@ -36,4 +27,10 @@ public class MentorOptions : AbstractOptionGroup<MentorRole>
 
     public ModdedToggleOption CanTeachOnSamePlayerAgain { get; } =
         new(MiraLocaleManager.Get("DivaniMods.Options.Mentor.CanTeachOnSamePlayerAgain", "Can Teach The Same Player More Than Once"), true);
+
+    public ModdedNumberOption InsomniaRounds { get; } = new(
+        MiraLocaleManager.Get("DivaniMods.Options.Mentor.InsomniaRounds", "Rounds Needed To Teach Again"), 1f, 1f, 3f, 1f, MiraNumberSuffixes.None);
+        {
+            Visible = () => OptionGroupSingleton<MentorOptions>.Instance.CanTeachOnSamePlayerAgain
+        };
 }

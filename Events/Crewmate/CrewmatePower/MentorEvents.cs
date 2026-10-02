@@ -59,56 +59,25 @@ public static class MentorEvents
 
         foreach (var player in PlayerControl.AllPlayerControls)
         {
-            if (player == null || player.Data == null || player.Data.Role is not MentorRole Mentor)
+            if (player == null || player.Data == null || player.Data.Role is not DreamerRole dreamer)
             {
                 continue;
             }
 
-            if (Mentor.Player == null || Mentor.Player.HasDied() || Mentor.StudentId == byte.MaxValue)
+            if (dreamer.Player == null || dreamer.Player.HasDied() || dreamer.DreamTargetId == byte.MaxValue)
             {
                 continue;
             }
 
-            var target = GameData.Instance.GetPlayerById(Mentor.StudentId)?.Object;
-            var chosenRole = RoleManager.Instance.GetRole((AmongUs.GameOptions.RoleTypes)Mentor.LessonRoleId);
-
+            var target = GameData.Instance.GetPlayerById(dreamer.DreamTargetId)?.Object;
             if (target == null)
             {
                 continue;
             }
 
-            if (!MentorRole.IsValidLessonTarget(target, Mentor.Player))
-            {
-                continue;
-            }
+            var chosenRoleId = dreamer.DreamRoleId;
 
-            if (chosenRole == target.Data.Role && options.FailLessonOnNoChange)
-            {
-                MentorRole.RpcNotifyLessonFailed(Mentor.Player, target);
-                continue;
-            }
-
-            if (target.HasModifier<MentorTaughtModifier>())
-            {
-                continue;
-            }
-
-            // Max role count is always respected: if the lesson would exceed it, the lesson fails.
-            if (chosenRole != null && MentorRole.IsBreakingMaxRoleCount(chosenRole, target))
-            {
-                MentorRole.RpcNotifyLessonFailed(Mentor.Player, target);
-                continue;
-            }
-
-            if (!target.IsCrewmate())
-            {
-                MentorRole.RpcNotifyLessonFailed(Mentor.Player, target);
-                continue;
-            }
-
-            var originalRole = (ushort)target.Data.Role.Role;
-            target.RpcChangeRole(Mentor.LessonRoleId);
-            target.RpcAddModifier<MentorTaughtModifier>(originalRole, Mentor.LessonRoleId);
+            DreamerRole.RpcReimagine(dreamer.Player, target, chosenRoleId);
         }
     }
 }
