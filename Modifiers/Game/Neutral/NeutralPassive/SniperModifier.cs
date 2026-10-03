@@ -11,6 +11,7 @@ using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
 using UnityEngine;
+using DivaniMods.Roles.Neutral.NeutralKilling;
 
 namespace DivaniMods.Modifiers.Game.Neutral.NeutralPassive;
 
@@ -48,7 +49,7 @@ public sealed class SniperModifier : TouGameModifier, IWikiDiscoverable
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
         return base.IsModifierValidOn(role) &&
-            role is ITownOfUsRole { RoleAlignment: RoleAlignment.NeutralKilling };
+            role is ITownOfUsRole { RoleAlignment: RoleAlignment.NeutralKilling } && role is not MonsterRole;
     }
 
     public static bool LocalPlayerHasSniper()

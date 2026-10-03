@@ -21,6 +21,7 @@ using TownOfUs;
 using TownOfUs.Assets;
 using TownOfUs.Buttons;
 using TownOfUs.Events;
+using DivaniMods.Modifiers.Game.Alliance;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
@@ -757,7 +758,7 @@ public class PickpocketButton : TownOfUsButton
                 if (loverPartner == PlayerControl.LocalPlayer)
                 {
                     var newLoverText = MiraLocaleManager.Get("DivaniMods.Role.Thief.Notification.NowInLove")
-                        .Replace("[player]", thief.Data.PlayerName);
+                        .Replace("<player>", thief.Data.PlayerName);
 
                     MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                         $"<b><color=#FF66CC>{newLoverText}</color></b>",
@@ -796,9 +797,9 @@ public class PickpocketButton : TownOfUsButton
                 var stoleLover = isStealingLover && loverPartner != null;
                 var stolenMsg = stoleLover
                     ? $"<b><color=#FF66CC>{MiraLocaleManager.Get("DivaniMods.Role.Thief.Notification.StoleLover")
-                        .Replace("[player]", loverPartner!.Data.PlayerName)}</color></b>"
+                        .Replace("<player>", loverPartner!.Data.PlayerName)}</color></b>"
                     : $"<b><color=#804D1A>{MiraLocaleManager.Get("DivaniMods.Role.Thief.Notification.StoleModifier")
-                        .Replace("[modifier]", displayName)}</color></b>";
+                        .Replace("<modifier>", displayName)}</color></b>";
                 MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                     stolenMsg,
                     stoleLover ? TownOfUsColors.Lover : Color.white,
@@ -967,7 +968,7 @@ public class PickpocketButton : TownOfUsButton
         {
             var message = MiraLocaleManager
                 .Get("DivaniMods.Role.Thief.Notification.StoleOrGainedModifier")
-                .Replace("[modifier]", displayName);
+                .Replace("<modifier>", displayName);
 
             MiraAPI.Utilities.Helpers.CreateAndShowNotification(
                 $"<b><color=#804D1A>{message}</color></b>",

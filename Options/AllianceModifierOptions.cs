@@ -48,4 +48,13 @@ public sealed class AllianceModifierOptions : AbstractOptionGroup
             optAmount.Data.GetValueString(optAmount.Value),
             opt.Data.GetValueString(opt.Value));
     }
+
+    private static void RunNotif(AmountChanceOption opt, string count, string title)
+    {
+        opt.AddSettingsChangeMessage(HudManager.Instance.Notifier,
+            opt.StringName,
+            title,
+            count,
+            opt.Data.GetValueString(opt.Value));
+    }
 }
