@@ -405,25 +405,26 @@ public sealed class MentorRole(IntPtr cppPtr)
 
         if (IsBreakingMaxRoleCount(role, target))
         {
-            var randomRole = GetRandomValidRole(target);
-            if (randomRole == null)
+            if (AmongUsClient.Instance.AmHost)
             {
-                canApplyRole = false;
-            }
-            else
-            {
-                LessonRoleId = (ushort)randomRole.Role;
-                mentorRole.LessonRoleId = LessonRoleId;
-
-                if (Mentor.AmOwner)
+                var randomRole = GetRandomValidRole(target);
+                if (randomRole == null)
                 {
-                    var roleObj = role as ITownOfUsRole;
-                    var notif = Helpers.CreateAndShowNotification(
-                    $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.Redirected").Replace("<player>", $"{MentorColor.ToTextColor()}{target.Data.PlayerName}</color>").Replace("<role>", $"{roleObj?.RoleColor.ToTextColor()}{roleObj?.RoleName}</color>")}</b>",
-                    Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.MentorIcon.LoadAsset());
-
-                    notif.AdjustNotification();
+                    canApplyRole = false;
                 }
+                RpcSetLessonTarget(Mentor, targetId, (ushort)randomRole.Role);
+            }
+            LessonRoleId = mentorRole.LessonRoleId;
+            role = RoleManager.Instance.GetRole((RoleTypes)LessonRoleId);
+
+            if (Mentor.AmOwner)
+            {
+                var roleObj = role as ITownOfUsRole;
+                var notif = Helpers.CreateAndShowNotification(
+                $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.Redirected").Replace("<player>", $"{MentorColor.ToTextColor()}{target.Data.PlayerName}</color>").Replace("<role>", $"{roleObj?.RoleColor.ToTextColor()}{roleObj?.RoleName}</color>")}</b>",
+                Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.MentorIcon.LoadAsset());
+
+                notif.AdjustNotification();
             }
         }
 
