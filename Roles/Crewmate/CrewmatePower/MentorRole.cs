@@ -29,6 +29,7 @@ using TMPro;
 using TownOfUs.Modifiers;
 using System.Text;
 using Reactor.Utilities.Extensions;
+using TownOfUs.Modifiers.Crewmate;
 
 namespace DivaniMods.Roles.Crewmate.CrewmatePower;
 
@@ -339,7 +340,7 @@ public sealed class MentorRole(IntPtr cppPtr)
         meetingMenu?.HideButtons();
         ShowTaughtIndicator(targetId);
 
-        var roleObj = RoleManager.Instance.GetRole((RoleTypes)roleId) as ITownOfUsRole;
+        var roleObj = role as ITownOfUsRole;
 
         var notif = Helpers.CreateAndShowNotification(
             $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.WillTeach").Replace("<player>", $"{MentorColor.ToTextColor()}{target.Data.PlayerName}</color>").Replace("<role>", $"{roleObj?.RoleColor.ToTextColor()}{roleObj?.RoleName}</color>")}</b>",
@@ -384,14 +385,10 @@ public sealed class MentorRole(IntPtr cppPtr)
     }
 
     [MethodRpc((uint)DivaniRpcCalls.MentorLesson)]
-    public static void RpcSetLessonTarget(PlayerControl Mentor, byte targetId, ushort roleId)
+    public static void RpcLesson(PlayerControl Mentor, byte targetId, ushort LessonRoleId)
     {
-        iif (!AmongUsClient.Instance.AmClient)
-        {
-            return;
-        }
-
         var canApplyRole = true;
+        var target = MiscUtils.PlayerById(targetId);
 
         if (!IsValidLessonTarget(target, Mentor))
         {
@@ -403,7 +400,7 @@ public sealed class MentorRole(IntPtr cppPtr)
             return;
         }
 
-        var role = RoleManager.Instance.GetRole((RoleTypes)roleId);
+        var role = RoleManager.Instance.GetRole((RoleTypes)LessonRoleId);
         var options = OptionGroupSingleton<MentorOptions>.Instance;
 
         if (IsBreakingMaxRoleCount(role, target))
@@ -415,8 +412,8 @@ public sealed class MentorRole(IntPtr cppPtr)
             }
             else
             {
-                roleId = (ushort)randomRole.Role;
-                mentorRole.LessonRoleId = roleId;
+                LessonRoleId = (ushort)randomRole.Role;
+                mentorRole.LessonRoleId = LessonRoleId;
 
                 if (Mentor.AmOwner)
                 {
@@ -427,10 +424,6 @@ public sealed class MentorRole(IntPtr cppPtr)
 
                     notif.AdjustNotification();
                 }
-            }
-            else
-            {
-                canApplyRole = false;
             }
         }
 
