@@ -30,6 +30,7 @@ using TMPro;
 using TownOfUs.Modifiers;
 using System.Text;
 using Reactor.Utilities.Extensions;
+using TownOfUs.Modifiers.Crewmate;
 
 namespace DivaniMods.Roles.Crewmate.CrewmatePower;
 
@@ -496,6 +497,14 @@ public sealed class MentorRole(IntPtr cppPtr)
         // One lesson per meeting: hide the Teach buttons once a student has been chosen.
         meetingMenu?.HideButtons();
         ShowTaughtIndicator(targetId);
+
+        var roleObj = role as ITownOfUsRole;
+
+        var notif = Helpers.CreateAndShowNotification(
+            $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.WillTeach").Replace("<player>", $"{MentorColor.ToTextColor()}{target.Data.PlayerName}</color>").Replace("<role>", $"{roleObj?.RoleColor.ToTextColor()}{roleObj?.RoleName}</color>")}</b>",
+            Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.MentorIcon.LoadAsset());
+
+        notif.AdjustNotification();
     }
 
     [HideFromIl2Cpp]
@@ -531,70 +540,97 @@ public sealed class MentorRole(IntPtr cppPtr)
         mentorRole.StudentId = targetId;
         mentorRole.LessonRoleId = roleId;
         mentorRole.RecordLesson(targetId);
-
-
-        if (Mentor.AmOwner)
-        {
-            var targetName = GameData.Instance.GetPlayerById(targetId)?.Object?.Data?.PlayerName
-                             ?? MiraLocaleManager.Get("DivaniMods.Role.Mentor.Fallback.Them", "them");
-            var roleObj = RoleManager.Instance.GetRole((RoleTypes)roleId) as ITownOfUsRole;
-            var lessonRole = roleObj?.RoleName ?? MiraLocaleManager.Get("DivaniMods.Role.Mentor.Fallback.NewRole", "a new role");
-            var lessonRoleHex = roleObj != null ? ColorUtility.ToHtmlStringRGB(roleObj.RoleColor) : "9999FF";
-
-            var message = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.WillTeach", "You will teach [player] to be the [role] next round!")
-                .Replace("[player]", $"<color=white>{targetName}</color>")
-                .Replace("[role]", $"<color=#{lessonRoleHex}>{lessonRole}</color>");
-
-            Helpers.CreateAndShowNotification(
-                $"<b>{message}</b>",
-                MentorColor, spr: DivaniAssets.MentorIcon.LoadAsset()
-            );
-        }
     }
 
-    [MethodRpc((uint)DivaniRpcCalls.MentorNotifyLessonFailed)]
-    public static void RpcNotifyLessonFailed(PlayerControl Mentor, PlayerControl target)
+    [MethodRpc((uint)DivaniRpcCalls.MentorLesson)]
+    public static void RpcLesson(PlayerControl Mentor, byte targetId, ushort LessonRoleId)
     {
-        var options = OptionGroupSingleton<MentorOptions>.Instance;
+        var canApplyRole = true;
+        var target = MiscUtils.PlayerById(targetId);
 
-        if (target != null && target.AmOwner && options.NotifyTargetOnAttempt.Value)
-        {
-            var mentorName = $"<color=\"#{MentorColor.ToHtmlStringRGBA()}\">{MiraLocaleManager.Get("DivaniMods.Role.Mentor", "Mentor")}</color>";
-            var message = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.TriedAndFailed", "The [mentor] tried to teach you a lesson but failed!")
-                .Replace("[mentor]", mentorName);
-            Helpers.CreateAndShowNotification(
-                $"<b>{message}</b>",
-                Color.white, spr: DivaniAssets.MentorIcon.LoadAsset());
-        }
-
-        if (Mentor != null && Mentor.AmOwner && options.NotifyMentorOnFail.Value)
-        {
-            var message = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.LessonFailed", "Your lesson for [player] failed!")
-                .Replace("[player]", target?.Data?.PlayerName ?? MiraLocaleManager.Get("DivaniMods.Role.Mentor.Fallback.Them", "them"));
-            Helpers.CreateAndShowNotification(
-                $"<b>{message}</b>",
-                MentorColor, spr: DivaniAssets.MentorIcon.LoadAsset());
-        }
-    }
-
-    [MethodRpc((uint)DivaniRpcCalls.MentorNotifyLessonRedirected)]
-    public static void RpcNotifyLessonRedirected(PlayerControl Mentor, ushort newRoleId)
-    {
-        if (Mentor == null || !Mentor.AmOwner || !OptionGroupSingleton<MentorOptions>.Instance.NotifyMentorOnFail.Value)
+        if (!IsValidLessonTarget(target, Mentor))
         {
             return;
         }
 
-        var roleObj = RoleManager.Instance.GetRole((RoleTypes)newRoleId) as ITownOfUsRole;
-        var roleName = roleObj?.RoleName ?? MiraLocaleManager.Get("DivaniMods.Role.Mentor.Fallback.NewRole", "a new role");
-        var roleHex = roleObj != null ? ColorUtility.ToHtmlStringRGB(roleObj.RoleColor) : "9999FF";
+        if (Mentor?.Data?.Role is not MentorRole mentorRole)
+        {
+            return;
+        }
 
-        var message = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.Redirected", "The role you chose was unavailable- your student was taught the [role] instead!")
-            .Replace("[role]", $"<color=#{roleHex}>{roleName}</color>");
+        var role = RoleManager.Instance.GetRole((RoleTypes)LessonRoleId);
+        var options = OptionGroupSingleton<MentorOptions>.Instance;
 
-        Helpers.CreateAndShowNotification(
-            $"<b>{message}</b>",
-            MentorColor, spr: DivaniAssets.MentorIcon.LoadAsset());
+        if (IsBreakingMaxRoleCount(role, target))
+        {
+            if (AmongUsClient.Instance.AmHost)
+            {
+                var randomRole = GetRandomValidRole(target);
+                if (randomRole == null)
+                {
+                    canApplyRole = false;
+                }
+                RpcSetLessonTarget(Mentor, targetId, (ushort)randomRole.Role);
+            }
+            LessonRoleId = mentorRole.LessonRoleId;
+            role = RoleManager.Instance.GetRole((RoleTypes)LessonRoleId);
+
+            if (Mentor.AmOwner)
+            {
+                var roleObj = role as ITownOfUsRole;
+                var notif = Helpers.CreateAndShowNotification(
+                $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.Redirected").Replace("<player>", $"{MentorColor.ToTextColor()}{target.Data.PlayerName}</color>").Replace("<role>", $"{roleObj?.RoleColor.ToTextColor()}{roleObj?.RoleName}</color>")}</b>",
+                Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.MentorIcon.LoadAsset());
+
+                notif.AdjustNotification();
+            }
+        }
+
+        if (!target.IsCrewmate())
+        {
+            if (options.NotifyTargetOfRoleOnAttempt.Value)
+            {
+                if (target.AmOwner)
+                {
+                    var roleObj = RoleManager.Instance.GetRole((RoleTypes)mentorRole.LessonRoleId) as ITownOfUsRole;
+
+                    var notif = Helpers.CreateAndShowNotification(
+                    $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.FailedLessonWithRole").Replace("<role>", $"{roleObj?.RoleColor.ToTextColor()}{roleObj?.RoleName}</color>")}</b>",
+                    Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.MentorIcon.LoadAsset());
+
+                    notif.AdjustNotification();
+                }
+            }
+            else if (options.NotifyTargetOnAttempt.Value)
+            {
+                if (target.AmOwner)
+                {
+                    var notif = Helpers.CreateAndShowNotification(
+                    $"<b>{MiraLocaleManager.Get("DivaniMods.Role.Mentor.Notification.FailedLesson")}</b>",
+                    Color.white, new Vector3(0f, 1f, -20f), spr: DivaniAssets.MentorIcon.LoadAsset());
+
+                    notif.AdjustNotification();
+                }
+            }
+            canApplyRole = false;
+        }
+
+        if (AmongUsClient.Instance.AmHost)
+        {
+            target.RpcAddModifier<MentorInsomniaModifier>((int)options.InsomniaRounds.Value);
+
+            if (canApplyRole)
+            {
+                if (target.HasModifier<ImitatorCacheModifier>())
+                {
+                    target.RemoveModifier<ImitatorCacheModifier>();
+                    target.RpcChangeRole(RoleId.Get<ImitatorRole>(), false);
+                }
+                var originalRole = (ushort)target.Data.Role.Role;
+                target.RpcChangeRole(LessonRoleId, false);
+                target.RpcAddModifier<MentorTaughtModifier>(originalRole, LessonRoleId);
+            }
+        }
     }
 
     public static bool IsValidLessonTarget(PlayerControl? target, PlayerControl Mentor)
@@ -610,6 +646,11 @@ public sealed class MentorRole(IntPtr cppPtr)
         }
 
         if (target.HasDied() || target.PlayerId == Mentor.PlayerId)
+        {
+            return false;
+        }
+
+        if (target.HasModifier<MentorTaughtModifier>() || target.HasModifier<MentorInsomniaModifier>())
         {
             return false;
         }

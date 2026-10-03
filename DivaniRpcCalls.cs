@@ -69,7 +69,5 @@ public enum DivaniRpcCalls : uint
     MonsterDigest = 264,
     RecruiterSetRecruited = 265,
     MentorSetLessonTarget = 266,
-    MentorLesson = 267,
-    MentorNotifyLessonFailed = 268,
-    MentorNotifyLessonRedirected = 269,
+    MentorLesson = 267
 }
