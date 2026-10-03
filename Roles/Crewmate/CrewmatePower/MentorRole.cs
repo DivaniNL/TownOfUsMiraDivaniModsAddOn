@@ -1,6 +1,7 @@
 using AmongUs.GameOptions;
 using System.Collections;
 using System.Linq;
+using System.Reflection;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Crewmate.CrewmatePower;
 using DivaniMods.Options;
@@ -228,6 +229,7 @@ public sealed class MentorRole(IntPtr cppPtr)
         var targetId = student.PlayerId;
         var menu = AmbassadorSelectionMinigame.Create();
         teachMenu = menu;
+        ApplyMenuBackground(menu);
         menu.Open(roles, role =>
         {
             if (role != null)
@@ -257,14 +259,7 @@ public sealed class MentorRole(IntPtr cppPtr)
         menu.RoleTeam.text = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Menu.HoverOverRole", "Hover over a role");
         menu.RoleIcon.sprite = DivaniAssets.MentorIcon.LoadAsset();
 
-        foreach (var ring in new[] { menu.RedRing, menu.WarpRing })
-        {
-            var ringRenderer = ring != null ? ring.GetComponent<SpriteRenderer>() : null;
-            if (ringRenderer != null)
-            {
-                ringRenderer.color = MentorColor;
-            }
-        }
+        ApplyMenuTheme(menu);
 
         var randomCard = menu.RolesHolder.GetChild(menu.RolesHolder.childCount - 1);
         var actualCard = randomCard.GetChild(0);
@@ -291,6 +286,169 @@ public sealed class MentorRole(IntPtr cppPtr)
             menu.RoleTeam.text = randomTeam;
             menu.RoleIcon.sprite = crewIcon;
         }));
+    }
+
+    // ---- Mentor theming for the Ambassador role-selection minigame ----------------------------------
+
+    // Dark indigo version of the Mentor colour (the vanilla menu fades in a dark red, 24,0,0,215).
+    private static readonly Color MenuBackground = new Color32(14, 14, 38, 215);
+
+    // New saturation = source * SatScale + SatFloor, so grey art picks up a lavender tint and the
+    // saturated red ring/swirl art becomes a rich indigo instead of a washed-out grey.
+    private const float MenuSatScale = 0.65f;
+    private const float MenuSatFloor = 0.20f;
+
+    private static readonly FieldInfo? MenuBackgroundField =
+        typeof(AmbassadorSelectionMinigame).GetField("_bgColor", BindingFlags.Instance | BindingFlags.NonPublic);
+
+    private static readonly Dictionary<int, Sprite> RecolouredMenuSprites = new();
+
+    /// <summary>Must run before Open(): the full-screen fade colour is read when the menu begins.</summary>
+    [HideFromIl2Cpp]
+    private static void ApplyMenuBackground(AmbassadorSelectionMinigame menu)
+    {
+        try
+        {
+            MenuBackgroundField?.SetValue(menu, MenuBackground);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning($"[Mentor] Could not recolour the menu background: {e.Message}");
+        }
+    }
+
+    /// <summary>Runs once the menu's cards exist: title text, ring, swirl and hover underlay.</summary>
+    [HideFromIl2Cpp]
+    private static void ApplyMenuTheme(AmbassadorSelectionMinigame menu)
+    {
+        menu.StatusText.color = MentorColor;
+        menu.RoleTeam.color = MentorColor;
+
+        RecolourMenuRenderers(menu.RedRing);
+        RecolourMenuRenderers(menu.WarpRing);
+
+        // Hover underlay on every role card (the same sprite on each, so it is only recoloured once).
+        for (var i = 0; i < menu.RolesHolder.childCount; i++)
+        {
+            var card = menu.RolesHolder.GetChild(i).GetChild(0);
+            if (card.childCount > 3)
+            {
+                RecolourMenuRenderers(card.GetChild(3).gameObject);
+            }
+        }
+    }
+
+    [HideFromIl2Cpp]
+    private static void RecolourMenuRenderers(GameObject? root)
+    {
+        if (root == null)
+        {
+            return;
+        }
+
+        foreach (var spriteRenderer in root.GetComponentsInChildren<SpriteRenderer>(true))
+        {
+            var recoloured = RecolourMenuSprite(spriteRenderer.sprite);
+            if (recoloured != null)
+            {
+                spriteRenderer.sprite = recoloured;
+            }
+
+            // The tint is baked into the new sprite; a multiplied colour would darken it again.
+            spriteRenderer.color = Color.white;
+        }
+    }
+
+    /// <summary>Hue-shifts a sprite to the Mentor colour, keeping its shading and alpha.</summary>
+    [HideFromIl2Cpp]
+    private static Sprite? RecolourMenuSprite(Sprite? source)
+    {
+        if (source == null || source.texture == null)
+        {
+            return source;
+        }
+
+        var key = source.GetInstanceID();
+        if (RecolouredMenuSprites.TryGetValue(key, out var cached) && cached != null)
+        {
+            return cached;
+        }
+
+        Color.RGBToHSV(MentorColor, out var hue, out _, out _);
+
+        // Use the sprite's FULL rect, not textureRect: these sprites have tight meshes, so textureRect is only
+        // the trimmed bounds. Rebuilding from it while keeping the original pivot is what shifted the wheel.
+        var rect = source.rect;
+        var width = Mathf.RoundToInt(rect.width);
+        var height = Mathf.RoundToInt(rect.height);
+
+        // Bundle textures are not CPU-readable, so read them back through a render texture.
+        var temp = RenderTexture.GetTemporary(source.texture.width, source.texture.height, 0, RenderTextureFormat.ARGB32);
+        Graphics.Blit(source.texture, temp);
+        var previous = RenderTexture.active;
+        RenderTexture.active = temp;
+
+        var texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        texture.ReadPixels(new Rect(rect.x, rect.y, width, height), 0, 0);
+
+        RenderTexture.active = previous;
+        RenderTexture.ReleaseTemporary(temp);
+
+        // Plain managed maths: calling Color.RGBToHSV/HSVToRGB per pixel crosses into native code every
+        // time, which made big ring textures take seconds to recolour. The hue is constant, so only the
+        // source saturation and value are needed.
+        var h6 = (hue - Mathf.Floor(hue)) * 6f;
+        var sector = (int)h6;
+        var frac = h6 - sector;
+
+        var pixels = texture.GetPixels32();
+        for (var i = 0; i < pixels.Length; i++)
+        {
+            var pixel = pixels[i];
+            if (pixel.a == 0)
+            {
+                continue;
+            }
+
+            var max = Mathf.Max(pixel.r, Mathf.Max(pixel.g, pixel.b));
+            var min = Mathf.Min(pixel.r, Mathf.Min(pixel.g, pixel.b));
+            var v = max / 255f;
+            var s = max == 0 ? 0f : (max - min) / (float)max;
+            s = Mathf.Clamp01(s * MenuSatScale + MenuSatFloor);
+
+            var p = v * (1f - s);
+            var q = v * (1f - s * frac);
+            var t = v * (1f - s * (1f - frac));
+            float r, g, b;
+            switch (sector)
+            {
+                case 0: r = v; g = t; b = p; break;
+                case 1: r = q; g = v; b = p; break;
+                case 2: r = p; g = v; b = t; break;
+                case 3: r = p; g = q; b = v; break;
+                case 4: r = t; g = p; b = v; break;
+                default: r = v; g = p; b = q; break;
+            }
+
+            pixels[i] = new Color32(
+                (byte)(r * 255f + 0.5f),
+                (byte)(g * 255f + 0.5f),
+                (byte)(b * 255f + 0.5f),
+                pixel.a);
+        }
+
+        texture.SetPixels32(pixels);
+        texture.Apply();
+        texture.filterMode = source.texture.filterMode;
+        texture.hideFlags = HideFlags.HideAndDontSave;
+
+        var pivot = new Vector2(source.pivot.x / width, source.pivot.y / height);
+        var sprite = Sprite.Create(texture, new Rect(0, 0, width, height), pivot, source.pixelsPerUnit, 0, SpriteMeshType.FullRect);
+        sprite.name = source.name + "_Mentor";
+        sprite.hideFlags = HideFlags.HideAndDontSave;
+
+        RecolouredMenuSprites[key] = sprite;
+        return sprite;
     }
 
     [HideFromIl2Cpp]
