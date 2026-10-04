@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Crewmate.CrewmatePower;
 
-public sealed class MentorTaughtModifier(ushort originalRoleId, ushort lessonRoleId) : BaseModifier
+public sealed class MentorTaughtModifier(ushort originalRoleId, ushort lessonRoleId) : BaseModifier, ICachedRole
 {
     public static readonly Color MentorColor = new Color32(150, 150, 200, 255);
     public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.MentorTaught", "Taught");
@@ -19,14 +19,11 @@ public sealed class MentorTaughtModifier(ushort originalRoleId, ushort lessonRol
     public ushort OriginalRoleId { get; set; } = originalRoleId;
     public ushort LessonRoleId { get; set; } = lessonRoleId;
 
-    public override string GetDescription()
-    {
-        var roleObj = RoleManager.Instance.GetRole((RoleTypes)LessonRoleId) as ITownOfUsRole;
-        var roleName = roleObj?.RoleName ?? MiraLocaleManager.Get("DivaniMods.Role.Mentor.Fallback.NewRole", "a new role");
-        var roleColor = roleObj != null ? ColorUtility.ToHtmlStringRGB(roleObj.RoleColor) : "9999FF";
-        return MiraLocaleManager.Get("DivaniMods.Modifier.MentorTaught.Description", "You have been taught by the Mentor- you are the [role] for one round!")
-            .Replace("[role]", $"<color=#{roleColor}>{roleName}</color>");
-    }
+    public bool ShowCurrentRoleFirst => true;
+    public bool Visible => Player.AmOwner || PlayerControl.LocalPlayer.HasDied() || FairyRole.FairySeesRoleVisibilityFlag(Player);
+    public CacheRoleGuess GuessMode => CacheRoleGuess.ActiveRole; // placeholder ig? If you wanted to implement an option if a retrained player can be guessed as their prev role ig you could mess with this
+    public RoleBehaviour CachedRole => RoleManager.Instance.GetRole((RoleTypes)OriginalRoleId);
+    public string CachedRoleName => $"{MentorColor.ToTextColor()}{MiraLocaleManager.Get("DivaniMods.Modifier.MentorTaught", "Taught")}</color>";
 
     public override void OnActivate()
     {
@@ -37,18 +34,29 @@ public sealed class MentorTaughtModifier(ushort originalRoleId, ushort lessonRol
             return;
         }
 
-        var roleObj = RoleManager.Instance.GetRole((RoleTypes)LessonRoleId) as ITownOfUsRole;
-        var lessonRoleName = roleObj?.RoleName ?? MiraLocaleManager.Get("DivaniMods.Role.Mentor.Fallback.NewRole", "a new role");
-        var lessonRoleHex = roleObj != null ? ColorUtility.ToHtmlStringRGB(roleObj.RoleColor) : "9999FF";
-        var mentorName = $"<color=#{ColorUtility.ToHtmlStringRGB(MentorColor)}>{MiraLocaleManager.Get("DivaniMods.Role.Mentor", "Mentor")}</color>";
-
-        var message = MiraLocaleManager.Get("DivaniMods.Modifier.MentorTaught.Notification", "The [mentor] has taught you a new role! You are now the [role].")
-            .Replace("[mentor]", mentorName)
-            .Replace("[role]", $"<color=#{lessonRoleHex}>{lessonRoleName}</color>");
+        var lessonRoleName = (RoleManager.Instance.GetRole((RoleTypes)LessonRoleId) as ITownOfUsRole)?.RoleName;
 
         Helpers.CreateAndShowNotification(
-            $"<b>{message}</b>",
+            $"<b>{MiraLocaleManager.Get($"DivaniMods.Modifier.MentorTaught.Notification").Replace("<role>", lessonRoleName)}</b>",
             Color.white, spr: DivaniAssets.MentorIcon.LoadAsset());
+        
+        Coroutines.Start(MiscUtils.CoFlash(MentorColor));
+    }
+
+    public override void OnDeactivate()
+    {
+        base.OnDeactivate();
+
+        if (Player == null || !Player.AmOwner)
+        {
+            return;
+        }
+
+        Helpers.CreateAndShowNotification(
+            $"<b>{MiraLocaleManager.Get($"DivaniMods.Modifier.MentorUntaught.Notification")}</b>",
+            Color.white, spr: DivaniAssets.MentorIcon.LoadAsset());
+        
+        Coroutines.Start(MiscUtils.CoFlash(MentorColor));
     }
 
     public override void OnDeath(DeathReason reason)
