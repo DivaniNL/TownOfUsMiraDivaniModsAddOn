@@ -64,20 +64,12 @@ public static class MentorEvents
                 continue;
             }
 
-            if (mentor.Player == null || mentor.Player.HasDied() || mentor.TargetId == byte.MaxValue)
+            if (mentor.Player == null || mentor.Player.HasDied() || mentor.StudentId == byte.MaxValue)
             {
                 continue;
             }
 
-            var target = GameData.Instance.GetPlayerById(mentor.TargetId)?.Object;
-            if (target == null)
-            {
-                continue;
-            }
-
-            var chosenRoleId = mentor.LessonRoleId;
-
-            MentorRole.RpcReimagine(mentor.Player, target, chosenRoleId);
+            MentorRole.RpcLesson(mentor.Player, mentor.StudentId, mentor.LessonRoleId);
         }
     }
 }
