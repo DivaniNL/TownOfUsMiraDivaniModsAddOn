@@ -59,56 +59,17 @@ public static class MentorEvents
 
         foreach (var player in PlayerControl.AllPlayerControls)
         {
-            if (player == null || player.Data == null || player.Data.Role is not MentorRole Mentor)
+            if (player == null || player.Data == null || player.Data.Role is not MentorRole mentor)
             {
                 continue;
             }
 
-            if (Mentor.Player == null || Mentor.Player.HasDied() || Mentor.StudentId == byte.MaxValue)
+            if (mentor.Player == null || mentor.Player.HasDied() || mentor.StudentId == byte.MaxValue)
             {
                 continue;
             }
 
-            var target = GameData.Instance.GetPlayerById(Mentor.StudentId)?.Object;
-            var chosenRole = RoleManager.Instance.GetRole((AmongUs.GameOptions.RoleTypes)Mentor.LessonRoleId);
-
-            if (target == null)
-            {
-                continue;
-            }
-
-            if (!MentorRole.IsValidLessonTarget(target, Mentor.Player))
-            {
-                continue;
-            }
-
-            if (chosenRole == target.Data.Role && options.FailLessonOnNoChange)
-            {
-                MentorRole.RpcNotifyLessonFailed(Mentor.Player, target);
-                continue;
-            }
-
-            if (target.HasModifier<MentorTaughtModifier>())
-            {
-                continue;
-            }
-
-            // Max role count is always respected: if the lesson would exceed it, the lesson fails.
-            if (chosenRole != null && MentorRole.IsBreakingMaxRoleCount(chosenRole, target))
-            {
-                MentorRole.RpcNotifyLessonFailed(Mentor.Player, target);
-                continue;
-            }
-
-            if (!target.IsCrewmate())
-            {
-                MentorRole.RpcNotifyLessonFailed(Mentor.Player, target);
-                continue;
-            }
-
-            var originalRole = (ushort)target.Data.Role.Role;
-            target.RpcChangeRole(Mentor.LessonRoleId);
-            target.RpcAddModifier<MentorTaughtModifier>(originalRole, Mentor.LessonRoleId);
+            MentorRole.RpcLesson(mentor.Player, mentor.StudentId, mentor.LessonRoleId);
         }
     }
 }
