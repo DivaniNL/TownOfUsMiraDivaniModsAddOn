@@ -2,6 +2,7 @@ using System;
 using DivaniMods;
 using MiraAPI.Utilities.Assets;
 using Reactor.Utilities;
+using TMPro;
 using UnityEngine;
 
 namespace DivaniMods.Assets;
@@ -13,6 +14,7 @@ public static class DivaniAssets
     
     // Button sprites (115 ppu)
     public static LoadableAsset<Sprite> PlacePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalUse.png", 100);
+    public static LoadableAsset<Sprite> NoteButton { get; } = new LoadableResourceAsset($"{ShortPath}.Note.png", 200f);
     public static LoadableAsset<Sprite> UsePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalUse.png", 100);
     public static LoadableAsset<Sprite> PickpocketButton { get; } = new LoadableResourceAsset($"{ShortPath}.PickPocketButton.png");
     public static LoadableAsset<Sprite> ThiefKillButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefKillButton.png");
@@ -59,12 +61,13 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> TelecomChatBubble { get; } = new LoadableResourceAsset($"{ShortPath}.ChatTelecomBubble.png");
     // Role icons (200 ppu)
     public static LoadableAsset<Sprite> ThiefIcon { get; } = new LoadableResourceAsset($"{IconPath}.Thief.png", 200);
+    public static LoadableAsset<Sprite> DeathnoteIcon { get; } = new LoadableResourceAsset($"{IconPath}.Deathnote.png", 200);
     public static LoadableAsset<Sprite> DeadlockIcon { get; } = new LoadableResourceAsset($"{IconPath}.Deadlock.png", 200);
     public static LoadableAsset<Sprite> CouncillorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Councillor.png", 200);
     public static LoadableAsset<Sprite> PortalmakerIcon { get; } = new LoadableResourceAsset($"{IconPath}.PortalMaker.png", 200);
     public static LoadableAsset<Sprite> FragIcon { get; } = new LoadableResourceAsset($"{IconPath}.Frag.png", 200);
     public static LoadableAsset<Sprite> SilencerIcon { get; } = new LoadableResourceAsset($"{IconPath}.Silencer.png", 200);
-public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourceAsset($"{IconPath}.Workhorse.png", 200);
+    public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourceAsset($"{IconPath}.Workhorse.png", 200);
     public static LoadableAsset<Sprite> PlagueDoctorIcon { get; } = new LoadableResourceAsset($"{IconPath}.PlagueDoctor.png", 200);
     public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{IconPath}.Innocent.png", 200);
     public static LoadableAsset<Sprite> OpportunistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Opportunist.png", 200);
@@ -80,6 +83,7 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<Sprite> ClockstopperIcon { get; } = new LoadableResourceAsset($"{IconPath}.Clockstopper.png", 200);
     public static LoadableAsset<Sprite> RetributionistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Retributionist.png", 200);
     public static LoadableAsset<Sprite> CupidIcon { get; } = new LoadableResourceAsset($"{IconPath}.Cupid.png", 200);
+    public static LoadableAsset<Sprite> MentorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mentor.png", 200);
     public static LoadableAsset<Sprite> MageIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mage.png", 200);
     public static LoadableAsset<Sprite> WatcherIcon { get; } = new LoadableResourceAsset($"{IconPath}.Watcher.png", 200);
     public static LoadableAsset<Sprite> MonsterIcon { get; } = new LoadableResourceAsset($"{IconPath}.Monster.png", 200);
@@ -116,6 +120,7 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<Sprite> ArmoredIcon { get; } = new LoadableResourceAsset($"{IconPath}.Armored.png", 200);
     public static LoadableAsset<Sprite> UavIcon { get; } = new LoadableResourceAsset($"{IconPath}.UAV.png", 200);
     public static LoadableAsset<Sprite> TacticalInsertionIcon { get; } = new LoadableResourceAsset($"{IconPath}.TacticalInsertion.png", 200);
+    public static LoadableAsset<Sprite> MentorTaughtIcon { get; } = new LoadableResourceAsset($"{ShortPath}.MentorTaught.png", 200);
     // Audio clips (16000hz)
     public static LoadableAsset<AudioClip> FragileBreak { get; } = new LoadableAudioResourceAsset($"{ShortPath}.FragileBreak.wav");
     public static LoadableAsset<AudioClip> PlagueDoctorIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.PlagueDoctorIntro.wav");
@@ -131,6 +136,7 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<AudioClip> FragGiveSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.FragGive.wav");
     public static LoadableAsset<AudioClip> BearTrapActivateSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.BearTrapActivate.wav");
     public static LoadableAsset<AudioClip> OpportunistIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.OpportunistIntro.wav");
+    public static LoadableAsset<AudioClip> CatIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.CatIntro.wav");
     public static LoadableAsset<AudioClip> DemolitionistIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DemolitionistIntro.wav");
     public static LoadableAsset<AudioClip> DemolitionistExplosionSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DemolitionistExplosion.wav");
     public static LoadableAsset<AudioClip> DomesmithIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DomesmithIntro.wav");
@@ -149,6 +155,7 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
     public static LoadableAsset<AudioClip> UavEnemySound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVEnemy.wav");
     public static LoadableAsset<AudioClip> UavEndSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVEnd.wav");
     public static LoadableAsset<AudioClip> CupidIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.CupidIntro.wav");
+    public static LoadableAsset<AudioClip> MentorIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.MentorIntro.wav");
     public static LoadableAsset<AudioClip> WatcherIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WatcherIntro.wav");
     public static LoadableAsset<AudioClip> WatcherGoSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WatcherGo.wav");
     public static LoadableAsset<AudioClip> WatcherStopSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.WatcherStop.wav");
@@ -173,6 +180,21 @@ public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourc
 
     // Beacon on map (550 ppu – source image is ~1024px so high ppu keeps it small in-game)
     public static LoadableAsset<Sprite> BeaconSprite { get; } = new LoadableResourceAsset($"{ShortPath}.BeaconAsset.png", 550);
+
+    // Meeting nameplate buttons:
+    public static LoadableAsset<Sprite> MentorTeachButton { get; } =
+        new LoadableResourceAsset($"{ShortPath}.MentorTeachButton.png", 440f);
+
+    // Shown on the taught player's nameplate (where the Teach button was) once the Mentor picks them.
+    public static LoadableAsset<Sprite> MentorTaughtMeeting { get; } =
+        new LoadableResourceAsset($"{ShortPath}.MentorTaught.png", 440f);
+
+    // TMP sprite for MentorTaught, built like the role icons' IconTmp. Put MentorTaughtSpriteTag in text.
+    public const string MentorTaughtTmpName = "DivaniMod.Modifier.Crewmate.MentorTaught";
+    public static string MentorTaughtSpriteTag => $"<sprite name=\"{MentorTaughtTmpName}\">";
+    private static TMP_SpriteAsset? _mentorTaughtTmp;
+    public static TMP_SpriteAsset MentorTaughtTmp =>
+        _mentorTaughtTmp ??= TmpSpriteUtils.CreateSpriteAsset(MentorTaughtIcon.LoadAsset(), MentorTaughtTmpName, 1.45f);
 
     // Meeting nameplate toggles:
     public static LoadableAsset<Sprite> RecruitMeetingCrewmate { get; } =
