@@ -20,6 +20,7 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#retributionist"><img width="10%" src="./Resources/Icons/Retributionist.png" alt="Retributionist"/></a>
   <img src="./Resources/Headers/CrewPower.png" alt="Crewmate Power"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#mage"><img width="10%" src="./Resources/Icons/Mage.png" alt="Mage"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#mentor"><img width="10%" src="./Resources/Icons/Mentor.png" alt="Mentor"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#workhorse"><img width="10%" src="./Resources/Icons/Workhorse.png" alt="Workhorse"/></a>
   <img src="./Resources/Headers/CrewProtective.png" alt="Crewmate Protective"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#domesmith"><img width="10%" src="./Resources/Icons/Domesmith.png" alt="Domesmith"/></a>
@@ -34,6 +35,7 @@ Join the Discord:
   <img src="./Resources/Headers/ImpConcealing.png" alt="Impostor Concealing"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#cunctator"><img width="10%" src="./Resources/Icons/Cunctator.png" alt="Cunctator"/></a>
   <img src="./Resources/Headers/ImpKilling.png" alt="Impostor Killing"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#deathnote"><img width="10%" src="./Resources/Icons/Deathnote.png" alt="Deathnote"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#mosquito"><img width="10%" src="./Resources/Icons/Mosquito.png" alt="Mosquito"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#silencer"><img width="10%" src="./Resources/Icons/Silencer.png" alt="Silencer"/></a>
   <img src="./Resources/Headers/ImpPower.png" alt="Impostor Power"/>
@@ -81,15 +83,6 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#tactical-insertion"><img width="10%" src="./Resources/Icons/TacticalInsertion.png" alt="Tactical Insertion"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#uav"><img width="10%" src="./Resources/Icons/UAV.png" alt="UAV"/></a>
 </p>
-
-## New roles in v1.4.0
-
-| Icon | Role | Type | Description |
-| --- | --- | --- | --- |
-| <img src="./Resources/Icons/Deathnote.png" alt="Deathnote" width="64" /> | [Deathnote](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#deathnote) | Impostor Killing | Note down players during the round to take them down with you when you get voted out. |
-| <img src="./Resources/Icons/Mentor.png" alt="Mentor" width="64" /> | [Mentor](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#mentor) | Crewmate Power | Teach a Crewmate a new role for the next round; their role reverts after the end of the following meeting. |
-
----
 
 ## Installation
 
