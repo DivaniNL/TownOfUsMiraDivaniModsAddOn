@@ -82,6 +82,13 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#uav"><img width="10%" src="./Resources/Icons/UAV.png" alt="UAV"/></a>
 </p>
 
+## New roles in v1.4.0
+
+| Icon | Role | Type | Description |
+| --- | --- | --- | --- |
+| <img src="./Resources/Icons/Deathnote.png" alt="Deathnote" width="64" /> | [Deathnote](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#deathnote) | Impostor Killing | Note down players during the round to take them down with you when you get voted out. |
+| <img src="./Resources/Icons/Mentor.png" alt="Mentor" width="64" /> | [Mentor](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#mentor) | Crewmate Power | Teach a Crewmate a new role for the next round; their role reverts after the end of the following meeting. |
+
 ---
 
 ## Installation
