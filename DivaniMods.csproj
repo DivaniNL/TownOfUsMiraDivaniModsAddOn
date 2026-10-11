@@ -36,10 +36,5 @@
     <EmbeddedResource Include="Resources\**\*" Exclude="Resources\Headers\**" />
   </ItemGroup>
 
- <Target Name="CopyDllToAnotherFolder" AfterTargets="Build">
-        <Copy SourceFiles="$(TargetDir)$(TargetName).dll" 
-        DestinationFolder="/Users/neiljain/Library/Application Support/CrossOver/Bottles/Mainly/drive_c/Program Files (x86)/Steam/steamapps/common/Among Us copy/BepInEx/plugins" 
-        SkipUnchangedFiles="true" />
-</Target>
 
 </Project>
