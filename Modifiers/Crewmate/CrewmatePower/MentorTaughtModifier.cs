@@ -4,7 +4,11 @@ using MiraAPI.Modifiers;
 using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
+using Reactor.Utilities;
+using TownOfUs.Extensions;
 using TownOfUs.Roles;
+using TownOfUs.Roles.Neutral;
+using TownOfUs.Utilities;
 using UnityEngine;
 
 namespace DivaniMods.Modifiers.Crewmate.CrewmatePower;
