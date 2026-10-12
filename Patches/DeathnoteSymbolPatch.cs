@@ -16,7 +16,7 @@ internal static class DeathnoteDisplay
 
     private static string MarkChunk =>
         _markChunk ??=
-            $"<color=#{ColorUtility.ToHtmlStringRGBA(Palette.ImpostorRed)}> {MarkSymbol}</color>";
+            $"<color=#{ColorUtility.ToHtmlStringRGBA(TownOfUsColors.Impostor)}> {MarkSymbol}</color>";
 
     internal static bool LocalShouldShowMark(PlayerControl row)
     {

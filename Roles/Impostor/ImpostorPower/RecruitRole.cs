@@ -32,7 +32,7 @@ public sealed class RecruitRole(IntPtr cppPtr)
     public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Recruit.Description");
     public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Recruit.MedDescription");
     public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Recruit.LongDescription");
-    public Color RoleColor => Palette.ImpostorRed;
+    public Color RoleColor => TownOfUsColors.Impostor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorPower;
 

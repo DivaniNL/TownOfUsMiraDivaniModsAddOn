@@ -24,7 +24,7 @@ public class DeathnoteButton : TownOfUsRoleButton<DeathnoteRole, PlayerControl>
     public override bool UsableFirstRound => OptionGroupSingleton<DeathnoteOptions>.Instance.CanNoteFirstRound;
     public override ButtonLocation Location => ButtonLocation.BottomRight;
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
-    public override Color TextOutlineColor => Palette.ImpostorRed;
+    public override Color TextOutlineColor => TownOfUsColors.Impostor;
     public override bool ZeroIsInfinite { get; set; } = true;
 
     public override int MaxUses => (int)OptionGroupSingleton<DeathnoteOptions>.Instance.MaxNotesPerGame.Value;
@@ -131,14 +131,14 @@ public class DeathnoteButton : TownOfUsRoleButton<DeathnoteRole, PlayerControl>
         Button.usesRemainingSprite.sprite = TouAssets.AbilityCounterPlayerSprite.LoadAsset();
         if (TextOutlineColor != Color.clear)
         {
-            SetTextOutline(Palette.ImpostorRed);
+            SetTextOutline(TownOfUsColors.Impostor);
             Button.usesRemainingSprite.color = TextOutlineColor;
         }
     }
 
     public override void SetOutline(bool active)
     {
-        Target?.cosmetics.SetOutline(active, new Il2CppSystem.Nullable<Color>(Palette.ImpostorRed));
+        Target?.cosmetics.SetOutline(active, new Il2CppSystem.Nullable<Color>(TownOfUsColors.Impostor));
     }
 
     public override bool IsTargetValid(PlayerControl? target)

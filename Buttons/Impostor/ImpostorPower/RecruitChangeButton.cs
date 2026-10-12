@@ -25,7 +25,7 @@ public sealed class RecruitChangeButton : TownOfUsRoleButton<RecruitRole>
 {
     public override string Name => MiraLocaleManager.Get("DivaniMods.Role.Recruit.Ability.ChangeRole");
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
-    public override Color TextOutlineColor => Palette.ImpostorRed;
+    public override Color TextOutlineColor => TownOfUsColors.Impostor;
     public override float Cooldown => 0.01f;
     public override ButtonLocation Location => ButtonLocation.BottomLeft;
     public override LoadableAsset<Sprite> Sprite => TouImpAssets.TraitorSelect;

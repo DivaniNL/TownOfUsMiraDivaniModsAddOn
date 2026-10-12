@@ -55,7 +55,7 @@ public class FragGiveBombButton : TownOfUsTargetButton<PlayerControl>, IDiseasea
     public override void SetOutline(bool active)
     {
         if (Target == null) return;
-        Target.cosmetics.SetOutline(active, new Il2CppSystem.Nullable<Color>(Palette.ImpostorRed));
+        Target.cosmetics.SetOutline(active, new Il2CppSystem.Nullable<Color>(TownOfUsColors.Impostor));
     }
 
     public override bool IsTargetValid(PlayerControl? target)

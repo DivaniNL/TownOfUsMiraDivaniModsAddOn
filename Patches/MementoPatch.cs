@@ -98,7 +98,7 @@ public static class MementoPatch
 
     public static Color FactionColor(RoleBehaviour role) => Faction(role) switch
     {
-        ModdedRoleTeams.Impostor => Palette.ImpostorRed,
+        ModdedRoleTeams.Impostor => TownOfUsColors.Impostor,
         ModdedRoleTeams.Crewmate => Palette.CrewmateBlue,
         _ => Color.gray,
     };

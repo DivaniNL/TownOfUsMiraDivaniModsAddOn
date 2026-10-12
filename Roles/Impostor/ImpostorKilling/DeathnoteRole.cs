@@ -21,7 +21,7 @@ public sealed class DeathnoteRole(IntPtr cppPtr)
     public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Deathnote.Description", "Collect my pages!");
     public string RoleLongDescription =>
         MiraLocaleManager.Get("DivaniMods.Role.Deathnote.LongDescription", "Note players, their name will be in your book.\nthey will succumb with you when you die.");
-    public Color RoleColor => Palette.ImpostorRed;
+    public Color RoleColor => TownOfUsColors.Impostor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorKilling;
 

@@ -51,7 +51,7 @@ public static class MosquitoEvents
         {
             MosquitoObject.PendingStingTargetId = byte.MaxValue;
 
-            var colorHex = ColorUtility.ToHtmlStringRGB(Palette.ImpostorRed);
+            var colorHex = ColorUtility.ToHtmlStringRGB(TownOfUsColors.Impostor);
             var notificationText = MiraLocaleManager
                 .Get("DivaniMods.Role.Mosquito.Notification.Stung")
                 .Replace("<player>", evt.Target.Data.PlayerName);

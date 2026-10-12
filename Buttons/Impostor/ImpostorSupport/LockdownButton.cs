@@ -21,7 +21,7 @@ public class LockdownButton : TownOfUsButton
     public override int MaxUses => (int)OptionGroupSingleton<DeadlockOptions>.Instance.InitialCharges.Value;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.DeadlockLockdownButton;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
-    public override Color TextOutlineColor => Palette.ImpostorRed;
+    public override Color TextOutlineColor => TownOfUsColors.Impostor;
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
     
     public static bool IsLockdownActive { get; private set; }

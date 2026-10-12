@@ -23,7 +23,7 @@ public sealed class MosquitoStingButton : TownOfUsButton, IDiseaseableButton
     public override int MaxUses => (int)OptionGroupSingleton<MosquitoOptions>.Instance.StingCharges.Value;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.MosquitoStingButton;
     public override ButtonLocation Location => ButtonLocation.BottomRight;
-    public override Color TextOutlineColor => Palette.ImpostorRed;
+    public override Color TextOutlineColor => TownOfUsColors.Impostor;
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
 
     public static MosquitoStingButton? Instance { get; private set; }

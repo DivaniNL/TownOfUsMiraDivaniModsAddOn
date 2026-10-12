@@ -31,7 +31,7 @@ public sealed class ObfuscatorRole(IntPtr cppPtr)
     public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Obfuscator.Description");
     public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Obfuscator.MedDescription");
     public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Obfuscator.LongDescription");
-    public Color RoleColor => Palette.ImpostorRed;
+    public Color RoleColor => TownOfUsColors.Impostor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorPower;
 
