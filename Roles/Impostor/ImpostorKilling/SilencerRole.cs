@@ -22,7 +22,7 @@ public sealed class SilencerRole(IntPtr cppPtr)
     public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Silencer.Description");
     public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Silencer.MedDescription");
     public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Silencer.LongDescription");
-    public Color RoleColor => Palette.ImpostorRed;
+    public Color RoleColor => TownOfUsColors.Impostor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorKilling;
 

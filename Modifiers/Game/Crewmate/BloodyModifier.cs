@@ -17,7 +17,7 @@ namespace DivaniMods.Modifiers.Game.Crewmate;
 
 public sealed class BloodyModifier : TouGameModifier, IWikiDiscoverable
 {
-    public static readonly Color ModifierUiColor = Palette.ImpostorRed;
+    public static readonly Color ModifierUiColor = TownOfUsColors.Impostor;
     public override ModifierUiConfiguration Configuration => new(
         ModifierUiColor,
         TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.BloodyIcon.LoadAsset(),

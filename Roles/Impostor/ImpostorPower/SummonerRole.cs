@@ -31,7 +31,7 @@ public sealed class SummonerRole(IntPtr cppPtr)
     public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Summoner.Description");
     public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Summoner.MedDescription");
     public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Summoner.LongDescription");
-    public Color RoleColor => Palette.ImpostorRed;
+    public Color RoleColor => TownOfUsColors.Impostor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorPower;
 

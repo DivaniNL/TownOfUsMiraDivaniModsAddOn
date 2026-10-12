@@ -14,6 +14,7 @@ using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
 using DivaniMods.Events.Neutral.NeutralBenign;
+using DivaniMods.Modifiers.Game.Alliance;
 using DivaniMods.Modifiers.Neutral.NeutralBenign;
 using DivaniMods.Options;
 using TownOfUs;

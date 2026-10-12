@@ -22,7 +22,7 @@ public sealed class MosquitoKillButton : TownOfUsKillRoleButton<MosquitoRole, Pl
 {
     public override string Name => TranslationController.Instance.GetStringWithDefault(StringNames.KillLabel, "Kill");
     public override BaseKeybind Keybind => Keybinds.PrimaryAction;
-    public override Color TextOutlineColor => Palette.ImpostorRed;
+    public override Color TextOutlineColor => TownOfUsColors.Impostor;
     public override float Cooldown => PlayerControl.LocalPlayer.GetKillCooldown();
     public override LoadableAsset<Sprite> Sprite => TouAssets.KillSprite;
 

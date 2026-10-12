@@ -293,7 +293,7 @@ public static class MonsterState
             {
                 var parasite = MiscUtils.PlayerById(parasiteId);
                 if (parasite?.Data?.Role is ParasiteRole)
-                    ParasiteRole.RpcParasiteEndControl(parasite, victim);
+                    ParasiteRole.RpcParasiteEndControl(parasite, victim, victim.GetTruePosition(),false);
             }
         }
         catch { }
@@ -304,7 +304,7 @@ public static class MonsterState
             {
                 var puppeteer = MiscUtils.PlayerById(puppeteerId);
                 if (puppeteer?.Data?.Role is PuppeteerRole)
-                    PuppeteerRole.RpcPuppeteerEndControl(puppeteer, victim);
+                    PuppeteerRole.RpcPuppeteerEndControl(puppeteer, victim, victim.GetTruePosition());
             }
         }
         catch { }
@@ -312,14 +312,14 @@ public static class MonsterState
         try
         {
             if (victim.Data?.Role is ParasiteRole parasiteRole && parasiteRole.Controlled != null)
-                ParasiteRole.RpcParasiteEndControl(victim, parasiteRole.Controlled);
+                ParasiteRole.RpcParasiteEndControl(victim, parasiteRole.Controlled, victim.GetTruePosition(), false);
         }
         catch { }
 
         try
         {
             if (victim.Data?.Role is PuppeteerRole puppeteerRole && puppeteerRole.Controlled != null)
-                PuppeteerRole.RpcPuppeteerEndControl(victim, puppeteerRole.Controlled);
+                PuppeteerRole.RpcPuppeteerEndControl(victim, puppeteerRole.Controlled, victim.GetTruePosition());
         }
         catch { }
     }

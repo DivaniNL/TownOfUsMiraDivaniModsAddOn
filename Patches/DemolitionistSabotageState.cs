@@ -78,7 +78,7 @@ public static class DemolitionistSabotageState
 
     private static readonly Color DefuseFlashColor = Palette.AcceptedGreen;
 
-    private static readonly Color ExplosionFlashColor = Palette.ImpostorRed;
+    private static readonly Color ExplosionFlashColor = TownOfUsColors.Impostor;
 
     private static readonly List<(int ConsoleKey, DemolitionistUtilityKind Kind)> DisabledUtilities = new();
 

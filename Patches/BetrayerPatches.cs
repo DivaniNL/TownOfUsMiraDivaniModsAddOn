@@ -346,21 +346,49 @@ public static class BetrayerPatches
         return !(IsLocalBetrayer() && !OptionGroupSingleton<BetrayerOptions>.Instance.CanSabotage.Value);
     }
 
-    [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
-    [HarmonyPostfix]
-    [HarmonyPriority(Priority.Last)]
-    public static void HudUpdatePostfix(HudManager __instance)
+    // Same UI TOU:Mira uses when sabotages are disabled: sabotage map mode is blocked and the
+    // sabotage button stays visible but greyed out (instead of being hidden).
+    private static bool BetrayerCannotSabotage()
     {
-        if (!IsLocalBetrayer())
+        return IsLocalBetrayer() && !OptionGroupSingleton<BetrayerOptions>.Instance.CanSabotage.Value;
+    }
+
+    [HarmonyPatch(typeof(HudManager), nameof(HudManager.ToggleMapVisible))]
+    [HarmonyPrefix]
+    public static void ToggleMapVisiblePrefix(MapOptions options)
+    {
+        if (options.Mode is MapOptions.Modes.Sabotage && BetrayerCannotSabotage())
+        {
+            options.Mode = MapOptions.Modes.Normal;
+        }
+    }
+
+    [HarmonyPatch(typeof(NormalGameManager), nameof(NormalGameManager.GetMapOptions))]
+    [HarmonyPostfix]
+    public static void GetMapOptionsPostfix(ref MapOptions __result)
+    {
+        if (__result == null || __result.Mode != MapOptions.Modes.Sabotage || !BetrayerCannotSabotage())
         {
             return;
         }
 
-        var options = OptionGroupSingleton<BetrayerOptions>.Instance;
+        __result = new MapOptions { Mode = MapOptions.Modes.Normal };
+    }
 
-        if (!options.CanSabotage.Value && __instance.SabotageButton != null)
+    [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.Refresh))]
+    [HarmonyPriority(Priority.Last)]
+    [HarmonyPostfix]
+    public static void SabotageButtonRefreshPostfix(SabotageButton __instance)
+    {
+        if (GameManager.Instance == null || !BetrayerCannotSabotage())
         {
-            __instance.SabotageButton.ToggleVisible(false);
+            return;
+        }
+
+        if (__instance.gameObject.active)
+        {
+            __instance.SetDisabled();
+            HudManagerHelper.Instance.SabotageButtonDisabledSprite?.gameObject.SetActive(true);
         }
     }
 
