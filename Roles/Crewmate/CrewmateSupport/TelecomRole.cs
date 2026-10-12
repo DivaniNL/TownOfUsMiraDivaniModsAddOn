@@ -12,6 +12,7 @@ using Reactor.Networking.Attributes;
 using Reactor.Utilities.Extensions;
 using DivaniMods.Assets;
 using DivaniMods.Modifiers.Crewmate.CrewmateSupport;
+using DivaniMods.Modules.Monster;
 using DivaniMods.Options;
 using DivaniMods.Interfaces;
 using TownOfUs;
@@ -313,7 +314,8 @@ public sealed class TelecomRole(IntPtr cppPtr)
             return;
         }
 
-        if (sender == null || !sender.HasModifier<TelecomChatModifier>())
+        if (sender == null || MonsterState.IsEaten(sender.PlayerId) ||
+            !sender.HasModifier<TelecomChatModifier>())
         {
             return;
         }

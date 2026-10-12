@@ -4,6 +4,7 @@ using MiraAPI.Translation;
 using MiraAPI.Modifiers;
 using TMPro;
 using DivaniMods.Assets;
+using DivaniMods.Modules.Monster;
 using DivaniMods.Modifiers.Crewmate.CrewmateSupport;
 using DivaniMods.Roles.Crewmate.CrewmateSupport;
 using TownOfUs;
@@ -30,15 +31,22 @@ public static class RoundChatManager
     private static GameObject? _switchButton;
     private static TextMeshPro? _statusText;
     private static bool _bgTinted;
+    private static bool _chatHiddenForMonster;
+
+    private static bool LocalPlayerEaten =>
+        PlayerControl.LocalPlayer != null &&
+        MonsterState.IsEaten(PlayerControl.LocalPlayer.PlayerId);
 
     private static bool TelecomActive =>
         PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data != null &&
         !PlayerControl.LocalPlayer.Data.IsDead &&
+        !LocalPlayerEaten &&
         PlayerControl.LocalPlayer.HasModifier<TelecomChatModifier>();
 
     private static bool LoverActive =>
         PlayerControl.LocalPlayer != null && PlayerControl.LocalPlayer.Data != null &&
-        !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.IsLover();
+        !PlayerControl.LocalPlayer.Data.IsDead && !LocalPlayerEaten &&
+        PlayerControl.LocalPlayer.IsLover();
 
     public static bool ShouldSendLover => LoverActive && Selected == RoundChat.Lover;
 
@@ -50,6 +58,23 @@ public static class RoundChatManager
         }
     }
 
+    public static void RestoreChatAfterMonster()
+    {
+        if (!_chatHiddenForMonster)
+        {
+            return;
+        }
+
+        if (HudManager.InstanceExists && HudManager.Instance.Chat != null)
+        {
+            var chat = HudManager.Instance.Chat;
+            chat.gameObject.SetActive(true);
+            chat.SetVisible(true);
+        }
+
+        _chatHiddenForMonster = false;
+    }
+
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     [HarmonyPostfix]
     public static void HudUpdatePostfix()
@@ -59,6 +84,28 @@ public static class RoundChatManager
             return;
         }
 
+        if (LocalPlayerEaten)
+        {
+            HideSwitchButton();
+            var chatWhileEaten = HudManager.Instance.Chat;
+            if (chatWhileEaten != null)
+            {
+                if (chatWhileEaten.IsOpenOrOpening)
+                {
+                    chatWhileEaten.Close();
+                }
+
+                chatWhileEaten.SetVisible(false);
+                chatWhileEaten.gameObject.SetActive(false);
+            }
+
+            UpdateStatusText(false, false);
+            UpdateChatBackground(false, false);
+            _chatHiddenForMonster = true;
+            return;
+        }
+
+        RestoreChatAfterMonster();
         SelfHealTelecomLink();
 
         var telecom = TelecomActive;
@@ -253,6 +300,11 @@ public static class RoundChatManager
 
     private static void CycleChat()
     {
+        if (LocalPlayerEaten)
+        {
+            return;
+        }
+
         Selected = Selected == RoundChat.Telecom ? RoundChat.Lover : RoundChat.Telecom;
         ApplyMainChatSprite();
     }
