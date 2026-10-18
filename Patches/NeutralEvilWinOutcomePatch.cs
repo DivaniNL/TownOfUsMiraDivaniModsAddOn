@@ -1,11 +1,15 @@
+using HarmonyLib;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
+using MiraAPI.Hud;
+using DivaniMods.Buttons.Neutral;
 using MiraAPI.Roles;
 using DivaniMods.Roles.Neutral.NeutralEvil;
 using DivaniMods.Utilities;
 
 namespace DivaniMods.Patches;
 
+[HarmonyPatch]
 public static class NeutralEvilWinOutcomePatch
 {
     [RegisterEvent]
@@ -35,5 +39,31 @@ public static class NeutralEvilWinOutcomePatch
         {
             NeutralEvilWinOutcomeUtils.TryResolveQuietWin(pd, pd);
         }
+    }
+
+    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
+    [HarmonyPostfix]
+    public static void ResetTormentButtonOnGameEnd()
+    {
+        ResetTormentButton();
+    }
+
+    [HarmonyPatch(typeof(LobbyBehaviour), nameof(LobbyBehaviour.Start))]
+    [HarmonyPostfix]
+    public static void ResetTormentButtonOnLobbyStart()
+    {
+        ResetTormentButton();
+    }
+
+    private static void ResetTormentButton()
+    {
+        var button = CustomButtonSingleton<NeutralEvilTormentButton>.Instance;
+        if (button == null)
+        {
+            return;
+        }
+
+        button.Show = false;
+        button.Owner = null;
     }
 }
