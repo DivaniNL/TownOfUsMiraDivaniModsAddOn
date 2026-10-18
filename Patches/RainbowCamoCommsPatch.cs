@@ -1,4 +1,6 @@
 using HarmonyLib;
+using MiraAPI;
+using MiraAPI.Colors;
 using MiraAPI.GameOptions;
 using MiraAPI.LocalSettings;
 using MiraAPI.Modifiers;
@@ -6,7 +8,6 @@ using DivaniMods.Modules;
 using DivaniMods.Options;
 using TownOfUs.Modifiers.Impostor.Venerer;
 using TownOfUs.Modules;
-using TownOfUs.Modules.RainbowMod;
 using TownOfUs.Patches;
 using TownOfUs.Utilities.Appearances;
 using UnityEngine;
@@ -66,7 +67,7 @@ public static class RainbowCamoCommsPatch
             var body = player.cosmetics.currentBodySprite?.BodySprite;
             if (body != null)
             {
-                RainbowUtils.SetRainbow(body);
+                SetRainbow(body);
             }
         }
 
@@ -86,8 +87,15 @@ public static class RainbowCamoCommsPatch
             var body = cosmetics?.currentBodySprite?.BodySprite;
             if (body != null)
             {
-                RainbowUtils.SetRainbow(body);
+                SetRainbow(body);
             }
         }
+    }
+
+    private static void SetRainbow(Renderer renderer)
+    {
+        var behaviour = renderer.gameObject.GetComponent<VariableColorBehaviour>()
+                        ?? renderer.gameObject.AddComponent<VariableColorBehaviour>();
+        behaviour.SetColor(TownOfUs.TownOfUsPlayerColors.Rainbow);
     }
 }

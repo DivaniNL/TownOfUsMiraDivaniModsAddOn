@@ -4,6 +4,7 @@ using DivaniMods.Interfaces;
 using DivaniMods.Modules.Monster;
 using DivaniMods.Options;
 using Il2CppInterop.Runtime.Attributes;
+using MiraAPI.Colors;
 using MiraAPI.GameOptions;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
@@ -79,7 +80,7 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), IDivaniRol
                 continue;
             }
 
-            if (RainbowUtils.IsRainbow(victim.Data.DefaultOutfit.ColorId))
+            if (PaletteManager.IsVariable(victim.Data.DefaultOutfit.ColorId))
             {
                 tally.Append(GetIcon(UxIcons[1]));
             }
