@@ -18,7 +18,6 @@ publish/
 # NuGet
 # -----------------------------------------------------------------------------
 packages/
-*.nupkg
 *.snupkg
 *.nuget.props
 *.nuget.targets
