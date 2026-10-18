@@ -126,7 +126,7 @@ public static class WatcherLightSystem
 
     private static void CloseOpenPlayerMenu()
     {
-        var menu = Minigame.Instance == null ? null : Minigame.Instance.TryCast<CustomPlayerMenu>();
+        var menu = Minigame.Instance == null ? null : Minigame.Instance.TryCast<CustomPhoneMenuComponent>();
         menu?.ForceClose();
     }
 
