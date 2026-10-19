@@ -20,8 +20,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TownOfUsMira" Version="1.7.3-ci.1669" />
-    <PackageReference Include="AllOfUs.MiraAPI" Version="0.5.0"/>
+    <PackageReference Include="TownOfUsMira" Version="1.7.9-beta1" />
+    <PackageReference Include="AllOfUs.MiraAPI" Version="0.6.0"/>
     <PackageReference Include="Reactor" Version="2.5.1-ci.384"/>
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" Private="false" ExcludeAssets="runtime;native"/>
     <PackageReference Include="AmongUs.GameLibs.Steam" Version="2026.9.29" PrivateAssets="all"/>
