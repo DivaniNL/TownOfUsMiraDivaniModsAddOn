@@ -4,6 +4,7 @@ using DivaniMods.Interfaces;
 using DivaniMods.Modules.Monster;
 using DivaniMods.Options;
 using Il2CppInterop.Runtime.Attributes;
+using MiraAPI.Colors;
 using MiraAPI.GameOptions;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
@@ -16,6 +17,7 @@ using System.Text;
 using TMPro;
 using TownOfUs;
 using TownOfUs.Assets;
+using TownOfUs.Extensions;
 using TownOfUs.Interfaces;
 using TownOfUs.Modules.RainbowMod;
 using TownOfUs.Modules.Wiki;
@@ -33,7 +35,7 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), IDivaniRol
     public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Monster.Description");
     public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Monster.MedDescription");
     public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Monster.LongDescription");
-
+    public static DoomableType DoomHintType => DoomableType.Hunter;
     public Color RoleColor => MonsterColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralKilling;
@@ -78,7 +80,7 @@ public sealed class MonsterRole(IntPtr cppPtr) : NeutralRole(cppPtr), IDivaniRol
                 continue;
             }
 
-            if (RainbowUtils.IsRainbow(victim.Data.DefaultOutfit.ColorId))
+            if (PaletteManager.IsVariable(victim.Data.DefaultOutfit.ColorId))
             {
                 tally.Append(GetIcon(UxIcons[1]));
             }

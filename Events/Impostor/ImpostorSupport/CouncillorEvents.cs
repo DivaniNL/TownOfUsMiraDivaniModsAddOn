@@ -73,7 +73,7 @@ public static class CouncillorEvents
                 .Get(key)
                 .Replace("<votes>", votesGained.ToString());
 
-        var colorHex = ColorUtility.ToHtmlStringRGB(Palette.ImpostorRed);
+        var colorHex = ColorUtility.ToHtmlStringRGB(TownOfUsColors.Impostor);
 
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
             $"<b><color=#{colorHex}>{notificationText}</color></b>",

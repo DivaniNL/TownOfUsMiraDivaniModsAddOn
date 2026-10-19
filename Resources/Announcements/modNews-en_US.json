@@ -1,6 +1,41 @@
 {
   "News": [
     {
+      "Date": "2026-10-05T12:00:00Z",
+      "Number": "10021",
+      "ShortTitle": "Divani Mods v1.4.0",
+      "Title": "We are sooo back!",
+      "SubTitle": "Deathnote and Mentor join Divani Mods, plus compatibility fixes",
+      "Text": [
+        "\r<size=110%><b>Divani Mods v1.4.0</b></size>",
+        "\n\nSupport for Among Us v19 and Town of Us Mira:1.7.4",
+        "\n\n<i>This version does not work with Town of Us Mira versions lower than 1.7.4</i>",
+        "\n\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.4.0>Download v1.4.0</link>",
+        "\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases>All releases</link>",
+        "\n★ <link=https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki>Wiki</link>",
+        "\n\n\r<size=108%><b>Added Role: Deathnote</b> (Impostor Killing)</size>",
+        "\n\nNote down players during the round to take them down with you when you get voted out ([#40](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/40))",
+        "\n\n\r<size=108%><b>Added Role: Mentor</b> (Crew Power)</size>",
+        "\n\nThe Mentor can choose a Crewmate during the meeting to be taught how to be a new role for the next round, reverting their role back after the end of the next meeting. The lesson fails on Non-Crew, and there are options to toggle notifications upon failure. ([#14](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/14))",
+        "\n\n\r<size=108%><b>Bugfixes</b></size>",
+        "\n\n<b>Thief</b>",
+        "\n- Fixed a bug with localized strings on stealing modifiers",
+        "\n\n<b>Recruiter</b>",
+        "\n- Fixed Recruiter not following correct rules for picking during Draft Mode",
+        "\n\n<b>Monster</b>",
+        "\n- Fixed Monster animation being inconsistent with victim's position",
+        "\n- Upscaled Monster Animation and removed hole in visor",
+        "\n- Added Doomsayer Bucket for Monster",
+        "\n\n<b>Frag (Related)</b>",
+        "\n- Fixed a bug where you cannot pass the frag during comms",
+        "\n\n<b>Cunctator</b>",
+        "\n- Fixed a bug where pets from cunctator were left regardless during the period of time when the body isnt visible",
+        "\n- This means now that this is configurable by the setting \"HidePetsOnBodyRemove\" in the Vanilla Tweaks portion of the settings in TOU:Mira.",
+        "\n\n<b>Betrayer</b>",
+        "\n- Fixed a bug where betrayer could still sabotage even when the toggle was off. this now follows the same UI format as what TOU:Mira does when disabling sabotages."
+      ]
+    },
+    {
       "Date": "2026-04-18T19:09:33Z",
       "Number": "10000",
       "ShortTitle": "Divani Mods v1.0.0",

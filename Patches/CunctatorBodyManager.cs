@@ -3,12 +3,14 @@ using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using MiraAPI.Modifiers;
+using MiraAPI.GameOptions;
 using MiraAPI.Networking;
 using Reactor.Utilities;
 using DivaniMods.Buttons.Crewmate.CrewmateInvestigative;
 using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using DivaniMods.Roles.Impostor.ImpostorConcealing;
 using TownOfUs.Modifiers.Game.Crewmate;
+using TownOfUs.Options;
 using TownOfUs.Utilities;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -24,6 +26,7 @@ public static class CunctatorBodyManager
         public byte KillerId;
         public Vector3 Position;
         public float Remaining;
+        public bool HidPet;
     }
 
     private static readonly List<PendingBody> Pending = [];
@@ -48,6 +51,10 @@ public static class CunctatorBodyManager
 
         BeaconManager.ForgetBody(target.PlayerId);
 
+        // The body is gone until it drops, so its pet must not be left standing there. Follows TOU:Mira's
+        // "HidePetsOnBodyRemove" setting (Vanilla Tweaks).
+        var hidPet = HidePet(target);
+
         Pending.RemoveAll(p => p.TargetId == target.PlayerId);
         Pending.Add(new PendingBody
         {
@@ -55,7 +62,31 @@ public static class CunctatorBodyManager
             KillerId = killer != null ? killer.PlayerId : target.PlayerId,
             Position = position,
             Remaining = delaySeconds,
+            HidPet = hidPet,
         });
+    }
+
+    private static bool HidePet(PlayerControl target)
+    {
+        var hidePets = OptionGroupSingleton<VanillaTweakOptions>.Instance.PetVisibilityUponDeath;
+        if (hidePets is PetHidden.Never || target.AmOwner || !target.cosmetics.currentPet)
+        {
+            return false;
+        }
+
+        MiscUtils.RemovePet(target, hidePets);
+        return true;
+    }
+
+    private static void RestorePet(PlayerControl target)
+    {
+        if (!target.cosmetics.currentPet)
+        {
+            return;
+        }
+
+        target.cosmetics.petHiddenByViper = false;
+        target.cosmetics.TogglePet(true);
     }
 
     public static void Clear()
@@ -104,6 +135,12 @@ public static class CunctatorBodyManager
         target.SetPlayerMaterialColors(deadBody.bloodSplatter);
         deadBody.transform.position = pending.Position;
         deadBody.enabled = true;
+
+        // The body is back, so its pet comes back with it.
+        if (pending.HidPet)
+        {
+            RestorePet(target);
+        }
 
         if (target.HasModifier<RottingModifier>())
         {

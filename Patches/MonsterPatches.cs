@@ -40,6 +40,19 @@ public static class MonsterPatches
     public static bool CmdReportDeadBodyPrefix(PlayerControl __instance)
         => !MonsterState.IsEaten(__instance.PlayerId);
 
+    [HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.First)]
+    public static bool ChatControllerSendChatPrefix()
+        => !IsLocalPlayerEaten();
+
+    [HarmonyPatch(typeof(ChatController), nameof(ChatController.AddChat))]
+    [HarmonyPatch(typeof(ChatController), nameof(ChatController.AddChatNote))]
+    [HarmonyPrefix]
+    [HarmonyPriority(Priority.First)]
+    public static bool ChatControllerAddChatPrefix()
+        => !IsLocalPlayerEaten();
+
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
     [HarmonyPostfix]
     [HarmonyPriority(Priority.First)]
@@ -289,9 +302,17 @@ public static class MonsterPatches
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Start))]
     [HarmonyPrefix]
-    public static void GameStartPrefix() => MonsterState.ResetAll();
+    public static void GameStartPrefix()
+    {
+        MonsterState.ResetAll();
+        RoundChatManager.RestoreChatAfterMonster();
+    }
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     [HarmonyPostfix]
-    public static void GameEndPostfix() => MonsterState.ResetAll();
+    public static void GameEndPostfix()
+    {
+        MonsterState.ResetAll();
+        RoundChatManager.RestoreChatAfterMonster();
+    }
 }

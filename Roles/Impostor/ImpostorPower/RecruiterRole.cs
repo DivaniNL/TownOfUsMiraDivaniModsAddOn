@@ -20,18 +20,20 @@ using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
 using DivaniMods.Interfaces;
+using TownOfUs.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorPower;
 
 public sealed class RecruiterRole(IntPtr cppPtr)
-    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant
+    : ImpostorRole(cppPtr), IDivaniRole, IWikiDiscoverable, IDoomable, ICrewVariant, IDoubleDraftRole
 {
     public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Recruiter", "Recruiter");
     public string LocaleKey => "Recruiter";
+    public bool IsDoubleDraftRole => true;
     public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Recruiter.Description");
     public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Recruiter.MedDescription");
     public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Recruiter.LongDescription");
-    public Color RoleColor => Palette.ImpostorRed;
+    public Color RoleColor => TownOfUsColors.Impostor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Impostor;
     public RoleAlignment RoleAlignment => RoleAlignment.ImpostorPower;
 
@@ -70,7 +72,7 @@ public sealed class RecruiterRole(IntPtr cppPtr)
     [HideFromIl2Cpp] public List<RoleBehaviour> ChosenRoles { get; } = [];
     [HideFromIl2Cpp] public RoleBehaviour? RandomRole { get; set; }
     [HideFromIl2Cpp] public RoleBehaviour? SelectedRole { get; set; }
-
+    
     private MeetingMenu? _meetingMenu;
     private byte _localSelectedId = 255;
 

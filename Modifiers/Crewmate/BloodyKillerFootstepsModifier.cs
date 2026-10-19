@@ -78,7 +78,7 @@ public sealed class BloodyKillerFootstepsModifier : BaseModifier
         var cantContinue = PlayerControl.LocalPlayer.GetModifiers<HypnotisedModifier>().Any(x => x.HysteriaActive) ||
                            !Player.IsVisibleToOthers();
 
-        var footprintColor = Palette.ImpostorRed;
+        var footprintColor = TownOfUsColors.Impostor;
 
         if (CheckDistance)
         {
