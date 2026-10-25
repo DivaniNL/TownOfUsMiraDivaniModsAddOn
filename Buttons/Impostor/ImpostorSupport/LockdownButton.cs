@@ -6,6 +6,7 @@ using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using DivaniMods.Patches;
 using DivaniMods.Roles.Impostor.ImpostorSupport;
 using System.Collections;
 using TownOfUs.Buttons;
@@ -27,6 +28,7 @@ public class LockdownButton : TownOfUsButton
     public static bool IsLockdownActive { get; private set; }
     public static float LockdownTimeRemaining { get; private set; }
     public static LockdownButton? Instance { get; private set; }
+    private static bool _lockdownClosedDoors;
     
     public static int ChargesPerKill => (int)OptionGroupSingleton<DeadlockOptions>.Instance.ChargesPerKill.Value;
     private static int LockdownMode => OptionGroupSingleton<DeadlockOptions>.Instance.LockdownEffects.Value;
@@ -62,6 +64,19 @@ public class LockdownButton : TownOfUsButton
         if (player == null || player.Data == null || player.Data.IsDead) return false;
 
         if (!base.CanUse()) return false;
+
+        if (!EffectActive)
+        {
+            if (DemolitionistSabotageState.IsActive) return false;
+
+            var ship = ShipStatus.Instance;
+            if (ship?.Systems != null &&
+                ship.Systems.TryGetValue(SystemTypes.Sabotage, out var sabotageSystem) &&
+                sabotageSystem.Cast<SabotageSystemType>().AnyActive)
+            {
+                return false;
+            }
+        }
 
         return (Timer <= 0 && !EffectActive) || (EffectActive && Timer <= EffectDuration - 2f);
     }
@@ -144,7 +159,11 @@ public class LockdownButton : TownOfUsButton
             KickPlayersFromTasks();
         }
 
-        CloseDoorsForLockdown();
+        _lockdownClosedDoors = ControlsDoorsAndSabotage;
+        if (_lockdownClosedDoors)
+        {
+            SetDoorsLocked(true);
+        }
         
         Coroutines.Start(LockdownTimerCoroutine(duration));
         
@@ -156,6 +175,12 @@ public class LockdownButton : TownOfUsButton
     
     private static void EndLockdownLocal()
     {
+        if (_lockdownClosedDoors)
+        {
+            SetDoorsLocked(false);
+            _lockdownClosedDoors = false;
+        }
+
         IsLockdownActive = false;
         LockdownTimeRemaining = 0;
         
@@ -178,9 +203,9 @@ public class LockdownButton : TownOfUsButton
                 LockdownTimeRemaining -= Time.deltaTime;
                 doorRefreshTimer += Time.deltaTime;
 
-                if (doorRefreshTimer >= 5f)
+                if (_lockdownClosedDoors && doorRefreshTimer >= 1f)
                 {
-                    CloseDoorsForLockdown();
+                    SetDoorsLocked(true);
                     doorRefreshTimer = 0f;
                 }
             }
@@ -199,13 +224,8 @@ public class LockdownButton : TownOfUsButton
         }
     }
 
-    private static void CloseDoorsForLockdown()
+    private static void SetDoorsLocked(bool locked)
     {
-        if (!ControlsDoorsAndSabotage || !AmongUsClient.Instance.AmHost)
-        {
-            return;
-        }
-
         var ship = ShipStatus.Instance;
         if (ship == null || GameOptionsManager.Instance == null ||
             (MapNames)GameOptionsManager.Instance.currentNormalGameOptions.MapId == MapNames.MiraHQ)
@@ -213,9 +233,13 @@ public class LockdownButton : TownOfUsButton
             return;
         }
 
-        for (var doorSet = 0; doorSet < ship.AllDoors.Count; doorSet++)
+        for (var i = 0; i < ship.AllDoors.Count; i++)
         {
-            ship.RpcCloseDoorsOfType((SystemTypes)doorSet);
+            var door = ship.AllDoors[i];
+            if (door != null && door.IsOpen == locked)
+            {
+                door.SetDoorway(!locked);
+            }
         }
     }
     
@@ -235,6 +259,12 @@ public class LockdownButton : TownOfUsButton
 
     public static void ResetLockdown()
     {
+        if (_lockdownClosedDoors)
+        {
+            SetDoorsLocked(false);
+            _lockdownClosedDoors = false;
+        }
+
         IsLockdownActive = false;
         LockdownTimeRemaining = 0;
         Instance?.ResetCharges();
