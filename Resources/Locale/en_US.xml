@@ -453,6 +453,10 @@
     <string name="DivaniMods.Options.Deadlock.LockdownCooldown">Lockdown Cooldown</string>
     <string name="DivaniMods.Options.Deadlock.InitialCharges">Initial Charges</string>
     <string name="DivaniMods.Options.Deadlock.ChargesPerKill">Charges Per Kill</string>
+    <string name="DivaniMods.Options.Deadlock.LockdownEffects">Lockdown Effects</string>
+    <string name="DivaniMods.Options.Deadlock.LockdownEffects.TasksOnly">Tasks Only</string>
+    <string name="DivaniMods.Options.Deadlock.LockdownEffects.DoorsOnly">Doors Only</string>
+    <string name="DivaniMods.Options.Deadlock.LockdownEffects.Both">Both</string>
 <!-- NEUTRALS -->
 <!-- Cupid -->
     <string name="DivaniMods.Role.Cupid">Cupid</string>

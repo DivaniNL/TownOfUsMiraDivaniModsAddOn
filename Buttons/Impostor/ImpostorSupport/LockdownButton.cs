@@ -6,6 +6,7 @@ using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Options;
+using DivaniMods.Patches;
 using DivaniMods.Roles.Impostor.ImpostorSupport;
 using System.Collections;
 using TownOfUs.Buttons;
@@ -27,9 +28,15 @@ public class LockdownButton : TownOfUsButton
     public static bool IsLockdownActive { get; private set; }
     public static float LockdownTimeRemaining { get; private set; }
     public static LockdownButton? Instance { get; private set; }
+    private static bool _lockdownClosedDoors;
     
     public static int ChargesPerKill => (int)OptionGroupSingleton<DeadlockOptions>.Instance.ChargesPerKill.Value;
-    
+    private static int LockdownMode => OptionGroupSingleton<DeadlockOptions>.Instance.LockdownEffects.Value;
+    public static bool ControlsDoorsAndSabotage =>
+        LockdownMode == (int)DeadlockLockdownMode.DoorsOnly || LockdownMode == (int)DeadlockLockdownMode.Both;
+    public static bool DisablesTasks =>
+        LockdownMode == (int)DeadlockLockdownMode.TasksOnly || LockdownMode == (int)DeadlockLockdownMode.Both;
+
     public int CurrentCharges => UsesLeft;
 
     private void ApplyUses(int amount)
@@ -57,6 +64,19 @@ public class LockdownButton : TownOfUsButton
         if (player == null || player.Data == null || player.Data.IsDead) return false;
 
         if (!base.CanUse()) return false;
+
+        if (!EffectActive)
+        {
+            if (DemolitionistSabotageState.IsActive) return false;
+
+            var ship = ShipStatus.Instance;
+            if (ship?.Systems != null &&
+                ship.Systems.TryGetValue(SystemTypes.Sabotage, out var sabotageSystem) &&
+                sabotageSystem.Cast<SabotageSystemType>().AnyActive)
+            {
+                return false;
+            }
+        }
 
         return (Timer <= 0 && !EffectActive) || (EffectActive && Timer <= EffectDuration - 2f);
     }
@@ -134,7 +154,16 @@ public class LockdownButton : TownOfUsButton
         IsLockdownActive = true;
         LockdownTimeRemaining = duration;
         
-        KickPlayersFromTasks();
+        if (DisablesTasks)
+        {
+            KickPlayersFromTasks();
+        }
+
+        _lockdownClosedDoors = ControlsDoorsAndSabotage;
+        if (_lockdownClosedDoors)
+        {
+            SetDoorsLocked(true);
+        }
         
         Coroutines.Start(LockdownTimerCoroutine(duration));
         
@@ -146,6 +175,12 @@ public class LockdownButton : TownOfUsButton
     
     private static void EndLockdownLocal()
     {
+        if (_lockdownClosedDoors)
+        {
+            SetDoorsLocked(false);
+            _lockdownClosedDoors = false;
+        }
+
         IsLockdownActive = false;
         LockdownTimeRemaining = 0;
         
@@ -158,6 +193,7 @@ public class LockdownButton : TownOfUsButton
     private static IEnumerator LockdownTimerCoroutine(float duration)
     {
         LockdownTimeRemaining = duration;
+        var doorRefreshTimer = 0f;
         
         while (LockdownTimeRemaining > 0 && IsLockdownActive)
         {
@@ -165,6 +201,13 @@ public class LockdownButton : TownOfUsButton
                 !TownOfUs.Modules.TimeLordRewindSystem.IsRewinding)
             {
                 LockdownTimeRemaining -= Time.deltaTime;
+                doorRefreshTimer += Time.deltaTime;
+
+                if (_lockdownClosedDoors && doorRefreshTimer >= 1f)
+                {
+                    SetDoorsLocked(true);
+                    doorRefreshTimer = 0f;
+                }
             }
             yield return null;
         }
@@ -177,6 +220,25 @@ public class LockdownButton : TownOfUsButton
             {
                 Instance.Timer = Instance.Cooldown;
                 Instance.EffectActive = false;
+            }
+        }
+    }
+
+    private static void SetDoorsLocked(bool locked)
+    {
+        var ship = ShipStatus.Instance;
+        if (ship == null || GameOptionsManager.Instance == null ||
+            (MapNames)GameOptionsManager.Instance.currentNormalGameOptions.MapId == MapNames.MiraHQ)
+        {
+            return;
+        }
+
+        for (var i = 0; i < ship.AllDoors.Count; i++)
+        {
+            var door = ship.AllDoors[i];
+            if (door != null && door.IsOpen == locked)
+            {
+                door.SetDoorway(!locked);
             }
         }
     }
@@ -197,6 +259,12 @@ public class LockdownButton : TownOfUsButton
 
     public static void ResetLockdown()
     {
+        if (_lockdownClosedDoors)
+        {
+            SetDoorsLocked(false);
+            _lockdownClosedDoors = false;
+        }
+
         IsLockdownActive = false;
         LockdownTimeRemaining = 0;
         Instance?.ResetCharges();

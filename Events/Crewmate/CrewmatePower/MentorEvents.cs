@@ -47,7 +47,8 @@ public static class MentorEvents
         {
             var taughtMod = student.GetModifier<MentorTaughtModifier>();
 
-            if (taughtMod != null && (ushort)student.Data.Role.Role == taughtMod.LessonRoleId)
+            if (taughtMod != null && taughtMod.LessonSucceeded &&
+                (ushort)student.Data.Role.Role == taughtMod.LessonRoleId)
             {
                 student.RpcChangeRole(taughtMod.OriginalRoleId);
             }

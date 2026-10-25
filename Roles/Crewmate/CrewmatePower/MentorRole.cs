@@ -616,6 +616,7 @@ public sealed class MentorRole(IntPtr cppPtr)
         {
             target.RpcAddModifier<MentorInsomniaModifier>((int)options.InsomniaRounds.Value);
 
+            var originalRole = (ushort)target.Data.Role.Role;
             if (canApplyRole)
             {
                 if (target.HasModifier<ImitatorCacheModifier>())
@@ -623,10 +624,12 @@ public sealed class MentorRole(IntPtr cppPtr)
                     target.RemoveModifier<ImitatorCacheModifier>();
                     target.RpcChangeRole(RoleId.Get<ImitatorRole>(), false);
                 }
-                var originalRole = (ushort)target.Data.Role.Role;
+
+                originalRole = (ushort)target.Data.Role.Role;
                 target.RpcChangeRole(LessonRoleId, false);
-                target.RpcAddModifier<MentorTaughtModifier>(originalRole, LessonRoleId);
             }
+
+            target.RpcAddModifier<MentorTaughtModifier>(originalRole, LessonRoleId, canApplyRole);
         }
     }
 

@@ -450,6 +450,10 @@
     <string name="DivaniMods.Options.Deadlock.LockdownCooldown">Recarga del Bloqueo</string>
     <string name="DivaniMods.Options.Deadlock.InitialCharges">Cargas iniciales</string>
     <string name="DivaniMods.Options.Deadlock.ChargesPerKill">Cargas por muerte</string>
+    <string name="DivaniMods.Options.Deadlock.LockdownEffects">Efectos del bloqueo</string>
+    <string name="DivaniMods.Options.Deadlock.LockdownEffects.TasksOnly">Solo tareas</string>
+    <string name="DivaniMods.Options.Deadlock.LockdownEffects.DoorsOnly">Solo puertas</string>
+    <string name="DivaniMods.Options.Deadlock.LockdownEffects.Both">Ambos</string>
 <!-- NEUTRALES -->
 <!-- Cupido -->
     <string name="DivaniMods.Role.Cupid">Cupido</string>

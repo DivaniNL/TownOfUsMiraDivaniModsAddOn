@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace DivaniMods.Modifiers.Crewmate.CrewmatePower;
 
-public sealed class MentorTaughtModifier(ushort originalRoleId, ushort lessonRoleId) : BaseModifier, ICachedRole
+public sealed class MentorTaughtModifier(ushort originalRoleId, ushort lessonRoleId, bool lessonSucceeded = true) : BaseModifier, ICachedRole
 {
     public static readonly Color MentorColor = new Color32(150, 150, 200, 255);
     public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.MentorTaught", "Taught");
@@ -22,9 +22,12 @@ public sealed class MentorTaughtModifier(ushort originalRoleId, ushort lessonRol
     public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.MentorTaughtIcon;
     public ushort OriginalRoleId { get; set; } = originalRoleId;
     public ushort LessonRoleId { get; set; } = lessonRoleId;
+    public bool LessonSucceeded { get; set; } = lessonSucceeded;
 
     public bool ShowCurrentRoleFirst => true;
-    public bool Visible => Player.AmOwner || PlayerControl.LocalPlayer.HasDied() || FairyRole.FairySeesRoleVisibilityFlag(Player);
+    public bool Visible => LessonSucceeded &&
+                           (Player.AmOwner || PlayerControl.LocalPlayer.HasDied() ||
+                            FairyRole.FairySeesRoleVisibilityFlag(Player));
     public CacheRoleGuess GuessMode => CacheRoleGuess.ActiveRole; // placeholder ig? If you wanted to implement an option if a retrained player can be guessed as their prev role ig you could mess with this
     public RoleBehaviour CachedRole => RoleManager.Instance.GetRole((RoleTypes)OriginalRoleId);
     public string CachedRoleName => $"{MentorColor.ToTextColor()}{MiraLocaleManager.Get("DivaniMods.Modifier.MentorTaught", "Taught")}</color>";
@@ -33,7 +36,7 @@ public sealed class MentorTaughtModifier(ushort originalRoleId, ushort lessonRol
     {
         base.OnActivate();
 
-        if (Player == null || !Player.AmOwner)
+        if (Player == null || !Player.AmOwner || !LessonSucceeded)
         {
             return;
         }
@@ -51,7 +54,7 @@ public sealed class MentorTaughtModifier(ushort originalRoleId, ushort lessonRol
     {
         base.OnDeactivate();
 
-        if (Player == null || !Player.AmOwner)
+        if (Player == null || !Player.AmOwner || !LessonSucceeded)
         {
             return;
         }

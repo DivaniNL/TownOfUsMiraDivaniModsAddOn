@@ -8,7 +8,7 @@
     
     <AssemblyName>DivaniMods</AssemblyName>
     <RootNamespace>DivaniMods</RootNamespace>
-    <Version>1.4.0</Version>
+    <Version>1.4.1</Version>
     <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);MSB3277</MSBuildWarningsAsMessages>
     <NoWarn>$(NoWarn);NU1605</NoWarn>
     <DefaultItemExcludes>$(DefaultItemExcludes);TownOfUs\**\*;TouMiraRolesExtension\**\*;TheOtherRolesGMIA-main\**\*;.specstory\**\*</DefaultItemExcludes>
@@ -35,6 +35,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\**\*" Exclude="Resources\Headers\**" />
   </ItemGroup>
-
+   
 
 </Project>
