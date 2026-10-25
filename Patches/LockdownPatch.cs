@@ -62,16 +62,6 @@ public static class LockdownPatch
     {
         if (!LockdownButton.IsLockdownActive) return true;
         if (__instance == null) return true;
-
-        if (LockdownButton.ControlsDoorsAndSabotage &&
-            (__instance.TryCast<DoorConsole>() != null || __instance.TryCast<OpenDoorConsole>() != null))
-        {
-            canUse = false;
-            couldUse = false;
-            __result = float.MaxValue;
-            return false;
-        }
-
         if (!LockdownButton.DisablesTasks) return true;
         if (__instance.AllowImpostor) return true;
         if (IsSabotageFixConsole(__instance)) return true;
@@ -85,6 +75,52 @@ public static class LockdownPatch
         __result = float.MaxValue;
         return false;
     }
+
+    [HarmonyPatch(typeof(DoorConsole), nameof(DoorConsole.CanUse))]
+    [HarmonyPrefix]
+    public static bool DoorConsoleCanUsePrefix(
+        NetworkedPlayerInfo pc,
+        ref bool canUse,
+        ref bool couldUse,
+        ref float __result)
+    {
+        return AllowDoorConsoleUse(ref canUse, ref couldUse, ref __result);
+    }
+
+    [HarmonyPatch(typeof(OpenDoorConsole), nameof(OpenDoorConsole.CanUse))]
+    [HarmonyPrefix]
+    public static bool OpenDoorConsoleCanUsePrefix(
+        NetworkedPlayerInfo pc,
+        ref bool canUse,
+        ref bool couldUse,
+        ref float __result)
+    {
+        return AllowDoorConsoleUse(ref canUse, ref couldUse, ref __result);
+    }
+
+    [HarmonyPatch(typeof(DoorConsole), nameof(DoorConsole.Use))]
+    [HarmonyPrefix]
+    public static bool DoorConsoleUsePrefix() => !ShouldBlockDoorConsoleUse();
+
+    [HarmonyPatch(typeof(OpenDoorConsole), nameof(OpenDoorConsole.Use))]
+    [HarmonyPrefix]
+    public static bool OpenDoorConsoleUsePrefix() => !ShouldBlockDoorConsoleUse();
+
+    private static bool AllowDoorConsoleUse(ref bool canUse, ref bool couldUse, ref float result)
+    {
+        if (!ShouldBlockDoorConsoleUse())
+        {
+            return true;
+        }
+
+        canUse = false;
+        couldUse = false;
+        result = float.MaxValue;
+        return false;
+    }
+
+    private static bool ShouldBlockDoorConsoleUse() =>
+        LockdownButton.IsLockdownActive && LockdownButton.ControlsDoorsAndSabotage;
 
     [HarmonyPatch(typeof(Minigame), nameof(Minigame.Begin))]
     [HarmonyPrefix]
