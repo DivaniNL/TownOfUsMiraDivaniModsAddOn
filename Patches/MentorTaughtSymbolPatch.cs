@@ -35,12 +35,21 @@ internal static class MentorTaughtDisplay
             return false;
         }
 
-        if (!row.HasModifier<MentorTaughtModifier>())
+        var taughtModifier = row.GetModifier<MentorTaughtModifier>();
+        if (taughtModifier is { LessonSucceeded: false })
+        {
+            return local.Data.Role is MentorRole;
+        }
+
+        var selectedByLocalMentor =
+            local.Data.Role is MentorRole mentor && mentor.StudentId == row.PlayerId;
+        if (taughtModifier == null && !selectedByLocalMentor)
         {
             return false;
         }
 
-        return local.HasDied()
+        return selectedByLocalMentor
+               || local.HasDied()
                || GameHistory.IsFullyDead(local)
                || local.Data.Role is MentorRole
                || local.PlayerId == row.PlayerId;
