@@ -16,6 +16,8 @@ namespace DivaniMods.Buttons.Modifiers;
 
 public sealed class UAVButton : TownOfUsButton
 {
+    private static UAVButton? Instance { get; set; }
+
     public override string Name => MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Ability.CallUAV");
     public override Color TextOutlineColor => UAVModifier.UavColor;
     public override BaseKeybind Keybind => Keybinds.ModifierAction;
@@ -36,10 +38,16 @@ public sealed class UAVButton : TownOfUsButton
 
     public override bool Enabled(RoleBehaviour? role)
     {
+        Instance = this;
         var player = PlayerControl.LocalPlayer;
         if (player == null || player.Data == null || player.Data.IsDead)
         {
             return false;
+        }
+
+        if (player.HasModifier<UAVActiveModifier>())
+        {
+            OverrideName(MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Button.Active"));
         }
 
         return player.HasModifier<UAVModifier>();
@@ -66,6 +74,29 @@ public sealed class UAVButton : TownOfUsButton
             return false;
         }
 
+        if (player.HasModifier<UAVActiveModifier>())
+        {
+            TimerPaused = true;
+            if (Mathf.Abs(Timer - Cooldown) > 0.5f)
+            {
+                SetTimer(Cooldown);
+            }
+
+            return false;
+        }
+
+        TimerPaused = false;
+        var cooldownRemaining = modifier.CooldownReadyAt - Time.time;
+        if (cooldownRemaining > 0f)
+        {
+            if (Mathf.Abs(Timer - cooldownRemaining) > 0.5f)
+            {
+                SetTimer(cooldownRemaining);
+            }
+
+            return false;
+        }
+
         return base.CanUse();
     }
 
@@ -88,7 +119,10 @@ public sealed class UAVButton : TownOfUsButton
             return;
         }
 
+        Instance = this;
         modifier.UsesRemaining--;
+        TimerPaused = true;
+        SetTimer(Cooldown);
 
         player.RpcAddModifier<UAVActiveModifier>();
         RpcUavCall(player);
@@ -100,10 +134,13 @@ public sealed class UAVButton : TownOfUsButton
         var player = PlayerControl.LocalPlayer;
         if (player != null && player.HasModifier<UAVActiveModifier>())
         {
-            player.RpcRemoveModifier<UAVActiveModifier>();
-            RpcUavEnd(player);
+            OverrideName(MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Button.Active"));
+            TimerPaused = true;
+            SetTimer(Cooldown);
+            return;
         }
 
+        TimerPaused = false;
         OverrideName(Name);
     }
 
@@ -175,6 +212,24 @@ public sealed class UAVButton : TownOfUsButton
 
         if (local.PlayerId == caller.PlayerId)
         {
+            var button = Instance;
+            var modifier = local.GetModifier<UAVModifier>();
+            if (modifier != null)
+            {
+                var cooldown = button?.Cooldown ?? OptionGroupSingleton<UAVOptions>.Instance.UavCooldown.Value;
+                modifier.CooldownReadyAt = Time.time + cooldown;
+            }
+
+            if (button != null)
+            {
+                button.TimerPaused = false;
+                var cooldownRemaining = modifier == null
+                    ? 0f
+                    : Mathf.Max(0f, modifier.CooldownReadyAt - Time.time);
+                button.SetTimer(cooldownRemaining);
+                button.OverrideName(button.Name);
+            }
+
             PlaySound(DivaniAssets.UavEndSound.LoadAsset());
             Notify($"<b><color=#B37575>{MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Notification.SignalLost")}</color></b>");
         }

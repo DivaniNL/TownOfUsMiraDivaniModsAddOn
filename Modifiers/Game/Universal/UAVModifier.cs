@@ -58,6 +58,14 @@ public class UAVModifier : UniversalGameModifier, IWikiDiscoverable, IButtonModi
     }
 
     private int _usesRemaining = -1;
+    private float _cooldownReadyAt;
+
+    [HideFromIl2Cpp]
+    public float CooldownReadyAt
+    {
+        get => _cooldownReadyAt;
+        set => _cooldownReadyAt = value;
+    }
 
     public int UsesRemaining
     {
