@@ -60,8 +60,19 @@ public static class LockdownPatch
     [HarmonyPrefix]
     public static bool ConsoleCanUsePrefix(Console __instance, NetworkedPlayerInfo pc, ref bool canUse, ref bool couldUse, ref float __result)
     {
-        if (!LockdownButton.IsLockdownActive || !LockdownButton.DisablesTasks) return true;
+        if (!LockdownButton.IsLockdownActive) return true;
         if (__instance == null) return true;
+
+        if (LockdownButton.ControlsDoorsAndSabotage &&
+            (__instance.TryCast<DoorConsole>() != null || __instance.TryCast<OpenDoorConsole>() != null))
+        {
+            canUse = false;
+            couldUse = false;
+            __result = float.MaxValue;
+            return false;
+        }
+
+        if (!LockdownButton.DisablesTasks) return true;
         if (__instance.AllowImpostor) return true;
         if (IsSabotageFixConsole(__instance)) return true;
 
