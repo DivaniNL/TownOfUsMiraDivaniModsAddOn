@@ -29,7 +29,12 @@ public class LockdownButton : TownOfUsButton
     public static LockdownButton? Instance { get; private set; }
     
     public static int ChargesPerKill => (int)OptionGroupSingleton<DeadlockOptions>.Instance.ChargesPerKill.Value;
-    
+    private static int LockdownMode => OptionGroupSingleton<DeadlockOptions>.Instance.LockdownEffects.Value;
+    public static bool ControlsDoorsAndSabotage =>
+        LockdownMode == (int)DeadlockLockdownMode.DoorsOnly || LockdownMode == (int)DeadlockLockdownMode.Both;
+    public static bool DisablesTasks =>
+        LockdownMode == (int)DeadlockLockdownMode.TasksOnly || LockdownMode == (int)DeadlockLockdownMode.Both;
+
     public int CurrentCharges => UsesLeft;
 
     private void ApplyUses(int amount)
@@ -134,7 +139,12 @@ public class LockdownButton : TownOfUsButton
         IsLockdownActive = true;
         LockdownTimeRemaining = duration;
         
-        KickPlayersFromTasks();
+        if (DisablesTasks)
+        {
+            KickPlayersFromTasks();
+        }
+
+        CloseDoorsForLockdown();
         
         Coroutines.Start(LockdownTimerCoroutine(duration));
         
@@ -158,6 +168,7 @@ public class LockdownButton : TownOfUsButton
     private static IEnumerator LockdownTimerCoroutine(float duration)
     {
         LockdownTimeRemaining = duration;
+        var doorRefreshTimer = 0f;
         
         while (LockdownTimeRemaining > 0 && IsLockdownActive)
         {
@@ -165,6 +176,13 @@ public class LockdownButton : TownOfUsButton
                 !TownOfUs.Modules.TimeLordRewindSystem.IsRewinding)
             {
                 LockdownTimeRemaining -= Time.deltaTime;
+                doorRefreshTimer += Time.deltaTime;
+
+                if (doorRefreshTimer >= 5f)
+                {
+                    CloseDoorsForLockdown();
+                    doorRefreshTimer = 0f;
+                }
             }
             yield return null;
         }
@@ -178,6 +196,26 @@ public class LockdownButton : TownOfUsButton
                 Instance.Timer = Instance.Cooldown;
                 Instance.EffectActive = false;
             }
+        }
+    }
+
+    private static void CloseDoorsForLockdown()
+    {
+        if (!ControlsDoorsAndSabotage || !AmongUsClient.Instance.AmHost)
+        {
+            return;
+        }
+
+        var ship = ShipStatus.Instance;
+        if (ship == null || GameOptionsManager.Instance == null ||
+            (MapNames)GameOptionsManager.Instance.currentNormalGameOptions.MapId == MapNames.MiraHQ)
+        {
+            return;
+        }
+
+        for (var doorSet = 0; doorSet < ship.AllDoors.Count; doorSet++)
+        {
+            ship.RpcCloseDoorsOfType((SystemTypes)doorSet);
         }
     }
     

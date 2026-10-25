@@ -6,6 +6,13 @@ using DivaniMods.Roles.Impostor.ImpostorSupport;
 
 namespace DivaniMods.Options;
 
+public enum DeadlockLockdownMode
+{
+    TasksOnly,
+    DoorsOnly,
+    Both
+}
+
 public class DeadlockOptions : AbstractRoleOptionGroup<DeadlockRole>
 {
     public override string GroupName => MiraLocaleManager.Get("DivaniMods.Role.Deadlock", "Deadlock");
@@ -21,4 +28,14 @@ public class DeadlockOptions : AbstractRoleOptionGroup<DeadlockRole>
 
     public ModdedNumberOption ChargesPerKill { get; } = new(
         MiraLocaleManager.Get("DivaniMods.Options.Deadlock.ChargesPerKill"), 1f, 0f, 3f, 1f, MiraNumberSuffixes.None);
+
+    public ModdedEnumOption LockdownEffects { get; } = new(
+        MiraLocaleManager.Get("DivaniMods.Options.Deadlock.LockdownEffects"),
+        (int)DeadlockLockdownMode.Both,
+        typeof(DeadlockLockdownMode),
+        [
+            MiraLocaleManager.Get("DivaniMods.Options.Deadlock.LockdownEffects.TasksOnly"),
+            MiraLocaleManager.Get("DivaniMods.Options.Deadlock.LockdownEffects.DoorsOnly"),
+            MiraLocaleManager.Get("DivaniMods.Options.Deadlock.LockdownEffects.Both")
+        ]);
 }

@@ -21,6 +21,26 @@ public static class LockdownPatch
 
     private static Sprite? _cachedDeadlockIcon;
 
+    [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.DoClick))]
+    [HarmonyPrefix]
+    public static bool SabotageButtonDoClickPrefix()
+    {
+        return !LockdownButton.IsLockdownActive || !LockdownButton.ControlsDoorsAndSabotage;
+    }
+
+    [HarmonyPatch(typeof(SabotageSystemType), nameof(SabotageSystemType.UpdateSystem))]
+    [HarmonyPrefix]
+    public static bool SabotageSystemUpdatePrefix([HarmonyArgument(0)] PlayerControl player)
+    {
+        if (!LockdownButton.IsLockdownActive || !LockdownButton.ControlsDoorsAndSabotage ||
+            !AmongUsClient.Instance.AmHost || player == null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     private static Sprite? GetDeadlockRoleIcon()
     {
         if (_cachedDeadlockIcon != null) return _cachedDeadlockIcon;
@@ -40,7 +60,7 @@ public static class LockdownPatch
     [HarmonyPrefix]
     public static bool ConsoleCanUsePrefix(Console __instance, NetworkedPlayerInfo pc, ref bool canUse, ref bool couldUse, ref float __result)
     {
-        if (!LockdownButton.IsLockdownActive) return true;
+        if (!LockdownButton.IsLockdownActive || !LockdownButton.DisablesTasks) return true;
         if (__instance == null) return true;
         if (__instance.AllowImpostor) return true;
         if (IsSabotageFixConsole(__instance)) return true;
@@ -59,7 +79,7 @@ public static class LockdownPatch
     [HarmonyPrefix]
     public static bool MinigameBeginPrefix(Minigame __instance, PlayerTask task)
     {
-        if (!LockdownButton.IsLockdownActive) return true;
+        if (!LockdownButton.IsLockdownActive || !LockdownButton.DisablesTasks) return true;
         if (task == null) return true;
         if (task.TryCast<SabotageTask>() != null) return true;
 
