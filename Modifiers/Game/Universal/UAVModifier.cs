@@ -1,0 +1,88 @@
+using Il2CppInterop.Runtime.Attributes;
+using MiraAPI.GameOptions;
+using MiraAPI.Modifiers;
+using MiraAPI.Translation;
+using MiraAPI.Utilities.Assets;
+using DivaniMods.Assets;
+using DivaniMods.Options;
+using TownOfUs.Interfaces;
+using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Game;
+using TownOfUs.Modules.Wiki;
+using TownOfUs.Utilities;
+using UnityEngine;
+using MiraAPI.Modifiers.Types;
+
+namespace DivaniMods.Modifiers.Game.Universal;
+
+public class UAVModifier : UniversalGameModifier, IWikiDiscoverable, IButtonModifier
+{
+    public static readonly Color UavColor = new Color32(179, 117, 117, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        UavColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.UavIcon.LoadAsset(),
+            "DivaniMod.Modifier.Universal.UAV", 1.45f));
+
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.UAV", "UAV");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.UAV.IntroInfo");
+    public override ModifierFaction FactionType => ModifierFaction.UniversalUtility;
+    public override Color FreeplayFileColor => UavColor;
+    public Color ModifierColor => UavColor;
+    public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.UavIcon;
+
+    public override string GetDescription() =>
+        MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Description");
+
+    public string GetAdvancedDescription() =>
+        GetDescription() + MiscUtils.AppendOptionsText(GetType());
+
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new(
+            MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Ability.CallUAV"),
+            MiraLocaleManager.Get("DivaniMods.Modifier.UAV.Ability.CallUAV.Description"),
+            DivaniAssets.UavButton
+        )
+    ];
+
+    public override int GetAssignmentChance() =>
+        (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.UavChance.Value;
+
+    public override int GetAmountPerGame() =>
+        (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.UavAmount.Value;
+
+    public override bool IsModifierValidOn(RoleBehaviour role)
+    {
+        return base.IsModifierValidOn(role) &&
+            !role.Player.GetModifierComponent().HasModifier<GameModifier>(true, x => x is IButtonModifier);
+    }
+
+    private int _usesRemaining = -1;
+    private float _cooldownReadyAt;
+
+    [HideFromIl2Cpp]
+    public float CooldownReadyAt
+    {
+        get => _cooldownReadyAt;
+        set => _cooldownReadyAt = value;
+    }
+
+    public int UsesRemaining
+    {
+        get
+        {
+            if (_usesRemaining < 0)
+            {
+                _usesRemaining = (int)OptionGroupSingleton<UAVOptions>.Instance.UavUses.Value;
+            }
+
+            return _usesRemaining;
+        }
+        set => _usesRemaining = value;
+    }
+
+    public override void OnActivate()
+    {
+        _usesRemaining = (int)OptionGroupSingleton<UAVOptions>.Instance.UavUses.Value;
+    }
+}

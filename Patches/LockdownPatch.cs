@@ -3,38 +3,67 @@ using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.Events;
 using MiraAPI.Events.Vanilla.Gameplay;
 using MiraAPI.GameOptions;
-using DivaniMods.Buttons;
+using MiraAPI.Translation;
+using DivaniMods.Assets;
+using DivaniMods.Buttons.Impostor.ImpostorSupport;
 using DivaniMods.Options;
-using DivaniMods.Roles;
+using DivaniMods.Roles.Impostor.ImpostorSupport;
+using DivaniMods.Utilities;
 using UnityEngine;
-using TMPro;
 
 namespace DivaniMods.Patches;
 
 [HarmonyPatch]
 public static class LockdownPatch
 {
-    private static GameObject? _lockdownTimerObject;
-    private static TMPro.TextMeshPro? _lockdownTimerText;
-    
-    // Only block TASK consoles during a lockdown. Task consoles have a
-    // populated `TaskTypes` array; the emergency-meeting button, portal
-    // consoles, etc. have `TaskTypes.Length == 0`. Map systems (Admin,
-    // Cameras, Vitals, Doors, Comms, Reactor) use SystemConsole, which we
-    // deliberately don't patch at all so crewmates keep full access to
-    // meetings, info panels and utilities during a lockdown.
-    //
-    // Sabotage-fix consoles (reactor reset, lights, O2, comms, Fungle
-    // reactor, Mushroom Mixup) are also Console instances with TaskTypes
-    // set, so we whitelist those explicitly - otherwise the impostor could
-    // lockdown the ship AND sabotage, trapping the crew with no way out.
+    public const string TimerId = "divani.lockdown";
+    private const int TimerPriority = 10;
+
+    private static Sprite? _cachedDeadlockIcon;
+
+    [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.DoClick))]
+    [HarmonyPrefix]
+    public static bool SabotageButtonDoClickPrefix()
+    {
+        return !LockdownButton.IsLockdownActive || !LockdownButton.ControlsDoorsAndSabotage;
+    }
+
+    [HarmonyPatch(typeof(SabotageSystemType), nameof(SabotageSystemType.UpdateSystem))]
+    [HarmonyPrefix]
+    public static bool SabotageSystemUpdatePrefix([HarmonyArgument(0)] PlayerControl player)
+    {
+        if (!LockdownButton.IsLockdownActive || !LockdownButton.ControlsDoorsAndSabotage ||
+            !AmongUsClient.Instance.AmHost || player == null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static Sprite? GetDeadlockRoleIcon()
+    {
+        if (_cachedDeadlockIcon != null) return _cachedDeadlockIcon;
+        try
+        {
+            _cachedDeadlockIcon = DivaniAssets.DeadlockIcon.LoadAsset();
+        }
+        catch
+        {
+            // non-fatal
+        }
+
+        return _cachedDeadlockIcon;
+    }
+
     [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
     [HarmonyPrefix]
     public static bool ConsoleCanUsePrefix(Console __instance, NetworkedPlayerInfo pc, ref bool canUse, ref bool couldUse, ref float __result)
     {
         if (!LockdownButton.IsLockdownActive) return true;
         if (__instance == null) return true;
-        if (__instance.TaskTypes == null || __instance.TaskTypes.Length == 0) return true;
+        if (!LockdownButton.DisablesTasks) return true;
+        if (__instance.AllowImpostor) return true;
         if (IsSabotageFixConsole(__instance)) return true;
 
         var playerControl = pc?.Object;
@@ -47,17 +76,57 @@ public static class LockdownPatch
         return false;
     }
 
-    // Safety net: if something bypasses Console.CanUse and tries to open a
-    // minigame, only block task minigames. `Minigame.Begin(PlayerTask task)`
-    // is invoked with a non-null task for task minigames and `null` for
-    // things like the EmergencyMinigame (meeting button). Sabotage-fix
-    // minigames are driven by SabotageTask instances - we let those through
-    // so the crew can always repair.
+    [HarmonyPatch(typeof(DoorConsole), nameof(DoorConsole.CanUse))]
+    [HarmonyPrefix]
+    public static bool DoorConsoleCanUsePrefix(
+        NetworkedPlayerInfo pc,
+        ref bool canUse,
+        ref bool couldUse,
+        ref float __result)
+    {
+        return AllowDoorConsoleUse(ref canUse, ref couldUse, ref __result);
+    }
+
+    [HarmonyPatch(typeof(OpenDoorConsole), nameof(OpenDoorConsole.CanUse))]
+    [HarmonyPrefix]
+    public static bool OpenDoorConsoleCanUsePrefix(
+        NetworkedPlayerInfo pc,
+        ref bool canUse,
+        ref bool couldUse,
+        ref float __result)
+    {
+        return AllowDoorConsoleUse(ref canUse, ref couldUse, ref __result);
+    }
+
+    [HarmonyPatch(typeof(DoorConsole), nameof(DoorConsole.Use))]
+    [HarmonyPrefix]
+    public static bool DoorConsoleUsePrefix() => !ShouldBlockDoorConsoleUse();
+
+    [HarmonyPatch(typeof(OpenDoorConsole), nameof(OpenDoorConsole.Use))]
+    [HarmonyPrefix]
+    public static bool OpenDoorConsoleUsePrefix() => !ShouldBlockDoorConsoleUse();
+
+    private static bool AllowDoorConsoleUse(ref bool canUse, ref bool couldUse, ref float result)
+    {
+        if (!ShouldBlockDoorConsoleUse())
+        {
+            return true;
+        }
+
+        canUse = false;
+        couldUse = false;
+        result = float.MaxValue;
+        return false;
+    }
+
+    private static bool ShouldBlockDoorConsoleUse() =>
+        LockdownButton.IsLockdownActive && LockdownButton.ControlsDoorsAndSabotage;
+
     [HarmonyPatch(typeof(Minigame), nameof(Minigame.Begin))]
     [HarmonyPrefix]
     public static bool MinigameBeginPrefix(Minigame __instance, PlayerTask task)
     {
-        if (!LockdownButton.IsLockdownActive) return true;
+        if (!LockdownButton.IsLockdownActive || !LockdownButton.DisablesTasks) return true;
         if (task == null) return true;
         if (task.TryCast<SabotageTask>() != null) return true;
 
@@ -105,21 +174,28 @@ public static class LockdownPatch
 
         if (role.IsImpostor)
         {
-            CleanupCrewmateTimer();
+            DivaniTimers.Remove(TimerId);
             return;
         }
         
-        // Hide the timer during meetings / ejection - the countdown is also paused
-        // in LockdownButton.LockdownTimerCoroutine so it resumes after the meeting.
-        bool inMeeting = MeetingHud.Instance != null || ExileController.Instance != null;
+        bool inMeeting = MeetingHud.Instance || ExileController.Instance;
         
         if (LockdownButton.IsLockdownActive && LockdownButton.LockdownTimeRemaining > 0 && !inMeeting)
         {
-            ShowLockdownTimer(__instance, LockdownButton.LockdownTimeRemaining);
+            var text = MiraLocaleManager.Get(
+                "DivaniMods.Role.Deadlock.Timer.Lockdown");
+
+            DivaniTimers.Set(
+                TimerId,
+                $"<b><color=#CC3333>{text}</color></b>",
+                GetDeadlockRoleIcon(),
+                Mathf.Max(0f, LockdownButton.LockdownTimeRemaining),
+                useLocalTimeDelta: false,
+                priority: TimerPriority);
         }
         else
         {
-            CleanupCrewmateTimer();
+            DivaniTimers.Remove(TimerId);
         }
     }
     
@@ -141,62 +217,11 @@ public static class LockdownPatch
         }
     }
     
-    private static void ShowLockdownTimer(HudManager hud, float timeRemaining)
-    {
-        if (_lockdownTimerObject == null || _lockdownTimerText == null)
-        {
-            CreateTimerObject(hud);
-        }
-        
-        if (_lockdownTimerText != null && _lockdownTimerObject != null)
-        {
-            _lockdownTimerObject.SetActive(true);
-            int seconds = Mathf.CeilToInt(timeRemaining);
-            _lockdownTimerText.text = $"<color=#CC3333>LOCKDOWN</color>\n<size=80%>{seconds}s</size>";
-        }
-    }
-    
-    private static void CreateTimerObject(HudManager hud)
-    {
-        if (hud.TaskPanel == null) return;
-        
-        var existingText = hud.TaskPanel.GetComponentInChildren<TMPro.TextMeshPro>();
-        if (existingText == null) return;
-        
-        _lockdownTimerObject = new GameObject("LockdownTimer");
-        _lockdownTimerObject.transform.SetParent(hud.transform);
-        _lockdownTimerObject.transform.localPosition = new Vector3(0, 2.2f, -50f);
-        _lockdownTimerObject.layer = LayerMask.NameToLayer("UI");
-        
-        _lockdownTimerText = UnityEngine.Object.Instantiate(existingText, _lockdownTimerObject.transform);
-        _lockdownTimerText.transform.localPosition = Vector3.zero;
-        _lockdownTimerText.fontSize = 3f;
-        _lockdownTimerText.fontStyle = FontStyles.Bold;
-        _lockdownTimerText.alignment = TextAlignmentOptions.Center;
-        _lockdownTimerText.color = Color.white;
-        _lockdownTimerText.text = "";
-    }
-    
-    private static void CleanupCrewmateTimer()
-    {
-        if (_lockdownTimerObject != null)
-        {
-            _lockdownTimerObject.SetActive(false);
-        }
-    }
-    
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     [HarmonyPostfix]
     public static void OnGameEndPostfix()
     {
         LockdownButton.ResetLockdown();
-        
-        if (_lockdownTimerObject != null)
-        {
-            UnityEngine.Object.Destroy(_lockdownTimerObject);
-            _lockdownTimerObject = null;
-            _lockdownTimerText = null;
-        }
     }
     
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
@@ -204,19 +229,9 @@ public static class LockdownPatch
     public static void OnIntroBeginPostfix()
     {
         LockdownButton.ResetLockdown();
-        
-        if (_lockdownTimerObject != null)
-        {
-            UnityEngine.Object.Destroy(_lockdownTimerObject);
-            _lockdownTimerObject = null;
-            _lockdownTimerText = null;
-        }
     }
 }
 
-/// <summary>
-/// Event handler for granting Deadlock charges on kill.
-/// </summary>
 public static class DeadlockKillEventHandler
 {
     [RegisterEvent]

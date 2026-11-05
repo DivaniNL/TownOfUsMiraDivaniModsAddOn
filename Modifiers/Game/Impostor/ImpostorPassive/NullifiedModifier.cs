@@ -1,0 +1,58 @@
+using MiraAPI.GameOptions;
+using MiraAPI.Translation;
+using MiraAPI.Utilities.Assets;
+using DivaniMods.Assets;
+using DivaniMods.Options;
+using TownOfUs.Interfaces;
+using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Game;
+using TownOfUs.Modules.Wiki;
+using TownOfUs.Utilities;
+using UnityEngine;
+
+namespace DivaniMods.Modifiers.Game.Impostor.ImpostorPassive;
+
+public class NullifiedModifier : TouGameModifier, IWikiDiscoverable
+{
+    public static readonly Color NullifiedColor = Palette.ImpostorRoleHeaderRed;
+    public override ModifierUiConfiguration Configuration => new(
+        NullifiedColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.NullifiedIcon.LoadAsset(),
+            "DivaniMod.Modifier.Impostor.Nullified", 1.45f));
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Nullified", "Nullified");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Nullified.IntroInfo");
+    public override ModifierFaction FactionType => ModifierFaction.ImpostorPassive;
+    public override Color FreeplayFileColor => NullifiedColor;
+    public Color ModifierColor => NullifiedColor;
+
+    public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.NullifiedIcon;
+
+    public override string GetDescription()
+    {
+        var desc = MiraLocaleManager.Get("DivaniMods.Modifier.Nullified.Description");
+
+        if (OptionGroupSingleton<NullifiedOptions>.Instance.SilencesCelebrity)
+        {
+            desc += " " + MiraLocaleManager.Get("DivaniMods.Modifier.Nullified.Description.SilencesCelebrity");
+        }
+
+        return desc;
+    }
+
+    public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
+
+    public override int GetAssignmentChance() =>
+        (int)OptionGroupSingleton<ImpostorModifierOptions>.Instance.NullifiedChance.Value;
+
+    public override int GetAmountPerGame() =>
+        (int)OptionGroupSingleton<ImpostorModifierOptions>.Instance.NullifiedAmount.Value;
+
+    public override bool IsModifierValidOn(RoleBehaviour role)
+    {
+        return base.IsModifierValidOn(role) && role.TeamType == RoleTeamTypes.Impostor;
+    }
+
+    public override void OnActivate()
+    {
+    }
+}

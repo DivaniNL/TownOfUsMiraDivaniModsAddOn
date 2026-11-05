@@ -1,245 +1,182 @@
-# Divani Mods
+> [!NOTE]
+> This repo is an extension mod for [Town of Us: Mira](https://github.com/AU-Avengers/TOU-Mira) that adds new roles and modifiers.\
+> This mod requires Town of Us: Mira to be installed and is NOT for console versions of Among Us.
+
+<div align="center">
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki"><img src="./Resources/Banners/DivaniModsLogoNew.png" alt="Divani Mods"/></a>
+  <p>Divani Mods</p>
+</div>
+<br/>
 
 An [Among Us](https://store.steampowered.com/app/945360/Among_Us/) mod that adds
 new roles and modifiers on top of [Town Of Us &ndash; Mira](https://github.com/AU-Avengers/TOU-Mira).
 
-Divani Mods is built on [BepInEx](https://github.com/BepInEx/BepInEx),
-[Reactor](https://github.com/NuclearPowered/Reactor) and
-[MiraAPI](https://github.com/All-Of-Us-Mods/MiraAPI), and depends on
-[TOU-Mira](https://github.com/AU-Avengers/TOU-Mira) at runtime.
-
----
-
-## Contents
-
-| **Impostor Roles**    | **Crewmate Roles**          | **Neutral Roles**            | **Modifiers**           |
-| --------------------- | --------------------------- | ---------------------------- | ----------------------- |
-| [Deadlock](#deadlock) | [Thief](#thief)             | [Plague Doctor](#plague-doctor) | [Blindspot](#blindspot) |
-|                       | [Portalmaker](#portalmaker) |                              | [Fragile](#fragile)     |
-|                       |                             |                              | [Ruthless](#ruthless)   |
-|                       |                             |                              | [Shuffle](#shuffle)     |
-
----
+Join the Discord:
+[Link](https://discord.gg/dqzQrcxqdx)
+<p align="center">
+  <img src="./Resources/Headers/CrewInvestigative.png" alt="Crewmate Investigative"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#sentinel"><img width="10%" src="./Resources/Icons/Sentinel.png" alt="Sentinel"/></a>
+  <img src="./Resources/Headers/CrewKilling.png" alt="Crewmate Killing"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#retributionist"><img width="10%" src="./Resources/Icons/Retributionist.png" alt="Retributionist"/></a>
+  <img src="./Resources/Headers/CrewPower.png" alt="Crewmate Power"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#mage"><img width="10%" src="./Resources/Icons/Mage.png" alt="Mage"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#mentor"><img width="10%" src="./Resources/Icons/Mentor.png" alt="Mentor"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#workhorse"><img width="10%" src="./Resources/Icons/Workhorse.png" alt="Workhorse"/></a>
+  <img src="./Resources/Headers/CrewProtective.png" alt="Crewmate Protective"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#domesmith"><img width="10%" src="./Resources/Icons/Domesmith.png" alt="Domesmith"/></a>
+  <img src="./Resources/Headers/CrewSupport.png" alt="Crewmate Support"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#clockstopper"><img width="10%" src="./Resources/Icons/Clockstopper.png" alt="Clockstopper"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#locator"><img width="10%" src="./Resources/Icons/Locator.png" alt="Locator"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#Mole"><img width="10%" src="./Resources/Icons/Mole.png" alt="Mole"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#portalmaker"><img width="10%" src="./Resources/Icons/PortalMaker.png" alt="Portalmaker"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#telecom"><img width="10%" src="./Resources/Icons/Telecom.png" alt="Telecom"/></a>
+  <img src="./Resources/Headers/ImpAfterlife.png" alt="Impostor Afterlife"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#revenant"><img width="10%" src="./Resources/Icons/Revenant.png" alt="Revenant"/></a>
+  <img src="./Resources/Headers/ImpConcealing.png" alt="Impostor Concealing"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#cunctator"><img width="10%" src="./Resources/Icons/Cunctator.png" alt="Cunctator"/></a>
+  <img src="./Resources/Headers/ImpKilling.png" alt="Impostor Killing"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#deathnote"><img width="10%" src="./Resources/Icons/Deathnote.png" alt="Deathnote"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#mosquito"><img width="10%" src="./Resources/Icons/Mosquito.png" alt="Mosquito"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#silencer"><img width="10%" src="./Resources/Icons/Silencer.png" alt="Silencer"/></a>
+  <img src="./Resources/Headers/ImpPower.png" alt="Impostor Power"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#obfuscator"><img width="10%" src="./Resources/Icons/Obfuscator.png" alt="Obfuscator"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#recruiter"><img width="10%" src="./Resources/Icons/Recruiter.png" alt="Recruiter"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#summoner"><img width="10%" src="./Resources/Icons/Summoner.png" alt="Summoner"/></a>
+  <img src="./Resources/Headers/ImpSupport.png" alt="Impostor Support"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#councillor"><img width="10%" src="./Resources/Icons/Councillor.png" alt="Councillor"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#deadlock"><img width="10%" src="./Resources/Icons/Deadlock.png" alt="Deadlock"/></a>
+  <img src="./Resources/Headers/NeutBenign.png" alt="Neutral Benign"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#cupid"><img width="10%" src="./Resources/Icons/Cupid.png" alt="Cupid"/></a>
+  <img src="./Resources/Headers/NeutEvil.png" alt="Neutral Evil"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#demolitionist"><img width="10%" src="./Resources/Icons/Demolitionist.png" alt="Demolitionist"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#innocent"><img width="10%" src="./Resources/Icons/Innocent.png" alt="Innocent"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#opportunist"><img width="10%" src="./Resources/Icons/Opportunist.png" alt="Opportunist"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#plague-doctor"><img width="10%" src="./Resources/Icons/PlagueDoctor.png" alt="Plague Doctor"/></a>
+  <img src="./Resources/Headers/NeutKilling.png" alt="Neutral Killing"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#frag"><img width="10%" src="./Resources/Icons/Frag.png" alt="Frag"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#monster"><img width="10%" src="./Resources/Icons/Monster.png" alt="Monster"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#thief"><img width="10%" src="./Resources/Icons/Thief.png" alt="Thief"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#watcher"><img width="10%" src="./Resources/Icons/Watcher.png" alt="Watcher"/></a>
+  <img src="./Resources/Headers/NeutOutlier.png" alt="Neutral Outlier"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#duelist"><img width="10%" src="./Resources/Icons/Duellist.png" alt="Duelist"/></a>
+  <img src="./Resources/Headers/AllianceMods.png" alt="Alliance modifiers"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#betrayer"><img width="10%" src="./Resources/Icons/Betrayer.png" alt="Betrayer"/></a>
+  <img src="./Resources/Headers/CrewMods.png" alt="Crewmate modifiers"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#bear-trap"><img width="10%" src="./Resources/Icons/Beartrap.png" alt="Bear Trap"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#blindspot"><img width="10%" src="./Resources/Icons/Blindspot.png" alt="Blindspot"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#bloody"><img width="10%" src="./Resources/Icons/Bloody.png" alt="Bloody"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#incompetent"><img width="10%" src="./Resources/Icons/Incompetent.png" alt="Incompetent"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#skilled"><img width="10%" src="./Resources/Icons/Skilled.png" alt="Skilled"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#sprout"><img width="10%" src="./Resources/Icons/Sprout.png" alt="Sprout"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#strong"><img width="10%" src="./Resources/Icons/Strong.png" alt="Strong"/></a>
+  <img src="./Resources/Headers/ImpMods.png" alt="Impostor modifiers"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#nullified"><img width="10%" src="./Resources/Icons/Nullified.png" alt="Nullified"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#ruthless"><img width="10%" src="./Resources/Icons/Ruthless.png" alt="Ruthless"/></a>
+  <img src="./Resources/Headers/NeutMods.png" alt="Neutral modifiers"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#sniper"><img width="10%" src="./Resources/Icons/Sniper.png" alt="Sniper"/></a>
+  <img src="./Resources/Headers/UniMods.png" alt="Universal modifiers"/>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#armored"><img width="10%" src="./Resources/Icons/Armored.png" alt="Armored"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#fragile"><img width="10%" src="./Resources/Icons/Fragile.png" alt="Fragile"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#memento"><img width="10%" src="./Resources/Icons/Memento.png" alt="Memento"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#misvote"><img width="10%" src="./Resources/Icons/Misvote.png" alt="Misvote"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#shuffle"><img width="10%" src="./Resources/Icons/Shuffle.png" alt="Shuffle"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#tactical-insertion"><img width="10%" src="./Resources/Icons/TacticalInsertion.png" alt="Tactical Insertion"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#uav"><img width="10%" src="./Resources/Icons/UAV.png" alt="UAV"/></a>
+</p>
 
 ## Installation
 
-1. Install the [Steam version of Among Us](https://store.steampowered.com/app/945360/Among_Us/).
-2. Install [BepInEx IL2CPP 6.x](https://builds.bepinex.dev/projects/bepinex_be) for Among Us.
-3. Drop the following DLLs into `Among Us/BepInEx/plugins/`:
-   - `Reactor.dll`
-   - `MiraAPI.dll`
-   - `TownOfUsMira.dll` (plus the bundled `touhats.bundle` + `touhats.catalog`)
-   - `DivaniMods.dll` &larr; *this mod*
-4. Launch Among Us. All Divani Mods options appear under a **Divani Mods** tab
-   in the lobby options.
+1. Install the mod using the same setup process as Town Of Us Mira.
+2. Once Town Of Us Mira is installed, place `DivaniMods.dll` into the `[MODFOLDER]/BepInEx/plugins/` folder.
+3. Launch Among Us. All Divani Mods options will appear under the **Divani Mods** tab in the lobby options.
 
-If you want the simplest install, grab the latest `DivaniMods-vX.Y.Z.zip`
-from [Releases](../../releases), extract it, and copy the `BepInEx` folder
-over your Among Us folder.
+For the simplest install, make sure your Town Of Us Mira installation is working first, then add `DivaniMods.dll` to the plugins folder.
+
+Full role and modifier write-ups live on the **[project wiki](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki)**.
 
 ---
 
-# Roles
+# Releases
 
-## Crewmate Roles
+**Disclaimer: The mod is *not* guaranteed to work on the latest versions of Among Us when the game updates.**
 
-### Thief
-
-#### **Crewmate Power**
-
-The Thief is a Crewmate that can steal modifiers from other players.
-Use your **Pickpocket** ability on a nearby player to either take one of their
-modifiers, or &mdash; if they have none &mdash; give them a random modifier.
-Stolen modifiers are applied to the Thief and appear in the end&ndash;game
-summary.
-
-#### Game Options
-
-| Name                  | Description                                                   | Type       | Default |
-| --------------------- | ------------------------------------------------------------- | ---------- | ------- |
-| Thief                 | The percentage probability of the Thief appearing             | Percentage | 0%      |
-| Max Stolen Modifiers  | How many modifiers the Thief can hold at once                 | Number     | 2       |
-| Pickpocket Cooldown   | The cooldown on the Pickpocket ability                        | Time       | 25s     |
-| Pickpocket Range      | The range of the Pickpocket ability                           | Multiplier | 1x      |
-
----
-
-### Portalmaker
-
-#### **Crewmate Support**
-
-The Portalmaker is a Crewmate that can place two portals on the map.
-Once both portals are placed, **any player** (including the Portalmaker)
-can use them to teleport between the two locations.
-
-#### Game Options
-
-| Name                  | Description                                             | Type | Default |
-| --------------------- | ------------------------------------------------------- | ---- | ------- |
-| Portalmaker           | The percentage probability of the Portalmaker appearing | Percentage | 0% |
-| Place Portal Cooldown | The cooldown on the place-portal button                 | Time | 20s     |
-| Use Portal Cooldown   | The cooldown on the use-portal button                   | Time | 10s     |
+| Game Version      | Mod Version | Town Of Us: Mira | Download link |
+| ----------------- | ----------- | ---------------- | ------------- |
+| 17.4              | 1.3.6       | 1.7.1+           | [v1.3.6](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.6) |
+| 17.4              | 1.3.5       | 1.7.0            | [v1.3.5](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.5) |
+| 17.3 (2026.3.31)  | 1.3.4       | 1.6.0 - 1.6.2    | [v1.3.4](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.4) |
+| 17.3 (2026.3.31)  | 1.3.3       | 1.6.0 - 1.6.2    | [v1.3.3](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.3) |
+| 17.3 (2026.3.31)  | 1.3.2       | 1.6.0 - 1.6.2    | [v1.3.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.2) |
+| 17.3 (2026.3.31)  | 1.3.1       | 1.6.0+           | [v1.3.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.1) |
+| 17.3 (2026.3.31)  | 1.3.0       | 1.6.0 - 1.6.2    | [v1.3.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.3.0) |
+| 17.3 (2026.3.31)  | 1.2.9       | 1.6.0 - 1.6.2    | [v1.2.9](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.9) |
+| 17.3 (2026.3.31)  | 1.2.8       | 1.6.0 - 1.6.2    | [v1.2.8](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.8) |
+| 17.3 (2026.3.31)  | 1.2.7       | 1.6.0 - 1.6.2    | [v1.2.7](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.7) |
+| 17.3 (2026.3.31)  | 1.2.6       | 1.6.0 - 1.6.2    | [v1.2.6](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.6) |
+| 17.3 (2026.3.31)  | 1.2.5       | 1.6.0 - 1.6.2    | [v1.2.5](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.5) |
+| 17.3 (2026.3.31)  | 1.2.4       | 1.6.0 - 1.6.2          | [v1.2.4](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.4) |
+| 17.3 (2026.3.31)  | 1.2.3       | 1.6.0 - 1.6.2          | [v1.2.3](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.3) |
+| 17.3 (2026.3.31)  | 1.2.3-beta  | 1.6.0 - 1.6.2          | [v1.2.3-beta](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.3-beta) |
+| 17.3 (2026.3.31)  | 1.2.2       | 1.6.0 - 1.6.2          | [v1.2.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.2) |
+| 17.3 (2026.3.31)  | 1.2.1       | 1.6.0 - 1.6.2          | [v1.2.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.1) |
+| 17.3 (2026.3.31)  | 1.2.0       | 1.6.0 - 1.6.2           | [v1.2.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.2.0) |
+| 17.3 (2026.3.31)  | 1.1.2       | 1.6.0 - 1.6.2         | [v1.1.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.1.2) |
+| 17.3 (2026.3.31)  | 1.1.1       | 1.6.0 - 1.6.2          | [v1.1.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.1.1) |
+| 17.3 (2026.3.31)  | 1.1.0       | 1.6.0 - 1.6.2        | [v1.1.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.1.0) |
+| Steam             | 1.0.2       | 1.6.0 - 1.6.2              | [v1.0.2](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.0.2) |
+| Steam             | 1.0.1       | 1.6.0 - 1.6.2                | [v1.0.1](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.0.1) |
+| Steam             | 1.0.0       | 1.6.0 - 1.6.2               | [v1.0.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/releases/tag/v1.0.0) |
 
 ---
 
-## Impostor Roles
+# Contributions & Credits
 
-### Deadlock
+[MiraAPI](https://github.com/All-Of-Us-Mods/MiraAPI): Mod framework and API\
+[Town Of Us: Mira](https://github.com/AU-Avengers/TOU-Mira): Base mod, inspiration, and shared assets\
+[Reactor](https://github.com/NuclearPowered/Reactor): Networking and build dependency\
+[BepInEx](https://github.com/BepInEx/BepInEx): IL2CPP plugin loader and Harmony hooks
 
-#### **Impostor Support**
+## Code Contributors
 
-The Deadlock is an Impostor that can temporarily disable all crewmate tasks.
-During a **Lockdown**, crewmates cannot access or complete any tasks.
-The Deadlock can also use a vanilla kill button, and gains more charges by
-killing.
+[Xinav](https://github.com/xinavGit) - [Alliance Modifier support on Clockstopper and Domesmith](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/17)\
+[Espeon](https://github.com/espeon3) - [Workhorse role](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/24)\
+[idkimneil](https://github.com/idkimneil):
+[PerfectComms fix for Retributionist and Duelist](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/29)
+[Monster Role](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/31)
+[Atony](https://github.com/AtonyGit) - [Support for Among Us 17.4 and Town Of Us: Mira 1.7.0](https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/pull/28)
 
-#### Game Options
+## Asset credits
 
-| Name              | Description                                         | Type   | Default |
-| ----------------- | --------------------------------------------------- | ------ | ------- |
-| Deadlock          | The percentage probability of the Deadlock appearing | Percentage | 0% |
-| Lockdown Duration | How long a single lockdown lasts                    | Time   | 10s     |
-| Lockdown Cooldown | The cooldown between lockdowns                      | Time   | 45s     |
-| Initial Charges   | How many lockdown charges the Deadlock starts with  | Number | 1       |
-| Charges Per Kill  | Bonus lockdown charges granted per successful kill  | Number | 1       |
+- [@AtonyGit](https://github.com/AtonyGit)/[Town Of Us: Mira](https://github.com/AU-Avengers/TOU-Mira) - All assets that are not specified below
+- @jaydoeswitchcraft (discord) - Bloody modifier icon and Demolitionist role icon and Button assets, Skilled, Strong and Incompetent modifier icons, Retributionist assets, Mage assets, Cunctator role icon, Locator assets
+- [Freesound](https://freesound.org/) (community) -Glass&ndash;break SFX for Fragile
+- Espeon(@mystic_haze2 on discord) - Sprout Assets, Summoner role and meeting icon, Obfuscator role icon, Mosquito assets, providing more intro sounds, Duelist assets, Cupid assets, Councillor role icon, Mole assets, Watcher assets, Betrayer assets, Workhorse assets
+- @aasteriisken (discord) - Memento modifier icon, Domesmith Assets, Revenant icon, UAV Assets, Clockstopper icon, Nullified modifier icon, Telecom assets, Armored assets
+[Follow Asterisken on GitHub](https://github.com/aasteriisken)
+- @maybe_xinav (discord) - Animated Portalmaker portals and portal button icons, Frag button icons, Plague Doctor button icon, Shuffle button icon, Sentinel beacon sprite, Sentinel palce beacon button,Lockdown button sprite, Tactical Insertion assets
+- Hecker(dc hecker0) - Monster Devour Animation
 
----
+## Idea box Ideas (Divani Mods Discord)
 
-## Neutral Roles
+- @jaydoeswitchcraft - Retributionist, Mage, Locator, Workhorse
+- @aasteriisken - Telecom
+- @mystic_haze2 - Watcher thought process, Mole, Workhorse, Betrayer
+- @skillrain_ (Luka) - Betrayer
+- @%$#@!&@$! [TOU] - Armored resetting the killer's full cooldown
+- @mcrib - Frag going through Veteran shields
 
-### Plague Doctor
+## Testers
 
-#### **Neutral Killing**
+- @skillrain_ (Luka) - Testing Watcher
+- @Thatchet - Testing Duelist Ties
 
-The Plague Doctor is a Neutral role that wins by infecting every living
-player. Use the **Infect** ability to directly infect a nearby player, or
-rely on **passive spread**: infected players continuously infect anyone who
-stands near them for long enough. The Plague Doctor wins when every other
-living player is infected.
+# Source inspiration
 
-#### Game Options
+Some of my roles and modifiers take design cues from other Among Us mod communities. These pages were useful references:
 
-| Name                    | Description                                                              | Type       | Default |
-| ----------------------- | ------------------------------------------------------------------------ | ---------- | ------- |
-| Plague Doctor           | The percentage probability of the Plague Doctor appearing                | Percentage | 0%      |
-| Infect Cooldown         | The cooldown on the Infect ability                                       | Time       | 25s     |
-| Max Direct Infections   | How many players the Plague Doctor can infect directly with the ability  | Number     | 2       |
-| Infection Distance      | Range for passive infection spread                                       | Multiplier | 1.5x    |
-| Infection Duration      | Seconds of proximity needed to passively infect someone                  | Time       | 5s      |
-| Post-Meeting Immunity   | Grace period after meetings where passive spread is paused               | Time       | 10s     |
-| Infect Killer On Death  | Whether killing the Plague Doctor also infects the killer                | Toggle     | True    |
-| Can Win While Dead      | Whether the Plague Doctor still wins if they die before all are infected | Toggle     | True    |
-| Can Use Vents           | Whether the Plague Doctor can use vents                                  | Toggle     | False   |
-
----
-
-# Modifiers
-
-## Blindspot
-
-### **Crewmate**
-
-A Crewmate with the Blindspot modifier does not cause the red camera indicator
-to light up when they view cameras. Useful for sneakier information gathering.
-
-### Game Options
-
-| Name             | Description                                                       | Type       | Default |
-| ---------------- | ----------------------------------------------------------------- | ---------- | ------- |
-| Blindspot Amount | How many Blindspot modifiers are assigned each game               | Number     | 1       |
-| Blindspot Chance | Per&ndash;assignment chance (rolled per slot up to Amount)        | Percentage | 50%     |
-
----
-
-## Fragile
-
-### **Universal**
-
-A Fragile player has a chance to break (die instantly) if any other player
-interacts with them. The *Chance to Break* option controls how often an
-interaction actually kills them. When they break, the player who triggered
-the death hears a glass&ndash;breaking sound effect.
-
-### Game Options
-
-| Name              | Description                                                             | Type       | Default |
-| ----------------- | ----------------------------------------------------------------------- | ---------- | ------- |
-| Fragile Amount    | How many Fragile modifiers are assigned each game                       | Number     | 0       |
-| Fragile Chance    | Per&ndash;assignment chance (rolled per slot up to Amount)              | Percentage | 50%     |
-| Chance to Break   | Chance that an interaction actually breaks the Fragile player           | Percentage | 100%    |
-
----
-
-## Ruthless
-
-### **Impostor**
-
-A Ruthless Impostor's kills bypass Medic shields, Guardian Angel protection,
-and Survivor vests.
-
-### Game Options
-
-| Name             | Description                                                       | Type       | Default |
-| ---------------- | ----------------------------------------------------------------- | ---------- | ------- |
-| Ruthless Amount  | How many Ruthless modifiers are assigned each game                | Number     | 0       |
-| Ruthless Chance  | Per&ndash;assignment chance (rolled per slot up to Amount)        | Percentage | 50%     |
-
----
-
-## Shuffle
-
-### **Universal**
-
-A Shuffle player can press a button to **teleport every living player to a
-random other player's position**. Great for chaos and escape plays. Ghosts
-are excluded from the shuffle; dead bodies can optionally be shuffled too.
-
-### Game Options
-
-| Name                | Description                                                 | Type       | Default |
-| ------------------- | ----------------------------------------------------------- | ---------- | ------- |
-| Shuffle Amount      | How many Shuffle modifiers are assigned each game           | Number     | 1       |
-| Shuffle Chance      | Per&ndash;assignment chance (rolled per slot up to Amount)  | Percentage | 50%     |
-| Shuffle Uses        | How many times a Shuffle holder can press the button        | Number     | 1       |
-| Shuffle Cooldown    | Cooldown between Shuffle button uses                        | Time       | 30s     |
-| Shuffle Dead Bodies | Whether dead bodies also get shuffled                       | Toggle     | False   |
-
----
-
-# Building from Source
-
-Divani Mods targets `net6.0` and expects a local Among Us + BepInEx
-installation so MSBuild can resolve the interop DLLs.
-
-1. Install the [.NET 8 SDK](https://dotnet.microsoft.com/download).
-2. Install Among Us + BepInEx + TOU-Mira somewhere locally.
-3. Open `DivaniMods.csproj` and update `AmongUsPath` to point at that folder.
-4. Run:
-
-   ```powershell
-   dotnet build DivaniMods.csproj -c Release
-   ```
-
-   The output DLL is written to `bin/Release/net6.0/DivaniMods.dll` and
-   also copied into `<AmongUsPath>/BepInEx/plugins/` by the `CopyToPlugins`
-   build target.
-
-To create a release package locally (zip + bare DLL), run:
-
-```powershell
-./scripts/Package.ps1 -Version 1.0.0
-```
-
-This produces `release/DivaniMods.dll` and
-`release/DivaniMods-v1.0.0.zip` matching the structure uploaded to
-GitHub releases.
-
----
-
-# Credits
-
-- Built on top of [TOU-Mira](https://github.com/AU-Avengers/TOU-Mira) by the
-  AU-Avengers team.
-- Uses [MiraAPI](https://github.com/All-Of-Us-Mods/MiraAPI) and
-  [Reactor](https://github.com/NuclearPowered/Reactor).
-- Glass&ndash;break SFX from [Freesound](https://freesound.org/) (community).
+- **Demolitionist** - [Counter Strike](https://www.counter-strike.net/) (Plant/Defuse bombs + the colorcodes)
+- **Opportunist** - [TOHE: Collector](https://tohe.weareten.ca/options/Neutrals/Chaos/Collector.html) (vote-collection win pattern)
+- **Innocent** - [TOHE: Innocent](https://tohe.weareten.ca/options/Neutrals/Evil/Innocent.html)
+- **Plague Doctor** - [TheOtherRoles GMIA wiki — Neutral roles](https://github.com/GMIA-Nexus/TheOtherRolesGMIA/wiki/Neutral-Roles#plague-doctor)
+- **Bear Trap** (modifier) - [TOHE: Beartrap](https://tohe.weareten.ca/options/Addons/Helpful/Beartrap.html)
+- **Watcher** - Squid Game

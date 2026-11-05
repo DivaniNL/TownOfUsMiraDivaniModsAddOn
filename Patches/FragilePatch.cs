@@ -6,36 +6,24 @@ using MiraAPI.Hud;
 using MiraAPI.Modifiers;
 using MiraAPI.Networking;
 using DivaniMods.Assets;
-using DivaniMods.Modifiers;
+using DivaniMods.Modifiers.Game.Universal;
 using DivaniMods.Options;
+using TownOfUs.Networking;
 using UnityEngine;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// When any player-targeting ability button is used on another player, if that player has Fragile they die.
-/// Same networking rule as Veteran: only <c>source.AmOwner</c> runs the RPC.
-/// Uses <c>target.RpcCustomMurder(target, …)</c> so the death plays as the fragile player killing themselves (suicide-style anim),
-/// not as the interactor killing them.
-/// </summary>
 public static class FragileInteraction
 {
     private static int _lastFragileKillFrame = -1;
     private static byte _lastFragileKillVictimId = byte.MaxValue;
 
-    /// <summary>
-    /// If the button targets a fragile player, applies fragile death and returns <c>true</c> so the caller can skip
-    /// <see cref="CustomActionButton.ClickHandler"/> / TownOfUs <c>OnClick</c> (no shield, douse, etc.).
-    /// </summary>
     public static bool TryConsumeFragilePlayerTargetedClick(PlayerControl? source, object? buttonInstance)
     {
         var target = TryGetPlayerTarget(buttonInstance);
         return TryApplyFragileDeath(source, target);
     }
 
-    /// <summary>
-    /// Returns <c>true</c> if a fragile death RPC was sent (caller should cancel the rest of the click).
-    /// </summary>
     public static bool TryApplyFragileDeath(PlayerControl? source, PlayerControl? target)
     {
         if (MeetingHud.Instance || ExileController.Instance)
@@ -58,28 +46,33 @@ public static class FragileInteraction
             return false;
         var chanceToBreak = OptionGroupSingleton<FragileOptions>.Instance.ChanceToBreak.Value;
         var randNum = UnityEngine.Random.Range(0f, 100f);
-        DivaniPlugin.Instance.Log.LogInfo($"Fragile: Chance to break is {chanceToBreak}%, random roll is {randNum:F1}");
         if (chanceToBreak < 100f && randNum >= chanceToBreak)
         {
-            DivaniPlugin.Instance.Log.LogInfo("Fragile: Player survived (roll >= chance)");
             return false;
         }
 
         _lastFragileKillFrame = Time.frameCount;
         _lastFragileKillVictimId = target.PlayerId;
-
-        target.RpcCustomMurder(target, MeetingCheck.OutsideMeeting);
         PlayFragileBreakSound();
+        target.RpcSpecialMurder(
+            target,
+            MeetingCheck.OutsideMeeting,
+            isIndirect: true,
+            ignoreShield: false,
+            didSucceed: true,
+            resetKillTimer: false,
+            createDeadBody: true,
+            teleportMurderer: false,
+            showKillAnim: false,
+            playKillSound: true,
+            causeOfDeath: "Fragile");
+        
         return true;
     }
 
-    /// <summary>
-    /// Glass-break SFX for the interactor that just broke a fragile player.
-    /// Only runs on source.AmOwner path, so only the killer hears it (by design).
-    /// </summary>
     private static void PlayFragileBreakSound()
     {
-        if (SoundManager.Instance == null) return;
+        if (!SoundManager.Instance) return;
         try
         {
             var clip = DivaniAssets.FragileBreak.LoadAsset();
@@ -120,10 +113,6 @@ public static class FragileInteraction
     }
 }
 
-/// <summary>
-/// Prefix on Mira <see cref="CustomActionButton.ClickHandler"/> so fragile is handled before <see cref="CustomActionButton.OnClick"/>.
-/// TownOfUs buttons use their own <c>ClickHandler</c> overrides and are patched separately.
-/// </summary>
 [HarmonyPatch(typeof(CustomActionButton), nameof(CustomActionButton.ClickHandler))]
 internal static class FragileCustomActionButtonClickPatch
 {
@@ -139,11 +128,6 @@ internal static class FragileCustomActionButtonClickPatch
     }
 }
 
-/// <summary>
-/// Patches TownOfUs <c>ClickHandler</c> overrides — TOU replaces <see cref="CustomActionButton.ClickHandler"/> entirely
-/// (<see href="https://github.com/AU-Avengers/TOU-Mira/blob/main/TownOfUs/Buttons/TownOfUsButton.cs">TownOfUsButton.cs</see>),
-/// so a postfix runs <i>after</i> <c>OnClick</c> (shield/douse already applied). A prefix skips the original when fragile triggers.
-/// </summary>
 public static class FragileTownOfUsButtonPatch
 {
     private static bool _initialized;
@@ -205,29 +189,9 @@ public static class FragileTownOfUsButtonPatch
                 }
             }
 
-            foreach (var type in assembly.GetTypes())
-            {
-                if (type.IsAbstract || type.IsInterface)
-                    continue;
-                if (!type.Name.EndsWith("Button", StringComparison.Ordinal))
-                    continue;
+            PatchNamedClickHandlers(harmony, harmonyMethod, assembly, "MonarchKnightButton");
+            PatchNamedClickHandlers(harmony, harmonyMethod, Assembly.GetExecutingAssembly(), "PickpocketButton", "FragGiveBombButton");
 
-                var m = type.GetMethod("ClickHandler", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-                if (m == null)
-                    continue;
-
-                try
-                {
-                    harmony.Patch(m, prefix: harmonyMethod);
-                    count++;
-                }
-                catch
-                {
-                    // already patched or incompatible
-                }
-            }
-
-            DivaniPlugin.Instance.Log.LogInfo($"Fragile: Patched {count} TownOfUs ClickHandler prefix(es) for Fragile.");
         }
         catch (Exception ex)
         {
@@ -244,5 +208,27 @@ public static class FragileTownOfUsButtonPatch
             return false;
 
         return true;
+    }
+
+    private static void PatchNamedClickHandlers(Harmony harmony, HarmonyMethod prefix, Assembly assembly, params string[] typeNames)
+    {
+        foreach (var type in assembly.GetTypes())
+        {
+            if (Array.IndexOf(typeNames, type.Name) < 0)
+                continue;
+
+            var m = type.GetMethod("ClickHandler", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            if (m == null)
+                continue;
+
+            try
+            {
+                harmony.Patch(m, prefix: prefix);
+            }
+            catch
+            {
+                // already patched or incompatible
+            }
+        }
     }
 }

@@ -1,0 +1,86 @@
+using MiraAPI.GameOptions;
+using MiraAPI.Translation;
+using MiraAPI.Utilities.Assets;
+using DivaniMods.Assets;
+using DivaniMods.Options;
+using DivaniMods.Roles.Neutral.NeutralEvil;
+using TownOfUs.Interfaces;
+using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Game;
+using TownOfUs.Modules.Wiki;
+using TownOfUs.Utilities;
+using UnityEngine;
+using MiraAPI.Modifiers;
+
+namespace DivaniMods.Modifiers.Game.Universal;
+
+public class ArmoredModifier : UniversalGameModifier, IWikiDiscoverable
+{
+    public static readonly Color ArmoredColor = new Color32(0xdf, 0xce, 0x52, 0xff);
+    public override ModifierUiConfiguration Configuration => new(
+        ArmoredColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.ArmoredIcon.LoadAsset(),
+            "DivaniMod.Modifier.Universal.Armored", 1.45f));
+
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Armored", "Armored");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Armored.IntroInfo");
+    public override ModifierFaction FactionType => ModifierFaction.UniversalPassive;
+    public override Color FreeplayFileColor => ArmoredColor;
+    public Color ModifierColor => ArmoredColor;
+    public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.ArmoredIcon;
+
+    public int MaxAttacks { get; private set; }
+    public int AttacksRemaining { get; set; }
+    public int AttacksSurvived => MaxAttacks - AttacksRemaining;
+    public int DisplayedAttacksSurvived { get; set; }
+    public bool NotifiedBroken { get; set; }
+
+    public void RefreshDisplayedAttacks() => DisplayedAttacksSurvived = AttacksSurvived;
+
+    public override string GetDescription()
+    {
+        var max = MaxAttacks > 0
+            ? MaxAttacks
+            : (int)OptionGroupSingleton<ArmoredOptions>.Instance.AttacksToSurvive.Value;
+
+        var descriptionKey = max == 1
+            ? "DivaniMods.Modifier.Armored.Description.Singular"
+            : "DivaniMods.Modifier.Armored.Description.Plural";
+
+        return MiraLocaleManager.Get(descriptionKey)
+            .Replace("<max>", max.ToString())
+            .Replace("<survived>", DisplayedAttacksSurvived.ToString());
+    }
+
+    public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
+
+    public override int GetAssignmentChance() =>
+        (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.ArmoredChance.Value;
+
+    public override int GetAmountPerGame() =>
+        (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.ArmoredAmount.Value;
+
+    public override bool IsModifierValidOn(RoleBehaviour role)
+    {
+        return base.IsModifierValidOn(role) && role is not InnocentRole;
+    }
+
+    public override void OnActivate()
+    {
+        MaxAttacks = (int)OptionGroupSingleton<ArmoredOptions>.Instance.AttacksToSurvive.Value;
+        AttacksRemaining = MaxAttacks;
+
+        if (AttacksRemaining > 0 && !Player.HasModifier<ArmoredShieldModifier>())
+        {
+            Player.AddModifier<ArmoredShieldModifier>();
+        }
+    }
+
+    public override void OnDeath(DeathReason reason)
+    {
+        if (Player != null && Player.HasModifier<ArmoredShieldModifier>())
+        {
+            Player.RemoveModifier<ArmoredShieldModifier>();
+        }
+    }
+}

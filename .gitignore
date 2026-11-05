@@ -11,7 +11,6 @@ publish/
 *.pdb
 *.exe
 *.mdb
-
 # Keep committed reference DLLs if any (none right now, but be explicit).
 !Resources/*.dll
 
@@ -19,7 +18,6 @@ publish/
 # NuGet
 # -----------------------------------------------------------------------------
 packages/
-*.nupkg
 *.snupkg
 *.nuget.props
 *.nuget.targets
@@ -52,8 +50,16 @@ desktop.ini
 # These folders ship game source trees used for reading, not building.
 # -----------------------------------------------------------------------------
 /TownOfUs/
+/TOU-Mira-1.6.2
 /TouMiraRolesExtension/
 /TheOtherRolesGMIA-main/
+/wiki/
+/Documentation/
+# -----------------------------------------------------------------------------
+# Local secrets (never commit tokens)
+# -----------------------------------------------------------------------------
+.env
+.env.*
 
 # -----------------------------------------------------------------------------
 # Local tool state / scratch
@@ -61,14 +67,20 @@ desktop.ini
 .specstory/
 .qodo/
 .cursor/
+.cursorindexingignore
 terminals/
 agent-tools/
 agent-transcripts/
+graphify-out/
 .fake/
 *.log
 *.tmp
-
+.claude/*
+.agents/*
+graphify-out/*
+skills-lock.json
 # Personal TODO scratchpads
 lockdown timer*.txt
 todo.txt
 TODO.txt
+/scripts/GitHub-RepoActivity.ps1

@@ -1,0 +1,72 @@
+using MiraAPI.GameOptions;
+using MiraAPI.Modifiers;
+using MiraAPI.Translation;
+using MiraAPI.Utilities.Assets;
+using DivaniMods.Assets;
+using DivaniMods.Options;
+using TownOfUs.Interfaces;
+using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Game;
+using TownOfUs.Modules.Wiki;
+using TownOfUs.Roles;
+using TownOfUs.Utilities;
+using UnityEngine;
+using DivaniMods.Roles.Neutral.NeutralKilling;
+
+namespace DivaniMods.Modifiers.Game.Neutral.NeutralPassive;
+
+public sealed class SniperModifier : TouGameModifier, IWikiDiscoverable
+{
+    public static readonly Color SniperColor = new Color32(155, 165, 160, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        SniperColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.SniperIcon.LoadAsset(),
+            "DivaniMod.Modifier.Neutral.Sniper", 1.45f));
+    public const float MaxSniperDistance = 2.5f;
+
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Sniper", "Sniper");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Sniper.IntroInfo");
+    public override ModifierFaction FactionType => ModifierFaction.NeutralPassive;
+    public override Color FreeplayFileColor => SniperColor;
+    public Color ModifierColor => SniperColor;
+    public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.SniperIcon;
+
+    public override string GetDescription()
+    {
+        var multiplier = OptionGroupSingleton<SniperOptions>.Instance.KillDistanceMultiplier.Value;
+        return MiraLocaleManager.Get("DivaniMods.Modifier.Sniper.Description")
+            .Replace("<multiplier>", multiplier.ToString("0.0"));
+    }
+
+    public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
+
+    public override int GetAssignmentChance() =>
+        (int)OptionGroupSingleton<NeutralModifierOptions>.Instance.SniperChance.Value;
+
+    public override int GetAmountPerGame() =>
+        (int)OptionGroupSingleton<NeutralModifierOptions>.Instance.SniperAmount.Value;
+
+    public override bool IsModifierValidOn(RoleBehaviour role)
+    {
+        return base.IsModifierValidOn(role) &&
+            role is ITownOfUsRole { RoleAlignment: RoleAlignment.NeutralKilling } && role is not MonsterRole;
+    }
+
+    public static bool LocalPlayerHasSniper()
+    {
+        var localPlayer = PlayerControl.LocalPlayer;
+        return localPlayer?.Data?.Role is ITownOfUsRole { RoleAlignment: RoleAlignment.NeutralKilling } &&
+            localPlayer.HasModifier<SniperModifier>();
+    }
+
+    public static float ApplyRangeMultiplier(float baseDistance)
+    {
+        if (baseDistance <= 0f)
+        {
+            return baseDistance;
+        }
+
+        var multiplier = OptionGroupSingleton<SniperOptions>.Instance.KillDistanceMultiplier.Value;
+        return Mathf.Min(baseDistance * multiplier, MaxSniperDistance);
+    }
+}

@@ -1,0 +1,49 @@
+using MiraAPI.GameOptions;
+using MiraAPI.Translation;
+using MiraAPI.Utilities.Assets;
+using DivaniMods.Assets;
+using DivaniMods.Options;
+using TownOfUs.Interfaces;
+using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Game;
+using TownOfUs.Modules.Wiki;
+using TownOfUs.Utilities;
+using UnityEngine;
+
+namespace DivaniMods.Modifiers.Game.Crewmate;
+
+public class StrongModifier : TouGameModifier, IWikiDiscoverable
+{
+    public static readonly Color StrongColor = new Color32(50, 201, 147, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        StrongColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.StrongIcon.LoadAsset(),
+            "DivaniMod.Modifier.Crewmate.Strong", 1.45f));
+
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Strong", "Strong");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Strong.IntroInfo");
+    public override ModifierFaction FactionType => ModifierFaction.CrewmatePassive;
+    public override Color FreeplayFileColor => StrongColor;
+    public Color ModifierColor => StrongColor;
+    public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.StrongIcon;
+
+    public override string GetDescription() =>
+        MiraLocaleManager.Get("DivaniMods.Modifier.Strong.Description");
+
+    public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
+
+    public override int GetAssignmentChance() =>
+        (int)OptionGroupSingleton<CrewmateModifierOptions>.Instance.StrongChance.Value;
+
+    public override int GetAmountPerGame() =>
+        (int)OptionGroupSingleton<CrewmateModifierOptions>.Instance.StrongAmount.Value;
+
+    public override bool IsModifierValidOn(RoleBehaviour role)
+    {
+        return role.IsCrewmate() && base.IsModifierValidOn(role);
+    }
+
+    public override void OnActivate()
+    {
+    }
+}

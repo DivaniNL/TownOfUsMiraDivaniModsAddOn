@@ -1,0 +1,52 @@
+using Il2CppInterop.Runtime.Attributes;
+using AmongUs.GameOptions;
+using MiraAPI.GameOptions;
+using MiraAPI.Roles;
+using MiraAPI.Translation;
+using MiraAPI.Utilities.Assets;
+using DivaniMods.Assets;
+using DivaniMods.Options;
+using TownOfUs.Interfaces;
+using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Game;
+using TownOfUs.Modules.Wiki;
+using TownOfUs.Utilities;
+using UnityEngine;
+
+namespace DivaniMods.Modifiers.Game.Crewmate;
+
+public sealed class BloodyModifier : TouGameModifier, IWikiDiscoverable
+{
+    public static readonly Color ModifierUiColor = TownOfUsColors.Impostor;
+    public override ModifierUiConfiguration Configuration => new(
+        ModifierUiColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.BloodyIcon.LoadAsset(),
+            "DivaniMod.Modifier.Crewmate.Bloody", 1.45f));
+
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Bloody", "Bloody");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Bloody.IntroInfo");
+    public override ModifierFaction FactionType => ModifierFaction.CrewmatePostmortem;
+    public override Color FreeplayFileColor => ModifierUiColor;
+    public Color ModifierColor => ModifierUiColor;
+    public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.BloodyIcon;
+
+    public override string GetDescription()
+    {
+        return MiraLocaleManager.Get("DivaniMods.Modifier.Bloody.Description");
+    }
+
+    public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
+
+    public override int GetAssignmentChance() =>
+        (int)OptionGroupSingleton<CrewmateModifierOptions>.Instance.BloodyChance.Value;
+
+    public override int GetAmountPerGame() =>
+        (int)OptionGroupSingleton<CrewmateModifierOptions>.Instance.BloodyAmount.Value;
+
+    public override bool IsModifierValidOn(RoleBehaviour role)
+    {
+        return base.IsModifierValidOn(role) && role.IsCrewmate();
+    }
+
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } = [];
+}

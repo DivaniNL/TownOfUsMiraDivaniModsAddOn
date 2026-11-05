@@ -1,0 +1,289 @@
+using System.Collections;
+using MiraAPI.GameOptions;
+using MiraAPI.Modifiers;
+using MiraAPI.Roles;
+using MiraAPI.Utilities;
+using MiraAPI.Translation;
+using Reactor.Networking.Attributes;
+using Reactor.Networking.Rpc;
+using Reactor.Utilities;
+using DivaniMods.Assets;
+using DivaniMods.Events.Crewmate.CrewmateKilling;
+using DivaniMods.Modifiers.Crewmate.CrewmateKilling;
+using DivaniMods.Options;
+using DivaniMods.Roles.Crewmate.CrewmateAfterlife;
+using DivaniMods.Roles.Crewmate.CrewmateKilling;
+using TownOfUs.Events;
+using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Game.Alliance;
+using TownOfUs.Options.Modifiers.Alliance;
+using TownOfUs.Modules;
+using TownOfUs.Utilities;
+using UnityEngine;
+using Object = UnityEngine.Object;
+using AmongUs.GameOptions;
+using MiraAPI.Networking;
+
+namespace DivaniMods.Networking.Crewmate.CrewmateKilling;
+
+public static class RetributionistRpc
+{
+    [MethodRpc((uint)DivaniRpcCalls.RetributionistStartRevenge, LocalHandling = RpcLocalHandling.Before)]
+    public static void RpcStartRevenge(PlayerControl soul, PlayerControl killer, float x, float y)
+    {
+        if (LobbyBehaviour.Instance)
+        {
+            MiscUtils.RunAnticheatWarning(soul);
+            return;
+        }
+
+        if (soul == null || killer == null)
+        {
+            return;
+        }
+
+        var deathPos = new Vector2(x, y);
+
+        RetributionistManager.StartRevenge(soul.PlayerId, killer.PlayerId, deathPos);
+
+        VanishBody(soul.PlayerId);
+        Coroutines.Start(CoVanishLingeringBody(soul.PlayerId, 1.0f));
+
+        soul.ChangeRole((ushort)RoleId.Get<VengefulSoulRole>(), false);
+
+        if (soul.Data?.Role is VengefulSoulRole vengefulSoul)
+        {
+            vengefulSoul.Spawn();
+        }
+
+        if (soul.AmOwner)
+        {
+            var duration = OptionGroupSingleton<RetributionistOptions>.Instance.RevengeTimer;
+            if (!soul.HasModifier<RevengeTimerModifier>())
+            {
+                soul.AddModifier<RevengeTimerModifier>(duration);
+            }
+        }
+
+        var hex = ColorUtility.ToHtmlStringRGB(RetributionistRole.RetributionistColor);
+
+        if (killer.AmOwner)
+        {
+            Coroutines.Start(MiscUtils.CoFlash(RetributionistRole.RetributionistColor));
+            Helpers.CreateAndShowNotification(
+                $"<b><color=#{hex}>{MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Notification.OnTheLoose")}</color></b>",
+                Color.white,
+                new Vector3(0f, 1f, -20f),
+                spr: DivaniAssets.RetributionistIcon.LoadAsset());
+        }
+
+        if (soul.AmOwner)
+        {
+            Helpers.CreateAndShowNotification(
+                $"<b><color=#{hex}>{MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Notification.SeekRevenge")}</color></b>",
+                Color.white,
+                new Vector3(0f, 1f, -20f),
+                spr: DivaniAssets.RetributionistIcon.LoadAsset());
+        }
+    }
+
+    [MethodRpc((uint)DivaniRpcCalls.RetributionistRevenge, LocalHandling = RpcLocalHandling.Before)]
+    public static void RpcRevenge(PlayerControl soul, PlayerControl killer)
+    {
+        if (LobbyBehaviour.Instance)
+        {
+            MiscUtils.RunAnticheatWarning(soul);
+            return;
+        }
+
+        if (soul == null || killer == null || !soul.HasDied())
+        {
+            return;
+        }
+
+        if (soul.Data?.Role is not VengefulSoulRole)
+        {
+            return;
+        }
+
+        Coroutines.Start(CoRevenge(soul, killer));
+    }
+
+    private static IEnumerator CoRevenge(PlayerControl soul, PlayerControl killer)
+    {
+        var soulId = soul.PlayerId;
+        var cause = MiraLocaleManager.Get("DivaniMods.DeathReason.Retaliated");
+
+        GameHistory.UpdatePlayerDeathData(
+            killer,
+            cause,
+            roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+            diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetTrue,   
+            killedBy: MiraLocaleManager.Get("DiedByStringBasic").Replace("<player>", soul.Data.PlayerName),
+            lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
+
+
+        var revivePos = (Vector2)soul.transform.position;
+        var roleWhenAlive = RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<RetributionistRole>());
+        RetributionistManager.MarkReviveInProgress(soulId);
+        RetributionistManager.EndRevenge(soulId);
+
+        if (killer.Data != null && !killer.Data.IsDead &&
+            AmongUsClient.Instance && AmongUsClient.Instance.AmHost)
+        {
+            soul.RpcCustomMurder(killer, MeetingCheck.OutsideMeeting, didSucceed: true,
+                resetKillTimer: false, createDeadBody: true, teleportMurderer: false,
+                showKillAnim: false, playKillSound: true);
+        }
+
+        ReviveUtilities.RevivePlayer(
+            reviver: soul,
+            revived: soul,
+            position: revivePos,
+            roleWhenAlive: roleWhenAlive,
+            flashColor: RetributionistRole.RetributionistColor,
+            revivedOwnerNotificationText: MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Notification.RevengeComplete"),
+            reviverOwnerNotificationText: null,
+            notificationIcon: DivaniAssets.RetributionistIcon.LoadAsset());
+
+        ReviveHeartbrokenLover(soul, revivePos);
+
+        var waited = 0f;
+        while (waited < 5f && soul != null && soul.Data != null && soul.HasDied())
+        {
+            waited += Time.deltaTime;
+            yield return null;
+        }
+
+        yield return null;
+
+        RetributionistManager.ClearReviveInProgress(soulId);
+    }
+
+    private static void ReviveHeartbrokenLover(PlayerControl soul, Vector2 revivePos)
+    {
+        if (!OptionGroupSingleton<LoversOptions>.Instance.BothLoversDie)
+        {
+            return;
+        }
+
+        var lover = FindLover(soul);
+        if (lover == null || !lover.HasDied())
+        {
+            return;
+        }
+
+        var loverRoleWhenAlive = lover.GetRoleWhenAlive();
+        if (loverRoleWhenAlive is null)
+        {
+            return;
+        }
+
+        var liveRole = RoleManager.Instance.GetRole(loverRoleWhenAlive.Role);
+        if (liveRole is null)
+        {
+            return;
+        }
+
+        var loverPos = revivePos + new Vector2(0.4f, 0f);
+
+        ReviveUtilities.RevivePlayer(
+            reviver: soul,
+            revived: lover,
+            position: loverPos,
+            roleWhenAlive: liveRole,
+            flashColor: RetributionistRole.RetributionistColor,
+            revivedOwnerNotificationText: MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Notification.LoverRevived"),
+            reviverOwnerNotificationText: null,
+            notificationIcon: DivaniAssets.RetributionistIcon.LoadAsset());
+    }
+
+    private static PlayerControl? FindLover(PlayerControl soul)
+    {
+        if (soul.TryGetModifier<LoverModifier>(out var love) && love.OtherLover != null)
+        {
+            return love.OtherLover;
+        }
+
+        foreach (var pc in PlayerControl.AllPlayerControls)
+        {
+            if (pc != null && pc != soul &&
+                pc.TryGetModifier<LoverModifier>(out var otherLove) &&
+                otherLove.OtherLover == soul)
+            {
+                return pc;
+            }
+        }
+
+        return null;
+    }
+
+    [MethodRpc((uint)DivaniRpcCalls.RetributionistRevengeFailed, LocalHandling = RpcLocalHandling.Before)]
+    public static void RpcRevengeFailed(PlayerControl soul)
+    {
+        if (LobbyBehaviour.Instance)
+        {
+            MiscUtils.RunAnticheatWarning(soul);
+            return;
+        }
+
+        if (soul == null)
+        {
+            return;
+        }
+
+        RetributionistManager.TryGetKiller(soul.PlayerId, out var killer);
+
+        if (soul.Data?.Role is VengefulSoulRole)
+        {
+            soul.ChangeRole((ushort)RoleTypes.CrewmateGhost, false);
+        }
+
+        RetributionistManager.EndRevenge(soul.PlayerId);
+
+        var hex = ColorUtility.ToHtmlStringRGB(RetributionistRole.RetributionistColor);
+
+        if (soul.AmOwner)
+        {
+            Helpers.CreateAndShowNotification(
+                $"<b><color=#{hex}>{MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Notification.RevengeFailed")}</color></b>",
+                Color.white,
+                new Vector3(0f, 1f, -20f),
+                spr: DivaniAssets.RetributionistIcon.LoadAsset());
+        }
+
+        if (killer != null && killer.AmOwner)
+        {
+            Coroutines.Start(MiscUtils.CoFlash(RetributionistRole.RetributionistColor));
+            Helpers.CreateAndShowNotification(
+                $"<b><color=#{hex}>{MiraLocaleManager.Get("DivaniMods.Role.VengefulSoul.Notification.KillerSurvived")}</color></b>",
+                Color.white,
+                new Vector3(0f, 1f, -20f),
+                spr: DivaniAssets.RetributionistIcon.LoadAsset());
+        }
+    }
+
+    private static void VanishBody(byte bodyId)
+    {
+        foreach (var body in Object.FindObjectsOfType<DeadBody>())
+        {
+            if (body != null && body.ParentId == bodyId)
+            {
+                Object.Destroy(body.gameObject);
+            }
+        }
+    }
+
+    private static IEnumerator CoVanishLingeringBody(byte bodyId, float timeoutSeconds)
+    {
+        const float step = 0.05f;
+        var waited = 0f;
+
+        while (waited < timeoutSeconds)
+        {
+            VanishBody(bodyId);
+            waited += step;
+            yield return new WaitForSeconds(step);
+        }
+    }
+}

@@ -16,7 +16,6 @@ public static class ShieldDeathPatch
         if (__instance == null || __instance.Data == null) return;
         
         var deadPlayerName = __instance.Data.PlayerName;
-        DivaniPlugin.Instance.Log.LogInfo($"ShieldDeathPatch: {deadPlayerName} died, checking for shields to remove");
         
         foreach (var player in PlayerControl.AllPlayerControls)
         {
@@ -30,7 +29,6 @@ public static class ShieldDeathPatch
                 var sourcePlayer = GetShieldSourcePlayer(modifier);
                 if (sourcePlayer != null && sourcePlayer.PlayerId == __instance.PlayerId)
                 {
-                    DivaniPlugin.Instance.Log.LogInfo($"ShieldDeathPatch: Removing shield from {player.Data.PlayerName} because {deadPlayerName} (shield source) died");
                     player.RemoveModifier(modifier.TypeId, null);
                 }
             }

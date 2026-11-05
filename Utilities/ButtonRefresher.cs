@@ -1,5 +1,6 @@
 using System.Collections;
 using MiraAPI.Hud;
+using MiraAPI.Translation;
 using Reactor.Utilities;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ public static class ButtonRefresher
     {
         yield return new WaitForSeconds(0.1f);
         
-        if (!HudManager.InstanceExists || HudManager.Instance == null)
+        if (!HudManager.InstanceExists)
             yield break;
         
         var player = PlayerControl.LocalPlayer;
@@ -33,7 +34,6 @@ public static class ButtonRefresher
                 if (bottomLeft != null)
                 {
                     button.CreateButton(bottomLeft);
-                    DivaniPlugin.Instance.Log.LogInfo($"Created button: {button.Name}");
                 }
             }
             
@@ -41,7 +41,6 @@ public static class ButtonRefresher
             {
                 var shouldBeVisible = button.Enabled(role);
                 button.Button.ToggleVisible(shouldBeVisible);
-                DivaniPlugin.Instance.Log.LogInfo($"Button {button.Name} visibility set to {shouldBeVisible}");
             }
         }
     }

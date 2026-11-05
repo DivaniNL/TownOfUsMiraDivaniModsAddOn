@@ -1,0 +1,46 @@
+using MiraAPI.GameOptions;
+using MiraAPI.Modifiers;
+using MiraAPI.Translation;
+using MiraAPI.Utilities.Assets;
+using DivaniMods.Assets;
+using DivaniMods.Options;
+using DivaniMods.Roles.Impostor.ImpostorSupport;
+using TownOfUs.Interfaces;
+using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Game;
+using TownOfUs.Modules.Wiki;
+using TownOfUs.Utilities;
+using UnityEngine;
+
+namespace DivaniMods.Modifiers.Game.Universal;
+
+public sealed class MisvoteModifier : UniversalGameModifier, IWikiDiscoverable
+{
+    public static readonly Color MisvoteColor = new Color32(180, 180, 180, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        MisvoteColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.MisvoteIcon.LoadAsset(),
+            "DivaniMod.Modifier.Universal.Misvote", 1.45f));
+
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.Misvote", "Misvote");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.Misvote.IntroInfo");
+    public override ModifierFaction FactionType => ModifierFaction.UniversalPassive;
+    public override Color FreeplayFileColor => MisvoteColor;
+    public Color ModifierColor => MisvoteColor;
+    public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.MisvoteIcon;
+
+    public override string GetDescription() => MiraLocaleManager.Get("DivaniMods.Modifier.Misvote.Description");
+
+    public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
+
+    public override int GetAssignmentChance() =>
+        (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.MisvoteChance.Value;
+
+    public override int GetAmountPerGame() =>
+        (int)OptionGroupSingleton<UniversalModifierOptions>.Instance.MisvoteAmount.Value;
+
+    public override bool IsModifierValidOn(RoleBehaviour role)
+    {
+        return base.IsModifierValidOn(role) && role is not CouncillorRole;
+    }
+}

@@ -17,18 +17,10 @@ using UnityEngine;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// Keeps <see cref="MedicRole.Shielded"/> aligned with <see cref="MedicShieldModifier"/> holders and refreshes the role tab
-/// (same flow as <see cref="TownOfUsEventHandlers.IntroEndEventHandler"/>).
-/// </summary>
 public static class MedicShieldStolenPatch
 {
     private static bool s_afterMurderVictimWasLocalMedicShield;
 
-    /// <summary>
-    /// Ruthless (and any path that skips <c>RpcMedicShieldAttacked</c>) still clears the medic via <c>AfterMurder</c>,
-    /// but the task/role tab text is not refreshed. Capture shielded victim before TOU clears <see cref="MedicRole.Shielded"/>.
-    /// </summary>
     [RegisterEvent(-200)]
     public static void AfterMurderCaptureIfVictimWasOurShield(AfterMurderEvent evt)
     {
@@ -74,9 +66,6 @@ public static class MedicShieldStolenPatch
         Coroutines.Start(CoDeferredSyncAndRefresh());
     }
 
-    /// <summary>
-    /// Called from Thief steal RPC after the Medic shield has been moved to the thief (all clients).
-    /// </summary>
     public static void ApplyStolenMedicShield(PlayerControl? medicSourceFromModifier, PlayerControl thief)
     {
         if (thief == null)
@@ -87,8 +76,6 @@ public static class MedicShieldStolenPatch
         if (medicSourceFromModifier != null && medicSourceFromModifier.GetRole<MedicRole>() is { } medicRole)
         {
             medicRole.Shielded = thief;
-            DivaniPlugin.Instance.Log.LogInfo(
-                $"MedicShieldStolenPatch: Set Shielded -> {thief.Data?.PlayerName} (medic {medicSourceFromModifier.Data?.PlayerName})");
         }
 
         RebuildMedicShieldedFromModifiers();
@@ -101,7 +88,6 @@ public static class MedicShieldStolenPatch
         yield return null;
         RebuildMedicShieldedFromModifiers();
         TryRefreshLocalMedicRoleTab();
-        DivaniPlugin.Instance.Log.LogInfo("MedicShieldStolenPatch: Deferred sync + tab refresh");
     }
 
     public static void RebuildMedicShieldedFromModifiers()
@@ -145,7 +131,7 @@ public static class MedicShieldStolenPatch
     {
         try
         {
-            if (!HudManager.InstanceExists || HudManager.Instance == null)
+            if (!HudManager.InstanceExists)
             {
                 return;
             }

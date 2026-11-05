@@ -1,0 +1,53 @@
+using MiraAPI.GameOptions;
+using MiraAPI.Translation;
+using MiraAPI.Utilities.Assets;
+using DivaniMods.Assets;
+using DivaniMods.Options;
+using TownOfUs.Interfaces;
+using TownOfUs.Modifiers;
+using TownOfUs.Modifiers.Game;
+using TownOfUs.Modules.Wiki;
+using TownOfUs.Utilities;
+using UnityEngine;
+
+namespace DivaniMods.Modifiers.Game.Crewmate;
+
+public sealed class BearTrapModifier : TouGameModifier, IWikiDiscoverable
+{
+    public static readonly Color BearTrapColor = new Color32(210, 125, 45, 255);
+    public override ModifierUiConfiguration Configuration => new(
+        BearTrapColor,
+        TmpSpriteUtils.CreateSpriteAsset(DivaniAssets.BearTrapIcon.LoadAsset(),
+            "DivaniMod.Modifier.Crewmate.BearTrap", 1.45f));
+
+    public override string ModifierName => MiraLocaleManager.Get("DivaniMods.Modifier.BearTrap", "Bear Trap");
+    public override string IntroInfo => MiraLocaleManager.Get("DivaniMods.Modifier.BearTrap.IntroInfo");
+    public override ModifierFaction FactionType => ModifierFaction.CrewmatePostmortem;
+    public override Color FreeplayFileColor => BearTrapColor;
+    public Color ModifierColor => BearTrapColor;
+    public override LoadableAsset<Sprite>? ModifierIcon => DivaniAssets.BearTrapIcon;
+
+    public override string GetDescription()
+    {
+        var duration = OptionGroupSingleton<BearTrapOptions>.Instance.FreezeDuration.Value;
+        return MiraLocaleManager.Get("DivaniMods.Modifier.BearTrap.Description")
+            .Replace("<seconds>", duration.ToString("0"));
+    }
+
+    public string GetAdvancedDescription() => GetDescription() + MiscUtils.AppendOptionsText(GetType());
+
+    public override int GetAssignmentChance() =>
+        (int)OptionGroupSingleton<CrewmateModifierOptions>.Instance.BearTrapChance.Value;
+
+    public override int GetAmountPerGame() =>
+        (int)OptionGroupSingleton<CrewmateModifierOptions>.Instance.BearTrapAmount.Value;
+
+    public override bool IsModifierValidOn(RoleBehaviour role)
+    {
+        return base.IsModifierValidOn(role) && role.IsCrewmate();
+    }
+
+    public override void OnActivate()
+    {
+    }
+}
