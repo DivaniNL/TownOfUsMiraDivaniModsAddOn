@@ -59,8 +59,8 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> TelecomChatHover { get; } = new LoadableResourceAsset($"{ShortPath}.TelecomChatHover.png");
     public static LoadableAsset<Sprite> TelecomChatOpen { get; } = new LoadableResourceAsset($"{ShortPath}.TelecomChatOpen.png");
     public static LoadableAsset<Sprite> TelecomChatBubble { get; } = new LoadableResourceAsset($"{ShortPath}.ChatTelecomBubble.png");
-    public static LoadableAsset<Sprite> HeartFilled { get; } = new LoadableResourceAsset($"{ShortPath}.HeartFilled.png", 1780f);
-    public static LoadableAsset<Sprite> HeartNotFilled { get; } = new LoadableResourceAsset($"{ShortPath}.HeartNotFilled.png", 1780f);
+    public static LoadableAsset<Sprite> StalkerIntuitButton { get; } = new LoadableResourceAsset($"{ShortPath}.IntuitButton.png", 230f);
+    public static LoadableAsset<Sprite> StalkerGazeButton { get; } = new LoadableResourceAsset($"{ShortPath}.GazeButton.png", 230f);
     // Role icons (200 ppu)
     public static LoadableAsset<Sprite> ThiefIcon { get; } = new LoadableResourceAsset($"{IconPath}.Thief.png", 200);
     public static LoadableAsset<Sprite> DeathnoteIcon { get; } = new LoadableResourceAsset($"{IconPath}.Deathnote.png", 200);

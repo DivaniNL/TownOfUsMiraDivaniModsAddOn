@@ -24,19 +24,9 @@ using UnityEngine;
 
 namespace DivaniMods.Roles;
 
-/// <summary>
-/// Neutral Evil that only exists when Lovers are present in the game. In meetings,
-/// the Stalker can pick two players they believe are the Lovers. If both picks are
-/// Lovers, the Stalker wins; a wrong guess can exile them, depending on the host's
-/// settings. During the round, the Stalker can read Lover chat with identities scrubbed.
-/// </summary>
 public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole, IUnlovable, IWikiDiscoverable
 {
-    public static readonly Color StalkerColor = new Color32(80, 0, 120, 255);
-
-    // Stalker is built around the Lovers existing; getting the Lover modifier itself would
-    // completely break the guess mechanic (and create a bizarre neutral-lover pair), so
-    // the Lover assignment pipeline skips anyone flagged IsUnlovable.
+    public static readonly Color StalkerColor = new Color32(255, 0, 149, 255);
     public bool IsUnlovable => true;
 
     public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Stalker", "Stalker");
@@ -73,23 +63,12 @@ public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
         IntroSound = DivaniAssets.StalkerIntroSound,
     };
 
-    // Meeting-state pick tracking (mirror of Swapper's PlayerVoteArea pattern).
     [HideFromIl2Cpp] public PlayerVoteArea? Guess1 { get; set; }
     [HideFromIl2Cpp] public PlayerVoteArea? Guess2 { get; set; }
-
-    // Marks the current meeting's resolution so StalkerEvents only reacts once.
     public bool ResolvedThisMeeting { get; set; }
-
     private MeetingMenu? _meetingMenu;
-
-    // Global state for game-end handling (single winner; similar to Plague Doctor).
     public static bool TriggerStalkerWin { get; set; }
     public static PlayerControl? WinningStalker { get; set; }
-
-    // Set during ProcessVotesEvent when the Stalker correctly guessed both
-    // Lovers; cleared to null on any failure. We only fire RpcTriggerStalkerWin
-    // only once the meeting ends so the game-end screen appears after it wraps
-    // up (matching the Plague Doctor flow).
     public static PlayerControl? PendingWinStalker { get; set; }
 
     public static void ClearAndReload()
@@ -109,27 +88,20 @@ public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
 
         if (Player.AmOwner)
         {
-            // Heart sprites already encode their colors (grey = not picked, pink = picked);
-            // override MeetingMenu's default green/red/white tints with white so the sprite
-            // pixels pass through untouched.
             _meetingMenu = new MeetingMenu(
                 this,
                 OnHeartClicked,
                 MeetingAbilityType.Toggle,
-                DivaniAssets.HeartFilled,
-                DivaniAssets.HeartNotFilled,
+                DivaniAssets.StalkerIntuitButton,
+                DivaniAssets.StalkerGazeButton,
                 IsExempt,
                 activeColor: Color.white,
                 disabledColor: Color.white,
                 hoverColor: Color.white)
             {
-                // Same side/position as Swapper so the pickers match visually.
                 Position = new Vector3(-0.40f, 0f, -3f),
             };
 
-            // Force-enable the chat button + swap to the Lover heart sprites so the
-            // Stalker can actually open the chat and see mirrored Lover messages.
-            // Mirrors LoverModifier.OnActivate.
             StalkerChatVisibility.ApplyLoverChatUi();
         }
     }
@@ -157,8 +129,6 @@ public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
         {
             _meetingMenu?.GenButtons(MeetingHud.Instance, !Player.HasDied());
 
-            // Meetings use the normal chat button sprites (everyone can chat,
-            // no private Lover channel). Love sprites come back on round start.
             StalkerChatVisibility.ApplyNormalChatUi();
         }
     }
@@ -186,11 +156,6 @@ public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
             return;
         }
 
-        // Toggle selection with the same semantics as SwapperRole.SetActive:
-        //   empty + empty  -> fill Guess1
-        //   filled + empty -> fill Guess2
-        //   click same     -> clear that slot
-        //   both full, new -> drop Guess1, shift Guess2 -> Guess1, set Guess2
         if (!Guess1)
         {
             Guess1 = voteArea;
@@ -260,9 +225,6 @@ public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
         }
     }
 
-    /// <summary>
-    /// Enumerates all alive Stalkers currently in game.
-    /// </summary>
     public static IEnumerable<StalkerRole> GetActiveStalkers()
     {
         foreach (var player in PlayerControl.AllPlayerControls)
