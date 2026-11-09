@@ -6,6 +6,7 @@ using MiraAPI.Modifiers;
 using MiraAPI.Roles;
 using Reactor.Utilities;
 using DivaniMods.Roles;
+using DivaniMods.Roles.Neutral.NeutralBenign;
 using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Roles;
 using TownOfUs.Utilities;
@@ -13,13 +14,6 @@ using UnityEngine;
 
 namespace DivaniMods.Patches;
 
-/// <summary>
-/// Stalker only exists in the game if Lovers ended up being assigned this round.
-/// Lovers are assigned asynchronously inside TOU's CoAssignTargets coroutine
-/// (via LoverModifier.AssignTargets + ModifierManager.AssignModifiers), so we
-/// defer the check a short moment after RoleManager.SelectRoles returns and
-/// revert any rolled Stalkers to Crewmates when no Lovers are present.
-/// </summary>
 [HarmonyPatch]
 public static class StalkerGatePatch
 {
@@ -39,26 +33,25 @@ public static class StalkerGatePatch
 
     private static IEnumerator WaitAndGateStalkers()
     {
-        // CoAssignTargets does multiple WaitForSeconds(0.01f) yields for every role/modifier
-        // that implements IAssignableTargets, then calls ModifierManager.AssignModifiers.
-        // 1 second is plenty of headroom.
         yield return new WaitForSeconds(1.0f);
 
-        var anyLovers = PlayerControl.AllPlayerControls.ToArray()
-            .Any(p => p != null && p.HasModifier<LoverModifier>());
-
-        if (anyLovers)
-        {
-            DivaniPlugin.Instance.Log.LogInfo("StalkerGate: Lovers present, Stalker allowed to stay.");
-            yield break;
-        }
-
-        var stalkers = PlayerControl.AllPlayerControls.ToArray()
+        var players = PlayerControl.AllPlayerControls.ToArray();
+        var stalkers = players
             .Where(p => p != null && p.Data != null && p.Data.Role is StalkerRole)
             .ToList();
 
         if (stalkers.Count == 0)
         {
+            yield break;
+        }
+
+        var cupidInGame = players.Any(p => p != null && p.Data?.Role is CupidRole);
+        var loverCount = players.Count(p =>
+            p != null && p.Data?.Role is not StalkerRole && p.HasModifier<LoverModifier>());
+
+        if (!cupidInGame && loverCount >= 2)
+        {
+            DivaniPlugin.Instance.Log.LogInfo("StalkerGate: Two Lovers present and no Cupid; Stalker allowed to stay.");
             yield break;
         }
 
@@ -68,11 +61,6 @@ public static class StalkerGatePatch
                         && r is not StalkerRole
                         && r.GetRoleAlignment() == RoleAlignment.NeutralEvil)
             .ToList();
-
-        // Fallback pool: custom Crewmate roles (Investigative/Killing/Power/...),
-        // explicitly excluding the plain vanilla Crewmate. We also filter out
-        // any role that's already been assigned to another player so the
-        // Stalker is replaced with something fresh.
         var pickedRoleTypes = new HashSet<RoleTypes>(PlayerControl.AllPlayerControls.ToArray()
             .Where(p => p != null && p.Data != null && p.Data.Role != null)
             .Select(p => p.Data.Role.Role));
@@ -85,7 +73,10 @@ public static class StalkerGatePatch
             .ToList();
 
         DivaniPlugin.Instance.Log.LogInfo(
-            "StalkerGate: No Lovers in game; rerolling " + stalkers.Count +
+            "StalkerGate: " + (cupidInGame
+                ? "Cupid is in game"
+                : "fewer than two Lovers are assigned") +
+            "; rerolling " + stalkers.Count +
             " Stalker(s). NeutralEvil pool: " + neutralEvilPool.Count +
             ", Crewmate fallback pool: " + crewmateFallbackPool.Count + ".");
 
@@ -103,8 +94,6 @@ public static class StalkerGatePatch
 
             if (crewmateFallbackPool.Count > 0)
             {
-                // Pull the picked role out of the fallback pool so subsequent
-                // Stalkers (rare, but possible) each get a unique crew role.
                 var idx = UnityEngine.Random.Range(0, crewmateFallbackPool.Count);
                 var pick = crewmateFallbackPool[idx];
                 crewmateFallbackPool.RemoveAt(idx);
