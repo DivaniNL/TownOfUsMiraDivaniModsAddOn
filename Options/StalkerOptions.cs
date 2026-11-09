@@ -8,9 +8,9 @@ public class StalkerOptions : AbstractOptionGroup<StalkerRole>
 {
     public override string GroupName => "Stalker";
 
-    [ModdedToggleOption("Anonymous Lover Chat Access")]
+    [ModdedToggleOption("DivaniMods.Options.Stalker.CanReadLoverChat")]
     public bool CanReadLoverChat { get; set; } = true;
 
-    [ModdedToggleOption("Wrong Guess Exiles Stalker")]
+    [ModdedToggleOption("DivaniMods.Options.Stalker.WrongGuessExiles")]
     public bool WrongGuessExiles { get; set; } = true;
 }

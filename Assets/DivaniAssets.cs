@@ -59,6 +59,8 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> TelecomChatHover { get; } = new LoadableResourceAsset($"{ShortPath}.TelecomChatHover.png");
     public static LoadableAsset<Sprite> TelecomChatOpen { get; } = new LoadableResourceAsset($"{ShortPath}.TelecomChatOpen.png");
     public static LoadableAsset<Sprite> TelecomChatBubble { get; } = new LoadableResourceAsset($"{ShortPath}.ChatTelecomBubble.png");
+    public static LoadableAsset<Sprite> HeartFilled { get; } = new LoadableResourceAsset($"{ShortPath}.HeartFilled.png", 1780f);
+    public static LoadableAsset<Sprite> HeartNotFilled { get; } = new LoadableResourceAsset($"{ShortPath}.HeartNotFilled.png", 1780f);
     // Role icons (200 ppu)
     public static LoadableAsset<Sprite> ThiefIcon { get; } = new LoadableResourceAsset($"{IconPath}.Thief.png", 200);
     public static LoadableAsset<Sprite> DeathnoteIcon { get; } = new LoadableResourceAsset($"{IconPath}.Deathnote.png", 200);
@@ -69,6 +71,7 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> SilencerIcon { get; } = new LoadableResourceAsset($"{IconPath}.Silencer.png", 200);
     public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourceAsset($"{IconPath}.Workhorse.png", 200);
     public static LoadableAsset<Sprite> PlagueDoctorIcon { get; } = new LoadableResourceAsset($"{IconPath}.PlagueDoctor.png", 200);
+    public static LoadableAsset<Sprite> StalkerIcon { get; } = new LoadableResourceAsset($"{ShortPath}.StalkerIcon.png", 200);
     public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{IconPath}.Innocent.png", 200);
     public static LoadableAsset<Sprite> OpportunistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Opportunist.png", 200);
     public static LoadableAsset<Sprite> RecruiterIcon { get; } = new LoadableResourceAsset($"{IconPath}.Recruiter.png");
@@ -124,6 +127,7 @@ public static class DivaniAssets
     // Audio clips (16000hz)
     public static LoadableAsset<AudioClip> FragileBreak { get; } = new LoadableAudioResourceAsset($"{ShortPath}.FragileBreak.wav");
     public static LoadableAsset<AudioClip> PlagueDoctorIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.PlagueDoctorIntro.wav");
+    public static LoadableAsset<AudioClip> StalkerIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.StalkerIntro.wav");
     public static LoadableAsset<AudioClip> InfectSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.InfectSound.wav");
     public static LoadableAsset<AudioClip> ThiefIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.ThiefIntro.wav");
     public static LoadableAsset<AudioClip> PortalMakerIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.PortalMakerIntro.wav");

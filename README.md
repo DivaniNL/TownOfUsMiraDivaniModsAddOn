@@ -52,6 +52,7 @@ Join the Discord:
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#innocent"><img width="10%" src="./Resources/Icons/Innocent.png" alt="Innocent"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#opportunist"><img width="10%" src="./Resources/Icons/Opportunist.png" alt="Opportunist"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#plague-doctor"><img width="10%" src="./Resources/Icons/PlagueDoctor.png" alt="Plague Doctor"/></a>
+  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#stalker"><img width="10%" src="./Resources/StalkerIcon.png" alt="Stalker"/></a>
   <img src="./Resources/Headers/NeutKilling.png" alt="Neutral Killing"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#frag"><img width="10%" src="./Resources/Icons/Frag.png" alt="Frag"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#monster"><img width="10%" src="./Resources/Icons/Monster.png" alt="Monster"/></a>

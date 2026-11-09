@@ -610,6 +610,17 @@
     <string name="DivaniMods.Options.PlagueDoctor.WinOutcome.EndsGame">Ends Game</string>
     <string name="DivaniMods.Options.PlagueDoctor.WinOutcome.KillOnePlayer">Kill One Player</string>
     <string name="DivaniMods.Options.PlagueDoctor.WinOutcome.Nothing">Nothing</string>
+<!-- Stalker -->
+    <string name="DivaniMods.Role.Stalker">Stalker</string>
+    <string name="DivaniMods.Role.Stalker.Description">Find the Lovers. Claim your win.</string>
+    <string name="DivaniMods.Role.Stalker.MedDescription">Identify both Lovers in a meeting to win alone.</string>
+    <string name="DivaniMods.Role.Stalker.LongDescription">You can only appear when Lovers are in the game.&#10;During a meeting, mark two living players as the Lovers. Correctly identify both to win alone. If enabled, a wrong guess gets you exiled.&#10;If Lover chat access is enabled, you can read their messages during the round, but their identities are hidden and you cannot reply.</string>
+    <string name="DivaniMods.Role.Stalker.Ability.Guess">Lover Guess</string>
+    <string name="DivaniMods.Role.Stalker.Ability.Guess.Description">During a meeting, select two players you believe are the Lovers. Guess both correctly to win. A wrong guess exiles you if the host enabled that option.</string>
+    <string name="DivaniMods.Role.Stalker.Ability.LoverChat">Anonymous Lover Chat</string>
+    <string name="DivaniMods.Role.Stalker.Ability.LoverChat.Description">Read Lover chat during the round with all sender identities hidden. You cannot send messages to this chat.</string>
+    <string name="DivaniMods.Options.Stalker.CanReadLoverChat">Can Read Anonymous Lover Chat</string>
+    <string name="DivaniMods.Options.Stalker.WrongGuessExiles">Wrong Guess Exiles Stalker</string>
 <!-- Frag -->
     <string name="DivaniMods.Role.Frag">Frag</string>
     <string name="DivaniMods.Role.Frag.Description">Here, Hold this!</string>

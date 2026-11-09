@@ -610,6 +610,17 @@
     <string name="DivaniMods.Options.PlagueDoctor.WinOutcome.EndsGame">Termina la partida</string>
     <string name="DivaniMods.Options.PlagueDoctor.WinOutcome.KillOnePlayer">Mata a un jugador</string>
     <string name="DivaniMods.Options.PlagueDoctor.WinOutcome.Nothing">Nada</string>
+<!-- Acechador -->
+    <string name="DivaniMods.Role.Stalker">Acechador</string>
+    <string name="DivaniMods.Role.Stalker.Description">Encuentra a los enamorados y gana.</string>
+    <string name="DivaniMods.Role.Stalker.MedDescription">Identifica a ambos enamorados en una reunión para ganar en solitario.</string>
+    <string name="DivaniMods.Role.Stalker.LongDescription">Solo apareces si hay enamorados en la partida.&#10;Durante una reunión, marca a dos jugadores vivos como los enamorados. Si identificas a ambos correctamente, ganas en solitario. Si está activado, una respuesta incorrecta te expulsa.&#10;Si el acceso al chat está activado, puedes leer los mensajes de los enamorados durante la ronda, pero sus identidades están ocultas y no puedes responder.</string>
+    <string name="DivaniMods.Role.Stalker.Ability.Guess">Adivinar a los enamorados</string>
+    <string name="DivaniMods.Role.Stalker.Ability.Guess.Description">Durante una reunión, selecciona a dos jugadores que creas que son los enamorados. Adivina a ambos correctamente para ganar. Si el anfitrión lo activó, una respuesta incorrecta te expulsa.</string>
+    <string name="DivaniMods.Role.Stalker.Ability.LoverChat">Chat anónimo de enamorados</string>
+    <string name="DivaniMods.Role.Stalker.Ability.LoverChat.Description">Lee el chat de los enamorados durante la ronda sin conocer la identidad de quien escribe. No puedes enviar mensajes a este chat.</string>
+    <string name="DivaniMods.Options.Stalker.CanReadLoverChat">Puede leer el chat anónimo de los enamorados</string>
+    <string name="DivaniMods.Options.Stalker.WrongGuessExiles">Una respuesta incorrecta expulsa al Acechador</string>
 <!-- Frag -->
     <string name="DivaniMods.Role.Frag">Frag</string>
     <string name="DivaniMods.Role.Frag.Description">¡Toma, sostén esto!</string>

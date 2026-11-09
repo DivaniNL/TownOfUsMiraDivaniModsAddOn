@@ -21,9 +21,8 @@ namespace DivaniMods.Patches;
 /// one heart filled / same-player picks / non-players all no-op so the meeting
 /// continues as normal.
 ///
-/// EjectionEvent: fires after the exile animation. If a correct guess was
-/// marked, fire the win RPC now - this routes through CustomGameOver just like
-/// Plague Doctor's solo win.
+/// EndMeetingEvent: fires after the vote and exile sequence, including ties and
+/// skips. If a correct guess was marked, fire the win RPC now.
 /// </summary>
 public static class StalkerEvents
 {
@@ -31,6 +30,11 @@ public static class StalkerEvents
     [RegisterEvent(5)]
     public static void ProcessVotesEventHandler(ProcessVotesEvent @event)
     {
+        if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
+        {
+            return;
+        }
+
         foreach (var stalker in StalkerRole.GetActiveStalkers().ToList())
         {
             ResolveStalkerGuess(@event, stalker);
@@ -38,19 +42,24 @@ public static class StalkerEvents
     }
 
     [RegisterEvent]
-    public static void EjectionEventHandler(EjectionEvent @event)
+    public static void EndMeetingEventHandler(EndMeetingEvent @event)
     {
+        if (!AmongUsClient.Instance || !AmongUsClient.Instance.AmHost)
+        {
+            return;
+        }
+
         var winner = StalkerRole.PendingWinStalker;
         StalkerRole.PendingWinStalker = null;
 
-        if (winner == null || winner.Data == null || winner.Data.IsDead)
+        if (winner == null || winner.Data == null)
         {
             return;
         }
 
         DivaniPlugin.Instance.Log.LogInfo(
             $"Stalker '{winner.Data.PlayerName}' guessed both Lovers correctly. " +
-            "Triggering post-meeting Stalker win.");
+            "Triggering Stalker win after the meeting.");
         StalkerRole.RpcTriggerStalkerWin(winner);
     }
 
@@ -67,13 +76,13 @@ public static class StalkerEvents
             return;
         }
 
-        if (stalker.Guess1.TargetPlayerId == stalker.Guess2.TargetPlayerId)
+        if (stalker.Guess1.PlayerId == stalker.Guess2.PlayerId)
         {
             return;
         }
 
-        var p1 = GetPlayerById(stalker.Guess1.TargetPlayerId);
-        var p2 = GetPlayerById(stalker.Guess2.TargetPlayerId);
+        var p1 = GetPlayerById(stalker.Guess1.PlayerId);
+        var p2 = GetPlayerById(stalker.Guess2.PlayerId);
         if (p1 == null || p2 == null)
         {
             return;
@@ -85,8 +94,7 @@ public static class StalkerEvents
 
         if (bothLovers)
         {
-            // Stalker wins - but don't trigger the game-end until the meeting
-            // actually wraps up (EjectionEventHandler above picks this up).
+            // Defer ending the game until the meeting has fully resolved.
             StalkerRole.PendingWinStalker = stalker.Player;
             return;
         }

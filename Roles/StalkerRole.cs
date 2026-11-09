@@ -6,6 +6,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Modifiers;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using Reactor.Networking.Attributes;
 using DivaniMods.Assets;
@@ -15,6 +16,7 @@ using DivaniMods.Patches;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers.Game.Alliance;
 using TownOfUs.Modules;
+using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
 using TownOfUs.Roles.Neutral;
 using TownOfUs.Utilities;
@@ -25,10 +27,10 @@ namespace DivaniMods.Roles;
 /// <summary>
 /// Neutral Evil that only exists when Lovers are present in the game. In meetings,
 /// the Stalker can pick two players they believe are the Lovers. If both picks are
-/// Lovers, Stalker instantly wins; otherwise, Stalker is exiled. During the round
-/// the Stalker can also read Lover chat with identities scrubbed.
+/// Lovers, the Stalker wins; a wrong guess can exile them, depending on the host's
+/// settings. During the round, the Stalker can read Lover chat with identities scrubbed.
 /// </summary>
-public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole, IUnlovable
+public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsRole, IUnlovable, IWikiDiscoverable
 {
     public static readonly Color StalkerColor = new Color32(80, 0, 120, 255);
 
@@ -37,21 +39,37 @@ public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
     // the Lover assignment pipeline skips anyone flagged IsUnlovable.
     public bool IsUnlovable => true;
 
-    public string RoleName => "Stalker";
-    public string RoleDescription => "Unmask the Lovers!";
-    public string RoleLongDescription =>
-        "You are a Stalker. Lovers are in the game and you want\n" +
-        "to expose them. In meetings, mark two players with hearts.\n" +
-        "Guess both Lovers correctly and you win instantly.\n" +
-        "Guess wrong and you are exiled.";
+    public string RoleName => MiraLocaleManager.Get("DivaniMods.Role.Stalker", "Stalker");
+    public string RoleDescription => MiraLocaleManager.Get("DivaniMods.Role.Stalker.Description");
+    public string RoleMedDescription => MiraLocaleManager.Get("DivaniMods.Role.Stalker.MedDescription");
+    public string RoleLongDescription => MiraLocaleManager.Get("DivaniMods.Role.Stalker.LongDescription");
     public Color RoleColor => StalkerColor;
     public ModdedRoleTeams Team => ModdedRoleTeams.Custom;
     public RoleAlignment RoleAlignment => RoleAlignment.NeutralEvil;
 
+    public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
+
+    [HideFromIl2Cpp] public List<CustomButtonWikiDescription> Abilities { get; } =
+    [
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Stalker.Ability.Guess"),
+            MiraLocaleManager.Get("DivaniMods.Role.Stalker.Ability.Guess.Description"),
+            DivaniAssets.StalkerIcon
+        ),
+        new(
+            MiraLocaleManager.Get("DivaniMods.Role.Stalker.Ability.LoverChat"),
+            MiraLocaleManager.Get("DivaniMods.Role.Stalker.Ability.LoverChat.Description"),
+            DivaniAssets.StalkerIcon
+        )
+    ];
+
     public CustomRoleConfiguration Configuration => new(this)
     {
         TasksCountForProgress = false,
+        MaxRoleCount = 1,
         Icon = DivaniAssets.StalkerIcon,
+        IconTmp = MiraAPI.Utilities.Assets.TmpSpriteUtils.CreateSpriteAsset(
+            DivaniAssets.StalkerIcon.LoadAsset(), "DivaniMod.Role.Neutral.Stalker", 1.45f),
         IntroSound = DivaniAssets.StalkerIntroSound,
     };
 
@@ -70,8 +88,8 @@ public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
 
     // Set during ProcessVotesEvent when the Stalker correctly guessed both
     // Lovers; cleared to null on any failure. We only fire RpcTriggerStalkerWin
-    // once the meeting's EjectionEvent runs so the game-end screen appears
-    // *after* the meeting wraps up (matching the Plague Doctor flow).
+    // only once the meeting ends so the game-end screen appears after it wraps
+    // up (matching the Plague Doctor flow).
     public static PlayerControl? PendingWinStalker { get; set; }
 
     public static void ClearAndReload()
@@ -157,13 +175,13 @@ public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
 
     private static bool IsExempt(PlayerVoteArea voteArea)
     {
-        var player = GameData.Instance.GetPlayerById(voteArea.TargetPlayerId)?.Object;
+        var player = GameData.Instance.GetPlayerById(voteArea.PlayerId)?.Object;
         return !player || player!.Data == null || player.Data.Disconnected || player.Data.IsDead;
     }
 
     private void OnHeartClicked(PlayerVoteArea voteArea, MeetingHud meeting)
     {
-        if (meeting.state == MeetingHud.VoteStates.Discussion || IsExempt(voteArea))
+        if (meeting.state == MeetingHud.MeetingStates.Discussion || IsExempt(voteArea))
         {
             return;
         }
@@ -176,32 +194,32 @@ public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
         if (!Guess1)
         {
             Guess1 = voteArea;
-            _meetingMenu!.Actives[voteArea.TargetPlayerId] = true;
+            _meetingMenu!.Actives[voteArea.PlayerId] = true;
         }
         else if (!Guess2)
         {
             Guess2 = voteArea;
-            _meetingMenu!.Actives[voteArea.TargetPlayerId] = true;
+            _meetingMenu!.Actives[voteArea.PlayerId] = true;
         }
         else if (Guess1 == voteArea)
         {
-            _meetingMenu!.Actives[Guess1.TargetPlayerId] = false;
+            _meetingMenu!.Actives[Guess1!.PlayerId] = false;
             Guess1 = null;
         }
         else if (Guess2 == voteArea)
         {
-            _meetingMenu!.Actives[Guess2.TargetPlayerId] = false;
+            _meetingMenu!.Actives[Guess2.PlayerId] = false;
             Guess2 = null;
         }
         else
         {
-            _meetingMenu!.Actives[Guess1.TargetPlayerId] = false;
+            _meetingMenu!.Actives[Guess1!.PlayerId] = false;
             Guess1 = Guess2;
             Guess2 = voteArea;
-            _meetingMenu.Actives[voteArea.TargetPlayerId] = true;
+            _meetingMenu!.Actives[voteArea.PlayerId] = true;
         }
 
-        RpcSyncGuesses(Player, Guess1?.TargetPlayerId ?? byte.MaxValue, Guess2?.TargetPlayerId ?? byte.MaxValue);
+        RpcSyncGuesses(Player, Guess1?.PlayerId ?? byte.MaxValue, Guess2?.PlayerId ?? byte.MaxValue);
     }
 
     [MethodRpc((uint)DivaniRpcCalls.StalkerSyncGuesses)]
@@ -218,8 +236,8 @@ public sealed class StalkerRole(IntPtr cppPtr) : NeutralRole(cppPtr), ITownOfUsR
         }
 
         var areas = MeetingHud.Instance.playerStates.ToArray();
-        role.Guess1 = areas.FirstOrDefault(x => x.TargetPlayerId == guess1);
-        role.Guess2 = areas.FirstOrDefault(x => x.TargetPlayerId == guess2);
+        role.Guess1 = areas.FirstOrDefault(x => x.PlayerId == guess1);
+        role.Guess2 = areas.FirstOrDefault(x => x.PlayerId == guess2);
     }
 
     [MethodRpc((uint)DivaniRpcCalls.StalkerTriggerWin)]
