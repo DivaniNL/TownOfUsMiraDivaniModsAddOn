@@ -20,8 +20,8 @@ public class RecruiterOptions : AbstractRoleOptionGroup<RecruiterRole>
     public ModdedToggleOption RemoveExistingRoles { get; } =
         new(MiraLocaleManager.Get("DivaniMods.Options.Recruiter.RemoveExistingRoles"), true);
 
-    public ModdedEnumOption RecruitGuess { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Recruiter.RecruitGuess"),
-        (int)CacheRoleGuess.ActiveRole, typeof(CacheRoleGuess),
+    public ModdedEnumOption<CacheRoleGuess> RecruitGuess { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Recruiter.RecruitGuess"),
+        CacheRoleGuess.ActiveRole,
         [
             MiraLocaleManager.Get("DivaniMods.Options.Recruiter.RecruitGuess.OriginalRole"),
             MiraLocaleManager.Get("DivaniMods.Options.Recruiter.RecruitGuess.NewRole"),

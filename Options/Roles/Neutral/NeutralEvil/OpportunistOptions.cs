@@ -19,7 +19,7 @@ public class OpportunistOptions : AbstractRoleOptionGroup<OpportunistRole>
 
     public ModdedToggleOption CanUseWildcard { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Opportunist.CanUseWildcard"), false);
 
-    [ModdedEnumOption("DivaniMods.Options.Opportunist.WinOutcome", typeof(NeutralEvilWinOutcome), 
+    [ModdedEnumOption<NeutralEvilWinOutcome>("DivaniMods.Options.Opportunist.WinOutcome",
         [
             "DivaniMods.Options.Opportunist.WinOutcome.EndsGame",
             "DivaniMods.Options.Opportunist.WinOutcome.KillOnePlayer",

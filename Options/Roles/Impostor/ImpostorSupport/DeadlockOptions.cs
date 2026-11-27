@@ -29,10 +29,9 @@ public class DeadlockOptions : AbstractRoleOptionGroup<DeadlockRole>
     public ModdedNumberOption ChargesPerKill { get; } = new(
         MiraLocaleManager.Get("DivaniMods.Options.Deadlock.ChargesPerKill"), 1f, 0f, 3f, 1f, MiraNumberSuffixes.None);
 
-    public ModdedEnumOption LockdownEffects { get; } = new(
+    public ModdedEnumOption<DeadlockLockdownMode> LockdownEffects { get; } = new(
         MiraLocaleManager.Get("DivaniMods.Options.Deadlock.LockdownEffects"),
-        (int)DeadlockLockdownMode.Both,
-        typeof(DeadlockLockdownMode),
+        DeadlockLockdownMode.Both,
         [
             MiraLocaleManager.Get("DivaniMods.Options.Deadlock.LockdownEffects.TasksOnly"),
             MiraLocaleManager.Get("DivaniMods.Options.Deadlock.LockdownEffects.DoorsOnly"),

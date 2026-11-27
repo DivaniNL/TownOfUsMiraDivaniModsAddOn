@@ -39,18 +39,18 @@ public class UAVOptions : AbstractTouModifierOptionGroup<UAVModifier>
     public ModdedToggleOption FriendliesShareVisionOption { get; } =
         new(MiraLocaleManager.Get("DivaniMods.Options.UAV.FriendliesShareVision"), true);
 
-    public ModdedEnumOption RevealMode { get; } =
-        new(MiraLocaleManager.Get("DivaniMods.Options.UAV.RevealMode"), (int)UAVRevealMode.Constant, typeof(UAVRevealMode));
+    public ModdedEnumOption<UAVRevealMode> RevealMode { get; } =
+        new(MiraLocaleManager.Get("DivaniMods.Options.UAV.RevealMode"), UAVRevealMode.Constant);
 
     public ModdedNumberOption RadarSweepInterval { get; } =
         new(MiraLocaleManager.Get("DivaniMods.Options.UAV.RadarSweepInterval"), 1f, 0.5f, 5f, 0.5f, MiraNumberSuffixes.Seconds)
         {
-            Visible = () => OptionGroupSingleton<UAVOptions>.Instance.RevealMode.Value == (int)UAVRevealMode.Sweeping
+            Visible = () => OptionGroupSingleton<UAVOptions>.Instance.RevealMode.Value == UAVRevealMode.Sweeping
         };
 
     public bool ShowPlayerColors => ShowPlayerColorsOption.Value;
     public bool NotifyOthers => NotifyOthersOption.Value;
     public bool FriendliesShareVision => FriendliesShareVisionOption.Value;
-    public bool Sweeping => RevealMode.Value == (int)UAVRevealMode.Sweeping;
+    public bool Sweeping => RevealMode.Value == UAVRevealMode.Sweeping;
     public float SweepInterval => RadarSweepInterval.Value;
 }

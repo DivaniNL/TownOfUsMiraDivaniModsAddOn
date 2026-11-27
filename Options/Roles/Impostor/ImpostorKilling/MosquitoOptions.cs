@@ -16,8 +16,8 @@ public class MosquitoOptions : AbstractRoleOptionGroup<MosquitoRole>
 {
     public override string GroupName => MiraLocaleManager.Get("DivaniMods.Role.Mosquito", "Mosquito");
 
-    public ModdedEnumOption TargetMode { get; } = new(
-        MiraLocaleManager.Get("DivaniMods.Options.Mosquito.TargetMode"), (int)MosquitoTargetMode.PlayerSelection, typeof(MosquitoTargetMode),
+    public ModdedEnumOption<MosquitoTargetMode> TargetMode { get; } = new(
+        MiraLocaleManager.Get("DivaniMods.Options.Mosquito.TargetMode"), MosquitoTargetMode.PlayerSelection,
         [
             MiraLocaleManager.Get("DivaniMods.Options.Mosquito.TargetMode.Furthest"),
             MiraLocaleManager.Get("DivaniMods.Options.Mosquito.TargetMode.SelectionTablet")

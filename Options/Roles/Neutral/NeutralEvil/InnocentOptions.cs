@@ -22,7 +22,7 @@ public class InnocentOptions : AbstractRoleOptionGroup<InnocentRole>
     [ModdedToggleOption("DivaniMods.Options.Innocent.TauntBreaksShields")]
     public bool TauntBreaksShields { get; set; } = true;
 
-    [ModdedEnumOption("DivaniMods.Options.Innocent.WinOutcome", typeof(NeutralEvilWinOutcome), 
+    [ModdedEnumOption<NeutralEvilWinOutcome>("DivaniMods.Options.Innocent.WinOutcome",
         [
             "DivaniMods.Options.Innocent.WinOutcome.EndsGame",
             "DivaniMods.Options.Innocent.WinOutcome.KillOnePlayer",

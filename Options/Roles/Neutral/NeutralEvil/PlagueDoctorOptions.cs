@@ -54,7 +54,7 @@ public class PlagueDoctorOptions : AbstractRoleOptionGroup<PlagueDoctorRole>
         Visible = () => OptionGroupSingleton<PlagueDoctorOptions>.Instance.NotifyPlayersWhenInfectionClose,
     };
 
-    [ModdedEnumOption("DivaniMods.Options.PlagueDoctor.WinOutcome", typeof(NeutralEvilWinOutcome), 
+    [ModdedEnumOption<NeutralEvilWinOutcome>("DivaniMods.Options.PlagueDoctor.WinOutcome",
         [
             "DivaniMods.Options.PlagueDoctor.WinOutcome.EndsGame",
             "DivaniMods.Options.PlagueDoctor.WinOutcome.KillOnePlayer",

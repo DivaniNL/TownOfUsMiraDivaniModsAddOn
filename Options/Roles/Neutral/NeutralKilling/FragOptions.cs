@@ -28,8 +28,8 @@ public class FragOptions : AbstractRoleOptionGroup<FragRole>
 
     public ModdedToggleOption NegatesVeteranAlert { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Frag.NegatesVeteranAlert"), true);
 
-    public ModdedEnumOption OnTimelordRewind { get; } = new(
-        MiraLocaleManager.Get("DivaniMods.Options.Frag.OnTimelordRewind"), (int)FragRewindBehavior.Pause, typeof(FragRewindBehavior),
+    public ModdedEnumOption<FragRewindBehavior> OnTimelordRewind { get; } = new(
+        MiraLocaleManager.Get("DivaniMods.Options.Frag.OnTimelordRewind"), FragRewindBehavior.Pause,
         [
             MiraLocaleManager.Get("DivaniMods.Options.Frag.OnTimelordRewind.Pause"),
             MiraLocaleManager.Get("DivaniMods.Options.Frag.OnTimelordRewind.Rewind")

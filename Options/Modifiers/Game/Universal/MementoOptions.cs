@@ -21,8 +21,8 @@ public class MementoOptions : AbstractTouModifierOptionGroup<MementoModifier>
     public override Color GroupColor => MementoModifier.MementoColor;
     public override uint GroupPriority => 35;
 
-    public ModdedEnumOption RevealMode { get; } =
-        new(MiraLocaleManager.Get("DivaniMods.Options.Memento.RevealMode"), (int)MementoRevealMode.Role, typeof(MementoRevealMode));
+    public ModdedEnumOption<MementoRevealMode> RevealMode { get; } =
+        new(MiraLocaleManager.Get("DivaniMods.Options.Memento.RevealMode"), MementoRevealMode.Role);
 
     public ModdedToggleOption ShowHeldModifiers { get; } =
         new(MiraLocaleManager.Get("DivaniMods.Options.Memento.ShowHeldModifiers"), true);

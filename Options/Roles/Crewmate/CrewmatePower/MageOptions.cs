@@ -45,8 +45,8 @@ public class MageOptions : AbstractRoleOptionGroup<MageRole>
     public ModdedNumberOption ShockShieldDuration { get; } =
         new(MiraLocaleManager.Get("DivaniMods.Options.Mage.ShockShieldDuration"), 12.5f, 5f, 30f, 2.5f, MiraNumberSuffixes.Seconds);
 
-    public ModdedEnumOption ShockShieldVisibleTo { get; } =
-        new(MiraLocaleManager.Get("DivaniMods.Options.Mage.ShockShieldVisibleTo"), (int)ShockShieldVisibility.MageAndTarget, typeof(ShockShieldVisibility),
+    public ModdedEnumOption<ShockShieldVisibility> ShockShieldVisibleTo { get; } =
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mage.ShockShieldVisibleTo"), ShockShieldVisibility.MageAndTarget,
             [
             MiraLocaleManager.Get("DivaniMods.Options.Mage.ShockShieldVisibleTo.Mage"),
             MiraLocaleManager.Get("DivaniMods.Options.Mage.ShockShieldVisibleTo.MageAndTarget"),
@@ -60,16 +60,16 @@ public class MageOptions : AbstractRoleOptionGroup<MageRole>
     public ModdedToggleOption ShockShieldReactsToInteractions { get; } =
         new(MiraLocaleManager.Get("DivaniMods.Options.Mage.ShockShieldReactsToInteractions"), true);
 
-    public ModdedEnumOption EnergizeApplyTiming { get; } =
-        new(MiraLocaleManager.Get("DivaniMods.Options.Mage.EnergizeApplyTiming"), (int)EnergizeTiming.AfterMeeting, typeof(EnergizeTiming), 
+    public ModdedEnumOption<EnergizeTiming> EnergizeApplyTiming { get; } =
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mage.EnergizeApplyTiming"), EnergizeTiming.AfterMeeting, 
         [
             MiraLocaleManager.Get("DivaniMods.Options.Mage.EnergizeApplyTiming.AfterDelay"),
             MiraLocaleManager.Get("DivaniMods.Options.Mage.EnergizeApplyTiming.AfterMeeting")
         ]
         );
 
-    public ModdedEnumOption EnergizeNeutralBenign { get; } =
-        new(MiraLocaleManager.Get("DivaniMods.Options.Mage.EnergizeNeutralBenign"), (int)EnergizeNeutralBenignMode.Nerf, typeof(EnergizeNeutralBenignMode), 
+    public ModdedEnumOption<EnergizeNeutralBenignMode> EnergizeNeutralBenign { get; } =
+        new(MiraLocaleManager.Get("DivaniMods.Options.Mage.EnergizeNeutralBenign"), EnergizeNeutralBenignMode.Nerf, 
         [
             MiraLocaleManager.Get("DivaniMods.Options.Mage.EnergizeNeutralBenign.Removed"),
             MiraLocaleManager.Get("DivaniMods.Options.Mage.EnergizeNeutralBenign.Added"),
@@ -80,7 +80,7 @@ public class MageOptions : AbstractRoleOptionGroup<MageRole>
     public ModdedNumberOption EnergizeDelay { get; } =
         new(MiraLocaleManager.Get("DivaniMods.Options.Mage.EnergizeDelay"), 3f, 0f, 15f, 0.5f, MiraNumberSuffixes.Seconds)
         {
-            Visible = () => OptionGroupSingleton<MageOptions>.Instance.EnergizeApplyTiming.Value == (int)EnergizeTiming.AfterDelay,
+            Visible = () => OptionGroupSingleton<MageOptions>.Instance.EnergizeApplyTiming.Value == EnergizeTiming.AfterDelay,
         };
 
     public ModdedNumberOption IllusionDuration { get; } =

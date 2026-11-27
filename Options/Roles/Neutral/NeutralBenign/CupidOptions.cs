@@ -37,8 +37,8 @@ public class CupidOptions : AbstractRoleOptionGroup<CupidRole>
     public ModdedNumberOption ProtectDuration { get; } = new(
         MiraLocaleManager.Get("DivaniMods.Options.Cupid.ProtectDuration"), 10f, 5f, 15f, 1f, MiraNumberSuffixes.Seconds);
 
-    public ModdedEnumOption ShowProtect { get; } = new(
-        MiraLocaleManager.Get("DivaniMods.Options.Cupid.ShowProtect"), (int)CupidProtectShowOptions.CupidAndLovers, typeof(CupidProtectShowOptions),
+    public ModdedEnumOption<CupidProtectShowOptions> ShowProtect { get; } = new(
+        MiraLocaleManager.Get("DivaniMods.Options.Cupid.ShowProtect"), CupidProtectShowOptions.CupidAndLovers,
         [
             MiraLocaleManager.Get("DivaniMods.Options.Cupid.ShowProtect.Cupid"),
             MiraLocaleManager.Get("DivaniMods.Options.Cupid.ShowProtect.CupidAndLovers"),
@@ -46,8 +46,8 @@ public class CupidOptions : AbstractRoleOptionGroup<CupidRole>
         ]
         );
 
-    public ModdedEnumOption OnLoverDeath { get; } = new(
-        MiraLocaleManager.Get("DivaniMods.Options.Cupid.OnLoverDeath"), (int)CupidBecomeOptions.Amnesiac, typeof(CupidBecomeOptions),
+    public ModdedEnumOption<CupidBecomeOptions> OnLoverDeath { get; } = new(
+        MiraLocaleManager.Get("DivaniMods.Options.Cupid.OnLoverDeath"), CupidBecomeOptions.Amnesiac,
         [
             MiraLocaleManager.Get("DivaniMods.Options.Cupid.OnLoverDeath.Crew"),
             MiraLocaleManager.Get("DivaniMods.Options.Cupid.OnLoverDeath.Amnesiac"),
@@ -61,7 +61,7 @@ public class CupidOptions : AbstractRoleOptionGroup<CupidRole>
     public ModdedToggleOption CupidRevivedOnLoversRevive { get; } = new(
         MiraLocaleManager.Get("DivaniMods.Options.Cupid.CupidRevivedOnLoversRevive"), false)
     {
-        Visible = () => OptionGroupSingleton<CupidOptions>.Instance.OnLoverDeath.Value == (int)CupidBecomeOptions.CupidDies,
+        Visible = () => OptionGroupSingleton<CupidOptions>.Instance.OnLoverDeath.Value == CupidBecomeOptions.CupidDies,
     };
 
     [ModdedToggleOption("DivaniMods.Options.Cupid.LoversKnowCupid")]

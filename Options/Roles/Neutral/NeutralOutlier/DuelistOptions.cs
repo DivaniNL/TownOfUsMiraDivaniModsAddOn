@@ -35,16 +35,16 @@ public class DuelistOptions : AbstractRoleOptionGroup<DuelistRole>
     public ModdedNumberOption DuelsLostToDie { get; } = new(
         MiraLocaleManager.Get("DivaniMods.Options.Duelist.DuelsLostToDie"), 2f, 1f, 10f, 1f, MiraNumberSuffixes.None);
 
-    public ModdedEnumOption WinType { get; } = new(
-        MiraLocaleManager.Get("DivaniMods.Options.Duelist.WinType"), (int)DuelistWinType.WinAlone, typeof(DuelistWinType),
+    public ModdedEnumOption<DuelistWinType> WinType { get; } = new(
+        MiraLocaleManager.Get("DivaniMods.Options.Duelist.WinType"), DuelistWinType.WinAlone,
         [
             MiraLocaleManager.Get("DivaniMods.Options.Duelist.WinType.WinAlone"),
             MiraLocaleManager.Get("DivaniMods.Options.Duelist.WinType.LeaveInVictory")
         ]
         );
 
-    public ModdedEnumOption SpawnType { get; } = new(
-        MiraLocaleManager.Get("DivaniMods.Options.Duelist.SpawnType"), (int)DuelSpawnType.Close, typeof(DuelSpawnType),
+    public ModdedEnumOption<DuelSpawnType> SpawnType { get; } = new(
+        MiraLocaleManager.Get("DivaniMods.Options.Duelist.SpawnType"), DuelSpawnType.Close,
         [
             MiraLocaleManager.Get("DivaniMods.Options.Duelist.SpawnType.Close"),
             MiraLocaleManager.Get("DivaniMods.Options.Duelist.SpawnType.Far"),

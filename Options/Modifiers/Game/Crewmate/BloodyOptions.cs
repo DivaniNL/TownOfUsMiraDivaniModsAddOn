@@ -20,17 +20,16 @@ public sealed class BloodyOptions : AbstractTouModifierOptionGroup<BloodyModifie
 
     public override uint GroupPriority => 26;
 
-    public ModdedEnumOption FootprintMode { get; set; } = new(
+    public ModdedEnumOption<BloodyPrintMode> FootprintMode { get; set; } = new(
         MiraLocaleManager.Get("DivaniMods.Options.Bloody.FootprintMode"),
-        (int)BloodyPrintMode.Distance,
-        typeof(BloodyPrintMode));
+        BloodyPrintMode.Distance);
 
     public ModdedNumberOption FootprintIntervalDistance { get; } = new(
         MiraLocaleManager.Get("DivaniMods.Options.Bloody.FootprintIntervalDistance"),
         0.5f, 0.25f, 3f, 0.5f, MiraNumberSuffixes.None)
     {
         Visible = () =>
-            (BloodyPrintMode)OptionGroupSingleton<BloodyOptions>.Instance.FootprintMode.Value is BloodyPrintMode.Distance
+            OptionGroupSingleton<BloodyOptions>.Instance.FootprintMode.Value is BloodyPrintMode.Distance
     };
 
     public ModdedNumberOption FootprintIntervalTime { get; } = new(
@@ -38,11 +37,11 @@ public sealed class BloodyOptions : AbstractTouModifierOptionGroup<BloodyModifie
         4f, 0.5f, 6f, 0.5f, MiraNumberSuffixes.Seconds)
     {
         Visible = () =>
-            (BloodyPrintMode)OptionGroupSingleton<BloodyOptions>.Instance.FootprintMode.Value is BloodyPrintMode.Time
+            OptionGroupSingleton<BloodyOptions>.Instance.FootprintMode.Value is BloodyPrintMode.Time
     };
 
     public float FootprintInterval =>
-        (BloodyPrintMode)FootprintMode.Value is BloodyPrintMode.Distance
+        FootprintMode.Value is BloodyPrintMode.Distance
             ? FootprintIntervalDistance.Value
             : FootprintIntervalTime.Value;
 

@@ -34,7 +34,7 @@ public sealed class MoleOptions : AbstractRoleOptionGroup<MoleRole>
     [ModdedNumberOption("DivaniMods.Options.Mole.VentRoundDuration", 0f, 15f, 1f, MiraNumberSuffixes.None, "0", true)]
     public float VentRoundDuration { get; set; } = 2f;
 
-    [ModdedEnumOption("DivaniMods.Options.Mole.VentUsage", typeof(MoleVentUsage), 
+    [ModdedEnumOption<MoleVentUsage>("DivaniMods.Options.Mole.VentUsage",
     [
         "DivaniMods.Options.Mole.VentUsage.Crewmates",
         "DivaniMods.Options.Mole.VentUsage.Anyone",
@@ -43,7 +43,7 @@ public sealed class MoleOptions : AbstractRoleOptionGroup<MoleRole>
     )]
     public MoleVentUsage VentUsage { get; set; } = MoleVentUsage.Anyone;
 
-    [ModdedEnumOption("DivaniMods.Options.Mole.VentVisibility", typeof(MoleVentVisibility), 
+    [ModdedEnumOption<MoleVentVisibility>("DivaniMods.Options.Mole.VentVisibility",
     [
         "DivaniMods.Options.Mole.VentVisibility.Immediate",
         "DivaniMods.Options.Mole.VentVisibility.AfterUse",

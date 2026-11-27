@@ -23,14 +23,14 @@ public class LockdownButton : TownOfUsButton
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override Color TextOutlineColor => TownOfUsColors.Impostor;
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
-    
+
     public static bool IsLockdownActive { get; private set; }
     public static float LockdownTimeRemaining { get; private set; }
     public static LockdownButton? Instance { get; private set; }
     private static bool _lockdownClosedDoors;
-    
+
     public static int ChargesPerKill => (int)OptionGroupSingleton<DeadlockOptions>.Instance.ChargesPerKill.Value;
-    private static int LockdownMode => OptionGroupSingleton<DeadlockOptions>.Instance.LockdownEffects.Value;
+    private static int LockdownMode => (int)OptionGroupSingleton<DeadlockOptions>.Instance.LockdownEffects.Value;
     public static bool ControlsDoorsAndSabotage =>
         LockdownMode == (int)DeadlockLockdownMode.DoorsOnly || LockdownMode == (int)DeadlockLockdownMode.Both;
     public static bool DisablesTasks =>
@@ -69,7 +69,7 @@ public class LockdownButton : TownOfUsButton
             var ship = ShipStatus.Instance;
             if (ship?.Systems != null &&
                 ship.Systems.TryGetValue(SystemTypes.Sabotage, out var sabotageSystem) &&
-                sabotageSystem.Cast<SabotageSystemType>().AnyActive)
+                sabotageSystem?.TryCast<SabotageSystemType>() is { AnyActive: true })
             {
                 return false;
             }
@@ -77,7 +77,7 @@ public class LockdownButton : TownOfUsButton
 
         return (Timer <= 0 && !EffectActive) || (EffectActive && Timer <= EffectDuration - 2f);
     }
-    
+
     public override bool IsEffectCancellable() => Timer <= EffectDuration - 2f;
 
     public override void ClickHandler()
@@ -89,7 +89,7 @@ public class LockdownButton : TownOfUsButton
 
         OnClick();
         Button?.SetDisabled();
-        
+
         if (EffectActive)
         {
             Timer = Cooldown;
@@ -110,7 +110,7 @@ public class LockdownButton : TownOfUsButton
     {
         var player = PlayerControl.LocalPlayer;
         if (player == null) return;
-        
+
         if (!EffectActive)
         {
             if (UsesLeft > 0)
@@ -130,7 +130,7 @@ public class LockdownButton : TownOfUsButton
     public override void OnEffectEnd()
     {
         if (!IsLockdownActive) return;
-        
+
         RpcEndLockdown(PlayerControl.LocalPlayer);
     }
 
@@ -139,7 +139,7 @@ public class LockdownButton : TownOfUsButton
     {
         StartLockdownLocal(duration);
     }
-    
+
     [MethodRpc((uint)DivaniRpcCalls.EndLockdown)]
     public static void RpcEndLockdown(PlayerControl source)
     {
@@ -150,7 +150,7 @@ public class LockdownButton : TownOfUsButton
     {
         IsLockdownActive = true;
         LockdownTimeRemaining = duration;
-        
+
         if (DisablesTasks)
         {
             KickPlayersFromTasks();
@@ -161,15 +161,15 @@ public class LockdownButton : TownOfUsButton
         {
             SetDoorsLocked(true);
         }
-        
+
         Coroutines.Start(LockdownTimerCoroutine(duration));
-        
+
         if (Instance != null)
         {
             Instance.OverrideName(MiraLocaleManager.Get("DivaniMods.Role.Deadlock.Button.Unlock"));
         }
     }
-    
+
     private static void EndLockdownLocal()
     {
         if (_lockdownClosedDoors)
@@ -181,7 +181,7 @@ public class LockdownButton : TownOfUsButton
 
         IsLockdownActive = false;
         LockdownTimeRemaining = 0;
-        
+
         if (Instance != null)
         {
             Instance.OverrideName(MiraLocaleManager.Get("DivaniMods.Role.Deadlock.Ability.Lockdown"));
@@ -192,7 +192,7 @@ public class LockdownButton : TownOfUsButton
     {
         LockdownTimeRemaining = duration;
         var doorRefreshTimer = 0f;
-        
+
         while (LockdownTimeRemaining > 0 && IsLockdownActive)
         {
             if (!MeetingHud.Instance && !ExileController.Instance &&
@@ -209,11 +209,11 @@ public class LockdownButton : TownOfUsButton
             }
             yield return null;
         }
-        
+
         if (IsLockdownActive)
         {
             EndLockdownLocal();
-            
+
             if (Instance != null)
             {
                 Instance.Timer = Instance.Cooldown;
@@ -269,14 +269,14 @@ public class LockdownButton : TownOfUsButton
             autoCloseDoor.SetDoorway(true);
         }
     }
-    
+
     private static void KickPlayersFromTasks()
     {
         var localPlayer = PlayerControl.LocalPlayer;
         if (localPlayer == null) return;
-        
+
         if (localPlayer.Data.Role.IsImpostor) return;
-        
+
         var minigame = Minigame.Instance;
         if (minigame != null)
         {
@@ -296,7 +296,7 @@ public class LockdownButton : TownOfUsButton
         LockdownTimeRemaining = 0;
         Instance?.ResetCharges();
     }
-    
+
     public void AddCharges(int amount)
     {
         if (amount != 0)

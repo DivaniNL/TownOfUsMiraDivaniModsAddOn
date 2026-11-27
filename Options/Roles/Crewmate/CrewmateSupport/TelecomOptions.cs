@@ -18,8 +18,8 @@ public class TelecomOptions : AbstractRoleOptionGroup<TelecomRole>
 
     public ModdedToggleOption Anonymous { get; } = new(MiraLocaleManager.Get("DivaniMods.Options.Telecom.Anonymous"), true);
 
-    public ModdedEnumOption TargetSelection { get; } = new(
-        "Target Selection", (int)TelecomTargetSelectionOptions.MidRound, typeof(TelecomTargetSelectionOptions),
+    public ModdedEnumOption<TelecomTargetSelectionOptions> TargetSelection { get; } = new(
+        "Target Selection", TelecomTargetSelectionOptions.MidRound,
         [
             MiraLocaleManager.Get("DivaniMods.Options.Telecom.TargetSelection.MidRound"),
             MiraLocaleManager.Get("DivaniMods.Options.Telecom.TargetSelection.Meeting")
@@ -30,13 +30,13 @@ public class TelecomOptions : AbstractRoleOptionGroup<TelecomRole>
         MiraLocaleManager.Get("DivaniMods.Options.Telecom.TransmissionDelay"), 3f, 0f, 10f, 1f, MiraNumberSuffixes.Seconds)
     {
         Visible = () => OptionGroupSingleton<TelecomOptions>.Instance.TargetSelection.Value ==
-                        (int)TelecomTargetSelectionOptions.MidRound,
+                        TelecomTargetSelectionOptions.MidRound,
     };
 
     public ModdedNumberOption TransmissionCooldown { get; } = new(
         MiraLocaleManager.Get("DivaniMods.Options.Telecom.TransmissionCooldown"), 25f, 10f, 60f, 2.5f, MiraNumberSuffixes.Seconds)
     {
         Visible = () => OptionGroupSingleton<TelecomOptions>.Instance.TargetSelection.Value ==
-                        (int)TelecomTargetSelectionOptions.MidRound,
+                        TelecomTargetSelectionOptions.MidRound,
     };
 }

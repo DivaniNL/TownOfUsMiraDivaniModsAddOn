@@ -38,8 +38,7 @@ public class DomesmithOptions : AbstractRoleOptionGroup<DomesmithRole>
     public ModdedToggleOption AllowCrewmateKillsInDome { get; } =
         new(MiraLocaleManager.Get("DivaniMods.Options.Domesmith.AllowCrewmateKillsInDome"), false);
 
-    public ModdedEnumOption SeenBy { get; } = new(
+    public ModdedEnumOption<DomesmithVisibility> SeenBy { get; } = new(
         MiraLocaleManager.Get("DivaniMods.Options.Domesmith.SeenBy"),
-        (int)DomesmithVisibility.Domesmith,
-        typeof(DomesmithVisibility));
+        DomesmithVisibility.Domesmith);
 }
