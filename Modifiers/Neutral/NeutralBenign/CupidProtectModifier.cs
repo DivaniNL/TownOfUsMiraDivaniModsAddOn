@@ -29,7 +29,7 @@ public sealed class CupidProtectModifier(PlayerControl cupid) : BaseShieldModifi
             var showProtect = OptionGroupSingleton<CupidOptions>.Instance.ShowProtect.Value;
             return !LocalSettingsTabSingleton<TouLocalTabButtons>.Instance.ShowShieldHudToggle.Value ||
                    !OptionGroupSingleton<CupidOptions>.Instance.LoversKnowCupid ||
-                   showProtect == (int)CupidProtectShowOptions.Cupid;
+                   showProtect == CupidProtectShowOptions.Cupid;
         }
     }
 
@@ -38,9 +38,9 @@ public sealed class CupidProtectModifier(PlayerControl cupid) : BaseShieldModifi
         var showProtect = OptionGroupSingleton<CupidOptions>.Instance.ShowProtect.Value;
         var cupidRole = CustomRoleUtils.GetActiveRolesOfType<CupidRole>().FirstOrDefault(x => x.IsLover(Player));
 
-        var showProtectEveryone = showProtect == (int)CupidProtectShowOptions.Everyone;
+        var showProtectEveryone = showProtect == CupidProtectShowOptions.Everyone;
         var showProtectLover = PlayerControl.LocalPlayer.PlayerId == Player.PlayerId &&
-                               showProtect == (int)CupidProtectShowOptions.CupidAndLovers &&
+                               showProtect == CupidProtectShowOptions.CupidAndLovers &&
                                OptionGroupSingleton<CupidOptions>.Instance.LoversKnowCupid;
         var showProtectCupid = cupidRole != null && PlayerControl.LocalPlayer.PlayerId == cupidRole.Player.PlayerId;
 

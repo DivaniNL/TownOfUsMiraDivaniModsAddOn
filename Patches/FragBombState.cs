@@ -199,7 +199,7 @@ public static class FragBombState
         var rewinding = TownOfUs.Modules.TimeLordRewindSystem.IsRewinding;
 
         if (!inMeeting && rewinding &&
-            OptionGroupSingleton<FragOptions>.Instance.OnTimelordRewind.Value == (int)FragRewindBehavior.Rewind)
+            OptionGroupSingleton<FragOptions>.Instance.OnTimelordRewind.Value == FragRewindBehavior.Rewind)
         {
             if (!IsArmed)
             {

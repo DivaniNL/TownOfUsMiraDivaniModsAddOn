@@ -255,6 +255,12 @@ public sealed class MentorRole(IntPtr cppPtr)
             yield break;
         }
 
+        var rolesHolder = menu.RolesHolder;
+        if (rolesHolder == null)
+        {
+            yield break;
+        }
+
         menu.StatusText.text = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Menu.ChooseRole", "Choose a role");
         menu.RoleName.text = MiraLocaleManager.Get("DivaniMods.Role.Mentor", "Mentor");
         menu.RoleTeam.text = MiraLocaleManager.Get("DivaniMods.Role.Mentor.Menu.HoverOverRole", "Hover over a role");
@@ -262,7 +268,7 @@ public sealed class MentorRole(IntPtr cppPtr)
 
         ApplyMenuTheme(menu);
 
-        var randomCard = menu.RolesHolder.GetChild(menu.RolesHolder.childCount - 1);
+        var randomCard = rolesHolder.GetChild(rolesHolder.childCount - 1);
         var actualCard = randomCard.GetChild(0);
         var crewColor = (Color)Palette.CrewmateBlue;
         var crewIcon = TouRoleIcons.RandomCrew.LoadAsset();

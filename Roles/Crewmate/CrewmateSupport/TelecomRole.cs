@@ -29,7 +29,6 @@ using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
 
-
 namespace DivaniMods.Roles.Crewmate.CrewmateSupport;
 
 public sealed class TelecomRole(IntPtr cppPtr)
@@ -75,7 +74,7 @@ public sealed class TelecomRole(IntPtr cppPtr)
 
     private static bool MeetingMode =>
         OptionGroupSingleton<TelecomOptions>.Instance.TargetSelection.Value ==
-        (int)TelecomTargetSelectionOptions.Meeting;
+        TelecomTargetSelectionOptions.Meeting;
 
     [HideFromIl2Cpp]
     public StringBuilder SetTabText()

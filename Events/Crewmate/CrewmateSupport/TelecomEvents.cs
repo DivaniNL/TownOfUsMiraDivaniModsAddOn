@@ -16,7 +16,7 @@ public static class TelecomEvents
 {
     private static bool MeetingMode =>
         OptionGroupSingleton<TelecomOptions>.Instance.TargetSelection.Value ==
-        (int)TelecomTargetSelectionOptions.Meeting;
+        TelecomTargetSelectionOptions.Meeting;
 
     [RegisterEvent]
     public static void OnRoundStart(RoundStartEvent evt)
