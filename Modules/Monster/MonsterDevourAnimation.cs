@@ -83,7 +83,10 @@ public sealed class MonsterDevourAnimation
             }
 
             monster.moveable = false;
-            monster.MyPhysics.body.velocity = Vector2.zero;
+            if (monster.MyPhysics?.body != null)
+            {
+                monster.MyPhysics.body.velocity = Vector2.zero;
+            }
 
             // Walk if there is a clear, short path; otherwise fall back to the old instant snap.
             var monster2D = (Vector2)monsterPos;

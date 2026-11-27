@@ -195,8 +195,9 @@ public static class DutchMemeSoundpackPatch
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                DivaniPlugin.Instance?.Log.LogWarning($"DutchMemeSoundpack: failed swapping property {prop.Name}: {ex.Message}");
             }
         }
 
@@ -218,8 +219,9 @@ public static class DutchMemeSoundpackPatch
                     didSwap = true;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                DivaniPlugin.Instance?.Log.LogWarning($"DutchMemeSoundpack: failed swapping field {field.Name}: {ex.Message}");
             }
         }
 

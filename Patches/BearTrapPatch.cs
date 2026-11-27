@@ -97,6 +97,11 @@ public static class BearTrapPatch
 
     public static void UpdateReportButtonVisibility()
     {
+        if (!ShipStatus.Instance || MeetingHud.Instance || ExileController.Instance)
+        {
+            return;
+        }
+
         if (!HudManager.InstanceExists || HudManager.Instance.ReportButton == null)
         {
             return;

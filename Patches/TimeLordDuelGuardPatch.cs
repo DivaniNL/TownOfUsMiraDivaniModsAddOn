@@ -93,8 +93,9 @@ public static class TimeLordDuelGuardPatch
         {
             HostScheduler?.Invoke(null, null);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            DivaniPlugin.Instance?.Log.LogWarning($"TimeLordDuelGuardPatch: HostScheduler failed: {ex.Message}");
         }
     }
 
@@ -111,9 +112,9 @@ public static class TimeLordDuelGuardPatch
             ClearBuffer(BufferField);
             ClearBuffer(TaskBufferField);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
+            DivaniPlugin.Instance?.Log.LogWarning($"TimeLordDuelGuardPatch: ClearLocalRewindHistory failed: {ex.Message}");
         }
     }
 

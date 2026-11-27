@@ -67,8 +67,9 @@ public static class ShieldDeathPatch
                         return pc;
                     }
                 }
-                catch
+                catch (System.Exception ex)
                 {
+                    DivaniPlugin.Instance?.Log.LogWarning($"ShieldDeathPatch: failed reading {modType.Name}.{prop.Name}: {ex.Message}");
                 }
             }
         }

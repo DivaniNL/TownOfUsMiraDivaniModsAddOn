@@ -169,7 +169,12 @@ public sealed class MoleRole(IntPtr cppPtr)
             return;
         }
 
-        if (player.Data.Role is not MoleRole mole)
+        if (player == null || player.Data == null || player.Data.Role is not MoleRole mole)
+        {
+            return;
+        }
+
+        if (ShipStatus.Instance == null || ShipStatus.Instance.AllVents == null || ShipStatus.Instance.AllVents.Length == 0)
         {
             return;
         }

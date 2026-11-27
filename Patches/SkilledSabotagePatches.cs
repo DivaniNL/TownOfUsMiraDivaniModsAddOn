@@ -33,8 +33,10 @@ public static class SkilledSabotagePatches
                     break;
 
                 case SystemTypes.Comms:
-                    var commsSystem = ShipStatus.Instance.Systems[SystemTypes.Comms];
-                    if (commsSystem == null || commsSystem.TryCast<HqHudSystemType>() == null) return;
+                    if (ShipStatus.Instance?.Systems == null ||
+                        !ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Comms, out var commsSystem) ||
+                        commsSystem == null ||
+                        commsSystem.TryCast<HqHudSystemType>() == null) return;
                     if ((amount & 16) == 0) return;
                     __instance.RpcUpdateSystem(SystemTypes.Comms, 16 | 0);
                     __instance.RpcUpdateSystem(SystemTypes.Comms, 16 | 1);

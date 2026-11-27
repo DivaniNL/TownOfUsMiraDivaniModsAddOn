@@ -17,7 +17,8 @@ public static class TelecomChatPatch
     [HarmonyPriority(Priority.First)]
     public static bool SendChatPatch(ChatController __instance)
     {
-        if (MeetingHud.Instance || ExileController.Instance || PlayerControl.LocalPlayer.Data.IsDead)
+        var local = PlayerControl.LocalPlayer;
+        if (MeetingHud.Instance || ExileController.Instance || local == null || local.Data == null || local.Data.IsDead)
         {
             return true;
         }
@@ -29,7 +30,6 @@ public static class TelecomChatPatch
             return true;
         }
 
-        var local = PlayerControl.LocalPlayer;
         if (!local.HasModifier<TelecomChatModifier>())
         {
             return true;

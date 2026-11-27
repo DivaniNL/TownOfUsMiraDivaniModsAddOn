@@ -115,6 +115,11 @@ public static class UseButtonOverridePatch
     [HarmonyPrefix]
     public static bool ActionButtonSetDisabledPrefix(ActionButton __instance)
     {
+        if (!_active)
+        {
+            return true;
+        }
+
         var hud = HudManager.Instance;
         if (hud == null || __instance != hud.UseButton)
         {
@@ -159,6 +164,11 @@ public static class UseButtonOverridePatch
 
     private static void ApplyOverride()
     {
+        if (!_active && !UsePortalButton.ShouldDriveUseButton())
+        {
+            return;
+        }
+
         var hud = HudManager.Instance;
         if (hud == null)
         {

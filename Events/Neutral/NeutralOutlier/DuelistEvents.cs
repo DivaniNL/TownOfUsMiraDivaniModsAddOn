@@ -119,13 +119,13 @@ public static class DuelistEvents
     public static void OnEjection(EjectionEvent evt)
     {
         var duelist = CustomRoleUtils.GetActiveRolesOfType<DuelistRole>().FirstOrDefault();
-        if (duelist is { VictoryPending: true } && !duelist.Player.HasDied() &&
+        if (duelist is { VictoryPending: true } && duelist.Player != null && !duelist.Player.HasDied() &&
             Helpers.GetAlivePlayers().Count > 3)
         {
             Coroutines.Start(CoShowLeaveNotification(duelist.Player));
 
             TownOfUs.Modules.GameHistory.UpdatePlayerDeathData(duelist.Player, MiraLocaleManager.Get("DiedToWinning"),
-                roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+                roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance?.CurrentRound ?? 0,
                 diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetFalse,
                 lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
 
@@ -143,13 +143,13 @@ public static class DuelistEvents
         }
 
         var duelist = CustomRoleUtils.GetActiveRolesOfType<DuelistRole>().FirstOrDefault();
-        if (duelist is { VictoryPending: true } && !duelist.Player.HasDied() &&
+        if (duelist is { VictoryPending: true } && duelist.Player != null && !duelist.Player.HasDied() &&
             Helpers.GetAlivePlayers().Count > 3)
         {
             Coroutines.Start(CoShowLeaveNotification(duelist.Player));
 
             TownOfUs.Modules.GameHistory.UpdatePlayerDeathData(duelist.Player, MiraLocaleManager.Get("DiedToWinning"),
-                roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+                roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance?.CurrentRound ?? 0,
                 diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetFalse,
                 lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
 
@@ -161,6 +161,11 @@ public static class DuelistEvents
     {
         while (ExileController.Instance != null || MeetingHud.Instance != null)
         {
+            if (ShipStatus.Instance == null || AmongUsClient.Instance == null || AmongUsClient.Instance.IsGameOver)
+            {
+                yield break;
+            }
+
             yield return null;
         }
 

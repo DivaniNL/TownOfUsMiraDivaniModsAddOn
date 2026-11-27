@@ -296,7 +296,10 @@ public static class MonsterState
                     ParasiteRole.RpcParasiteEndControl(parasite, victim, victim.GetTruePosition(),false);
             }
         }
-        catch { }
+        catch (System.Exception ex)
+        {
+            DivaniPlugin.Instance?.Log.LogWarning($"MonsterState: BreakControllingEffects (parasite on victim) failed: {ex.Message}");
+        }
 
         try
         {
@@ -307,21 +310,30 @@ public static class MonsterState
                     PuppeteerRole.RpcPuppeteerEndControl(puppeteer, victim, victim.GetTruePosition());
             }
         }
-        catch { }
+        catch (System.Exception ex)
+        {
+            DivaniPlugin.Instance?.Log.LogWarning($"MonsterState: BreakControllingEffects (puppeteer on victim) failed: {ex.Message}");
+        }
 
         try
         {
             if (victim.Data?.Role is ParasiteRole parasiteRole && parasiteRole.Controlled != null)
                 ParasiteRole.RpcParasiteEndControl(victim, parasiteRole.Controlled, victim.GetTruePosition(), false);
         }
-        catch { }
+        catch (System.Exception ex)
+        {
+            DivaniPlugin.Instance?.Log.LogWarning($"MonsterState: BreakControllingEffects (victim parasite) failed: {ex.Message}");
+        }
 
         try
         {
             if (victim.Data?.Role is PuppeteerRole puppeteerRole && puppeteerRole.Controlled != null)
                 PuppeteerRole.RpcPuppeteerEndControl(victim, puppeteerRole.Controlled, victim.GetTruePosition());
         }
-        catch { }
+        catch (System.Exception ex)
+        {
+            DivaniPlugin.Instance?.Log.LogWarning($"MonsterState: BreakControllingEffects (victim puppeteer) failed: {ex.Message}");
+        }
     }
 
     private static void BeginSpectating(byte MonsterId)

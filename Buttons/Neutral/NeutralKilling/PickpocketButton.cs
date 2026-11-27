@@ -42,7 +42,7 @@ public class PickpocketButton : TownOfUsButton
     public override float EffectDuration => OptionGroupSingleton<ThiefOptions>.Instance.PickpocketDuration.Value;
     public override int MaxUses => (int)OptionGroupSingleton<ThiefOptions>.Instance.MaxStolenModifiers.Value;
     public override LoadableAsset<Sprite> Sprite => DivaniAssets.PickpocketButton;
-    public float Distance => PlayerControl.LocalPlayer.Data.Role.GetAbilityDistance();
+    public float Distance => PlayerControl.LocalPlayer?.Data?.Role?.GetAbilityDistance() ?? 1.5f;
     public override ButtonLocation Location { get; set; } = ButtonLocation.BottomRight;
     public override Color TextOutlineColor => ThiefRole.ThiefColor;
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;

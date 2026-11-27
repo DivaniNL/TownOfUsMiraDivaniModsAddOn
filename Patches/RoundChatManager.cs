@@ -95,8 +95,11 @@ public static class RoundChatManager
                     chatWhileEaten.Close();
                 }
 
-                chatWhileEaten.SetVisible(false);
-                chatWhileEaten.gameObject.SetActive(false);
+                if (chatWhileEaten.gameObject.activeSelf)
+                {
+                    chatWhileEaten.SetVisible(false);
+                    chatWhileEaten.gameObject.SetActive(false);
+                }
             }
 
             UpdateStatusText(false, false);

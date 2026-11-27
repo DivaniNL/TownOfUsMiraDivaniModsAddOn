@@ -193,15 +193,44 @@ public static class InnocentPatch
         return closest == null || !IsReportBlockedFor(localPlayer, closest.ParentId);
     }
 
+    private static bool IsAnyInnocentTaunting(byte playerId)
+    {
+        foreach (var innocent in InnocentRole.ActiveInnocents.Values)
+        {
+            if (innocent != null && innocent.AwaitingNextMeetingExile && innocent.TauntedKillerId == playerId)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static void UpdateReportButtonGreyout()
     {
+        if (!ShipStatus.Instance || MeetingHud.Instance || ExileController.Instance)
+        {
+            return;
+        }
+
+        if (InnocentRole.ActiveInnocents.Count == 0 ||
+            OptionGroupSingleton<InnocentOptions>.Instance.TauntedPlayerCanReportBody)
+        {
+            return;
+        }
+
         if (!HudManager.InstanceExists || HudManager.Instance.ReportButton == null)
         {
             return;
         }
 
         var localPlayer = PlayerControl.LocalPlayer;
-        if (localPlayer == null)
+        if (localPlayer == null || localPlayer.Data == null || localPlayer.Data.IsDead || localPlayer.inVent)
+        {
+            return;
+        }
+
+        if (!IsAnyInnocentTaunting(localPlayer.PlayerId))
         {
             return;
         }

@@ -35,13 +35,15 @@ public sealed class ThiefQuotaDrawWinCondition : IWinCondition
 
         var drawReason = CustomGameOver.GameOverReason<DrawGameOver>();
         var loser = PlayerControl.AllPlayerControls.ToArray()
-            .FirstOrDefault(x => x != null && x.Data != null &&
+            .FirstOrDefault(x => x != null && x.Data != null && x.Data.Role != null &&
                                  !x.Data.Role.DidWin(drawReason) &&
                                  !x.GetModifiers<GameModifier>().Any(y => y.DidWin(drawReason) == true));
 
-        CustomGameOver.Trigger<DrawGameOver>([
-            loser != null ? loser.Data : PlayerControl.LocalPlayer.Data
-        ]);
+        var winnerData = loser != null ? loser.Data : PlayerControl.LocalPlayer?.Data;
+        if (winnerData != null)
+        {
+            CustomGameOver.Trigger<DrawGameOver>([winnerData]);
+        }
     }
 
     private static ThiefRole? GetStalledThief()

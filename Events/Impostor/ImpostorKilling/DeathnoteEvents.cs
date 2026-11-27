@@ -67,7 +67,7 @@ public class DeathNoteEvents
             }
 
             TownOfUs.Modules.GameHistory.UpdatePlayerDeathData(player, MiraLocaleManager.Get("DiedToDeathnote"),
-                roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance.CurrentRound,
+                roundOfDeath: TownOfUs.Modules.Components.HudManagerHelper.Instance?.CurrentRound ?? 0,
                 diedThisRound: TownOfUs.Modules.DeathHandlerOverride.SetFalse,
                 lockInfo: TownOfUs.Modules.DeathHandlerOverride.SetTrue);
 
