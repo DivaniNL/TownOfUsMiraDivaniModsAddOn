@@ -258,7 +258,7 @@ public class ShuffleButton : TownOfUsButton
             if (Minigame.Instance)
             {
                 try { Minigame.Instance.Close(); }
-                catch { }
+                catch (System.Exception ex) { DivaniPlugin.Instance?.Log.LogWarning($"ShuffleButton: failed to close minigame: {ex.Message}"); }
             }
             
             if (localPlayer.inVent)

@@ -170,12 +170,8 @@ public static class MonsterPatches
     [HarmonyPrefix]
     public static bool FootstepsOnActivatePrefix(FootstepsModifier __instance)
     {
-        try
-        {
-            if (__instance.Player != null && MonsterState.IsEaten(__instance.Player.PlayerId)) return false;
-        }
-        catch { }
-        return true;
+        if (__instance?.Player?.Data == null) return true;
+        return !MonsterState.IsEaten(__instance.Player.PlayerId);
     }
 
     [HarmonyPatch(typeof(FootstepsModifier), nameof(FootstepsModifier.FixedUpdate))]

@@ -174,8 +174,9 @@ public static class PortalManager
                 button.Timer = cd;
             }
         }
-        catch
+        catch (System.Exception ex)
         {
+            DivaniPlugin.Instance?.Log.LogWarning($"PortalManager: failed to set button timer for {typeof(T).Name}: {ex.Message}");
         }
     }
     
