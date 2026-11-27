@@ -218,24 +218,23 @@
     <string name="DivaniMods.Options.Domesmith.ActiveSeconds">Duración del domo</string>
     <string name="DivaniMods.Options.Domesmith.AllowCrewmateKillsInDome">Permitir muertes de Tripulantes</string>
     <string name="DivaniMods.Options.Domesmith.SeenBy">Domo visible para</string>
-<!-- Cronofreno -->
-    <string name="DivaniMods.Role.Clockstopper">Cronofreno</string>
-    <string name="DivaniMods.Role.Clockstopper.Description">¡Completa tareas y reinicia recargas!</string>
-    <string name="DivaniMods.Role.Clockstopper.MedDescription">Completa tareas para reiniciar el tiempo de ronda y darle más tiempo a tu equipo.</string>
-    <string name="DivaniMods.Role.Clockstopper.LongDescription">Completa cierta cantidad de tareas&#10;para reiniciar las recargas.</string>
-    <string name="DivaniMods.Role.Clockstopper.LongDescription.Evil">Completa cierta cantidad de tareas para&#10;&lt;b&gt;reiniciar las recargas de quienes no sean de tu equipo.&lt;/b&gt;</string>
-    <string name="DivaniMods.Role.Clockstopper.Tab.ResetProgress">Progreso de reinicio: [progress] / [needed]</string>
-    <string name="DivaniMods.Role.Clockstopper.Tab.Egotist">¡Usa tus reinicios para sabotear a la Tripulación!</string>
-    <string name="DivaniMods.Role.Clockstopper.Tab.Impostor">¡Reinicia las recargas de los no Impostores!</string>
-    <string name="DivaniMods.Role.Clockstopper.Tab.Lover">¡Reinicia todas las recargas excepto las de tu pareja!</string>
-    <string name="DivaniMods.Role.Clockstopper.Notification.SelfReset">Completaste [tasks] tareas más. Se reiniciaron las recargas.</string>
-    <string name="DivaniMods.Role.Clockstopper.Notification.ResetByClockstopper">El Cronofreno reinició tu recarga.</string>
-    <!-- Opciones del Cronofreno -->
-    <string name="DivaniMods.Options.Clockstopper.TasksPerReset">Tareas por reinicio</string>
-    <string name="DivaniMods.Options.Clockstopper.ResetNeutralBenign">Reiniciar Neutrales Benignos</string>
-    <string name="DivaniMods.Options.Clockstopper.ResetNeutralEvil">Reiniciar Neutrales Malvados</string>
-    <string name="DivaniMods.Options.Clockstopper.ResetNeutralKilling">Reiniciar Neutrales Asesinos</string>
-    <string name="DivaniMods.Options.Clockstopper.ResetNeutralOutlier">Reiniciar Neutrales Atípicos</string>
+<!-- Habilidad Cronofreno -->
+    <string name="DivaniMods.Role.ClockstopperAbility.Name">Habilidad Cronofreno</string>
+    <string name="DivaniMods.Role.ClockstopperAbility.Button">Reiniciar</string>
+    <string name="DivaniMods.Role.ClockstopperAbility.Notification.ResetByClockstopper">El Señor del Tiempo reinició tus recargas.</string>
+    <string name="DivaniMods.Options.Clockstopper.Enabled">Activar habilidad Cronofreno</string>
+    <string name="DivaniMods.Options.Clockstopper.UnlimitedUses">Usos ilimitados</string>
+    <string name="DivaniMods.Options.Clockstopper.MaxCharges">Cargas máximas</string>
+    <string name="DivaniMods.Options.Clockstopper.StartingCharges">Cargas iniciales</string>
+    <string name="DivaniMods.Options.Clockstopper.GainChargesFromTasks">Obtener cargas al completar tareas</string>
+    <string name="DivaniMods.Options.Clockstopper.TasksPerCharge">Tareas por carga</string>
+    <string name="DivaniMods.Options.Clockstopper.GainChargesOverTime">Obtener cargas con el tiempo</string>
+    <string name="DivaniMods.Options.Clockstopper.TimePerCharge">Tiempo por carga</string>
+    <string name="DivaniMods.Options.Clockstopper.GainChargeOnRewind">Obtener una carga al rebobinar</string>
+    <string name="DivaniMods.Options.Clockstopper.ResetNeutralBenign">Reiniciar recargas de neutrales benignos</string>
+    <string name="DivaniMods.Options.Clockstopper.ResetNeutralEvil">Reiniciar recargas de neutrales malvados</string>
+    <string name="DivaniMods.Options.Clockstopper.ResetNeutralKilling">Reiniciar recargas de neutrales asesinos</string>
+    <string name="DivaniMods.Options.Clockstopper.ResetNeutralOutlier">Reiniciar recargas de neutrales atípicos</string>
 <!-- Localizador -->
     <string name="DivaniMods.Role.Locator">Localizador</string>
     <string name="DivaniMods.Role.Locator.Description">¡Marca a los ruidosos!</string>

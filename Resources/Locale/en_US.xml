@@ -219,24 +219,24 @@
     <string name="DivaniMods.Options.Domesmith.ActiveSeconds">Dome Active Seconds</string>
     <string name="DivaniMods.Options.Domesmith.AllowCrewmateKillsInDome">Allow Crewmate Kills In Dome</string>
     <string name="DivaniMods.Options.Domesmith.SeenBy">Dome Visible To</string>
-<!-- Clockstopper -->
-    <string name="DivaniMods.Role.Clockstopper">Clockstopper</string>
-    <string name="DivaniMods.Role.Clockstopper.Description">Reset, Rinse and Repeat!</string>
-    <string name="DivaniMods.Role.Clockstopper.MedDescription">Complete tasks to reset the round timer and give your team more time.</string>
-    <string name="DivaniMods.Role.Clockstopper.LongDescription">Finish a set amount of tasks to reset cooldowns!</string>
-    <string name="DivaniMods.Role.Clockstopper.LongDescription.Evil">Finish a set amount of tasks to &lt;b&gt;reset the cooldowns of those not on your team!&lt;/b&gt;</string>
-    <string name="DivaniMods.Role.Clockstopper.Tab.ResetProgress">Reset cooldown progress: [progress] / [needed]</string>
-    <string name="DivaniMods.Role.Clockstopper.Tab.Egotist">Use your resets to sabotage the Crew!</string>
-    <string name="DivaniMods.Role.Clockstopper.Tab.Impostor">Reset Non-Impostor Cooldowns!</string>
-    <string name="DivaniMods.Role.Clockstopper.Tab.Lover">Reset all player cooldowns except for your lover's!</string>
-    <!-- Clockstopper Options -->
-    <string name="DivaniMods.Options.Clockstopper.TasksPerReset">Tasks Per Cooldown Reset</string>
-    <string name="DivaniMods.Options.Clockstopper.ResetNeutralBenign">Resets Neutral Benign Cooldowns</string>
-    <string name="DivaniMods.Options.Clockstopper.ResetNeutralEvil">Resets Neutral Evil Cooldowns</string>
-    <string name="DivaniMods.Options.Clockstopper.ResetNeutralKilling">Resets Neutral Killing Cooldowns</string>
-    <string name="DivaniMods.Options.Clockstopper.ResetNeutralOutlier">Resets Neutral Outlier Cooldowns</string>
-    <string name="DivaniMods.Role.Clockstopper.Notification.SelfReset">Completed [tasks] more tasks, cooldowns are reset</string>
-    <string name="DivaniMods.Role.Clockstopper.Notification.ResetByClockstopper">Your cooldown has been reset by the Clockstopper</string>
+<!-- Clockstopper Ability -->
+    <string name="DivaniMods.Role.ClockstopperAbility.Name">Clockstopper Ability</string>
+    <string name="DivaniMods.Role.ClockstopperAbility.Button">Reset</string>
+    <string name="DivaniMods.Role.ClockstopperAbility.Notification.ResetByClockstopper">Your cooldowns were reset by the Time Lord.</string>
+    <!-- Clockstopper Ability Options -->
+    <string name="DivaniMods.Options.Clockstopper.Enabled">Enable Clockstopper Ability</string>
+    <string name="DivaniMods.Options.Clockstopper.UnlimitedUses">Unlimited Uses</string>
+    <string name="DivaniMods.Options.Clockstopper.MaxCharges">Maximum Charges</string>
+    <string name="DivaniMods.Options.Clockstopper.StartingCharges">Starting Charges</string>
+    <string name="DivaniMods.Options.Clockstopper.GainChargesFromTasks">Gain Charges From Tasks</string>
+    <string name="DivaniMods.Options.Clockstopper.TasksPerCharge">Tasks Per Charge</string>
+    <string name="DivaniMods.Options.Clockstopper.GainChargesOverTime">Gain Charges Over Time</string>
+    <string name="DivaniMods.Options.Clockstopper.TimePerCharge">Time Per Charge</string>
+    <string name="DivaniMods.Options.Clockstopper.GainChargeOnRewind">Gain a Charge When Rewinding</string>
+    <string name="DivaniMods.Options.Clockstopper.ResetNeutralBenign">Reset Neutral Benign Cooldowns</string>
+    <string name="DivaniMods.Options.Clockstopper.ResetNeutralEvil">Reset Neutral Evil Cooldowns</string>
+    <string name="DivaniMods.Options.Clockstopper.ResetNeutralKilling">Reset Neutral Killing Cooldowns</string>
+    <string name="DivaniMods.Options.Clockstopper.ResetNeutralOutlier">Reset Neutral Outlier Cooldowns</string>
 <!-- Locator -->
     <string name="DivaniMods.Role.Locator">Locator</string>
     <string name="DivaniMods.Role.Locator.Description">Tag the noisy ones!</string>

@@ -25,7 +25,6 @@ Join the Discord:
   <img src="./Resources/Headers/CrewProtective.png" alt="Crewmate Protective"/>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#domesmith"><img width="10%" src="./Resources/Icons/Domesmith.png" alt="Domesmith"/></a>
   <img src="./Resources/Headers/CrewSupport.png" alt="Crewmate Support"/>
-  <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#clockstopper"><img width="10%" src="./Resources/Icons/Clockstopper.png" alt="Clockstopper"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#locator"><img width="10%" src="./Resources/Icons/Locator.png" alt="Locator"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#Mole"><img width="10%" src="./Resources/Icons/Mole.png" alt="Mole"/></a>
   <a href="https://github.com/DivaniNL/TownOfUsMiraDivaniModsAddOn/wiki/Home#portalmaker"><img width="10%" src="./Resources/Icons/PortalMaker.png" alt="Portalmaker"/></a>

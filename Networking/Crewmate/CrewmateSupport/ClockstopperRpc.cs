@@ -1,12 +1,12 @@
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
+using MiraAPI.Roles;
 using MiraAPI.Translation;
 using Reactor.Networking.Attributes;
 using Reactor.Networking.Rpc;
 using DivaniMods.Assets;
 using DivaniMods.Options;
-using DivaniMods.Roles.Crewmate.CrewmateSupport;
-using TownOfUs.Roles;
+using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
 using MiraAPI.Modifiers;
@@ -19,13 +19,14 @@ public static class ClockstopperRpc
     [MethodRpc((uint)DivaniRpcCalls.ClockstopperResetCooldowns, LocalHandling = RpcLocalHandling.Before)]
     public static void RpcResetCooldowns(PlayerControl clockstopper)
     {
-        if (clockstopper == null || clockstopper.Data?.Role is not ClockstopperRole || clockstopper.HasDied())
+        if (clockstopper == null || clockstopper.Data?.Role is not TimeLordRole || clockstopper.HasDied())
         {
             return;
         }
 
         var local = PlayerControl.LocalPlayer;
-        if (local == null || local.Data?.Role == null || local.HasDied())
+        if (local == null || local.Data?.Role == null || local.HasDied() ||
+            local.PlayerId == clockstopper.PlayerId || !ShouldResetFor(local, clockstopper))
         {
             return;
         }
@@ -33,27 +34,6 @@ public static class ClockstopperRpc
         var hex = ColorUtility.ToHtmlStringRGB(new Color32(175, 138, 162, 255));
         var icon = DivaniAssets.ClockstopperIcon.LoadAsset();
         var pos = new Vector3(0f, 1f, -20f);
-
-        if (local.PlayerId == clockstopper.PlayerId)
-        {
-            var perReset = (int)OptionGroupSingleton<ClockstopperOptions>.Instance.TasksPerReset.Value;
-            var resetSelfText = MiraLocaleManager
-                .Get("DivaniMods.Role.Clockstopper.Notification.SelfReset")
-                .Replace("<tasks>", perReset.ToString());
-
-            MiraAPI.Utilities.Helpers.CreateAndShowNotification(
-                $"<b><color=#{hex}>{resetSelfText}</color></b>",
-                Color.white,
-                pos,
-                spr: icon);
-            return;
-        }
-
-        if (!ShouldResetFor(local, clockstopper))
-        {
-            return;
-        }
-
         var role = local.Data.Role;
         foreach (var button in CustomButtonManager.Buttons)
         {
@@ -72,7 +52,7 @@ public static class ClockstopperRpc
         }
 
         var resetOtherText =
-            MiraLocaleManager.Get("DivaniMods.Role.Clockstopper.Notification.ResetByClockstopper");
+            MiraLocaleManager.Get("DivaniMods.Role.ClockstopperAbility.Notification.ResetByClockstopper");
 
         MiraAPI.Utilities.Helpers.CreateAndShowNotification(
             $"<b><color=#{hex}>{resetOtherText}</color></b>",
@@ -87,7 +67,7 @@ public static class ClockstopperRpc
         {
             return !player.IsImpostorAligned();
         }
-        
+
         if (clockstopper.HasModifier<EgotistModifier>())
         {
             return player.IsCrewmate();
@@ -103,10 +83,10 @@ public static class ClockstopperRpc
             return true;
         }
 
-        var opt = OptionGroupSingleton<ClockstopperOptions>.Instance;
-        return (player.Is(RoleAlignment.NeutralBenign) && opt.ResetNeutralBenign) ||
-               (player.Is(RoleAlignment.NeutralEvil) && opt.ResetNeutralEvil) ||
-               (player.Is(RoleAlignment.NeutralKilling) && opt.ResetNeutralKilling) ||
-               (player.Is(RoleAlignment.NeutralOutlier) && opt.ResetNeutralOutlier);
+        var opt = OptionGroupSingleton<ClockstopperAbilityOptions>.Instance;
+        return (player.Is(TownOfUs.Roles.RoleAlignment.NeutralBenign) && opt.ResetNeutralBenign) ||
+               (player.Is(TownOfUs.Roles.RoleAlignment.NeutralEvil) && opt.ResetNeutralEvil) ||
+               (player.Is(TownOfUs.Roles.RoleAlignment.NeutralKilling) && opt.ResetNeutralKilling) ||
+               (player.Is(TownOfUs.Roles.RoleAlignment.NeutralOutlier) && opt.ResetNeutralOutlier);
     }
 }
