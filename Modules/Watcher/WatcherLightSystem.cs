@@ -12,10 +12,8 @@ using DivaniMods.Assets;
 using DivaniMods.Buttons.Neutral.NeutralKilling;
 using DivaniMods.Modifiers;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
-using DivaniMods.Networking.Crewmate.CrewmateKilling;
 using DivaniMods.Networking.Neutral.NeutralKilling;
 using DivaniMods.Options;
-using DivaniMods.Roles.Crewmate.CrewmateAfterlife;
 using DivaniMods.Roles.Neutral.NeutralKilling;
 using DivaniMods.Utilities;
 using TownOfUs.Extensions;
@@ -385,14 +383,7 @@ public static class WatcherLightSystem
             return;
         }
 
-        if (ghost.Data?.Role is VengefulSoulRole)
-        {
-            if (AmongUsClient.Instance.AmHost)
-            {
-                RetributionistRpc.RpcRevengeFailed(ghost);
-            }
-        }
-        else if (ghost.Data?.Role is IGhostRole ghostRole)
+        if (ghost.Data?.Role is IGhostRole ghostRole)
         {
             ghostRole.Caught = true;
         }

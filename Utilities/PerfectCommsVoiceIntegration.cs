@@ -1,7 +1,6 @@
 using System.Runtime.CompilerServices;
 using DivaniMods.Modifiers.Neutral.NeutralOutlier;
 using DivaniMods.Modules.Monster;
-using DivaniMods.Roles.Crewmate.CrewmateAfterlife;
 using MiraAPI.Modifiers;
 using PerfectComms.Api;
 
@@ -40,11 +39,6 @@ internal static class PerfectCommsVoiceIntegration
 
             return VoicePairResult.Mute("Duel");
         });
-
-        PerfectCommsApi.RegisterVoicePairRule(Mod, ctx =>
-            ctx.SpeakerIsDead && ctx.Listener.Data?.Role is VengefulSoulRole
-                ? VoicePairResult.Mute("Vengeful Soul")
-                : VoicePairResult.Pass);
 
         PerfectCommsApi.RegisterVoicePairRule(Mod, ctx =>
         {

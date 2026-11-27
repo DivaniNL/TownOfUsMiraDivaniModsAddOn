@@ -6,7 +6,6 @@ using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
-using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using DivaniMods.Roles.Neutral.NeutralEvil;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers;
@@ -50,7 +49,7 @@ public class MementoModifier : UniversalGameModifier, IWikiDiscoverable
 
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        return base.IsModifierValidOn(role) && role is not RetributionistRole && role is not InnocentRole &&
+        return base.IsModifierValidOn(role) && role is not InnocentRole &&
             !(OptionGroupSingleton<MementoOptions>.Instance.PreventBaitPairing && role.Player.HasModifier<BaitModifier>());
     }
 

@@ -6,7 +6,6 @@ using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Options;
-using DivaniMods.Patches;
 using DivaniMods.Roles.Impostor.ImpostorSupport;
 using System.Collections;
 using TownOfUs.Buttons;
@@ -67,8 +66,6 @@ public class LockdownButton : TownOfUsButton
 
         if (!EffectActive)
         {
-            if (DemolitionistSabotageState.IsActive) return false;
-
             var ship = ShipStatus.Instance;
             if (ship?.Systems != null &&
                 ship.Systems.TryGetValue(SystemTypes.Sabotage, out var sabotageSystem) &&

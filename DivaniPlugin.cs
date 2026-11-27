@@ -11,10 +11,9 @@ using DivaniMods.Assets;
 using DivaniMods.Modules.Localization;
 using DivaniMods.Patches;
 using DivaniMods.Patches.WinConditions;
-using TownOfUs.Patches;
 using DivaniMods.Utilities;
 using MiraAPI.Roles;
-using DivaniMods.Roles.Impostor.ImpostorPower;
+using TownOfUs.Patches;
 
 namespace DivaniMods;
 
@@ -46,8 +45,6 @@ public class DivaniPlugin : BasePlugin, IMiraPlugin
     {
         Instance = this;
         Harmony.PatchAll();
-        DemolitionistPatches.Register(Log);
-        DemolitionistNumpad.Register(Harmony, Log);
         FragileTownOfUsButtonPatch.Initialize(Harmony);
         NullifiedPatch.Initialize(Harmony);
         SniperSerialKillerKill.Initialize(Harmony);

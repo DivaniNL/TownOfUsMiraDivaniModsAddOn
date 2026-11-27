@@ -3,9 +3,7 @@ using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using DivaniMods.Assets;
 using DivaniMods.Buttons.Crewmate.CrewmateSupport;
-using DivaniMods.Buttons.Neutral.NeutralEvil;
 using DivaniMods.Options;
-using DivaniMods.Roles.Neutral.NeutralEvil;
 using UnityEngine;
 
 namespace DivaniMods.Patches;
@@ -15,21 +13,13 @@ public static class UseButtonOverridePatch
 {
     private static readonly Color PortalLabelColor = new Color(0.047f, 0.420f, 0.961f);
 
-    private enum Kind
-    {
-        None,
-        Portal,
-        Defuse,
-    }
-
-    private static Kind _active = Kind.None;
+    private static bool _active;
     private static Sprite? _savedSprite;
     private static bool _savedSpriteValid;
     private static string? _savedLabel;
     private static bool _savedLabelActive;
     private static bool _savedLabelValid;
     private static Sprite? _portalSprite;
-    private static Sprite? _defuseSprite;
     private static readonly Dictionary<int, SpriteRenderer[]> RendererCache = new();
 
     // FixedUpdate runs before Unity polls mouse/collider input, so forcing the use
@@ -54,7 +44,6 @@ public static class UseButtonOverridePatch
     public static void HudManagerUpdatePostfix()
     {
         PortalManager.UpdatePortalOutlines();
-        DemolitionistSabotageState.UpdatePlantedConsoleOutline();
 
         ApplyOverride();
     }
@@ -80,7 +69,7 @@ public static class UseButtonOverridePatch
     [HarmonyPostfix]
     public static void PetButtonSetTargetPostfix(PetButton __instance)
     {
-        if (__instance == null || ComputeKind() == Kind.None)
+        if (__instance == null || !_active)
         {
             return;
         }
@@ -112,7 +101,7 @@ public static class UseButtonOverridePatch
             return true;
         }
 
-        if (ComputeKind() == Kind.None)
+        if (!_active)
         {
             return true;
         }
@@ -137,15 +126,7 @@ public static class UseButtonOverridePatch
 
     private static bool WantsUseButtonEnabled()
     {
-        switch (ComputeKind())
-        {
-            case Kind.Defuse:
-                return !DemolitionistDefuseButton.IsLocalDefusing;
-            case Kind.Portal:
-                return PortalCooldownRemaining() <= 0f;
-            default:
-                return false;
-        }
+        return PortalCooldownRemaining() <= 0f;
     }
 
     private static float PortalCooldownRemaining()
@@ -167,17 +148,13 @@ public static class UseButtonOverridePatch
     [HarmonyPrefix]
     public static bool UseButtonDoClickPrefix()
     {
-        switch (_active)
+        if (_active)
         {
-            case Kind.Defuse:
-                CustomButtonSingleton<DemolitionistDefuseButton>.Instance?.TriggerDefuseFromUseButton();
-                return false;
-            case Kind.Portal:
-                CustomButtonSingleton<UsePortalButton>.Instance?.TriggerFromUseButton();
-                return false;
-            default:
-                return true;
+            CustomButtonSingleton<UsePortalButton>.Instance?.TriggerFromUseButton();
+            return false;
         }
+
+        return true;
     }
 
     private static void ApplyOverride()
@@ -196,31 +173,28 @@ public static class UseButtonOverridePatch
 
         var kind = ComputeKind();
 
-        if (kind == Kind.None)
+        if (!kind)
         {
             ClearOverride(useButton);
             return;
         }
 
-        if (_active == Kind.None)
+        if (!_active)
         {
             SaveOriginal(useButton);
         }
 
-        _active = kind;
+        _active = true;
 
         DriveSlot(hud, useButton);
 
-        var sprite = GetOverrideSprite(kind);
+        var sprite = _portalSprite ??= DivaniAssets.UsePortalButton.LoadAsset();
 
-        var label = kind == Kind.Defuse ? "DEFUSE" : "USE PORTAL";
-        var labelColor = kind == Kind.Defuse ? DemolitionistRole.DemolitionistColor : PortalLabelColor;
+        var label = "USE PORTAL";
 
-        var portalCooldown = kind == Kind.Portal ? PortalCooldownRemaining() : 0f;
+        var portalCooldown = PortalCooldownRemaining();
 
-        var enabled = kind == Kind.Defuse
-            ? !DemolitionistDefuseButton.IsLocalDefusing
-            : portalCooldown <= 0f;
+        var enabled = portalCooldown <= 0f;
 
         if (enabled)
         {
@@ -232,7 +206,7 @@ public static class UseButtonOverridePatch
             useButton.SetDisabled();
         }
 
-        if (kind == Kind.Portal && portalCooldown > 0f)
+        if (portalCooldown > 0f)
         {
             var maxCooldown = OptionGroupSingleton<PortalmakerOptions>.Instance.UsePortalCooldown.Value;
             useButton.SetCoolDown(portalCooldown, maxCooldown);
@@ -252,8 +226,8 @@ public static class UseButtonOverridePatch
         {
             useButton.buttonLabelText.gameObject.SetActive(true);
             useButton.buttonLabelText.text = label;
-            useButton.buttonLabelText.color = labelColor;
-            useButton.buttonLabelText.SetOutlineColor(labelColor);
+            useButton.buttonLabelText.color = PortalLabelColor;
+            useButton.buttonLabelText.SetOutlineColor(PortalLabelColor);
         }
     }
 
@@ -269,16 +243,6 @@ public static class UseButtonOverridePatch
         {
             pet.gameObject.SetActive(false);
         }
-    }
-
-    private static Sprite? GetOverrideSprite(Kind kind)
-    {
-        return kind switch
-        {
-            Kind.Defuse => _defuseSprite ??= DivaniAssets.DemolitionistDefuseButton.LoadAsset(),
-            Kind.Portal => _portalSprite ??= DivaniAssets.UsePortalButton.LoadAsset(),
-            _ => null,
-        };
     }
 
     private static SpriteRenderer[] GetCachedRenderers(UseButton useButton)
@@ -329,7 +293,7 @@ public static class UseButtonOverridePatch
 
     private static void ClearOverride(UseButton useButton)
     {
-        if (_active == Kind.None)
+        if (!_active)
         {
             return;
         }
@@ -357,27 +321,17 @@ public static class UseButtonOverridePatch
         _savedSpriteValid = false;
         _savedLabel = null;
         _savedLabelValid = false;
-        _active = Kind.None;
+        _active = false;
     }
 
-    private static Kind ComputeKind()
+    private static bool ComputeKind()
     {
         if (!ShipStatus.Instance || MeetingHud.Instance || ExileController.Instance)
         {
-            return Kind.None;
+            return false;
         }
 
-        if (DemolitionistDefuseButton.ShouldDriveUseButton())
-        {
-            return Kind.Defuse;
-        }
-
-        if (UsePortalButton.ShouldDriveUseButton() && !HasVanillaUseTarget())
-        {
-            return Kind.Portal;
-        }
-
-        return Kind.None;
+        return UsePortalButton.ShouldDriveUseButton() && !HasVanillaUseTarget();
     }
 
     private static bool HasVanillaUseTarget()
