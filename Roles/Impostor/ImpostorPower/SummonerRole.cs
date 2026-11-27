@@ -16,9 +16,9 @@ using TownOfUs.Modifiers.Crewmate;
 using TownOfUs.Modules;
 using TownOfUs.Modules.Wiki;
 using TownOfUs.Roles;
+using TownOfUs.Roles.Crewmate;
 using TownOfUs.Utilities;
 using UnityEngine;
-using DivaniMods.Roles.Crewmate.CrewmateKilling;
 using DivaniMods.Interfaces;
 
 namespace DivaniMods.Roles.Impostor.ImpostorPower;
@@ -38,7 +38,7 @@ public sealed class SummonerRole(IntPtr cppPtr)
     public DoomableType DoomHintType => DoomableType.Death;
 
     public RoleBehaviour CrewVariant =>
-        RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<RetributionistRole>());
+        RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<SheriffRole>());
 
     public string GetAdvancedDescription() => RoleLongDescription + MiscUtils.AppendOptionsText(GetType());
 

@@ -15,19 +15,17 @@ public static class DivaniAssets
     // Button sprites (115 ppu)
     public static LoadableAsset<Sprite> PlacePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalUse.png", 100);
     public static LoadableAsset<Sprite> NoteButton { get; } = new LoadableResourceAsset($"{ShortPath}.Note.png", 200f);
+    public static LoadableAsset<Sprite> ResetButton { get; } = new LoadableResourceAsset($"{ShortPath}.ResetButton.png", 100);
     public static LoadableAsset<Sprite> UsePortalButton { get; } = new LoadableResourceAsset($"{ShortPath}.PortalUse.png", 100);
     public static LoadableAsset<Sprite> PickpocketButton { get; } = new LoadableResourceAsset($"{ShortPath}.PickPocketButton.png");
     public static LoadableAsset<Sprite> ThiefKillButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefKillButton.png");
     public static LoadableAsset<Sprite> ThiefVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.ThiefVentButton.png");
     public static LoadableAsset<Sprite> MonsterVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.MonsterVentButton.png");
     public static LoadableAsset<Sprite> PlagueDoctorVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.PDVent.png");
-    public static LoadableAsset<Sprite> DemolitionistVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.DemolitionistVent.png");
     public static LoadableAsset<Sprite> FragVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.FragVentButton.png");
     public static LoadableAsset<Sprite> FragGiveButton { get; } = new LoadableResourceAsset($"{ShortPath}.FragGive.png");
     public static LoadableAsset<Sprite> FragPassButton { get; } = new LoadableResourceAsset($"{ShortPath}.FragPass.png");
     public static LoadableAsset<Sprite> DeadlockLockdownButton { get; } = new LoadableResourceAsset($"{ShortPath}.DeadlockLockdown.png");
-    public static LoadableAsset<Sprite> DemolitionistPlantButton { get; } = new LoadableResourceAsset($"{ShortPath}.DemolitionistPlant.png");
-    public static LoadableAsset<Sprite> DemolitionistDefuseButton { get; } = new LoadableResourceAsset($"{ShortPath}.DemolitionistDefuse.png");
     public static LoadableAsset<Sprite> SentinelPlaceBeaconButton { get; } = new LoadableResourceAsset($"{ShortPath}.BeaconPlace.png");
     public static LoadableAsset<Sprite> DomesmithPlaceDomeButton { get; } = new LoadableResourceAsset($"{ShortPath}.DomesmithPlaceDome.png");
     public static LoadableAsset<Sprite> PlagueDoctorInfectButton { get; } = new LoadableResourceAsset($"{ShortPath}.PlagueDoctorInfect.png");
@@ -36,7 +34,6 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> MosquitoObjectSprite { get; } = new LoadableResourceAsset($"{ShortPath}.MosquitoObject.png", 200);
     public static LoadableAsset<Sprite> DuelistDuelButton { get; } = new LoadableResourceAsset($"{ShortPath}.DuelistDuel.png");
     public static LoadableAsset<Sprite> DuelStrikeButton { get; } = new LoadableResourceAsset($"{ShortPath}.DuelStrikeButton.png");
-    public static LoadableAsset<Sprite> VengefulSoulRevengeButton { get; } = new LoadableResourceAsset($"{ShortPath}.VengefulSoulRevenge.png");
     public static LoadableAsset<Sprite> ShuffleButton { get; } = new LoadableResourceAsset($"{ShortPath}.ShuffleButton.png",100);
     public static LoadableAsset<Sprite> UavButton { get; } = new LoadableResourceAsset($"{ShortPath}.UAVAirMap.png", 100);
     public static LoadableAsset<Sprite> TacticalInsertionButton { get; } = new LoadableResourceAsset($"{ShortPath}.TacticalInsertionButton.png", 100);
@@ -49,7 +46,6 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> MageShockShieldButton { get; } = new LoadableResourceAsset($"{ShortPath}.MageShockShield.png");
     public static LoadableAsset<Sprite> MageEnergizeButton { get; } = new LoadableResourceAsset($"{ShortPath}.MageEnergize.png");
     public static LoadableAsset<Sprite> MageIllusionButton { get; } = new LoadableResourceAsset($"{ShortPath}.MageIllusion.png");
-    public static LoadableAsset<Sprite> LocatorMarkButton { get; } = new LoadableResourceAsset($"{ShortPath}.LocatorMark.png");
     public static LoadableAsset<Sprite> MoleDigButton { get; } = new LoadableResourceAsset($"{ShortPath}.MoleDigButton.png");
     public static LoadableAsset<Sprite> MoleVentButton { get; } = new LoadableResourceAsset($"{ShortPath}.MoleVentButton.png");
     public static LoadableAsset<Sprite> MinerVentSprite { get; } = new LoadableResourceAsset($"{ShortPath}.MinerVent.png", 100);
@@ -63,10 +59,8 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> ThiefIcon { get; } = new LoadableResourceAsset($"{IconPath}.Thief.png", 200);
     public static LoadableAsset<Sprite> DeathnoteIcon { get; } = new LoadableResourceAsset($"{IconPath}.Deathnote.png", 200);
     public static LoadableAsset<Sprite> DeadlockIcon { get; } = new LoadableResourceAsset($"{IconPath}.Deadlock.png", 200);
-    public static LoadableAsset<Sprite> CouncillorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Councillor.png", 200);
     public static LoadableAsset<Sprite> PortalmakerIcon { get; } = new LoadableResourceAsset($"{IconPath}.PortalMaker.png", 200);
     public static LoadableAsset<Sprite> FragIcon { get; } = new LoadableResourceAsset($"{IconPath}.Frag.png", 200);
-    public static LoadableAsset<Sprite> SilencerIcon { get; } = new LoadableResourceAsset($"{IconPath}.Silencer.png", 200);
     public static LoadableAsset<Sprite> WorkhorseIcon { get; } = new LoadableResourceAsset($"{IconPath}.Workhorse.png", 200);
     public static LoadableAsset<Sprite> PlagueDoctorIcon { get; } = new LoadableResourceAsset($"{IconPath}.PlagueDoctor.png", 200);
     public static LoadableAsset<Sprite> InnocentIcon { get; } = new LoadableResourceAsset($"{IconPath}.Innocent.png", 200);
@@ -74,20 +68,17 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> RecruiterIcon { get; } = new LoadableResourceAsset($"{IconPath}.Recruiter.png");
     public static LoadableAsset<Sprite> RecruitIcon { get; } = new LoadableResourceAsset($"{IconPath}.Recruit.png", 200);
     public static LoadableAsset<Sprite> SentinelIcon { get; } = new LoadableResourceAsset($"{IconPath}.Sentinel.png", 200);
-    public static LoadableAsset<Sprite> DemolitionistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Demolitionist.png", 200);
     public static LoadableAsset<Sprite> DomesmithIcon { get; } = new LoadableResourceAsset($"{IconPath}.Domesmith.png", 200);
     public static LoadableAsset<Sprite> SummonerIcon { get; } = new LoadableResourceAsset($"{IconPath}.Summoner.png", 200);
     public static LoadableAsset<Sprite> RevenantIcon { get; } = new LoadableResourceAsset($"{IconPath}.Revenant.png", 200);
     public static LoadableAsset<Sprite> MosquitoIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mosquito.png", 200);
     public static LoadableAsset<Sprite> DuelistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Duellist.png", 200);
     public static LoadableAsset<Sprite> ClockstopperIcon { get; } = new LoadableResourceAsset($"{IconPath}.Clockstopper.png", 200);
-    public static LoadableAsset<Sprite> RetributionistIcon { get; } = new LoadableResourceAsset($"{IconPath}.Retributionist.png", 200);
     public static LoadableAsset<Sprite> CupidIcon { get; } = new LoadableResourceAsset($"{IconPath}.Cupid.png", 200);
     public static LoadableAsset<Sprite> MentorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mentor.png", 200);
     public static LoadableAsset<Sprite> MageIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mage.png", 200);
     public static LoadableAsset<Sprite> WatcherIcon { get; } = new LoadableResourceAsset($"{IconPath}.Watcher.png", 200);
     public static LoadableAsset<Sprite> MonsterIcon { get; } = new LoadableResourceAsset($"{IconPath}.Monster.png", 200);
-    public static LoadableAsset<Sprite> LocatorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Locator.png", 200);
     public static LoadableAsset<Sprite> MoleIcon { get; } = new LoadableResourceAsset($"{IconPath}.Mole.png", 200);
     public static LoadableAsset<Sprite> TelecomIcon { get; } = new LoadableResourceAsset($"{IconPath}.Telecom.png", 200);
     public static LoadableAsset<Sprite> MonsterDevourButton { get; } = new LoadableResourceAsset($"{ShortPath}.MonsterDevour.png");
@@ -114,7 +105,6 @@ public static class DivaniAssets
     public static LoadableAsset<Sprite> NullifiedIcon { get; } = new LoadableResourceAsset($"{IconPath}.Nullified.png", 200);
     public static LoadableAsset<Sprite> SproutIcon { get; } = new LoadableResourceAsset($"{IconPath}.Sprout.png", 200);
     public static LoadableAsset<Sprite> BetrayerIcon { get; } = new LoadableResourceAsset($"{IconPath}.Betrayer.png", 200);
-    public static LoadableAsset<Sprite> ObfuscatorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Obfuscator.png", 200);
     public static LoadableAsset<Sprite> CunctatorIcon { get; } = new LoadableResourceAsset($"{IconPath}.Cunctator.png", 200);
     public static LoadableAsset<Sprite> IncompetentIcon { get; } = new LoadableResourceAsset($"{IconPath}.Incompetent.png", 200);
     public static LoadableAsset<Sprite> ArmoredIcon { get; } = new LoadableResourceAsset($"{IconPath}.Armored.png", 200);
@@ -128,17 +118,13 @@ public static class DivaniAssets
     public static LoadableAsset<AudioClip> ThiefIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.ThiefIntro.wav");
     public static LoadableAsset<AudioClip> PortalMakerIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.PortalMakerIntro.wav");
     public static LoadableAsset<AudioClip> DeadlockIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DeadlockIntro.wav");
-    public static LoadableAsset<AudioClip> CouncillorIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.CouncillorIntro.wav");
     public static LoadableAsset<AudioClip> PlacePortalSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.PlacePortalSound.wav");
     public static LoadableAsset<AudioClip> FragHeartbeat { get; } = new LoadableAudioResourceAsset($"{ShortPath}.FragHeartbeat.wav");
     public static LoadableAsset<AudioClip> FragIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.FragIntro.wav");
-    public static LoadableAsset<AudioClip> SilencerIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.SilencerIntro.wav");
     public static LoadableAsset<AudioClip> FragGiveSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.FragGive.wav");
     public static LoadableAsset<AudioClip> BearTrapActivateSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.BearTrapActivate.wav");
     public static LoadableAsset<AudioClip> OpportunistIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.OpportunistIntro.wav");
     public static LoadableAsset<AudioClip> CatIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.CatIntro.wav");
-    public static LoadableAsset<AudioClip> DemolitionistIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DemolitionistIntro.wav");
-    public static LoadableAsset<AudioClip> DemolitionistExplosionSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DemolitionistExplosion.wav");
     public static LoadableAsset<AudioClip> DomesmithIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DomesmithIntro.wav");
     public static LoadableAsset<AudioClip> SummonerIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.SummonerIntro.wav");
     public static LoadableAsset<AudioClip> SentinelIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.SentinelIntro.wav");
@@ -146,11 +132,9 @@ public static class DivaniAssets
     public static LoadableAsset<AudioClip> MosquitoIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.MosquitoIntro.wav");
     public static LoadableAsset<AudioClip> CunctatorIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.CunctatorIntro.wav");
     public static LoadableAsset<AudioClip> MosquitoSwatSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.MosquitoSwat.wav");
-    public static LoadableAsset<AudioClip> ObfuscatorIntro { get; } = new LoadableAudioResourceAsset($"{ShortPath}.ObfuscatorIntro.wav");
     public static LoadableAsset<AudioClip> InnocentIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.InnocentIntro.wav");
     public static LoadableAsset<AudioClip> DuelistIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.DuelistIntro.wav");
     public static LoadableAsset<AudioClip> ClockstopperIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.ClockstopperIntro.wav");
-    public static LoadableAsset<AudioClip> RetributionistIntroSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.RetributionistIntro.wav");
     public static LoadableAsset<AudioClip> UavFriendlySound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVFriendly.wav");
     public static LoadableAsset<AudioClip> UavEnemySound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVEnemy.wav");
     public static LoadableAsset<AudioClip> UavEndSound { get; } = new LoadableAudioResourceAsset($"{ShortPath}.UAVEnd.wav");
@@ -235,8 +219,6 @@ public static class DivaniAssets
         new LoadableResourceAsset($"{ShortPath}.OptionBanners.CupidBanner.png");
     public static LoadableAsset<Sprite> DeadlockBanner { get; } =
         new LoadableResourceAsset($"{ShortPath}.OptionBanners.DeadlockBanner.png");
-    public static LoadableAsset<Sprite> DemolitionistBanner { get; } =
-        new LoadableResourceAsset($"{ShortPath}.OptionBanners.DemolitionistBanner.png");
     public static LoadableAsset<Sprite> DomesmithBanner { get; } =
         new LoadableResourceAsset($"{ShortPath}.OptionBanners.DomesmithBanner.png");
     public static LoadableAsset<Sprite> DuelistBanner { get; } =
@@ -249,12 +231,8 @@ public static class DivaniAssets
         new LoadableResourceAsset($"{ShortPath}.OptionBanners.MosquitoBanner.png");
     public static LoadableAsset<Sprite> PortalmakerBanner { get; } =
         new LoadableResourceAsset($"{ShortPath}.OptionBanners.PortalmakerBanner.png");
-    public static LoadableAsset<Sprite> RetributionistBanner { get; } =
-        new LoadableResourceAsset($"{ShortPath}.OptionBanners.RetributionistBanner.png");
     public static LoadableAsset<Sprite> SentinelBanner { get; } =
         new LoadableResourceAsset($"{ShortPath}.OptionBanners.SentinelBanner.png");
-    public static LoadableAsset<Sprite> SilencerBanner { get; } =
-        new LoadableResourceAsset($"{ShortPath}.OptionBanners.SilencerBanner.png");
     public static LoadableAsset<Sprite> SummonerBanner { get; } =
         new LoadableResourceAsset($"{ShortPath}.OptionBanners.SummonerBanner.png");
     public static LoadableAsset<Sprite> MageBanner { get; } =

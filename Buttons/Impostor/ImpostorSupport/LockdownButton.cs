@@ -6,7 +6,6 @@ using Reactor.Networking.Attributes;
 using Reactor.Utilities;
 using DivaniMods.Assets;
 using DivaniMods.Options;
-using DivaniMods.Patches;
 using DivaniMods.Roles.Impostor.ImpostorSupport;
 using System.Collections;
 using TownOfUs.Buttons;
@@ -67,8 +66,6 @@ public class LockdownButton : TownOfUsButton
 
         if (!EffectActive)
         {
-            if (DemolitionistSabotageState.IsActive) return false;
-
             var ship = ShipStatus.Instance;
             if (ship?.Systems != null &&
                 ship.Systems.TryGetValue(SystemTypes.Sabotage, out var sabotageSystem) &&
@@ -178,6 +175,7 @@ public class LockdownButton : TownOfUsButton
         if (_lockdownClosedDoors)
         {
             SetDoorsLocked(false);
+            RestartDecontaminationDoorTimers();
             _lockdownClosedDoors = false;
         }
 
@@ -240,6 +238,35 @@ public class LockdownButton : TownOfUsButton
             {
                 door.SetDoorway(!locked);
             }
+        }
+    }
+
+    private static void RestartDecontaminationDoorTimers()
+    {
+        var ship = ShipStatus.Instance;
+        if (ship?.Systems == null)
+        {
+            return;
+        }
+
+        foreach (var system in ship.Systems.Values)
+        {
+            var decon = system.TryCast<DeconSystem>();
+            if (decon == null)
+            {
+                continue;
+            }
+
+            RestartTimerIfOpen(decon.UpperDoor);
+            RestartTimerIfOpen(decon.LowerDoor);
+        }
+    }
+
+    private static void RestartTimerIfOpen(SomeKindaDoor? door)
+    {
+        if (door is AutoCloseDoor autoCloseDoor && autoCloseDoor.IsOpen)
+        {
+            autoCloseDoor.SetDoorway(true);
         }
     }
     

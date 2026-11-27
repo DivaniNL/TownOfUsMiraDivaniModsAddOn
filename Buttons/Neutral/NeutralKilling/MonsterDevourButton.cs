@@ -13,6 +13,7 @@ using MiraAPI.LocalSettings;
 using MiraAPI.Modifiers;
 using MiraAPI.Translation;
 using TownOfUs.Modifiers;
+using TownOfUs.Options.Modifiers.Alliance;
 
 namespace DivaniMods.Buttons.Neutral.NeutralKilling;
 
@@ -42,6 +43,8 @@ public sealed class MonsterDevourButton : TownOfUsRoleButton<MonsterRole, Player
         var player = PlayerControl.LocalPlayer;
         if (player == null) return null;
 
+        var cannotEatLover = player.IsLover() &&
+                            !OptionGroupSingleton<LoversOptions>.Instance.LoversKillEachOther;
         PlayerControl? closest = null;
         var closestDist = float.MaxValue;
         var myPos = player.GetTruePosition();
@@ -51,6 +54,7 @@ public sealed class MonsterDevourButton : TownOfUsRoleButton<MonsterRole, Player
             if (other == null || other.PlayerId == player.PlayerId) continue;
             if (other.Data == null || other.Data.Disconnected || other.HasDied()) continue;
             if (MonsterState.IsEaten(other.PlayerId)) continue;
+            if (cannotEatLover && other.IsLover()) continue;
 
             var dist = Vector2.Distance(myPos, other.GetTruePosition());
             if (dist > Distance || dist >= closestDist) continue;
@@ -87,6 +91,14 @@ public sealed class MonsterDevourButton : TownOfUsRoleButton<MonsterRole, Player
     {
         if (target == null || target.HasDied() || target.Data == null) return false;
         if (target.Data.Disconnected || MonsterState.IsEaten(target.PlayerId)) return false;
+
+        var player = PlayerControl.LocalPlayer;
+        if (player != null && player.IsLover() &&
+            !OptionGroupSingleton<LoversOptions>.Instance.LoversKillEachOther &&
+            target.IsLover())
+        {
+            return false;
+        }
 
         return base.IsTargetValid(target);
     }

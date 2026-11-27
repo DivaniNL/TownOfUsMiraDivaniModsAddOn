@@ -4,7 +4,6 @@ using MiraAPI.Translation;
 using MiraAPI.Utilities.Assets;
 using DivaniMods.Assets;
 using DivaniMods.Options;
-using DivaniMods.Roles.Impostor.ImpostorSupport;
 using TownOfUs.Interfaces;
 using TownOfUs.Modifiers;
 using TownOfUs.Modifiers.Game;
@@ -41,6 +40,6 @@ public sealed class MisvoteModifier : UniversalGameModifier, IWikiDiscoverable
 
     public override bool IsModifierValidOn(RoleBehaviour role)
     {
-        return base.IsModifierValidOn(role) && role is not CouncillorRole;
+        return base.IsModifierValidOn(role);
     }
 }
